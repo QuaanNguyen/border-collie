@@ -51,7 +51,7 @@ const TOOL_ACTION = {
 };
 
 function loadProtocol(workdir) {
-  const local = path.join(workdir, "protocol.json");
+  const local = path.join(workdir, ".opencode", "protocol.json");
   if (!fs.existsSync(local)) return null;
   return JSON.parse(fs.readFileSync(local, "utf8"));
 }
