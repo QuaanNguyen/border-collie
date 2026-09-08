@@ -53,8 +53,12 @@ const TOOL_ACTION = {
 
 function loadProtocol(workdir) {
   const local = path.join(workdir, ".opencode", "protocol.json");
-  if (!fs.existsSync(local)) return null;
-  return JSON.parse(fs.readFileSync(local, "utf8"));
+  if (!fs.existsSync(local)) return { protocol: null, policyPath: local };
+  try {
+    return { protocol: JSON.parse(fs.readFileSync(local, "utf8")), policyPath: local };
+  } catch (error) {
+    return { protocol: null, policyPath: local, error };
+  }
 }
 
 function resourcesFromArgs(tool, args) {
@@ -167,13 +171,19 @@ function launchPet(inboxPath) {
 
 export const Rice = async ({ client, directory }) => {
   const workdir = directory || process.cwd();
-  const protocol = resolvePolicy(researchSafeProtocol(loadOwnerPolicy()), loadProtocol(workdir));
+  const projectPolicy = loadProtocol(workdir);
+  const protocol = projectPolicy.error
+    ? null
+    : resolvePolicy(researchSafeProtocol(loadOwnerPolicy()), projectPolicy.protocol);
   const inboxPath = process.env.RICE_EVENTS || defaultInboxPath();
   const runsDir = process.env.RICE_RUNS || path.join(os.homedir(), ".rice", "runs");
-  const session = createSession({ protocol, workdir });
   const bus = new EventBus({ inboxPath, runsDir });
+  const session = projectPolicy.error ? null : createSession({ protocol, workdir });
   const claimed = new Set();
   let ended = false;
+  const invalidPolicyMessage = projectPolicy.error
+    ? "Rice blocked this session because the active project policy is malformed. Fix or remove the project policy at " + projectPolicy.policyPath + " and restart OpenCode."
+    : null;
 
   function publish(out) {
     if (!out || !out.events) return;
@@ -183,6 +193,7 @@ export const Rice = async ({ client, directory }) => {
   function endSession() {
     if (ended) return;
     ended = true;
+    if (!session) return;
     try {
       publish(session.handle({ kind: "session.end" }));
     } catch {
@@ -192,7 +203,22 @@ export const Rice = async ({ client, directory }) => {
   process.on("beforeExit", endSession);
   process.on("exit", endSession);
 
-  publish(session.handle({ kind: "session.start" }));
+  if (projectPolicy.error) {
+    bus.emit({
+      type: "notification",
+      status: "error",
+      petState: "refused",
+      summary: "Project policy is malformed",
+      reason: "The active project policy is malformed and was not loaded.",
+      detail: {
+        priority: "high",
+        policyPath: projectPolicy.policyPath,
+        remediation: invalidPolicyMessage,
+      },
+    });
+  } else {
+    publish(session.handle({ kind: "session.start" }));
+  }
   launchPet(inboxPath);
 
   async function reviewClaims(sessionID) {
@@ -217,6 +243,7 @@ export const Rice = async ({ client, directory }) => {
 
   return {
     "tool.execute.before": async (input, output) => {
+      if (invalidPolicyMessage) throw new Error(invalidPolicyMessage);
       const tool = input.tool || "";
       const args = output?.args || input.args || {};
       const resources = resourcesFromArgs(tool, args);
@@ -230,6 +257,7 @@ export const Rice = async ({ client, directory }) => {
     },
 
     "tool.execute.after": async (input, output) => {
+      if (invalidPolicyMessage) return;
       publish(session.handle({
         kind: "tool.after",
         tool: input.tool,
@@ -240,6 +268,7 @@ export const Rice = async ({ client, directory }) => {
     },
 
     event: async ({ event }) => {
+      if (invalidPolicyMessage) return;
       if (!event) return;
       if (event.type === "session.status" && isBusy(event)) {
         publish(session.handle({ kind: "busy" }));
