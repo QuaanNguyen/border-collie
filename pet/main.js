@@ -28,6 +28,7 @@ const {
 const path = require("node:path");
 const os = require("node:os");
 const fs = require("node:fs");
+const { pathToFileURL } = require("node:url");
 const { watchInbox, defaultInboxPath } = require("../assay/lib/events");
 const { parseOwnerPid, createOwnerRegistry } = require("./lib/owners");
 const G = require("./geometry");
@@ -55,6 +56,32 @@ const EVENTS_FILE = arg(
 const MOD = "Control+Alt";
 const TOGGLE_KEY = arg("shortcut", `${MOD}+R`);
 const DEV_H = 460;
+const LOCAL_ANIMATION_FOLDERS = {
+  calm: "rice-normal",
+  checking: "rice-checking",
+  drag: "rice-drag",
+  hover: "rice-hover",
+  thinking: "rice-thinking",
+};
+
+function localAnimations() {
+  const root = path.join(__dirname, "assets", "local-animations");
+  return Object.fromEntries(
+    Object.entries(LOCAL_ANIMATION_FOLDERS).flatMap(([state, folder]) => {
+      try {
+        const frames = fs
+          .readdirSync(path.join(root, folder), { withFileTypes: true })
+          .filter((entry) => entry.isFile() && entry.name.endsWith(".png"))
+          .map((entry) => entry.name)
+          .sort((left, right) => left.localeCompare(right, undefined, { numeric: true }))
+          .map((name) => pathToFileURL(path.join(root, folder, name)).href);
+        return frames.length === 5 ? [[state, frames]] : [];
+      } catch {
+        return [];
+      }
+    }),
+  );
+}
 
 function prettyShortcut(accel, platform = process.platform) {
   return platform === "darwin"
@@ -368,6 +395,7 @@ if (!gotLock) {
     scale: settings.scale,
     toggleKey: prettyShortcut(TOGGLE_KEY),
     resetKey: prettyShortcut(`${MOD}+0`),
+    animations: localAnimations(),
   }));
   ipcMain.on("rice:quit", () => app.quit());
   ipcMain.on("rice:hide", () => {

@@ -14,6 +14,8 @@
 
 const app = document.getElementById("app");
 const pet = document.getElementById("pet");
+const scene = document.getElementById("scene");
+const animation = document.getElementById("animation");
 const bubble = document.getElementById("bubble");
 const bubbleText = document.getElementById("bubble-text");
 const bubbleSub = document.getElementById("bubble-sub");
@@ -151,6 +153,62 @@ let quietTimer = null;
 let blinkTimer = null;
 let glanceTimer = null;
 let connected = false;
+let animationFrames = {};
+let animationTimer = null;
+let animationState = null;
+
+function loadFrames(frames) {
+  return Promise.all(
+    frames.map(
+      (src) =>
+        new Promise((resolve, reject) => {
+          const image = new Image();
+          image.onload = resolve;
+          image.onerror = reject;
+          image.src = src;
+        }),
+    ),
+  );
+}
+
+async function setAnimationFrames(next) {
+  const candidates = Object.entries(next || {}).filter(
+    ([, frames]) => Array.isArray(frames) && frames.length === 5 && frames.every((src) => typeof src === "string"),
+  );
+  const loaded = await Promise.all(
+    candidates.map(async ([state, frames]) => {
+      try {
+        await loadFrames(frames);
+        return [state, frames];
+      } catch {
+        return null;
+      }
+    }),
+  );
+  animationFrames = Object.fromEntries(loaded.filter(Boolean));
+}
+
+function paintAnimation(state) {
+  clearInterval(animationTimer);
+  const frames = animationFrames[state];
+  if (!frames) {
+    animationState = null;
+    animation.hidden = true;
+    animation.removeAttribute("src");
+    scene.hidden = false;
+    return;
+  }
+  animationState = state;
+  let index = 0;
+  animation.src = frames[index];
+  animation.hidden = false;
+  scene.hidden = true;
+  animationTimer = setInterval(() => {
+    if (animationState !== state) return;
+    index = (index + 1) % frames.length;
+    animation.src = frames[index];
+  }, 140);
+}
 
 function rendered() {
   return interaction || baseState;
@@ -160,6 +218,7 @@ function paint() {
   const s = rendered();
   for (const k of STATES) app.classList.toggle(`state-${k}`, k === s);
   face.innerHTML = window.RiceFaces.drawFace(s);
+  paintAnimation(s);
 }
 
 /** Set the agent-driven state. */
@@ -751,6 +810,7 @@ scheduleBlink();
 scheduleGlance();
 
 window.rice.config().then((cfg) => {
+  setAnimationFrames(cfg.animations).then(paint);
   if (cfg.toggleKey) toggleKey = cfg.toggleKey;
   if (cfg.resetKey) resetKey = cfg.resetKey;
   if (cfg.dev) {

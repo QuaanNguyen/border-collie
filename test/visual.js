@@ -9,6 +9,7 @@
  */
 const path = require('node:path');
 const fs = require('node:fs');
+const { pathToFileURL } = require('node:url');
 
 // Playwright is an optional convenience, not a dependency of the project.
 // The 48 behavioural tests in run-tests.js are the real gate; this script only
@@ -33,6 +34,22 @@ try {
 
 const SRC = path.resolve(__dirname, '..', 'pet', 'src', 'index.html');
 const OUT = path.resolve(__dirname, 'shots');
+const ASSETS = path.resolve(__dirname, '..', 'pet', 'assets', 'local-animations');
+
+function stagedFrames(folder) {
+  return fs.readdirSync(path.join(ASSETS, folder))
+    .filter((name) => name.endsWith('.png'))
+    .sort()
+    .map((name) => pathToFileURL(path.join(ASSETS, folder, name)).href);
+}
+
+const ANIMATIONS = {
+  calm: stagedFrames('rice-normal'),
+  checking: stagedFrames('rice-checking'),
+  drag: stagedFrames('rice-drag'),
+  hover: stagedFrames('rice-hover'),
+  thinking: stagedFrames('rice-thinking'),
+};
 
 const STATES = ['calm', 'hover', 'drag', 'thinking', 'watching', 'checking', 'allowed',
   'suspicious', 'refused', 'proving', 'rejecting', 'celebrating', 'error', 'sleeping',
@@ -110,14 +127,14 @@ print("  ok  contact sheet -> test/shots/all-states.png")
     deviceScaleFactor: 2,
   });
 
-  await page.addInitScript(() => {
+  await page.addInitScript((animations) => {
     window.rice = {
-      config: async () => ({ demo: true, solid: false }),
+      config: async () => ({ demo: true, solid: false, animations }),
       quit() {}, hide() {}, open() {}, setLogOpen() {},
       scaleStep() {}, setScale() {}, onScaled() {}, onDrag() {},
     };
     window.fetch = () => new Promise(() => {});
-  });
+  }, ANIMATIONS);
 
   await page.goto('file://' + SRC);
   await page.waitForFunction(() => !!window.__rice, null, { timeout: 5000 });
@@ -144,12 +161,51 @@ print("  ok  contact sheet -> test/shots/all-states.png")
 
     await page.waitForTimeout(320);
 
+    const usesFrames = Object.hasOwn(ANIMATIONS, state);
+    const animationVisible = await page.$eval('#animation', (el) => !el.hidden);
+    const sceneVisible = await page.$eval('#scene', (el) => !el.hidden);
+    if (usesFrames && (!animationVisible || sceneVisible)) {
+      console.error(`  FAIL ${state}: staged frames did not replace the fallback`);
+      failures++;
+    }
+    if (!usesFrames && (animationVisible || !sceneVisible)) {
+      console.error(`  FAIL ${state}: missing frames did not keep the fallback`);
+      failures++;
+    }
+
     const faceHtml = await page.$eval('#face', (el) => el.innerHTML.trim());
     if (!faceHtml) { console.error(`  FAIL ${state}: face did not render`); failures++; }
 
     await page.screenshot({ path: path.join(OUT, `${state}.png`) });
     console.log(`  ok  ${state}${line ? '  (speaking)' : ''}`);
   }
+
+  const incompletePage = await browser.newPage({
+    viewport: { width: 340, height: 380 },
+    deviceScaleFactor: 2,
+  });
+  await incompletePage.addInitScript((animations) => {
+    window.rice = {
+      config: async () => ({ demo: true, solid: false, animations }),
+      quit() {}, hide() {}, open() {}, setLogOpen() {},
+      scaleStep() {}, setScale() {}, onScaled() {}, onDrag() {},
+    };
+    window.fetch = () => new Promise(() => {});
+  }, { ...ANIMATIONS, thinking: ANIMATIONS.thinking.slice(0, 4) });
+  await incompletePage.goto('file://' + SRC);
+  await incompletePage.waitForFunction(() => !!window.__rice, null, { timeout: 5000 });
+  await incompletePage.evaluate(() => window.__rice.setState('thinking'));
+  await incompletePage.waitForTimeout(320);
+  const incompleteAnimation = await incompletePage.$eval('#animation', (el) => !el.hidden);
+  const incompleteScene = await incompletePage.$eval('#scene', (el) => !el.hidden);
+  if (incompleteAnimation || !incompleteScene) {
+    console.error('  FAIL incomplete thinking: fallback did not render');
+    failures++;
+  } else {
+    console.log('  ok  incomplete thinking fallback');
+  }
+  await incompletePage.screenshot({ path: path.join(OUT, 'thinking-fallback.png') });
+  await incompletePage.close();
 
   await browser.close();
   buildContactSheet(STATES);
