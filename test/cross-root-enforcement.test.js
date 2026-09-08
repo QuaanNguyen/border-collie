@@ -63,7 +63,10 @@ async function main() {
     const hooks = await hooksFor(projectDir, ownerConfigDir, runDir);
     const before = hooks['tool.execute.before'];
     await before({ tool: 'bash' }, { args: { command: 'node --version' } });
-    await assert.rejects(before({ tool: 'read' }, { args: { path: outsideFile } }), /refused/);
+    await assert.rejects(
+      before({ tool: 'read' }, { args: { path: outsideFile } }),
+      (error) => /refused/.test(error.message) && /Permitted alternative:/.test(error.message) && /Retry: do not retry/.test(error.message),
+    );
     await assert.rejects(before({ tool: 'edit' }, { args: { path: outsideFile, oldString: 'private', newString: 'changed' } }), /refused/);
     for (const command of [
       `cat ${outsideFile}`,
@@ -78,6 +81,10 @@ async function main() {
 
     const events = await readRunEvents(runDir);
     assert.ok(events.some((event) => event.type === 'action' && event.status === 'allow'));
+    const ordinaryDenial = events.find((event) => event.type === 'excursion');
+    assert.equal(ordinaryDenial.rule, 'read_paths');
+    assert.match(ordinaryDenial.reason, /outside the working directory/);
+    assert.match(ordinaryDenial.summary, /read/);
     assert.ok(events.filter((event) => event.type === 'excursion').length >= 8);
     assert.equal(events.some((event) => event.type === 'notification' || event.type === 'ask'), false);
   });
