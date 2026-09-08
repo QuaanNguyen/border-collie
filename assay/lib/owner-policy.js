@@ -37,6 +37,8 @@ function researchSafeProtocol(policy) {
     'allow_tools',
     'egress',
     'done_criteria',
+    'protected_paths',
+    'read_protected_paths',
   ]) {
     if (Object.hasOwn(policy, field)) protocol[field] = policy[field];
   }

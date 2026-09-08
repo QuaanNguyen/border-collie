@@ -66,6 +66,10 @@ function resolvePolicy(owner, project) {
     resolved.deny_commands = unique([...(owner.deny_commands || []), ...(project.deny_commands || [])]);
   }
 
+  for (const field of ['protected_paths', 'read_protected_paths']) {
+    if (Object.hasOwn(project, field)) resolved[field] = unique([...(owner[field] || []), ...(project[field] || [])]);
+  }
+
   if (Object.hasOwn(project, 'allow_ordinary_bash')) {
     resolved.allow_ordinary_bash = owner.allow_ordinary_bash === true && project.allow_ordinary_bash === true;
   }

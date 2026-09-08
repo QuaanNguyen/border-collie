@@ -37,6 +37,7 @@ const { createSession } = require(path.join(repoRoot, "assay/lib/session.js"));
 const { EventBus, defaultInboxPath } = require(path.join(repoRoot, "assay/lib/events.js"));
 const { loadOwnerPolicy, researchSafeProtocol } = require(path.join(repoRoot, "assay/lib/owner-policy.js"));
 const { resolvePolicy, policyConflicts } = require(path.join(repoRoot, "assay/lib/policy-resolution.js"));
+const { protectedPathDecision } = require(path.join(repoRoot, "assay/lib/protected-paths.js"));
 
 const TOOL_ACTION = {
   read: "read",
@@ -256,6 +257,19 @@ export const Rice = async ({ client, directory }) => {
       if (invalidPolicyMessage) throw new Error(invalidPolicyMessage);
       const tool = input.tool || "";
       const args = output?.args || input.args || {};
+      const protection = protectedPathDecision(tool, args, protocol, workdir);
+      if (protection) {
+        bus.emit({
+          type: "excursion",
+          status: "block",
+          petState: "refused",
+          tool,
+          summary: tool + " targets a protected path",
+          reason: protection.reason,
+          rule: protection.rule,
+        });
+        throw new Error("ASSAY refused this action because " + protection.reason + " [rule: " + protection.rule + "]");
+      }
       const resources = resourcesFromArgs(tool, args);
       const out = session.handle({
         kind: "permission",
