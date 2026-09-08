@@ -32,6 +32,27 @@ function intersectAllowLists(owner, project) {
   return unique(resolved);
 }
 
+function policyConflicts(owner, project, ownerTrustedWorkspaceRoots = []) {
+  if (!project) return [];
+  const conflicts = [];
+  for (const field of NARROWED_LIST_FIELDS) {
+    if (!Object.hasOwn(project, field)) continue;
+    const attempted = project[field] || [];
+    const allowed = owner[field] || [];
+    const broader = attempted.filter((value) => !allowed.some((ownerValue) => subsetPattern(value, ownerValue) === value));
+    if (broader.length) conflicts.push({ field, attempted: broader });
+  }
+  if (Object.hasOwn(project, 'trusted_workspace_roots')) {
+    const broader = (project.trusted_workspace_roots || [])
+      .filter((root) => !ownerTrustedWorkspaceRoots.includes(root));
+    if (broader.length) conflicts.push({ field: 'trusted_workspace_roots', attempted: broader });
+  }
+  if (project.allow_ordinary_bash === true && owner.allow_ordinary_bash !== true) {
+    conflicts.push({ field: 'allow_ordinary_bash', attempted: true });
+  }
+  return conflicts;
+}
+
 function resolvePolicy(owner, project) {
   if (!project) return owner;
   const resolved = { ...owner };
@@ -56,4 +77,4 @@ function resolvePolicy(owner, project) {
   return resolved;
 }
 
-module.exports = { resolvePolicy };
+module.exports = { resolvePolicy, policyConflicts };

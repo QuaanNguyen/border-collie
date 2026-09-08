@@ -62,10 +62,9 @@ async function main() {
     });
     const hooks = await hooksFor(projectDir, ownerConfigDir, path.join(root, 'run'));
 
-    await hooks['tool.execute.before']({ tool: 'read' }, { args: { path: path.join(projectDir, 'allowed.md') } });
     await assert.rejects(
-      hooks['tool.execute.before']({ tool: 'read' }, { args: { path: path.join(projectDir, 'private.md') } }),
-      /refused/,
+      hooks['tool.execute.before']({ tool: 'read' }, { args: { path: path.join(projectDir, 'allowed.md') } }),
+      /project policy.*owner policy.*read_paths/i,
     );
   });
 
@@ -99,7 +98,7 @@ async function main() {
 
     await assert.rejects(
       hooks['tool.execute.before']({ tool: 'bash' }, { args: { command: 'node --version' } }),
-      /refused/,
+      /project policy.*owner policy.*allow_ordinary_bash/i,
     );
   });
 }

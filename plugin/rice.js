@@ -36,7 +36,7 @@ if (!repoRoot) {
 const { createSession } = require(path.join(repoRoot, "assay/lib/session.js"));
 const { EventBus, defaultInboxPath } = require(path.join(repoRoot, "assay/lib/events.js"));
 const { loadOwnerPolicy, researchSafeProtocol } = require(path.join(repoRoot, "assay/lib/owner-policy.js"));
-const { resolvePolicy } = require(path.join(repoRoot, "assay/lib/policy-resolution.js"));
+const { resolvePolicy, policyConflicts } = require(path.join(repoRoot, "assay/lib/policy-resolution.js"));
 
 const TOOL_ACTION = {
   read: "read",
@@ -172,18 +172,25 @@ function launchPet(inboxPath) {
 export const Rice = async ({ client, directory }) => {
   const workdir = directory || process.cwd();
   const projectPolicy = loadProtocol(workdir);
+  const ownerPolicy = loadOwnerPolicy();
+  const ownerProtocol = researchSafeProtocol(ownerPolicy);
+  const conflicts = projectPolicy.error
+    ? []
+    : policyConflicts(ownerProtocol || {}, projectPolicy.protocol, ownerPolicy?.trusted_workspace_roots || []);
   const protocol = projectPolicy.error
     ? null
-    : resolvePolicy(researchSafeProtocol(loadOwnerPolicy()), projectPolicy.protocol);
+    : resolvePolicy(ownerProtocol, projectPolicy.protocol);
   const inboxPath = process.env.RICE_EVENTS || defaultInboxPath();
   const runsDir = process.env.RICE_RUNS || path.join(os.homedir(), ".rice", "runs");
   const bus = new EventBus({ inboxPath, runsDir });
-  const session = projectPolicy.error ? null : createSession({ protocol, workdir });
+  const session = projectPolicy.error || conflicts.length ? null : createSession({ protocol, workdir });
   const claimed = new Set();
   let ended = false;
   const invalidPolicyMessage = projectPolicy.error
     ? "Rice blocked this session because the active project policy is malformed. Fix or remove the project policy at " + projectPolicy.policyPath + " and restart OpenCode."
-    : null;
+    : conflicts.length
+      ? "Rice blocked this session because the project policy attempts to broaden the owner policy for " + conflicts.map((conflict) => conflict.field).join(', ') + ". Remove or narrow those project policy settings, then restart OpenCode."
+      : null;
 
   function publish(out) {
     if (!out || !out.events) return;
@@ -203,16 +210,19 @@ export const Rice = async ({ client, directory }) => {
   process.on("beforeExit", endSession);
   process.on("exit", endSession);
 
-  if (projectPolicy.error) {
+  if (projectPolicy.error || conflicts.length) {
     bus.emit({
       type: "notification",
       status: "error",
       petState: "refused",
-      summary: "Project policy is malformed",
-      reason: "The active project policy is malformed and was not loaded.",
+      summary: projectPolicy.error ? "Project policy is malformed" : "Project policy broadens owner authority",
+      reason: projectPolicy.error
+        ? "The active project policy is malformed and was not loaded."
+        : "The active project policy attempts to broaden the owner policy.",
       detail: {
         priority: "high",
         policyPath: projectPolicy.policyPath,
+        conflicts,
         remediation: invalidPolicyMessage,
       },
     });
