@@ -40,6 +40,13 @@ runTest('first install creates a Research-safe owner policy outside the package'
   });
 });
 
+runTest('first install accepts Custom only with supported owner settings', () => {
+  const root = temporaryDirectory();
+  const ownerConfigDir = path.join(root, 'owner-config');
+  installPlugin({ repoRoot: ROOT, destDir: path.join(root, 'plugins'), ownerConfigDir, skipNpm: true, setupPackage: 'custom', customPolicy: { read_paths: ['src/**'], allow_ordinary_bash: false, high_containment: true } });
+  assert.deepEqual(JSON.parse(fs.readFileSync(path.join(ownerConfigDir, 'policy.json'), 'utf8')), { schema_version: 1, setup_package: 'custom', trusted_workspace_roots: [], read_paths: ['src/**'], allow_ordinary_bash: false });
+});
+
 runTest('reinstall preserves the owner policy across package replacement', () => {
   const root = temporaryDirectory();
   const pluginsDir = path.join(root, 'plugins');

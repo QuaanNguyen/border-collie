@@ -20,11 +20,23 @@ function researchSafePolicy() {
   };
 }
 
-function ensureOwnerPolicy(ownerConfigDir) {
+const CUSTOM_FIELDS = ['trusted_workspace_roots', 'read_paths', 'write_paths', 'allow_commands', 'command_allowlist', 'allow_ordinary_bash', 'allow_tools', 'egress', 'done_criteria', 'deny_commands', 'protected_paths', 'read_protected_paths'];
+
+function initialOwnerPolicy(opts) {
+  if (!opts.setupPackage || opts.setupPackage === 'research-safe') return researchSafePolicy();
+  if (opts.setupPackage !== 'custom') throw new Error('setup package must be Research-safe or Custom');
+  const policy = { schema_version: 1, setup_package: 'custom', trusted_workspace_roots: [] };
+  for (const field of CUSTOM_FIELDS) {
+    if (Object.hasOwn(opts.customPolicy || {}, field)) policy[field] = opts.customPolicy[field];
+  }
+  return policy;
+}
+
+function ensureOwnerPolicy(ownerConfigDir, opts = {}) {
   const policyPath = path.join(ownerConfigDir, 'policy.json');
   if (!fs.existsSync(policyPath)) {
     fs.mkdirSync(ownerConfigDir, { recursive: true });
-    fs.writeFileSync(policyPath, JSON.stringify(researchSafePolicy(), null, 2) + '\n');
+    fs.writeFileSync(policyPath, JSON.stringify(initialOwnerPolicy(opts), null, 2) + '\n');
   }
   return policyPath;
 }
@@ -143,7 +155,7 @@ function installPlugin(opts = {}) {
     throw new Error('missing pet/package.json under ' + srcPet);
   }
 
-  const ownerPolicyPath = ensureOwnerPolicy(ownerConfigDir);
+  const ownerPolicyPath = ensureOwnerPolicy(ownerConfigDir, opts);
   const ownerPolicyMigration = migrationPreview(ownerPolicyPath);
   fs.mkdirSync(pluginsDir, { recursive: true });
   fs.rmSync(packageDir, { recursive: true, force: true });
