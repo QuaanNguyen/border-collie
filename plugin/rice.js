@@ -69,6 +69,36 @@ function resourcesFromArgs(tool, args) {
   return [a.filePath || a.path || a.pattern || a.glob].filter(Boolean);
 }
 
+function denialMessage({ action, target, rule, layer, reason, alternative, retry }) {
+  return [
+    'ASSAY refused this action.',
+    'Requested action: ' + action,
+    'Target: ' + target,
+    'Governing rule: ' + rule,
+    'Policy layer: ' + layer,
+    'Reason: ' + reason,
+    'Permitted alternative: ' + alternative,
+    'Retry: ' + retry,
+  ].join('\n');
+}
+
+function ordinaryDenialMessage(tool, args, event, workdir) {
+  const target = resourcesFromArgs(tool, args)[0] || tool;
+  const rule = event?.rule || 'resolved_policy';
+  const alternative = rule === 'read_paths' || rule === 'write_paths'
+    ? 'Use a path within the active project: ' + workdir
+    : 'Choose an action allowed by the resolved Rice policy.';
+  return denialMessage({
+    action: tool,
+    target,
+    rule,
+    layer: 'resolved Rice policy',
+    reason: event?.reason || 'the action is not permitted',
+    alternative,
+    retry: 'do not retry this target; use the permitted alternative or ask the owner to change policy.',
+  });
+}
+
 function resultText(output) {
   if (!output) return "";
   if (typeof output.output === "string") return output.output;
@@ -254,9 +284,20 @@ export const Rice = async ({ client, directory }) => {
 
   return {
     "tool.execute.before": async (input, output) => {
-      if (invalidPolicyMessage) throw new Error(invalidPolicyMessage);
       const tool = input.tool || "";
       const args = output?.args || input.args || {};
+      const target = resourcesFromArgs(tool, args)[0] || tool;
+      if (invalidPolicyMessage) {
+        throw new Error(denialMessage({
+          action: tool,
+          target,
+          rule: projectPolicy.error ? 'project_policy_validity' : 'owner_policy_broadening',
+          layer: projectPolicy.error ? 'active project policy' : 'owner policy',
+          reason: invalidPolicyMessage,
+          alternative: 'Fix or remove the active project policy, then restart OpenCode.',
+          retry: 'owner action is required; do not retry until the policy is fixed.',
+        }));
+      }
       const protection = protectedPathDecision(tool, args, protocol, workdir);
       if (protection) {
         bus.emit({
@@ -268,7 +309,15 @@ export const Rice = async ({ client, directory }) => {
           reason: protection.reason,
           rule: protection.rule,
         });
-        throw new Error("ASSAY refused this action because " + protection.reason + " [rule: " + protection.rule + "]");
+        throw new Error(denialMessage({
+          action: tool,
+          target,
+          rule: protection.rule,
+          layer: 'resolved Rice policy',
+          reason: protection.reason,
+          alternative: protection.rule === 'protected_paths' ? 'Read the path without modifying it, or ask the owner to change protection.' : 'Ask the owner to change read protection.',
+          retry: 'do not retry this action until policy changes.',
+        }));
       }
       const resources = resourcesFromArgs(tool, args);
       const out = session.handle({
@@ -277,7 +326,10 @@ export const Rice = async ({ client, directory }) => {
         resources: resources.length ? resources : [tool],
       });
       publish(out);
-      if (out.deny) throw new Error(out.deny.message);
+      if (out.deny) {
+        const event = out.events.find((item) => item.type === 'excursion');
+        throw new Error(ordinaryDenialMessage(tool, args, event, workdir));
+      }
     },
 
     "tool.execute.after": async (input, output) => {
