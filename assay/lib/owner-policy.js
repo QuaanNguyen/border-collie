@@ -19,7 +19,7 @@ function loadOwnerPolicy(configDir = process.env.RICE_OWNER_CONFIG || defaultOwn
 
 function researchSafeProtocol(policy) {
   if (policy?.setup_package !== 'research-safe') return null;
-  return {
+  const protocol = {
     task: 'Research-safe OpenCode session',
     read_paths: ['**'],
     write_paths: ['**'],
@@ -27,6 +27,23 @@ function researchSafeProtocol(policy) {
     deny_commands: ['curl', 'wget', 'nc', 'ncat', 'netcat', 'ssh', 'scp', 'rsync', 'ftp', 'telnet', 'powershell'],
     egress: [],
   };
+  for (const field of [
+    'task',
+    'read_paths',
+    'write_paths',
+    'allow_commands',
+    'command_allowlist',
+    'allow_ordinary_bash',
+    'allow_tools',
+    'egress',
+    'done_criteria',
+  ]) {
+    if (Object.hasOwn(policy, field)) protocol[field] = policy[field];
+  }
+  if (Object.hasOwn(policy, 'deny_commands')) {
+    protocol.deny_commands = [...new Set([...protocol.deny_commands, ...policy.deny_commands])];
+  }
+  return protocol;
 }
 
 module.exports = { defaultOwnerConfigDir, loadOwnerPolicy, researchSafeProtocol };
