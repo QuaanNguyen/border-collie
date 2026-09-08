@@ -88,6 +88,7 @@ class Protocol {
     this.writePaths = (spec.write_paths || []).map(toPosix);
     this.allowCommands = (spec.allow_commands || []).map((s) => s.toLowerCase());
     this.denyCommands = (spec.deny_commands || []).map((s) => s.toLowerCase());
+    this.allowOrdinaryBash = spec.allow_ordinary_bash === true;
     this.egress = spec.egress || [];
     this.doneCriteria = spec.done_criteria || [];
     this.raw = spec;
@@ -120,6 +121,7 @@ class Protocol {
       write_paths: this.writePaths,
       allow_commands: this.allowCommands,
       deny_commands: this.denyCommands,
+      allow_ordinary_bash: this.allowOrdinaryBash,
       egress: this.egress,
       done_criteria: this.doneCriteria.map((d) => ({ id: d.id, describe: d.describe || d.id })),
     };
@@ -146,7 +148,7 @@ function check(toolCall, protocol) {
     if (protocol.denyCommands.includes(bin)) {
       return deny(call, 'deny_commands', `'${bin}' is on the protocol's deny list`);
     }
-    if (protocol.allowCommands.length && !protocol.allowCommands.includes(bin)) {
+    if (!protocol.allowOrdinaryBash && protocol.allowCommands.length && !protocol.allowCommands.includes(bin)) {
       return deny(call, 'allow_commands', `'${bin}' is not among the commands this task declared`);
     }
   }

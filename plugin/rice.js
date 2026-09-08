@@ -35,6 +35,7 @@ if (!repoRoot) {
 
 const { createSession } = require(path.join(repoRoot, "assay/lib/session.js"));
 const { EventBus, defaultInboxPath } = require(path.join(repoRoot, "assay/lib/events.js"));
+const { loadOwnerPolicy, researchSafeProtocol } = require(path.join(repoRoot, "assay/lib/owner-policy.js"));
 
 const TOOL_ACTION = {
   read: "read",
@@ -165,7 +166,7 @@ function launchPet(inboxPath) {
 
 export const Rice = async ({ client, directory }) => {
   const workdir = directory || process.cwd();
-  const protocol = loadProtocol(workdir);
+  const protocol = loadProtocol(workdir) || researchSafeProtocol(loadOwnerPolicy());
   const inboxPath = process.env.RICE_EVENTS || defaultInboxPath();
   const runsDir = process.env.RICE_RUNS || path.join(os.homedir(), ".rice", "runs");
   const session = createSession({ protocol, workdir });
