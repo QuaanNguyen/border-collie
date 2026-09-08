@@ -11,7 +11,7 @@ function temporaryDirectory() {
   return fs.mkdtempSync(path.join(os.tmpdir(), 'rice-install-'));
 }
 
-function t(name, fn) {
+function runTest(name, fn) {
   try {
     fn();
     console.log(`  \x1b[32m✓\x1b[0m ${name}`);
@@ -23,7 +23,7 @@ function t(name, fn) {
 
 console.log('install plugin');
 
-t('first install creates a Research-safe owner policy outside the package', () => {
+runTest('first install creates a Research-safe owner policy outside the package', () => {
   const root = temporaryDirectory();
   const pluginsDir = path.join(root, 'plugins');
   const ownerConfigDir = path.join(root, 'owner-config');
@@ -40,7 +40,7 @@ t('first install creates a Research-safe owner policy outside the package', () =
   });
 });
 
-t('reinstall preserves the owner policy across package replacement', () => {
+runTest('reinstall preserves the owner policy across package replacement', () => {
   const root = temporaryDirectory();
   const pluginsDir = path.join(root, 'plugins');
   const ownerConfigDir = path.join(root, 'owner-config');
@@ -55,7 +55,7 @@ t('reinstall preserves the owner policy across package replacement', () => {
   assert.ok(fs.existsSync(result.dest));
 });
 
-t('upgrade previews missing policy fields without changing owner choices', () => {
+runTest('upgrade previews missing policy fields without changing owner choices', () => {
   const root = temporaryDirectory();
   const pluginsDir = path.join(root, 'plugins');
   const ownerConfigDir = path.join(root, 'owner-config');
@@ -70,6 +70,28 @@ t('upgrade previews missing policy fields without changing owner choices', () =>
     currentSchemaVersion: 0,
     targetSchemaVersion: 1,
     missingFields: ['trusted_workspace_roots'],
+    recommendedPolicy: {
+      schema_version: 1,
+      setup_package: 'research-safe',
+      trusted_workspace_roots: [],
+    },
   });
   assert.equal(fs.readFileSync(policyPath, 'utf8'), ownerPolicy);
+});
+
+runTest('reinstall preserves malformed owner policy and reports it for repair', () => {
+  const root = temporaryDirectory();
+  const pluginsDir = path.join(root, 'plugins');
+  const ownerConfigDir = path.join(root, 'owner-config');
+  const policyPath = path.join(ownerConfigDir, 'policy.json');
+  const ownerPolicy = '{ not valid json\n';
+
+  fs.mkdirSync(ownerConfigDir, { recursive: true });
+  fs.writeFileSync(policyPath, ownerPolicy);
+  const result = installPlugin({ repoRoot: ROOT, destDir: pluginsDir, ownerConfigDir, skipNpm: true });
+
+  assert.equal(result.migrationPreview.problem, 'invalid-policy');
+  assert.equal(result.migrationPreview.policyPath, policyPath);
+  assert.equal(fs.readFileSync(policyPath, 'utf8'), ownerPolicy);
+  assert.ok(fs.existsSync(result.dest));
 });

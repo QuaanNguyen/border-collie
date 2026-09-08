@@ -30,8 +30,17 @@ function ensureOwnerPolicy(ownerConfigDir) {
 }
 
 function migrationPreview(policyPath) {
-  const current = JSON.parse(fs.readFileSync(policyPath, 'utf8'));
   const target = researchSafePolicy();
+  let current;
+  try {
+    current = JSON.parse(fs.readFileSync(policyPath, 'utf8'));
+  } catch (error) {
+    return {
+      policyPath,
+      problem: 'invalid-policy',
+      reason: error.message,
+    };
+  }
   const missingFields = Object.keys(target).filter((field) => field !== 'schema_version' && !(field in current));
   const currentSchemaVersion = Number.isInteger(current.schema_version) ? current.schema_version : 0;
   if (currentSchemaVersion >= target.schema_version && !missingFields.length) return null;
@@ -39,6 +48,7 @@ function migrationPreview(policyPath) {
     currentSchemaVersion,
     targetSchemaVersion: target.schema_version,
     missingFields,
+    recommendedPolicy: target,
   };
 }
 
@@ -172,8 +182,14 @@ if (require.main === module) {
   console.log('Pet deps:      ' + petDir + '/node_modules');
   console.log('Owner policy:  ' + ownerPolicyPath);
   if (preview) {
-    console.log('Policy migration preview: schema ' + preview.currentSchemaVersion + ' → ' + preview.targetSchemaVersion);
-    if (preview.missingFields.length) console.log('Suggested fields: ' + preview.missingFields.join(', '));
+    if (preview.problem) {
+      console.log('Owner policy needs attention: ' + preview.policyPath);
+      console.log('Its contents were preserved and the package was installed. Fix the JSON before updating policy.');
+    } else {
+      console.log('Policy migration preview: schema ' + preview.currentSchemaVersion + ' → ' + preview.targetSchemaVersion);
+      if (preview.missingFields.length) console.log('Suggested fields: ' + preview.missingFields.join(', '));
+      console.log('Recommended policy: ' + JSON.stringify(preview.recommendedPolicy));
+    }
   }
   console.log('OpenCode loads ~/.config/opencode/plugins/*.js at startup.');
   console.log('Done. Open any project with: opencode <path>');
