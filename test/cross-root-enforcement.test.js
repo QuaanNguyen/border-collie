@@ -53,6 +53,7 @@ async function main() {
     fs.mkdirSync(projectDir, { recursive: true });
     fs.mkdirSync(outsideDir, { recursive: true });
     fs.mkdirSync(ownerConfigDir, { recursive: true });
+    fs.writeFileSync(path.join(projectDir, 'notes.md'), 'project notes\n');
     fs.writeFileSync(outsideFile, 'private notes\n');
     fs.writeFileSync(path.join(ownerConfigDir, 'policy.json'), JSON.stringify({
       schema_version: 1,
@@ -68,6 +69,14 @@ async function main() {
       (error) => /refused/.test(error.message) && /Permitted alternative:/.test(error.message) && /Retry: do not retry/.test(error.message),
     );
     await assert.rejects(before({ tool: 'edit' }, { args: { path: outsideFile, oldString: 'private', newString: 'changed' } }), /refused/);
+    await assert.rejects(
+      before({ tool: 'move' }, { args: { source: path.join(projectDir, 'notes.md'), destination: outsideFile } }),
+      /refused/,
+    );
+    await assert.rejects(
+      before({ tool: 'move' }, { args: { source: outsideFile, destination: path.join(projectDir, 'notes.md') } }),
+      /refused/,
+    );
     for (const command of [
       `cat ${outsideFile}`,
       `echo changed > ${outsideFile}`,

@@ -77,15 +77,12 @@ function createSession(opts = {}) {
   }
 
   function permission(event) {
-    // question, skill and subagent are OpenCode's own meta-tools: they touch no
-    // file and there is nothing to check. grep used to sit in this list too, and
-    // that was a hole — it reads file contents at a path, so 'read ../otherlab'
-    // was refused while 'grep ../otherlab' went through ungated and unrecorded.
-    if (event.action === 'question' || event.action === 'skill' || event.action === 'subagent') {
+    if (event.action === 'question') {
       return { events: [] };
     }
 
     const resources = event.resources && event.resources.length ? event.resources : ['*'];
+    const calls = event.toolCall ? [event.toolCall] : resources.map((resource) => asToolCall(event.action, resource));
     const actionId = `a${++actionSeq}`;
     const events = [
       {
@@ -101,8 +98,7 @@ function createSession(opts = {}) {
     ];
 
     const blocked = [];
-    for (const resource of resources) {
-      const tc = asToolCall(event.action, resource);
+    for (const tc of calls) {
       let result;
       try { result = check(tc, protocol); }
       catch (e) {

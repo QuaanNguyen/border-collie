@@ -18,6 +18,10 @@ const PATH_KEYS = ['path', 'file_path', 'filePath', 'filename', 'file', 'target'
   'directory', 'notebook_path', 'pattern', 'glob'];
 const CMD_KEYS = ['command', 'cmd', 'script', 'input', 'code'];
 const URL_KEYS = ['url', 'uri', 'endpoint', 'href'];
+const MOVE_TOOLS = new Set(['move', 'rename', 'move_file', 'rename_file']);
+const MOVE_SOURCE_KEYS = ['source', 'from', 'oldPath', 'old_path'];
+const MOVE_DESTINATION_KEYS = ['destination', 'to', 'newPath', 'new_path'];
+const MODIFYING_COMMANDS = new Set(['rm', 'mv', 'cp', 'touch', 'mkdir', 'sed', 'tee', 'chmod', 'chown', 'truncate']);
 
 const URL_RE = /\bhttps?:\/\/[^\s'"`)>\]}]+/gi;
 // bare host:port or IP that a command might POST to
@@ -40,18 +44,199 @@ function collect(obj, keys) {
   return out;
 }
 
+function pathish(t) {
+  if (/^([~/]|\.\.?\/)/.test(t)) return true;
+  if (/^[A-Za-z]:[\\/]/.test(t)) return true;
+  return t.includes('/') && !t.includes('://');
+}
+
+function splitShellCommands(cmd) {
+  const out = [];
+  let current = '';
+  let quote = null;
+  let escaped = false;
+  const s = String(cmd || '');
+  for (let i = 0; i < s.length; i++) {
+    const c = s[i];
+    const next = s[i + 1];
+    if (escaped) {
+      current += c;
+      escaped = false;
+      continue;
+    }
+    if (c === '\\' && quote !== "'") {
+      current += c;
+      escaped = true;
+      continue;
+    }
+    if ((c === '"' || c === "'") && !quote) {
+      quote = c;
+      current += c;
+      continue;
+    }
+    if (c === quote) {
+      quote = null;
+      current += c;
+      continue;
+    }
+    if (!quote && (c === '\n' || c === ';' || c === '|' || (c === '&' && next === '&'))) {
+      if (current.trim()) out.push(current.trim());
+      current = '';
+      if ((c === '|' && next === '|') || (c === '&' && next === '&')) i++;
+      continue;
+    }
+    current += c;
+  }
+  if (current.trim()) out.push(current.trim());
+  return out;
+}
+
+function shellTokens(cmd) {
+  const out = [];
+  let current = '';
+  let quote = null;
+  let escaped = false;
+  const s = String(cmd || '');
+  for (let i = 0; i < s.length; i++) {
+    const c = s[i];
+    if (escaped) {
+      current += c;
+      escaped = false;
+      continue;
+    }
+    if (c === '\\' && quote !== "'") {
+      escaped = true;
+      continue;
+    }
+    if ((c === '"' || c === "'") && !quote) {
+      quote = c;
+      continue;
+    }
+    if (c === quote) {
+      quote = null;
+      continue;
+    }
+    if (!quote && /\s/.test(c)) {
+      if (current) out.push(current);
+      current = '';
+      continue;
+    }
+    if (!quote && c === '>') {
+      if (current) out.push(current);
+      if (s[i + 1] === '>') {
+        out.push('>>');
+        i++;
+      } else {
+        out.push('>');
+      }
+      current = '';
+      continue;
+    }
+    current += c;
+  }
+  if (current) out.push(current);
+  return out;
+}
+
+function commandName(token) {
+  return String(token || '').replace(/^.*[\\/]/, '').replace(/^["']/, '').toLowerCase();
+}
+
+function commandStart(tokens) {
+  let index = 0;
+  while (index < tokens.length && /^[A-Za-z_][A-Za-z0-9_]*=/.test(tokens[index])) index++;
+  return index;
+}
+
+function operandTokens(tokens, start) {
+  const out = [];
+  for (let i = start; i < tokens.length; i++) {
+    const token = tokens[i];
+    if (!token || token === '>' || token === '>>' || token === '<') {
+      if (token === '>' || token === '>>' || token === '<') i++;
+      continue;
+    }
+    if (token.startsWith('-')) continue;
+    if (/^\d+$/.test(token)) continue;
+    out.push(token);
+  }
+  return out;
+}
+
+function addRedirectWrites(tokens, writePaths) {
+  for (let i = 0; i < tokens.length; i++) {
+    const token = tokens[i];
+    if ((token === '>' || token === '>>') && tokens[i + 1]) {
+      writePaths.push(tokens[i + 1]);
+      i++;
+    } else {
+      const match = token.match(/^\d*>>?(.+)$/);
+      if (match && match[1]) writePaths.push(match[1]);
+    }
+  }
+}
+
+function chmodTargets(operands) {
+  if (!operands.length) return [];
+  if (/^(\d+|[augo]*[=+-][rwxXstugo,]+)$/.test(operands[0])) return operands.slice(1);
+  return operands;
+}
+
+function chownTargets(operands) {
+  if (operands.length < 2) return operands;
+  return operands.slice(1);
+}
+
+function commandEndpoints(command) {
+  const readPaths = [];
+  const writePaths = [];
+  for (const part of splitShellCommands(command)) {
+    const tokens = shellTokens(part);
+    const start = commandStart(tokens);
+    const binary = commandName(tokens[start]);
+    const operands = operandTokens(tokens, start + 1);
+    for (const token of operands) {
+      if (pathish(token)) readPaths.push(token);
+    }
+    addRedirectWrites(tokens, writePaths);
+    if (!MODIFYING_COMMANDS.has(binary)) continue;
+    if (binary === 'rm' || binary === 'touch' || binary === 'mkdir' || binary === 'tee' || binary === 'truncate') {
+      writePaths.push(...operands);
+    } else if (binary === 'mv') {
+      if (operands.length > 1) {
+        readPaths.push(...operands.slice(0, -1));
+        writePaths.push(...operands);
+      }
+    } else if (binary === 'cp') {
+      if (operands.length > 1) {
+        readPaths.push(...operands.slice(0, -1));
+        writePaths.push(operands[operands.length - 1]);
+      }
+    } else if (binary === 'chmod') {
+      writePaths.push(...chmodTargets(operands));
+    } else if (binary === 'chown') {
+      writePaths.push(...chownTargets(operands));
+    } else if (binary === 'sed') {
+      writePaths.push(...operands.filter(pathish));
+    }
+  }
+  return {
+    readPaths: [...new Set(readPaths)],
+    writePaths: [...new Set(writePaths)],
+  };
+}
+
 /** Pull anything that looks like a filesystem path out of a shell command. */
 function pathsInCommand(cmd) {
   const out = [];
-  const tokens = String(cmd).split(/\s+/);
-  for (let t of tokens) {
-    t = t.replace(/^["'`]|["'`;|&]+$/g, '');
-    if (!t || t.startsWith('-')) continue;
-    if (URL_RE.test(t)) { URL_RE.lastIndex = 0; continue; }
-    URL_RE.lastIndex = 0;
-    // absolute, home-relative, explicit-relative, or has a directory separator
-    if (/^([~/]|\.\.?\/)/.test(t) || (t.includes('/') && !t.includes('://'))) out.push(t);
-    else if (/^[A-Za-z]:[\\/]/.test(t)) out.push(t);
+  for (const part of splitShellCommands(cmd)) {
+    const tokens = shellTokens(part);
+    for (const t of tokens) {
+      if (!t || t.startsWith('-')) continue;
+      if (URL_RE.test(t)) { URL_RE.lastIndex = 0; continue; }
+      URL_RE.lastIndex = 0;
+      if (pathish(t)) out.push(t);
+    }
   }
   return out;
 }
@@ -96,22 +281,18 @@ function normalise(toolCall) {
   if (EXEC_TOOLS.has(name) || (declaredCmds.length && !READ_TOOLS.has(name) && !WRITE_TOOLS.has(name))) {
     out.kind = 'exec';
     out.command = declaredCmds[0] || declaredPaths[0] || '';
-    const first = String(out.command).trim().split(/\s+/)[0] || '';
-    out.binary = first.replace(/^.*[\\/]/, '').replace(/^["']/, '');
-    // a shell command can both read and write; treat every path as needing read,
-    // and paths after a redirect or a writing binary as needing write.
-    const p = pathsInCommand(out.command);
-    out.readPaths = p;
-    const redirect = String(out.command).match(/>>?\s*("[^"]+"|'[^']+'|\S+)/g) || [];
-    for (const r of redirect) {
-      const target = r.replace(/^>>?\s*/, '').replace(/^["']|["']$/g, '');
-      if (target) out.writePaths.push(target);
-    }
-    if (/^(rm|mv|cp|touch|mkdir|sed|tee|chmod|chown|truncate)$/i.test(out.binary)) {
-      out.writePaths.push(...p);
-    }
+    const tokens = shellTokens(splitShellCommands(out.command)[0] || '');
+    out.binary = commandName(tokens[commandStart(tokens)]);
+    const endpoints = commandEndpoints(out.command);
+    out.readPaths = endpoints.readPaths;
+    out.writePaths = endpoints.writePaths;
     out.urls = urlsIn(out.command);
     out.summary = truncate(out.command, 70);
+  } else if (MOVE_TOOLS.has(name)) {
+    out.kind = 'write';
+    out.readPaths = collect(args, MOVE_SOURCE_KEYS);
+    out.writePaths = collect(args, MOVE_DESTINATION_KEYS);
+    out.summary = `${rawName} ${truncate(out.readPaths[0] || '', 24)} -> ${truncate(out.writePaths[0] || '', 24)}`.trim();
   } else if (WRITE_TOOLS.has(name)) {
     out.kind = 'write';
     out.writePaths = declaredPaths;

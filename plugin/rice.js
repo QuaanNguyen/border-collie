@@ -73,6 +73,14 @@ function resourcesFromArgs(tool, args) {
   return [a.filePath || a.path || a.pattern || a.glob].filter(Boolean);
 }
 
+function toolCallFromArgs(tool, args) {
+  return {
+    id: 'opencode',
+    type: 'function',
+    function: { name: tool, arguments: JSON.stringify(args || {}) },
+  };
+}
+
 function denialMessage({ action, target, rule, layer, reason, alternative, retry }) {
   return [
     'ASSAY refused this action.',
@@ -328,6 +336,7 @@ export const Rice = async ({ client, directory }) => {
         kind: "permission",
         action: TOOL_ACTION[tool] || tool,
         resources: resources.length ? resources : [tool],
+        toolCall: toolCallFromArgs(tool, args),
       });
       publish(out);
       if (out.deny) {

@@ -64,6 +64,8 @@ async function main() {
       `mv ${protectedFile} ${path.join(projectDir, 'moved.md')}`,
       `rm ${protectedFile}`,
       `chmod 600 ${protectedFile}`,
+      'rm protected.md',
+      'echo ok && rm protected.md',
       `cat ${secretFile}`,
     ]) {
       await assert.rejects(before({ tool: 'bash' }, { args: { command } }), /protected/);
