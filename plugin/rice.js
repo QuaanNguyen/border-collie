@@ -56,7 +56,11 @@ function loadProtocol(workdir) {
   const local = path.join(workdir, ".opencode", "protocol.json");
   if (!fs.existsSync(local)) return { protocol: null, policyPath: local };
   try {
-    return { protocol: JSON.parse(fs.readFileSync(local, "utf8")), policyPath: local };
+    const protocol = JSON.parse(fs.readFileSync(local, "utf8"));
+    if (!protocol || Array.isArray(protocol) || typeof protocol !== 'object') {
+      return { protocol: null, policyPath: local, error: new Error('project policy must be a JSON object') };
+    }
+    return { protocol, policyPath: local };
   } catch (error) {
     return { protocol: null, policyPath: local, error };
   }
