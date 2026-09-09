@@ -101,6 +101,26 @@ async function main() {
       /project policy.*owner policy.*allow_ordinary_bash/i,
     );
   });
+
+  await runTest('project protected paths accumulate with owner protected paths', async () => {
+    const root = temporaryDirectory();
+    const projectDir = path.join(root, 'project');
+    const ownerConfigDir = path.join(root, 'owner-config');
+    fs.mkdirSync(projectDir, { recursive: true });
+    fs.writeFileSync(path.join(projectDir, 'owner.md'), 'owner protected\n');
+    fs.writeFileSync(path.join(projectDir, 'project.md'), 'project protected\n');
+    writeJson(path.join(ownerConfigDir, 'policy.json'), ownerPolicy({
+      protected_paths: ['owner.md'],
+    }));
+    writeJson(path.join(projectDir, '.opencode', 'protocol.json'), {
+      protected_paths: ['project.md'],
+    });
+    const hooks = await hooksFor(projectDir, ownerConfigDir, path.join(root, 'run'));
+    const before = hooks['tool.execute.before'];
+
+    await assert.rejects(before({ tool: 'edit' }, { args: { path: path.join(projectDir, 'owner.md') } }), /protected/);
+    await assert.rejects(before({ tool: 'edit' }, { args: { path: path.join(projectDir, 'project.md') } }), /protected/);
+  });
 }
 
 main();
