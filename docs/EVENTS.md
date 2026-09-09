@@ -1,6 +1,6 @@
-# Event schema (v1) - the contract between ASSAY and Pet Rice
+# Event schema (v1) - the contract between Guard and Pet Rice
 
-ASSAY decides.
+Guard decides.
 Rice expresses.
 They talk **only** through the plugin inbox file.
 Nothing else is shared.
@@ -56,7 +56,7 @@ Rice shows it in a speech bubble, so keep it under ~60 chars.
 ## `petState` values
 
 Rice renders exactly one of these.
-ASSAY always sets it, so the pet never has to derive state itself.
+Guard always sets it, so the pet never has to derive state itself.
 
 Fourteen agent-driven states, plus two the *person* causes.
 
@@ -75,9 +75,9 @@ Fourteen agent-driven states, plus two the *person* causes.
 | `error`       | glitches, spiral eyes              | A tool failed or a command crashed                 |
 | `asking`      | head tilt, `?`                     | Genuinely ambiguous - a human should decide        |
 | `sleeping`    | dozes, `z z`                       | Connected, but nothing for 90s                     |
-| `offline`     | greyed out, asleep                 | ASSAY is not running                               |
+| `offline`     | greyed out, asleep                 | Guard is not running                               |
 
-Two more are set by the renderer, never by ASSAY, and sit *on top* of whatever agent state is current.
+Two more are set by the renderer, never by Guard, and sit *on top* of whatever agent state is current.
 When the interaction ends, the state underneath is still there:
 
 | petState | Trigger                          |
@@ -99,8 +99,8 @@ Rice uses this for idle posture between events, so it feels like it remembers.
 
 ## Rules
 
-1. ASSAY never imports pet code. Pet never imports ASSAY code.
-2. ASSAY always sets `petState`, so the pet never has to infer it from `type`.
+1. Guard never imports pet code. Pet never imports Guard code.
+2. Guard always sets `petState`, so the pet never has to infer it from `type`.
 3. Rice **never blocks anything**. It reports what already happened.
 4. Silence is the resting state. No event, no reaction - routine allowed
    actions tick a counter and, apart from a quick nod, say nothing.

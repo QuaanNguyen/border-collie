@@ -76,7 +76,7 @@ const LINES = {
 
 /* The transport is stubbed below, so pollMood can never run and the label
    would sit at its initial "asleep" for every shot - which is what these
-   screenshots get read from. Pose it the way ASSAY would report it. */
+   screenshots get read from. Pose it the way Guard would report it. */
 const MOOD = {
   calm: 'content', hover: 'content', drag: 'content', thinking: 'content',
   watching: 'content', checking: 'content', allowed: 'content',

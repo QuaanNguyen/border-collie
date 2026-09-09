@@ -1,17 +1,17 @@
 "use strict";
 /**
- * Rice — the window.
+ * Rice  -  the window.
  *
  * A frameless, transparent, always-on-top companion that floats over whatever
- * you are working in. It has no idea what ASSAY is beyond one URL: it reads the
+ * you are working in. It has no idea what Guard is beyond one URL: it reads the
  * event stream and reacts. It cannot block, allow, or change anything.
  *
  *   npm start                 -- normal
  *   npm run start:solid       -- opaque background, if transparency misbehaves
- *   npm run start:demo        -- replay a canned event sequence, no ASSAY needed
+ *   npm run start:demo        -- replay a canned event sequence, no Guard needed
  *   npm run start:dev         -- animation picker; hot-reloads pet/src on change
  *
- * Shortcuts (global — they work whatever window has focus):
+ * Shortcuts (global  -  they work whatever window has focus):
  *   Mac:     Control+Option+R  show/hide · Control+Option+= / -  size · Control+Option+0  reset
  *   Windows: Ctrl+Alt+R        show/hide · Ctrl+Alt+= / -        size · Ctrl+Alt+0        reset
  *
@@ -29,7 +29,7 @@ const path = require("node:path");
 const os = require("node:os");
 const fs = require("node:fs");
 const { pathToFileURL } = require("node:url");
-const { watchInbox, defaultInboxPath } = require("../assay/lib/events");
+const { watchInbox, defaultInboxPath } = require("../guard/lib/events");
 const { parseOwnerPid, createOwnerRegistry } = require("./lib/owners");
 const G = require("./geometry");
 const { BASE_W, BASE_H, DEFAULT_SCALE, clampScale } = G;
@@ -109,7 +109,7 @@ function loadSettings() {
     if (Number.isInteger(raw.x)) settings.x = raw.x;
     if (Number.isInteger(raw.y)) settings.y = raw.y;
   } catch {
-    /* first run, or unreadable — defaults are fine */
+    /* first run, or unreadable  -  defaults are fine */
   }
 }
 
@@ -378,7 +378,7 @@ if (!gotLock) {
     if (failed.length) {
       console.log("");
       console.log(
-        `  Note: ${failed.map((a) => prettyShortcut(a)).join(", ")} could not be registered — another app owns`,
+        `  Note: ${failed.map((a) => prettyShortcut(a)).join(", ")} could not be registered  -  another app owns`,
       );
       console.log(
         `  it. Pass --shortcut="${prettyShortcut(`${MOD}+K`)}" (or similar) to pick a different one.`,

@@ -1,6 +1,6 @@
 'use strict';
 /**
- * Window sizing, with no Electron in it — so it can be tested.
+ * Window sizing, with no Electron in it  -  so it can be tested.
  *
  * Rice lives in a screen corner, so growing has to keep the bottom-right
  * corner still. Growing from the top-left would walk the pet off the screen.
@@ -48,8 +48,8 @@ function boundsFor(prev, scale, logOpen) {
 
 /**
  * Never let it end up off the edge of the display it is on.
- * The outer Math.max matters: if the window is bigger than the work area — a
- * small laptop at 2x with the log open — the inner clamp alone produces a
+ * The outer Math.max matters: if the window is bigger than the work area  -  a
+ * small laptop at 2x with the log open  -  the inner clamp alone produces a
  * negative coordinate and pushes Rice off the top of the screen.
  */
 function keepOnScreen(bounds, area) {

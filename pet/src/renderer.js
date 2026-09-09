@@ -2,8 +2,8 @@
 /**
  * Rice's behaviour.
  *
- * Reads the ASSAY event stream and reacts. It never decides anything - by the
- * time an event arrives, ASSAY has already allowed or refused it. Rice is the
+ * Reads the Guard event stream and reacts. It never decides anything - by the
+ * time an event arrives, Guard has already allowed or refused it. Rice is the
  * face on a decision that already happened.
  *
  * Two layers of state:
@@ -489,7 +489,7 @@ if (window.rice.onDrag) {
   });
 }
 
-/* ---------------- demo mode (no ASSAY needed) ---------------- */
+/* ---------------- demo mode (no Guard needed) ---------------- */
 
 const DEMO_SCRIPT = [
   [

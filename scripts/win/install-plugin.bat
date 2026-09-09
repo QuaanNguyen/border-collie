@@ -1,6 +1,6 @@
 @echo off
 cd /d "%~dp0..\.."
-echo Installing Rice (plugin + assay + pet dependencies)…
+echo Installing Rice (plugin + guard + pet dependencies)…
 node scripts\install-plugin.js
 if errorlevel 1 (
   echo Install failed.

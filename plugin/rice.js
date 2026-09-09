@@ -11,7 +11,7 @@ const here = path.dirname(fileURLToPath(import.meta.url));
 function findRepo(start) {
   let dir = start;
   for (let i = 0; i < 12; i++) {
-    if (fs.existsSync(path.join(dir, "assay/lib/session.js"))) return dir;
+    if (fs.existsSync(path.join(dir, "guard/lib/session.js"))) return dir;
     const parent = path.dirname(dir);
     if (parent === dir) break;
     dir = parent;
@@ -22,22 +22,22 @@ function findRepo(start) {
 function resolveRoot(start) {
   if (process.env.RICE_ROOT) return process.env.RICE_ROOT;
   const bundled = path.join(start, "rice");
-  if (fs.existsSync(path.join(bundled, "assay/lib/session.js"))) return bundled;
+  if (fs.existsSync(path.join(bundled, "guard/lib/session.js"))) return bundled;
   return findRepo(start);
 }
 
 const repoRoot = resolveRoot(here);
 if (!repoRoot) {
   throw new Error(
-    "Rice cannot find assay/lib/session.js. Run scripts/install-plugin (copies assay + pet next to the plugin), or set RICE_ROOT.",
+    "Rice cannot find guard/lib/session.js. Run scripts/install-plugin (copies guard + pet next to the plugin), or set RICE_ROOT.",
   );
 }
 
-const { createSession } = require(path.join(repoRoot, "assay/lib/session.js"));
-const { EventBus, defaultInboxPath } = require(path.join(repoRoot, "assay/lib/events.js"));
-const { loadOwnerPolicy, ownerProtocol } = require(path.join(repoRoot, "assay/lib/owner-policy.js"));
-const { resolvePolicy, policyConflicts } = require(path.join(repoRoot, "assay/lib/policy-resolution.js"));
-const { protectedPathDecision } = require(path.join(repoRoot, "assay/lib/protected-paths.js"));
+const { createSession } = require(path.join(repoRoot, "guard/lib/session.js"));
+const { EventBus, defaultInboxPath } = require(path.join(repoRoot, "guard/lib/events.js"));
+const { loadOwnerPolicy, ownerProtocol } = require(path.join(repoRoot, "guard/lib/owner-policy.js"));
+const { resolvePolicy, policyConflicts } = require(path.join(repoRoot, "guard/lib/policy-resolution.js"));
+const { protectedPathDecision } = require(path.join(repoRoot, "guard/lib/protected-paths.js"));
 
 const TOOL_ACTION = {
   read: "read",
@@ -83,7 +83,7 @@ function toolCallFromArgs(tool, args) {
 
 function denialMessage({ action, target, rule, layer, reason, alternative, retry }) {
   return [
-    'ASSAY refused this action.',
+    'Guard refused this action.',
     'Requested action: ' + action,
     'Target: ' + target,
     'Governing rule: ' + rule,

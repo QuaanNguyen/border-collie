@@ -28,6 +28,7 @@ lerna-debug.log*
 /runs
 /demo/work
 /pet/node_modules
+/pet/assets/local-animations
 /test/shots
 
 # opencode

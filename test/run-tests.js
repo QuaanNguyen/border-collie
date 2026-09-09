@@ -12,10 +12,11 @@ const fs = require('node:fs');
 const { execFileSync } = require('node:child_process');
 
 const ROOT = path.resolve(__dirname, '..');
-const { Protocol, check } = require(path.join(ROOT, 'assay/lib/policy'));
-const { scan } = require(path.join(ROOT, 'assay/lib/injection'));
-const { detectClaims, runCheck, verify } = require(path.join(ROOT, 'assay/lib/verify'));
-const { normalise } = require(path.join(ROOT, 'assay/lib/toolcalls'));
+const { Protocol, check } = require(path.join(ROOT, 'guard/lib/policy'));
+const { createSession } = require(path.join(ROOT, 'guard/lib/session'));
+const { scan } = require(path.join(ROOT, 'guard/lib/injection'));
+const { detectClaims, runCheck, verify } = require(path.join(ROOT, 'guard/lib/verify'));
+const { normalise } = require(path.join(ROOT, 'guard/lib/toolcalls'));
 
 let pass = 0, fail = 0;
 const only = process.argv[2];
@@ -80,6 +81,7 @@ const P = new Protocol({
   read_paths: ['data/**', 'src/**', 'README.md'],
   write_paths: ['data/**', 'src/**'],
   allow_commands: ['python', 'git', 'ls', 'cat'],
+  command_allowlist: ['git status --short'],
   deny_commands: ['curl', 'wget', 'nc'],
   egress: [],
 }, '/work/project');
@@ -99,6 +101,20 @@ t('blocks a read inside the workdir but outside the protocol', () => {
   assert.equal(r.decision, 'block');
 });
 
+t('blocks an extension tool until the protocol names it', () => {
+  const r = check(call('shared_drive_search', { query: 'grant proposal' }), P);
+  assert.equal(r.decision, 'block');
+  assert.equal(r.rule, 'allow_tools');
+  const open = new Protocol({ ...P.raw, allow_tools: ['shared_drive_search'] }, '/work/project');
+  assert.equal(check(call('shared_drive_search', { query: 'grant proposal' }), open).decision, 'allow');
+});
+
+t('blocks subagent dispatch by default', () => {
+  const session = createSession({ protocol: P, workdir: '/work/project' });
+  const out = session.handle({ kind: 'permission', action: 'subagent', resources: ['explore'] });
+  assert.ok(out.deny);
+});
+
 t('blocks a write to a path only declared readable', () => {
   const r = check(call('write', { path: 'README.md', content: 'x' }), P);
   assert.equal(r.decision, 'block');
@@ -116,15 +132,42 @@ t('blocks a denied binary even with no network', () => {
   assert.equal(r.decision, 'block');
 });
 
-t('blocks a command that is not on the allow list', () => {
+t('blocks a command that is not exactly user-approved', () => {
   const r = check(call('bash', { command: 'rm -rf data' }), P);
   assert.equal(r.decision, 'block');
-  assert.equal(r.rule, 'allow_commands');
+  assert.equal(r.rule, 'command_allowlist');
 });
 
 t('blocks path traversal dressed up in a command', () => {
   const r = check(call('bash', { command: 'cat ../../../../etc/passwd' }), P);
   assert.equal(r.decision, 'block');
+});
+
+t('allows an exact user-approved command', () => {
+  const r = check(call('bash', { command: 'git status --short' }), P);
+  assert.equal(r.decision, 'allow');
+});
+
+t('blocks an agent-chosen argument to an otherwise allowed binary', () => {
+  const r = check(call('bash', {
+    command: "python -c \"from pathlib import Path; print(Path('../otherlab/notes.md').read_text())\"",
+  }), P);
+  assert.equal(r.decision, 'block');
+  assert.equal(r.rule, 'command_allowlist');
+});
+
+t('blocks a symlink in the working directory that resolves outside it', () => {
+  const root = fs.mkdtempSync(path.join(require('node:os').tmpdir(), 'guard-symlink-'));
+  const outside = fs.mkdtempSync(path.join(require('node:os').tmpdir(), 'guard-outside-'));
+  fs.writeFileSync(path.join(outside, 'notes.md'), 'private research notes\n');
+  fs.symlinkSync(outside, path.join(root, 'shared'));
+  const protocol = new Protocol({ read_paths: ['**'], write_paths: ['**'] }, root);
+  const r = check(call('read', { path: 'shared/notes.md' }), protocol);
+  assert.equal(r.decision, 'block');
+  assert.equal(r.rule, 'read_paths');
+  const write = check(call('write', { path: 'shared/new-notes.md', content: 'x' }), protocol);
+  assert.equal(write.decision, 'block');
+  assert.equal(write.rule, 'write_paths');
 });
 
 t('allows egress to a declared host only', () => {
@@ -228,7 +271,7 @@ t('scaling up stops at what the display can hold', () => {
 
 console.log('\ntool failures');
 
-const { toolFailed } = require(path.join(ROOT, 'assay/lib/toolerror'));
+const { toolFailed } = require(path.join(ROOT, 'guard/lib/toolerror'));
 
 const FAILURES = [
   'error: ENOENT: no such file or directory',
@@ -268,7 +311,7 @@ t('reports the offending line, not the whole blob', () => {
 
 console.log('\nevidence');
 
-const TMP = fs.mkdtempSync(path.join(require('node:os').tmpdir(), 'assay-test-'));
+const TMP = fs.mkdtempSync(path.join(require('node:os').tmpdir(), 'guard-test-'));
 fs.mkdirSync(path.join(TMP, 'src'), { recursive: true });
 fs.writeFileSync(path.join(TMP, 'src/config.py'), 'API_KEY = "sk-demo-ABCDEFGHIJ"\n');
 fs.writeFileSync(path.join(TMP, '.env.example'), 'API_KEY=sk-demo-ABCDEFGHIJ\n');
@@ -339,6 +382,37 @@ t('interrupted thinking returns the pet to calm', () => {
     if (!events.some((e) => e.type === 'thinking' && e.status === 'idle' && e.petState === 'calm')) {
       throw new Error('missing idle event after stopped status');
     }
+  `;
+  execFileSync(process.execPath, ['--input-type=module', '-e', script], { cwd: ROOT, stdio: 'pipe' });
+});
+
+t('the OpenCode adapter blocks a shell escape hidden in interpreter code', () => {
+  const script = `
+    import fs from 'node:fs';
+    import os from 'node:os';
+    import path from 'node:path';
+    process.env.RICE_NO_PET = '1';
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'rice-shell-boundary-'));
+    process.env.RICE_EVENTS = path.join(dir, 'events.jsonl');
+    process.env.RICE_RUNS = path.join(dir, 'runs');
+    fs.writeFileSync(path.join(dir, 'protocol.json'), JSON.stringify({
+      read_paths: ['**'],
+      write_paths: [],
+      allow_commands: ['python'],
+      egress: [],
+    }));
+    const { Rice } = await import(${JSON.stringify(path.join(ROOT, 'plugin/rice.js'))});
+    const hooks = await Rice({ client: {}, directory: dir });
+    let denied = false;
+    try {
+      await hooks['tool.execute.before'](
+        { tool: 'bash' },
+        { args: { command: "python -c \\"import os; print(open(os.pardir + os.sep + 'notes.md').read())\\"" } },
+      );
+    } catch {
+      denied = true;
+    }
+    if (!denied) throw new Error('shell escape was allowed');
   `;
   execFileSync(process.execPath, ['--input-type=module', '-e', script], { cwd: ROOT, stdio: 'pipe' });
 });

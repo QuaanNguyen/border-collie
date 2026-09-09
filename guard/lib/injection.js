@@ -4,7 +4,7 @@
  *
  * IMPORTANT, and say this on stage: this is **not** the security control.
  * The gate in policy.js is what actually stops anything, and it does so
- * without consulting this file. Detection of injected text is only a signal —
+ * without consulting this file. Detection of injected text is only a signal  - 
  * it is what makes Rice look nervous, and it is what lets the run record say
  * "the poison arrived here" instead of only "an action was refused there".
  *

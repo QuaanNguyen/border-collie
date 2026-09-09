@@ -18,7 +18,7 @@ contextBridge.exposeInMainWorld('rice', {
   // sees a mousemove. Main forwards window moves instead.
   onDrag: (fn) => ipcRenderer.on('rice:dragging', () => fn()),
 
-  // Plugin mode has no port to subscribe to: ASSAY runs inside the harness and
+  // Plugin mode has no port to subscribe to: Guard runs inside the harness and
   // appends to a file, main tails it, and each event arrives here instead.
   onEvent: (fn) => ipcRenderer.on('rice:event', (_e, evt) => fn(evt)),
 });

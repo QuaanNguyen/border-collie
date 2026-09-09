@@ -1,8 +1,8 @@
 {
-  "name": "pet-rice",
+  "name": "pet-border-collie",
   "version": "0.1.0",
   "private": true,
-  "description": "Rice — a desktop companion that watches what your coding agent is doing, and reacts.",
+  "description": "Border Collie - a desktop companion that watches what your coding agent is doing, and reacts.",
   "main": "main.js",
   "scripts": {
     "start": "electron .",

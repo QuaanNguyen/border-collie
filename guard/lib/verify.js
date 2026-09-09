@@ -3,7 +3,7 @@
  * "Done" is a claim. Evidence is what makes it a result.
  *
  * The agent asserts something is finished; we go and look. Checks are ordinary
- * code against the real working tree — a diff, a grep, an exit code — never a
+ * code against the real working tree  -  a diff, a grep, an exit code  -  never a
  * model being asked whether the code looks finished. The thing under test does
  * not get to author its own evidence.
  */
@@ -88,7 +88,7 @@ function runCheck(check, workdir) {
     const out = git(workdir, ['log', '--all', '-p', '--no-color', `-G${check.pattern}`, '--format=%H %s']);
     if (out == null) {
       return { id: check.id || type, type, pass: true, where: [],
-        evidence: 'no git repository here — history check skipped' };
+        evidence: 'no git repository here  -  history check skipped' };
     }
     const found = re.test(out);
     re.lastIndex = 0;

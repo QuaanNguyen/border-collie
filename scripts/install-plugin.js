@@ -144,12 +144,12 @@ function installPlugin(opts = {}) {
   const skipNpm = opts.skipNpm === true;
 
   const srcPlugin = path.join(repoRoot, 'plugin', 'rice.js');
-  const srcAssay = path.join(repoRoot, 'assay');
+  const srcGuard = path.join(repoRoot, 'guard');
   const srcPet = path.join(repoRoot, 'pet');
 
   if (!fs.existsSync(srcPlugin)) throw new Error('missing ' + srcPlugin);
-  if (!fs.existsSync(path.join(srcAssay, 'lib', 'session.js'))) {
-    throw new Error('missing assay/lib/session.js under ' + srcAssay);
+  if (!fs.existsSync(path.join(srcGuard, 'lib', 'session.js'))) {
+    throw new Error('missing guard/lib/session.js under ' + srcGuard);
   }
   if (!fs.existsSync(path.join(srcPet, 'package.json'))) {
     throw new Error('missing pet/package.json under ' + srcPet);
@@ -162,7 +162,7 @@ function installPlugin(opts = {}) {
   fs.mkdirSync(packageDir, { recursive: true });
 
   fs.copyFileSync(srcPlugin, entry);
-  copyTree(srcAssay, path.join(packageDir, 'assay'));
+  copyTree(srcGuard, path.join(packageDir, 'guard'));
   copyTree(srcPet, path.join(packageDir, 'pet'), {
     skip: new Set(['node_modules']),
   });
@@ -190,7 +190,7 @@ if (require.main === module) {
   console.log('Installing Rice into OpenCode global plugins…');
   const { dest, packageDir, petDir, ownerPolicyPath, migrationPreview: preview } = installPlugin();
   console.log('Plugin entry:  ' + dest);
-  console.log('Package:       ' + packageDir + '  (assay + pet)');
+  console.log('Package:       ' + packageDir + '  (guard + pet)');
   console.log('Pet deps:      ' + petDir + '/node_modules');
   console.log('Owner policy:  ' + ownerPolicyPath);
   if (preview) {

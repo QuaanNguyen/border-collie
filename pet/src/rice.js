@@ -88,7 +88,7 @@
     </g>
   </g>`;
 
-  /** a receipt with two ticked lines and one blank — evidence being gathered */
+  /** a receipt with two ticked lines and one blank  -  evidence being gathered */
   const receipt = () => `
   <g class="prop-tilt">
     <rect x="92" y="70" width="30" height="38" rx="3" fill="#fdfaf2" stroke="#b9ae95" stroke-width="1.6"/>
@@ -218,7 +218,7 @@
     ${oh(100, 3.5, 4.5)}
     ${zzz()}`,
 
-    /* ASSAY itself is not running */
+    /* Guard itself is not running */
     offline: () => `
     ${eyes(shut(44, 76) + shut(76, 76))}
     ${flat(10, 100)}

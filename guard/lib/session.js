@@ -131,7 +131,7 @@ function createSession(opts = {}) {
     const lines = blocked.map((result) =>
       `  - ${result.call.summary}\n    refused: ${result.reason} [rule: ${result.rule}]`);
     const message = [
-      'ASSAY refused the following action(s) because they fall outside the task you were given.',
+      'Guard refused the following action(s) because they fall outside the task you were given.',
       '',
       `Task: ${protocol.task}`,
       '',
@@ -186,7 +186,7 @@ function createSession(opts = {}) {
           events: [{
             type: 'ask', status: 'ask', petState: 'asking',
             summary: 'it says it is done, and this task declared no way to check',
-            reason: 'no done_criteria in the protocol — a human has to look',
+            reason: 'no done_criteria in the protocol  -  a human has to look',
             detail: { said: truncate(text, 160) },
           }],
         };
@@ -211,13 +211,13 @@ function createSession(opts = {}) {
         settled.add(criterion.id);
         events.push({
           type: 'verdict', status: 'pass', petState: 'celebrating',
-          summary: `verified — ${result.describe}`,
+          summary: `verified  -  ${result.describe}`,
           detail: { id: criterion.id, checks: result.checks },
         });
       } else {
         events.push({
           type: 'verdict', status: 'fail', petState: 'rejecting',
-          summary: `not accepted — ${truncate(result.summary, 60)}`,
+          summary: `not accepted  -  ${truncate(result.summary, 60)}`,
           reason: result.summary,
           detail: { id: criterion.id, checks: result.checks },
         });
@@ -233,7 +233,7 @@ function createSession(opts = {}) {
     ]);
 
     const inject = [
-      'ASSAY did not accept this as done. Evidence was checked against the working tree:',
+      'Guard did not accept this as done. Evidence was checked against the working tree:',
       '',
       ...lines,
       '',
