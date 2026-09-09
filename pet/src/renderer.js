@@ -196,13 +196,15 @@ function paintAnimation(state) {
     animation.hidden = true;
     animation.removeAttribute("src");
     scene.hidden = false;
+    scene.style.removeProperty("display");
     return;
   }
   animationState = state;
   let index = 0;
-  animation.src = frames[index];
-  animation.hidden = false;
-  scene.hidden = true;
+    animation.src = frames[index];
+    animation.hidden = false;
+    scene.hidden = true;
+    scene.style.display = "none";
   animationTimer = setInterval(() => {
     if (animationState !== state) return;
     index = (index + 1) % frames.length;
