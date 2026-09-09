@@ -145,9 +145,11 @@ body {
   position: relative;
   z-index: 1;
 }
-.animation[hidden],
-#scene[hidden] {
+.animation[hidden] {
   display: none;
+}
+#scene[hidden] {
+  display: none !important;
 }
 /* The bowl is furniture: it never moves. Everything animates on the grain,
    which is what makes the grain look like it is sitting *in* something. */
