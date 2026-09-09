@@ -35,7 +35,7 @@ if (!repoRoot) {
 
 const { createSession } = require(path.join(repoRoot, "assay/lib/session.js"));
 const { EventBus, defaultInboxPath } = require(path.join(repoRoot, "assay/lib/events.js"));
-const { loadOwnerPolicy, researchSafeProtocol } = require(path.join(repoRoot, "assay/lib/owner-policy.js"));
+const { loadOwnerPolicy, ownerProtocol } = require(path.join(repoRoot, "assay/lib/owner-policy.js"));
 const { resolvePolicy, policyConflicts } = require(path.join(repoRoot, "assay/lib/policy-resolution.js"));
 const { protectedPathDecision } = require(path.join(repoRoot, "assay/lib/protected-paths.js"));
 
@@ -204,13 +204,13 @@ export const Rice = async ({ client, directory }) => {
   const workdir = directory || process.cwd();
   const projectPolicy = loadProtocol(workdir);
   const ownerPolicy = loadOwnerPolicy();
-  const ownerProtocol = researchSafeProtocol(ownerPolicy);
+  const resolvedOwnerProtocol = ownerProtocol(ownerPolicy);
   const conflicts = projectPolicy.error
     ? []
-    : policyConflicts(ownerProtocol || {}, projectPolicy.protocol, ownerPolicy?.trusted_workspace_roots || []);
+    : policyConflicts(resolvedOwnerProtocol || {}, projectPolicy.protocol, ownerPolicy?.trusted_workspace_roots || []);
   const protocol = projectPolicy.error
     ? null
-    : resolvePolicy(ownerProtocol, projectPolicy.protocol);
+    : resolvePolicy(resolvedOwnerProtocol, projectPolicy.protocol);
   const inboxPath = process.env.RICE_EVENTS || defaultInboxPath();
   const runsDir = process.env.RICE_RUNS || path.join(os.homedir(), ".rice", "runs");
   const bus = new EventBus({ inboxPath, runsDir });

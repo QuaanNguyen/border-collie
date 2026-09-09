@@ -17,10 +17,10 @@ function loadOwnerPolicy(configDir = process.env.RICE_OWNER_CONFIG || defaultOwn
   }
 }
 
-function researchSafeProtocol(policy) {
-  if (policy?.setup_package !== 'research-safe') return null;
+function ownerProtocol(policy) {
+  if (!['research-safe', 'custom'].includes(policy?.setup_package)) return null;
   const protocol = {
-    task: 'Research-safe OpenCode session',
+    task: policy.setup_package === 'custom' ? 'Custom OpenCode session' : 'Research-safe OpenCode session',
     read_paths: ['**'],
     write_paths: ['**'],
     allow_ordinary_bash: true,
@@ -48,4 +48,4 @@ function researchSafeProtocol(policy) {
   return protocol;
 }
 
-module.exports = { defaultOwnerConfigDir, loadOwnerPolicy, researchSafeProtocol };
+module.exports = { defaultOwnerConfigDir, loadOwnerPolicy, ownerProtocol };
