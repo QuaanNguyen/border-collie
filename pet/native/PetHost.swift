@@ -1,6 +1,5 @@
 import AppKit
 import Carbon
-import Darwin
 import Foundation
 import WebKit
 
@@ -59,7 +58,6 @@ private func loadPetConfig(at petDirectory: URL) throws -> PetConfig {
 
 private func rendererConfiguration(
     petDirectory: URL,
-    eventURL: URL,
     config: PetConfig,
     scale: Double,
     shortcut: String
@@ -111,7 +109,7 @@ private func rendererConfiguration(
         throw PetConfigurationError.invalid("Pet configuration must map the calm state")
     }
     return [
-        "eventsFile": eventURL.path,
+        "live": true,
         "solid": false,
         "dev": false,
         "scale": scale,
@@ -143,85 +141,61 @@ private func enclosingRectangle(_ rectangles: [CGRect]) -> CGRect? {
     return bounds
 }
 
-private final class OwnerRegistry {
-    private let directory: URL
-    private let lockDescriptor: Int32
-    private let keepWithoutOwner: Bool
+private final class PetEventInput {
+    private static let maximumLineBytes = 1_048_576
+    private let handle: FileHandle
+    private let onEvent: ([String: Any]) -> Void
+    private let onEnd: () -> Void
+    private var buffer = Data()
+    private var closed = false
 
-    init(dataDirectory: URL, ownerPID: Int32?) throws {
-        directory = dataDirectory.appendingPathComponent("owners", isDirectory: true)
-        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
-        keepWithoutOwner = ownerPID == nil
-        if let ownerPID { try Data().write(to: directory.appendingPathComponent(String(ownerPID)), options: .atomic) }
-        lockDescriptor = open(dataDirectory.appendingPathComponent("pet.lock").path, O_CREAT | O_RDWR, S_IRUSR | S_IWUSR)
-        if lockDescriptor < 0 { throw NSError(domain: NSPOSIXErrorDomain, code: Int(errno)) }
+    init(handle: FileHandle = .standardInput, onEvent: @escaping ([String: Any]) -> Void, onEnd: @escaping () -> Void) {
+        self.handle = handle
+        self.onEvent = onEvent
+        self.onEnd = onEnd
     }
 
-    func acquire() -> Bool { return flock(lockDescriptor, LOCK_EX | LOCK_NB) == 0 }
-
-    func hasOwners() -> Bool {
-        if keepWithoutOwner { return true }
-        guard let names = try? FileManager.default.contentsOfDirectory(atPath: directory.path) else { return false }
-        var live = false
-        for name in names {
-            guard let pid = Int32(name) else { continue }
-            if kill(pid, 0) == 0 || errno == EPERM {
-                live = true
-            } else {
-                try? FileManager.default.removeItem(at: directory.appendingPathComponent(name))
-            }
-        }
-        return live
-    }
-
-    deinit { close(lockDescriptor) }
-}
-
-private final class EventInbox {
-    private let url: URL
-    private var offset: UInt64 = 0
-    private var carry = Data()
-    private var seen = Set<String>()
-    var onEvent: (([String: Any]) -> Void)?
-
-    init(url: URL, offset: UInt64?) {
-        self.url = url
-        if let offset {
-            self.offset = offset
-        } else if let attributes = try? FileManager.default.attributesOfItem(atPath: url.path) {
-            self.offset = (attributes[.size] as? NSNumber)?.uint64Value ?? 0
+    func start() {
+        handle.readabilityHandler = { [weak self] handle in
+            let data = handle.availableData
+            DispatchQueue.main.async { self?.receive(data) }
         }
     }
 
-    func drain() {
-        guard let attributes = try? FileManager.default.attributesOfItem(atPath: url.path) else {
-            reset()
+    private func receive(_ data: Data) {
+        guard !closed else { return }
+        if data.isEmpty {
+            finish()
             return
         }
-        let size = (attributes[.size] as? NSNumber)?.uint64Value ?? 0
-        if size < offset { reset() }
-        if size == offset { return }
-        guard let handle = try? FileHandle(forReadingFrom: url) else { return }
-        defer { try? handle.close() }
-        guard (try? handle.seek(toOffset: offset)) != nil,
-              let data = try? handle.readToEnd() else { return }
-        offset += UInt64(data.count)
-        carry.append(data)
-        while let newline = carry.firstIndex(of: 10) {
-            let line = Data(carry[..<newline])
-            carry.removeSubrange(...newline)
+        buffer.append(data)
+        if buffer.count > Self.maximumLineBytes {
+            finish()
+            return
+        }
+        while let newline = buffer.firstIndex(of: 10) {
+            let line = Data(buffer[..<newline])
+            buffer.removeSubrange(...newline)
             guard !line.isEmpty,
                   let event = try? JSONSerialization.jsonObject(with: line) as? [String: Any] else { continue }
-            let key = "\(event["runId"] ?? ""):\(event["seq"] ?? "")"
-            if seen.insert(key).inserted { onEvent?(event) }
+            onEvent(event)
         }
     }
 
-    private func reset() {
-        offset = 0
-        carry.removeAll()
-        seen.removeAll()
+    private func finish() {
+        if closed { return }
+        stop()
+        onEnd()
     }
+
+    func stop() {
+        if closed { return }
+        closed = true
+        handle.readabilityHandler = nil
+        buffer.removeAll()
+    }
+
+    deinit { stop() }
 }
 
 private final class GlobalShortcut {
@@ -296,13 +270,10 @@ private final class PetWebView: WKWebView {
     override func acceptsFirstMouse(for event: NSEvent?) -> Bool { return true }
 }
 
-final class PetHost: NSObject {
+final class PetHost: NSObject, WKNavigationDelegate {
     private let petDirectory: URL
-    private let dataDirectory: URL
-    private let eventURL: URL
-    private let owners: OwnerRegistry
     private let config: PetConfig
-    private let inbox: EventInbox
+    private var eventInput: PetEventInput?
     private var panel: PetPanel!
     private var webView: PetWebView!
     private var bridge: UserBridge!
@@ -310,27 +281,22 @@ final class PetHost: NSObject {
     private var scale: Double
     private var hitRegions: [CGRect] = []
     private var dragRegions: [CGRect] = []
-    private var timers: [Timer] = []
+    private var mouseTimer: Timer?
+    private var pendingEvents: [[String: Any]] = []
+    private var rendererReady = false
     private var dragging = false
     private var dragOffset: CGPoint?
     private var lastDragPointerX: CGFloat?
 
-    fileprivate init(petDirectory: URL, dataDirectory: URL, eventURL: URL, eventOffset: UInt64?, owners: OwnerRegistry, config: PetConfig) {
+    fileprivate init(petDirectory: URL, config: PetConfig) {
         self.petDirectory = petDirectory
-        self.dataDirectory = dataDirectory
-        self.eventURL = eventURL
-        self.owners = owners
         self.config = config
-        inbox = EventInbox(url: eventURL, offset: eventOffset)
         scale = config.defaultScale
         super.init()
     }
 
     func start(shortcut shortcutValue: String) throws {
-        try FileManager.default.createDirectory(at: dataDirectory, withIntermediateDirectories: true)
-        let saved = loadSettings()
-        scale = config.clamp((saved?["scale"] as? NSNumber)?.doubleValue ?? config.defaultScale)
-        panel = PetPanel(contentRect: initialFrame(saved), styleMask: [.borderless, .nonactivatingPanel], backing: .buffered, defer: false)
+        panel = PetPanel(contentRect: initialFrame(), styleMask: [.borderless, .nonactivatingPanel], backing: .buffered, defer: false)
         panel.host = self
         panel.isFloatingPanel = true
         panel.level = .floating
@@ -345,7 +311,6 @@ final class PetHost: NSObject {
         bridge.host = self
         let renderer = try rendererConfiguration(
             petDirectory: petDirectory,
-            eventURL: eventURL,
             config: config,
             scale: scale,
             shortcut: shortcutValue
@@ -358,16 +323,21 @@ final class PetHost: NSObject {
         webConfig.websiteDataStore = .nonPersistent()
         webConfig.setValue(false, forKey: "drawsBackground")
         webView = PetWebView(frame: panel.contentView!.bounds, configuration: webConfig)
+        webView.navigationDelegate = self
         webView.autoresizingMask = [.width, .height]
         webView.underPageBackgroundColor = .clear
         webView.pageZoom = scale
         panel.contentView = webView
 
-        inbox.onEvent = { [weak self] in self?.sendEvent($0) }
         webView.loadFileURL(petDirectory.appendingPathComponent("src/index.html"), allowingReadAccessTo: petDirectory)
         panel.orderFrontRegardless()
         shortcut = GlobalShortcut(value: shortcutValue) { [weak self] in self?.toggleVisible() }
-        startTimers()
+        startMouseTimer()
+        eventInput = PetEventInput(
+            onEvent: { [weak self] in self?.sendEvent($0) },
+            onEnd: { NSApp.terminate(nil) }
+        )
+        eventInput?.start()
     }
 
     private func bridgeScript(config: String) -> String {
@@ -406,15 +376,8 @@ final class PetHost: NSObject {
         }
     }
 
-    private func startTimers() {
-        timers = [
-            timer(every: 1.0 / 30.0) { [weak self] in self?.updateMouseAcceptance() },
-            timer(every: 0.15) { [weak self] in self?.inbox.drain() },
-            timer(every: 0.5) { [weak self] in
-                guard let self else { return }
-                if !owners.hasOwners() { NSApp.terminate(nil) }
-            },
-        ]
+    private func startMouseTimer() {
+        mouseTimer = timer(every: 1.0 / 30.0) { [weak self] in self?.updateMouseAcceptance() }
     }
 
     private func timer(every interval: TimeInterval, action: @escaping () -> Void) -> Timer {
@@ -464,14 +427,28 @@ final class PetHost: NSObject {
         dragOffset = nil
         lastDragPointerX = nil
         reportDrag(phase: "end", deltaX: 0)
-        saveSettings()
         updateMouseAcceptance()
         return true
     }
 
     private func sendEvent(_ event: [String: Any]) {
+        if !rendererReady {
+            pendingEvents.append(event)
+            if pendingEvents.count > 256 { pendingEvents.removeFirst() }
+            return
+        }
+        deliverEvent(event)
+    }
+
+    private func deliverEvent(_ event: [String: Any]) {
         guard let encoded = try? base64JSON(event) else { return }
         webView.evaluateJavaScript("window.__borderCollieEvent(JSON.parse(atob('\(encoded)')))" )
+    }
+
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        rendererReady = true
+        for event in pendingEvents { deliverEvent(event) }
+        pendingEvents.removeAll()
     }
 
     private func reportDrag(phase: String, deltaX: CGFloat) {
@@ -505,7 +482,6 @@ final class PetHost: NSObject {
         }
         panel.setFrame(next, display: true)
         webView.pageZoom = scale
-        saveSettings()
     }
 
     private func constrainedFrame(_ frame: NSRect, to visible: NSRect) -> NSRect {
@@ -525,32 +501,18 @@ final class PetHost: NSObject {
         return next
     }
 
-    private var settingsURL: URL { return dataDirectory.appendingPathComponent("pet-settings.json") }
-
-    private func loadSettings() -> [String: Any]? {
-        guard let data = try? Data(contentsOf: settingsURL) else { return nil }
-        return try? JSONSerialization.jsonObject(with: data) as? [String: Any]
-    }
-
-    private func initialFrame(_ saved: [String: Any]?) -> NSRect {
+    private func initialFrame() -> NSRect {
         let width = config.baseWidth * scale
         let height = config.baseHeight * scale
         let screen = NSScreen.main?.visibleFrame ?? NSRect(x: 0, y: 0, width: width, height: height)
-        let fallback = NSRect(x: screen.maxX - width - 28, y: screen.minY + 28, width: width, height: height)
-        guard let x = (saved?["x"] as? NSNumber)?.doubleValue,
-              let y = (saved?["y"] as? NSNumber)?.doubleValue else { return fallback }
-        let restored = NSRect(x: x, y: y, width: width, height: height)
-        let reachable = NSScreen.screens.contains { candidate in
-            let intersection = candidate.frame.intersection(restored)
-            return !intersection.isNull && intersection.width >= min(48, width) && intersection.height >= min(48, height)
-        }
-        return reachable ? restored : fallback
+        return NSRect(x: screen.maxX - width - 28, y: screen.minY + 28, width: width, height: height)
     }
 
-    private func saveSettings() {
-        let value: [String: Any] = ["scale": scale, "x": panel.frame.minX, "y": panel.frame.minY]
-        guard let data = try? JSONSerialization.data(withJSONObject: value) else { return }
-        try? data.write(to: settingsURL, options: .atomic)
+    func stop() {
+        mouseTimer?.invalidate()
+        mouseTimer = nil
+        eventInput?.stop()
+        eventInput = nil
     }
 }
 
@@ -569,26 +531,22 @@ private final class PetAppDelegate: NSObject, NSApplicationDelegate {
             NSApp.terminate(nil)
         }
     }
+
+    func applicationWillTerminate(_ notification: Notification) {
+        host?.stop()
+    }
 }
 
 @main
 struct PetHostMain {
     static func main() {
-        let environment = ProcessInfo.processInfo.environment
         let executable = URL(fileURLWithPath: CommandLine.arguments[0]).standardizedFileURL
         let petDirectory = URL(fileURLWithPath: argument("pet-dir") ?? executable.deletingLastPathComponent().deletingLastPathComponent().path)
-        let dataDirectory = URL(fileURLWithPath: argument("data-dir") ?? environment["BORDER_COLLIE_DATA_DIR"] ?? FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent(".border-collie").path)
-        let eventURL = URL(fileURLWithPath: argument("events") ?? environment["BORDER_COLLIE_EVENTS"] ?? dataDirectory.appendingPathComponent("events.jsonl").path)
-        let eventOffset = UInt64(environment["BORDER_COLLIE_EVENT_OFFSET"] ?? "")
-        let ownerPID = Int32(argument("owner-pid") ?? environment["BORDER_COLLIE_OWNER_PID"] ?? "")
         let shortcut = argument("shortcut") ?? "Control+Alt+R"
         do {
-            try FileManager.default.createDirectory(at: dataDirectory, withIntermediateDirectories: true)
-            let owners = try OwnerRegistry(dataDirectory: dataDirectory, ownerPID: ownerPID)
-            if !owners.acquire() { exit(0) }
             let config = try loadPetConfig(at: petDirectory)
             let delegate = PetAppDelegate {
-                let host = PetHost(petDirectory: petDirectory, dataDirectory: dataDirectory, eventURL: eventURL, eventOffset: eventOffset, owners: owners, config: config)
+                let host = PetHost(petDirectory: petDirectory, config: config)
                 try host.start(shortcut: shortcut)
                 return host
             }

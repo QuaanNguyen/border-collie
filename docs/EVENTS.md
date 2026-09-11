@@ -2,12 +2,14 @@
 
 Guard decides.
 Border Collie expresses.
-They communicate through the plugin inbox file.
+They communicate through the Pet process's private input pipe.
 
 ## Transport
 
-The OpenCode plugin appends every event to the inbox file at `~/.border-collie/events.jsonl` by default.
-Pet Border Collie starts at the current end of that file and reacts only to events appended during its lifetime.
+The OpenCode plugin sends each event directly to the running Pet process.
+The pipe belongs to the running plugin instance, so the Pet exits when that plugin disconnects.
+The Pet queues events only in memory while its renderer starts.
+Nothing is replayed after OpenCode exits, and the runtime does not create `~/.border-collie`.
 
 ## Event object
 
@@ -75,7 +77,7 @@ The shared Pet animation contract in `events/pet-config.json` maps these states 
 
 ## Rules
 
-1. Guard never imports pet code. Pet never imports Guard code.
+1. Guard never imports Pet code. The OpenCode adapter connects Guard output to the Pet process, and Pet never imports Guard code.
 2. Guard always sets `petState`, so the pet never has to infer it from `type`.
 3. Border Collie **never blocks anything**. It reports what already happened.
 4. Silence is the resting state.

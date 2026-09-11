@@ -9,7 +9,8 @@ Production macOS uses AppKit and system WebKit, while Windows, Linux, and develo
 
 **Pet animation contract** - validated shared configuration that maps semantic Pet states to named animation tracks, ordered frames, and per-frame durations before either Pet host activates the renderer.
 
-**Event stream** - append-only contract through which the Border Collie plugin publishes events and Pet consumes them.
+**Event stream** - transient contract sent over the Pet process's private input pipe through which the Border Collie plugin publishes events and Pet consumes them.
+The Pet keeps only a bounded in-memory queue while its renderer starts, and no events survive an OpenCode restart.
 
 **Border Collie plugin** - OpenCode adapter whose source is `plugin/border-collie.js` in this clone.
 

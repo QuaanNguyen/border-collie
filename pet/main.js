@@ -14,7 +14,6 @@
  *   Mac:     Control+Option+R  show/hide
  *   Windows: Ctrl+Alt+R        show/hide
  *
- * Size and position are remembered between runs.
  */
 const {
   app,
@@ -26,8 +25,7 @@ const {
 const path = require("node:path");
 const os = require("node:os");
 const fs = require("node:fs");
-const { watchInbox, defaultInboxPath } = require("../events");
-const { parseOwnerPid, createOwnerRegistry } = require("./lib/owners");
+const { readLiveEvents } = require("./live-events");
 const { createWindowInteraction } = require("./lib/window-interaction");
 const { loadAnimationTracks } = require("./lib/animation-manifest");
 const G = require("./geometry");
@@ -48,15 +46,10 @@ const arg = (name, fallback) => {
   const hit = argv.find((a) => a.startsWith(`--${name}=`));
   return hit ? hit.split("=").slice(1).join("=") : fallback;
 };
-const EVENTS_FILE = arg(
-  "events",
-  process.env.BORDER_COLLIE_EVENTS || defaultInboxPath(),
-);
 const MOD = "Control+Alt";
 const TOGGLE_KEY = arg("shortcut", `${MOD}+R`);
 const DEV_H = 460;
 const WINDOW_H = DEV ? DEV_H : BASE_H;
-const EVENT_OFFSET = Number.parseInt(process.env.BORDER_COLLIE_EVENT_OFFSET || "", 10);
 
 function prettyShortcut(accel, platform = process.platform) {
   return platform === "darwin"
@@ -65,47 +58,17 @@ function prettyShortcut(accel, platform = process.platform) {
 }
 
 let win = null;
-let ownerRegistry = null;
+let liveEventReader = null;
 let windowInteraction = null;
 let dragRegions = [];
 let pointerDrag = null;
-let settings = { scale: DEFAULT_SCALE, x: null, y: null };
+const settings = { scale: DEFAULT_SCALE, x: null, y: null };
 let animations = null;
+const pendingEvents = [];
+const runtimeDirectory = path.join(os.tmpdir(), `border-collie-electron-${process.pid}`);
 
-if (DEV) {
-  app.setName("pet-border-collie-dev");
-  app.setPath(
-    "userData",
-    process.env.BORDER_COLLIE_USER_DATA_DIR || path.join(os.homedir(), ".border-collie", "dev-userdata"),
-  );
-}
-
-const settingsPath = () =>
-  path.join(app.getPath("userData"), "border-collie-settings.json");
-
-function loadSettings() {
-  try {
-    const raw = JSON.parse(fs.readFileSync(settingsPath(), "utf8"));
-    if (typeof raw.scale === "number") settings.scale = clampScale(raw.scale);
-    if (Number.isInteger(raw.x)) settings.x = raw.x;
-    if (Number.isInteger(raw.y)) settings.y = raw.y;
-  } catch {
-    /* first run, or unreadable  -  defaults are fine */
-  }
-}
-
-let saveTimer = null;
-function saveSettings() {
-  clearTimeout(saveTimer);
-  saveTimer = setTimeout(() => {
-    try {
-      fs.mkdirSync(path.dirname(settingsPath()), { recursive: true });
-      fs.writeFileSync(settingsPath(), JSON.stringify(settings, null, 2));
-    } catch {
-      /* not worth crashing over */
-    }
-  }, 400);
-}
+app.setName(DEV ? "pet-border-collie-dev" : "pet-border-collie");
+app.setPath("userData", runtimeDirectory);
 
 function applyLayout() {
   if (!win || win.isDestroyed()) return;
@@ -126,7 +89,6 @@ function applyLayout() {
 
   settings.x = clamped.x;
   settings.y = clamped.y;
-  saveSettings();
 }
 
 function setScale(next) {
@@ -139,40 +101,31 @@ function setScale(next) {
   }
 }
 
-const initialOwner = parseOwnerPid(process.env.BORDER_COLLIE_OWNER_PID);
-const gotLock = app.requestSingleInstanceLock({
-  ownerPid: initialOwner,
-  dev: DEV,
-});
+const gotLock = !DEV || app.requestSingleInstanceLock({ dev: true });
 
 if (!gotLock) {
   app.exit(0);
 } else {
-  ownerRegistry = createOwnerRegistry({
-    onBecameEmpty() {
-      app.quit();
-    },
-  });
-  if (initialOwner != null) ownerRegistry.add(initialOwner);
-
-  app.on(
-    "second-instance",
-    (_event, _commandLine, _workingDirectory, additionalData) => {
-      const data =
-        additionalData && typeof additionalData === "object"
-          ? additionalData
-          : {};
-      if (DEV || data.dev) {
+  if (DEV) {
+    app.on(
+      "second-instance", () => {
         if (win && !win.isDestroyed()) {
           if (win.isMinimized()) win.restore();
           win.show();
           win.focus();
         }
-        return;
-      }
-      if (ownerRegistry) ownerRegistry.add(data.ownerPid);
-    },
-  );
+      },
+    );
+  }
+
+  if (!DEV) liveEventReader = readLiveEvents(process.stdin, (event) => {
+    if (win && !win.isDestroyed()) {
+      win.webContents.send("borderCollie:event", event);
+    } else {
+      pendingEvents.push(event);
+      if (pendingEvents.length > 256) pendingEvents.shift();
+    }
+  }, () => app.quit());
 
   function create() {
     const display = screen.getPrimaryDisplay();
@@ -229,14 +182,9 @@ if (!gotLock) {
       win.webContents.setZoomFactor(settings.scale);
       revealWindow();
     });
-    if (!DEV) {
-      win.webContents.once("did-finish-load", () => {
-        const watcher = watchInbox(EVENTS_FILE, (e) => {
-          if (win && !win.isDestroyed()) win.webContents.send("borderCollie:event", e);
-        }, { offset: Number.isSafeInteger(EVENT_OFFSET) ? EVENT_OFFSET : undefined });
-        win.on("closed", () => watcher.close());
-      });
-    }
+    win.webContents.once("did-finish-load", () => {
+      while (pendingEvents.length) win.webContents.send("borderCollie:event", pendingEvents.shift());
+    });
 
     win.on("closed", () => {
       if (windowInteraction) windowInteraction.stop();
@@ -248,7 +196,6 @@ if (!gotLock) {
       const b = win.getBounds();
       settings.x = b.x;
       settings.y = b.y;
-      saveSettings();
     });
 
   }
@@ -331,7 +278,7 @@ if (!gotLock) {
   }
 
   ipcMain.handle("borderCollie:config", () => ({
-    eventsFile: EVENTS_FILE,
+    live: !DEV,
     solid: SOLID,
     dev: DEV,
     scale: settings.scale,
@@ -377,7 +324,6 @@ if (!gotLock) {
 
   app.whenReady().then(() => {
     if (process.platform === "darwin" && !DEV) app.setActivationPolicy("accessory");
-    loadSettings();
     animations = loadAnimationTracks(__dirname, PET_CONFIG);
     create();
     watchDevSources();
@@ -393,7 +339,8 @@ if (!gotLock) {
   app.on("window-all-closed", () => app.quit());
   app.on("will-quit", () => {
     globalShortcut.unregisterAll();
-    if (ownerRegistry) ownerRegistry.stopPolling();
+    if (liveEventReader) liveEventReader.close();
     if (windowInteraction) windowInteraction.stop();
+    fs.rmSync(runtimeDirectory, { recursive: true, force: true });
   });
 }

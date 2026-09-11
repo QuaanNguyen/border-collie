@@ -209,19 +209,13 @@ function verifyStagedPlugin(entry, cwd) {
 
 function verifyOpenCode(cwd, ownerConfigDir) {
   const env = installEnv();
-  const eventsPath = path.join(os.tmpdir(), `border-collie-install-check-${process.pid}.jsonl`);
   env.BORDER_COLLIE_NO_PET = '1';
-  env.BORDER_COLLIE_EVENTS = eventsPath;
   env.BORDER_COLLIE_OWNER_CONFIG = ownerConfigDir;
-  try {
-    runCommand(process.platform === 'win32' ? 'opencode.exe' : 'opencode', ['debug', 'config'], cwd, {
-      capture: true,
-      env,
-      timeout: 120000,
-    });
-  } finally {
-    fs.rmSync(eventsPath, { force: true });
-  }
+  runCommand(process.platform === 'win32' ? 'opencode.exe' : 'opencode', ['debug', 'config'], cwd, {
+    capture: true,
+    env,
+    timeout: 120000,
+  });
 }
 
 function replaceInstallation({ stagePackage, stageEntry, packageDir, entry, pluginsDir, verify }) {

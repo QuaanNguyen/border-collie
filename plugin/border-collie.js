@@ -33,7 +33,7 @@ if (!repoRoot) {
 }
 
 const { createSession } = require(path.join(repoRoot, "guard/lib/session.js"));
-const { EventBus, defaultInboxPath } = require(path.join(repoRoot, "events/index.js"));
+const { EventBus } = require(path.join(repoRoot, "events/index.js"));
 const { loadOwnerPolicy, ownerProtocol } = require(path.join(repoRoot, "guard/lib/owner-policy.js"));
 const { resolvePolicy, policyConflicts } = require(path.join(repoRoot, "guard/lib/policy-resolution.js"));
 const { protectedPathDecision } = require(path.join(repoRoot, "guard/lib/protected-paths.js"));
@@ -192,9 +192,8 @@ function installedPetEnabled() {
   }
 }
 
-function launchPet(inboxPath, petEnabled) {
+function launchPet() {
   if (process.env.BORDER_COLLIE_NO_PET === "1") return;
-  if (!petEnabled) return;
   const petDir = path.join(repoRoot, "pet");
   const native = path.join(petDir, "native", "pet-host");
   const bin = process.platform === "darwin" ? native : electronBinary(petDir);
@@ -212,30 +211,25 @@ function launchPet(inboxPath, petEnabled) {
     );
     return;
   }
-  let eventOffset = 0;
-  try { eventOffset = fs.statSync(inboxPath).size; } catch {
-  }
-  const env = {
-    ...process.env,
-    BORDER_COLLIE_EVENTS: inboxPath,
-    BORDER_COLLIE_EVENT_OFFSET: String(eventOffset),
-    BORDER_COLLIE_OWNER_PID: String(process.pid),
-  };
+  const env = { ...process.env };
   delete env.ELECTRON_RUN_AS_NODE;
   delete env.ELECTRON_SKIP_BINARY_DOWNLOAD;
   const args = process.platform === "darwin"
-    ? [`--pet-dir=${petDir}`, `--events=${inboxPath}`, `--owner-pid=${process.pid}`]
+    ? [`--pet-dir=${petDir}`]
     : ["."];
   const child = spawn(bin, args, {
     cwd: petDir,
-    detached: true,
-    stdio: "ignore",
+    detached: false,
+    stdio: ["pipe", "ignore", "ignore"],
     env,
   });
   child.on("error", (err) => {
     console.error("[border-collie] failed to launch Pet Border Collie:", err.message);
   });
+  child.stdin.on("error", () => {});
   child.unref();
+  child.stdin.unref?.();
+  return child;
 }
 
 export const BorderCollie = async ({ client, directory }) => {
@@ -249,14 +243,13 @@ export const BorderCollie = async ({ client, directory }) => {
   const protocol = projectPolicy.error
     ? null
     : resolvePolicy(resolvedOwnerProtocol, projectPolicy.protocol);
-  const inboxPath = process.env.BORDER_COLLIE_EVENTS || defaultInboxPath();
-  const bus = new EventBus({
-    inboxPath,
-    onInboxError(error) {
-      console.error("[border-collie] Pet event delivery disabled: " + error.message);
-    },
-  });
   const petEnabled = installedPetEnabled();
+  const petProcess = petEnabled ? launchPet() : null;
+  const bus = new EventBus({
+    sink: petProcess?.stdin
+      ? (event) => petProcess.stdin.write(JSON.stringify(event) + "\n")
+      : null,
+  });
   const sessions = new Map();
   let sizeCommandRegistered = false;
   let ended = false;
@@ -288,6 +281,18 @@ export const BorderCollie = async ({ client, directory }) => {
     return state;
   }
 
+  function releaseSession(sessionID) {
+    if (!sessionID) return;
+    const state = sessions.get(sessionID);
+    if (!state) return;
+    try {
+      publish(state.guard.handle({ kind: "session.end" }));
+    } catch {
+    }
+    sessions.delete(sessionID);
+    if (lastActiveSessionID === sessionID) lastActiveSessionID = null;
+  }
+
   function endSession() {
     if (ended) return;
     ended = true;
@@ -298,12 +303,12 @@ export const BorderCollie = async ({ client, directory }) => {
       }
     }
     bus.close();
+    petProcess?.stdin?.end();
   }
 
   process.on("beforeExit", endSession);
   process.on("exit", endSession);
 
-  launchPet(inboxPath, petEnabled);
   if (projectPolicy.error || conflicts.length) {
     bus.emit({
       type: "notification",
@@ -505,6 +510,10 @@ export const BorderCollie = async ({ client, directory }) => {
       let sessionID = sessionIDOf(event);
       if (sessionID) lastActiveSessionID = sessionID;
       else if (event.type === "session.idle" || isIdle(event)) sessionID = lastActiveSessionID;
+      if (event.type === "session.deleted") {
+        releaseSession(sessionID);
+        return;
+      }
       const state = stateFor(sessionID);
       if (event.type === "session.status" && isBusy(event)) {
         state.completionPending = true;

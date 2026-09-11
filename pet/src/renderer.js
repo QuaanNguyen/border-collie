@@ -362,7 +362,7 @@ window.borderCollie.config().then((cfg) => {
   if (cfg.dev) {
     return runDev();
   }
-  if (cfg.eventsFile) {
+  if (cfg.live) {
     connected = true;
     window.borderCollie.onEvent((e) => handle(e));
     return;

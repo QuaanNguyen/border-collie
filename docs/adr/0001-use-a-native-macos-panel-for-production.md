@@ -16,7 +16,9 @@ The upstream reports describe the same limitation and do not identify a supporte
 
 The production macOS Pet uses a small AppKit host built around a true non-activating `NSPanel` and the system `WKWebView`.
 It retains the shared HTML, CSS, JavaScript, animation assets, event contract, and visible-pixel hit regions.
-The host handles window dragging, global shortcuts, persistent layout, and shared session ownership at the native boundary.
+The host handles window dragging, global shortcuts, transient layout, and shared live-session ownership at the native boundary.
+The plugin owns the Pet process and sends events through its private input pipe.
+Position, size, events, and active sessions remain in memory and are discarded when their processes exit.
 Electron remains locked for Windows, Linux, and development mode.
 The default macOS installation compiles the native host and does not download Electron.
 The Guard-only installation omits every desktop runtime.

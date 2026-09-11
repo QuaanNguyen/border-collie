@@ -1,6 +1,14 @@
 'use strict';
 const { contextBridge, ipcRenderer } = require('electron');
 
+const pendingEvents = [];
+let eventHandler = null;
+
+ipcRenderer.on('borderCollie:event', (_event, value) => {
+  if (eventHandler) eventHandler(value);
+  else pendingEvents.push(value);
+});
+
 contextBridge.exposeInMainWorld('borderCollie', {
   config: () => ipcRenderer.invoke('borderCollie:config'),
   setHitRegions: (regions, dragRegions) => ipcRenderer.send('borderCollie:hit-regions', regions, dragRegions),
@@ -10,5 +18,8 @@ contextBridge.exposeInMainWorld('borderCollie', {
   dragTo: (x, y) => ipcRenderer.send('borderCollie:drag-to', x, y),
   endDrag: () => ipcRenderer.send('borderCollie:drag-end'),
   onDrag: (fn) => ipcRenderer.on('borderCollie:dragging', (_event, drag) => fn(drag)),
-  onEvent: (fn) => ipcRenderer.on('borderCollie:event', (_e, evt) => fn(evt)),
+  onEvent: (fn) => {
+    eventHandler = fn;
+    while (pendingEvents.length) fn(pendingEvents.shift());
+  },
 });

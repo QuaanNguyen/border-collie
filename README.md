@@ -82,5 +82,5 @@ node test/run-all-tests.js
 
 Set `BORDER_COLLIE_SKIP_NATIVE_TESTS=1` only on a host that cannot display desktop windows.
 
-The live event inbox defaults to `~/.border-collie/events.jsonl`.
-Set `BORDER_COLLIE_EVENTS` to use a different path.
+Guard events, active sessions, Pet position, and Pet size exist only while OpenCode and the Pet are running.
+The plugin sends events over the Pet process's private input pipe and does not create `~/.border-collie` or replay events from previous sessions.
