@@ -8,12 +8,11 @@
  *
  *   npm start                 -- normal
  *   npm run start:solid       -- opaque background, if transparency misbehaves
- *   npm run start:demo        -- replay a canned event sequence, no Guard needed
  *   npm run start:dev         -- animation picker; hot-reloads pet/src on change
  *
  * Shortcuts (global  -  they work whatever window has focus):
- *   Mac:     Control+Option+R  show/hide · Control+Option+= / -  size · Control+Option+0  reset
- *   Windows: Ctrl+Alt+R        show/hide · Ctrl+Alt+= / -        size · Ctrl+Alt+0        reset
+ *   Mac:     Control+Option+R  show/hide
+ *   Windows: Ctrl+Alt+R        show/hide
  *
  * Size and position are remembered between runs.
  */
@@ -22,16 +21,17 @@ const {
   BrowserWindow,
   ipcMain,
   screen,
-  shell,
   globalShortcut,
 } = require("electron");
 const path = require("node:path");
 const os = require("node:os");
 const fs = require("node:fs");
-const { pathToFileURL } = require("node:url");
-const { watchInbox, defaultInboxPath } = require("../guard/lib/events");
+const { watchInbox, defaultInboxPath } = require("../events");
 const { parseOwnerPid, createOwnerRegistry } = require("./lib/owners");
+const { createWindowInteraction } = require("./lib/window-interaction");
+const { loadAnimationTracks } = require("./lib/animation-manifest");
 const G = require("./geometry");
+const PET_CONFIG = require("../events/pet-config.json");
 const { BASE_W, BASE_H, DEFAULT_SCALE, clampScale } = G;
 
 if (!app || typeof app.requestSingleInstanceLock !== "function") {
@@ -43,7 +43,6 @@ if (!app || typeof app.requestSingleInstanceLock !== "function") {
 
 const argv = process.argv.slice(1);
 const SOLID = argv.includes("--solid");
-const DEMO = argv.includes("--demo");
 const DEV = argv.includes("--dev");
 const arg = (name, fallback) => {
   const hit = argv.find((a) => a.startsWith(`--${name}=`));
@@ -56,44 +55,8 @@ const EVENTS_FILE = arg(
 const MOD = "Control+Alt";
 const TOGGLE_KEY = arg("shortcut", `${MOD}+R`);
 const DEV_H = 460;
-const DEFAULT_ANIMATION_FOLDERS = {
-  calm: "border-collie-normal",
-  allowed: "border-collie-normal",
-  asking: "border-collie-thinking",
-  celebrating: "border-collie-celebrating",
-  checking: "border-collie-thinking",
-  denied: "border-collie-denied",
-  drag: "border-collie-dragging",
-  error: "border-collie-thinking",
-  hover: "border-collie-hovering",
-  offline: "border-collie-normal",
-  proving: "border-collie-thinking",
-  refused: "border-collie-refused",
-  rejecting: "border-collie-refused",
-  sleeping: "border-collie-denied",
-  suspicious: "border-collie-suspicious",
-  thinking: "border-collie-thinking",
-  watching: "border-collie-normal",
-};
-
-function defaultAnimations() {
-  const root = path.join(__dirname, "assets", "default-animations");
-  return Object.fromEntries(
-    Object.entries(DEFAULT_ANIMATION_FOLDERS).flatMap(([state, folder]) => {
-      try {
-        const frames = fs
-          .readdirSync(path.join(root, folder), { withFileTypes: true })
-          .filter((entry) => entry.isFile() && entry.name.endsWith(".png"))
-          .map((entry) => entry.name)
-          .sort((left, right) => left.localeCompare(right, undefined, { numeric: true }))
-          .map((name) => pathToFileURL(path.join(root, folder, name)).href);
-        return frames.length === 5 ? [[state, frames]] : [];
-      } catch {
-        return [];
-      }
-    }),
-  );
-}
+const WINDOW_H = DEV ? DEV_H : BASE_H;
+const EVENT_OFFSET = Number.parseInt(process.env.BORDER_COLLIE_EVENT_OFFSET || "", 10);
 
 function prettyShortcut(accel, platform = process.platform) {
   return platform === "darwin"
@@ -103,12 +66,18 @@ function prettyShortcut(accel, platform = process.platform) {
 
 let win = null;
 let ownerRegistry = null;
-let logOpen = false;
+let windowInteraction = null;
+let dragRegions = [];
+let pointerDrag = null;
 let settings = { scale: DEFAULT_SCALE, x: null, y: null };
+let animations = null;
 
 if (DEV) {
   app.setName("pet-border-collie-dev");
-  app.setPath("userData", path.join(os.homedir(), ".border-collie", "dev-userdata"));
+  app.setPath(
+    "userData",
+    process.env.BORDER_COLLIE_USER_DATA_DIR || path.join(os.homedir(), ".border-collie", "dev-userdata"),
+  );
 }
 
 const settingsPath = () =>
@@ -138,17 +107,11 @@ function saveSettings() {
   }, 400);
 }
 
-function baseHeight() {
-  if (logOpen) return G.BASE_H_LOG;
-  if (DEV) return DEV_H;
-  return BASE_H;
-}
-
 function applyLayout() {
   if (!win || win.isDestroyed()) return;
   const prev = win.getBounds();
   const width = Math.round(BASE_W * settings.scale);
-  const height = Math.round(baseHeight() * settings.scale);
+  const height = Math.round(WINDOW_H * settings.scale);
   const next = {
     width,
     height,
@@ -156,7 +119,7 @@ function applyLayout() {
     y: Math.round(prev.y + prev.height - height),
   };
   const area = screen.getDisplayMatching(next).workArea;
-  const clamped = G.keepOnScreen(next, area);
+  const clamped = G.keepVisibleOnScreen(next, area, dragRegions, settings.scale);
 
   win.setBounds(clamped);
   win.webContents.setZoomFactor(settings.scale);
@@ -164,27 +127,6 @@ function applyLayout() {
   settings.x = clamped.x;
   settings.y = clamped.y;
   saveSettings();
-}
-
-function stepScale(dir) {
-  const wanted = G.stepScale(settings.scale, dir);
-  const area =
-    win && !win.isDestroyed()
-      ? screen.getDisplayMatching(win.getBounds()).workArea
-      : screen.getPrimaryDisplay().workArea;
-  const fits = (s) =>
-    BASE_W * s <= area.width && baseHeight() * s <= area.height;
-  let fitted = wanted;
-  if (!fits(wanted)) {
-    for (let i = G.SCALES.length - 1; i >= 0; i--) {
-      if (G.SCALES[i] <= wanted && fits(G.SCALES[i])) {
-        fitted = G.SCALES[i];
-        break;
-      }
-    }
-    if (!fits(fitted)) fitted = G.SCALES[0];
-  }
-  setScale(fitted);
 }
 
 function setScale(next) {
@@ -236,7 +178,7 @@ if (!gotLock) {
     const display = screen.getPrimaryDisplay();
     const area = display.workAreaSize;
     const w = Math.round(BASE_W * settings.scale);
-    const h = Math.round(baseHeight() * settings.scale);
+    const h = Math.round(WINDOW_H * settings.scale);
     const start = G.keepOnScreen(
       {
         width: w,
@@ -249,6 +191,7 @@ if (!gotLock) {
 
     win = new BrowserWindow({
       ...start,
+      ...(process.platform === "darwin" && !DEV ? { type: "panel" } : {}),
       frame: false,
       transparent: !SOLID,
       backgroundColor: SOLID ? "#12161a" : "#00000000",
@@ -259,7 +202,8 @@ if (!gotLock) {
       fullscreenable: false,
       skipTaskbar: true,
       alwaysOnTop: true,
-      focusable: true,
+      focusable: DEV,
+      acceptFirstMouse: !DEV,
       show: false,
       webPreferences: {
         preload: path.join(__dirname, "preload.js"),
@@ -269,43 +213,55 @@ if (!gotLock) {
         zoomFactor: settings.scale,
       },
     });
-
-    win.setAlwaysOnTop(true, "floating");
-    if (process.platform === "darwin") {
-      win.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true });
+    if (process.platform === "darwin" && !DEV) {
+      app.setActivationPolicy("prohibited");
+    }
+    if (!SOLID && !DEV) {
+      windowInteraction = createWindowInteraction({
+        win,
+        screen,
+        getScale: () => settings.scale,
+      });
     }
 
     win.loadFile(path.join(__dirname, "src", "index.html"));
     win.once("ready-to-show", () => {
       win.webContents.setZoomFactor(settings.scale);
-      win.show();
+      revealWindow();
     });
-    if (!DEMO && !DEV) {
+    if (!DEV) {
       win.webContents.once("did-finish-load", () => {
         const watcher = watchInbox(EVENTS_FILE, (e) => {
           if (win && !win.isDestroyed()) win.webContents.send("borderCollie:event", e);
-        });
+        }, { offset: Number.isSafeInteger(EVENT_OFFSET) ? EVENT_OFFSET : undefined });
         win.on("closed", () => watcher.close());
       });
     }
 
-    let moveTick = 0;
+    win.on("closed", () => {
+      if (windowInteraction) windowInteraction.stop();
+      windowInteraction = null;
+      pointerDrag = null;
+    });
+
     win.on("move", () => {
-      const now = Date.now();
-      if (now - moveTick > 60) {
-        moveTick = now;
-        if (!win.isDestroyed()) win.webContents.send("borderCollie:dragging");
-      }
       const b = win.getBounds();
       settings.x = b.x;
       settings.y = b.y;
       saveSettings();
     });
 
-    win.webContents.setWindowOpenHandler(({ url }) => {
-      shell.openExternal(url);
-      return { action: "deny" };
-    });
+  }
+
+  function revealWindow() {
+    if (!win || win.isDestroyed()) return;
+    if (DEV) {
+      win.show();
+      win.focus();
+    } else {
+      win.showInactive();
+    }
+    if (windowInteraction) windowInteraction.tick();
   }
 
   function watchDevSources() {
@@ -338,30 +294,12 @@ if (!gotLock) {
     if (win.isVisible()) {
       win.hide();
     } else {
-      win.show();
-      win.setAlwaysOnTop(true, "floating");
+      revealWindow();
     }
   }
 
-  function showVisible() {
-    if (!win || win.isDestroyed()) return create();
-    if (!win.isVisible()) win.show();
-    win.setAlwaysOnTop(true, "floating");
-  }
-
-  function scaleAndShow(fn) {
-    showVisible();
-    fn();
-  }
-
   function registerShortcuts() {
-    const wanted = [
-      [TOGGLE_KEY, toggleVisible],
-      [`${MOD}+=`, () => scaleAndShow(() => stepScale(+1))],
-      [`${MOD}+Plus`, () => scaleAndShow(() => stepScale(+1))],
-      [`${MOD}+-`, () => scaleAndShow(() => stepScale(-1))],
-      [`${MOD}+0`, () => scaleAndShow(() => setScale(DEFAULT_SCALE))],
-    ];
+    const wanted = [[TOGGLE_KEY, toggleVisible]];
 
     const failed = [];
     for (const [accel, fn] of wanted) {
@@ -378,15 +316,8 @@ if (!gotLock) {
       `    Mac:     ${prettyShortcut(TOGGLE_KEY, "darwin")}    show / hide`,
     );
     console.log(
-      `             ${prettyShortcut(`${MOD}+=`, "darwin")} / ${prettyShortcut(`${MOD}+-`, "darwin")}   bigger / smaller     ${prettyShortcut(`${MOD}+0`, "darwin")}  reset`,
-    );
-    console.log(
       `    Windows: ${prettyShortcut(TOGGLE_KEY, "win32")}        show / hide`,
     );
-    console.log(
-      `             ${prettyShortcut(`${MOD}+=`, "win32")} / ${prettyShortcut(`${MOD}+-`, "win32")}         bigger / smaller     ${prettyShortcut(`${MOD}+0`, "win32")}        reset`,
-    );
-    console.log("    Ctrl+wheel over Border Collie also resizes.");
     if (failed.length) {
       console.log("");
       console.log(
@@ -401,45 +332,68 @@ if (!gotLock) {
 
   ipcMain.handle("borderCollie:config", () => ({
     eventsFile: EVENTS_FILE,
-    demo: DEMO,
     solid: SOLID,
     dev: DEV,
     scale: settings.scale,
     toggleKey: prettyShortcut(TOGGLE_KEY),
-    resetKey: prettyShortcut(`${MOD}+0`),
-    animations: defaultAnimations(),
+    animations,
   }));
-  ipcMain.on("borderCollie:quit", () => app.quit());
-  ipcMain.on("borderCollie:hide", () => {
-    if (DEV) {
-      app.quit();
-      return;
-    }
-    if (win && !win.isDestroyed()) win.hide();
+  ipcMain.on("borderCollie:hit-regions", (event, regions, nextDragRegions) => {
+    if (!win || win.isDestroyed() || event.sender !== win.webContents) return;
+    if (windowInteraction) windowInteraction.updateRegions(regions);
+    dragRegions = Array.isArray(nextDragRegions) ? nextDragRegions : [];
   });
-  ipcMain.on("borderCollie:open", (_e, url) => {
-    if (/^https?:/.test(url)) shell.openExternal(url);
+  ipcMain.on("borderCollie:drag-start", (event, x, y) => {
+    if (!win || win.isDestroyed() || event.sender !== win.webContents) return;
+    if (!Number.isFinite(x) || !Number.isFinite(y)) return;
+    const bounds = win.getBounds();
+    pointerDrag = {
+      sender: event.sender,
+      grabOffset: { x: x - bounds.x, y: y - bounds.y },
+      lastX: x,
+    };
+    if (windowInteraction) windowInteraction.setDragging(true);
+    win.webContents.send("borderCollie:dragging", { phase: "start", deltaX: 0 });
   });
-  ipcMain.on("borderCollie:log", (_e, open) => {
-    logOpen = !!open;
-    applyLayout();
+  ipcMain.on("borderCollie:drag-to", (event, x, y) => {
+    if (!win || win.isDestroyed() || event.sender !== win.webContents) return;
+    if (!pointerDrag || pointerDrag.sender !== event.sender) return;
+    const origin = G.dragOrigin({ x, y }, pointerDrag.grabOffset);
+    if (!origin) return;
+    const deltaX = x - pointerDrag.lastX;
+    const bounds = win.getBounds();
+    win.setBounds({ ...bounds, ...origin });
+    pointerDrag.lastX = x;
+    win.webContents.send("borderCollie:dragging", { phase: "move", deltaX });
   });
-  ipcMain.on("borderCollie:scale-step", (_e, dir) => stepScale(dir > 0 ? 1 : -1));
+  ipcMain.on("borderCollie:drag-end", (event) => {
+    if (!win || win.isDestroyed() || event.sender !== win.webContents) return;
+    if (!pointerDrag || pointerDrag.sender !== event.sender) return;
+    pointerDrag = null;
+    if (windowInteraction) windowInteraction.setDragging(false);
+    win.webContents.send("borderCollie:dragging", { phase: "end", deltaX: 0 });
+  });
   ipcMain.on("borderCollie:scale-set", (_e, s) => setScale(s));
 
   app.whenReady().then(() => {
+    if (process.platform === "darwin" && !DEV) app.setActivationPolicy("accessory");
     loadSettings();
+    animations = loadAnimationTracks(__dirname, PET_CONFIG);
     create();
     watchDevSources();
     registerShortcuts();
     app.on("activate", () => {
       if (BrowserWindow.getAllWindows().length === 0) create();
     });
+  }).catch((error) => {
+    console.error(`[border-collie] ${error.message}`);
+    app.exit(1);
   });
 
   app.on("window-all-closed", () => app.quit());
   app.on("will-quit", () => {
     globalShortcut.unregisterAll();
     if (ownerRegistry) ownerRegistry.stopPolling();
+    if (windowInteraction) windowInteraction.stop();
   });
 }

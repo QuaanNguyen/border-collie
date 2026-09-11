@@ -1,7 +1,7 @@
 'use strict';
 const { Protocol, check, deriveDefault } = require('./policy');
 const { scan } = require('./injection');
-const { detectClaims, verify } = require('./verify');
+const { verify } = require('./verify');
 const { truncate } = require('./toolcalls');
 const { toolFailed } = require('./toolerror');
 
@@ -177,9 +177,16 @@ function createSession(opts = {}) {
 
   function assistant(event) {
     const text = event.text || '';
-    if (!text.trim()) return { events: [] };
 
     if (!protocol.doneCriteria.length) {
+      if (event.completed === true) {
+        return {
+          events: [{
+            type: 'run', status: 'finish', petState: 'celebrating',
+            summary: 'agent finished normally',
+          }],
+        };
+      }
       if (GENERIC_CLAIM.test(text) && !askedAboutDone) {
         askedAboutDone = true;
         return {
@@ -194,40 +201,39 @@ function createSession(opts = {}) {
       return { events: [] };
     }
 
-    const claimed = detectClaims(text, protocol.doneCriteria).filter((c) => !settled.has(c.id));
-    if (!claimed.length) return { events: [] };
+    const pending = protocol.doneCriteria.filter((criterion) => !settled.has(criterion.id));
+    if (!pending.length || event.error) return { events: [] };
 
-    const events = [];
-    const notes = [];
-    for (const criterion of claimed) {
+    const results = pending.map((criterion) => ({
+      criterion,
+      result: verify(criterion, protocol.workdir),
+    }));
+    const failed = results.filter(({ result }) => !result.pass);
+    const events = [{
+      type: 'claim', status: 'open', petState: 'proving',
+      summary: 'checking whether the task is complete',
+      detail: { criteria: pending.map((criterion) => criterion.id) },
+    }];
+
+    if (!failed.length) {
+      for (const criterion of pending) settled.add(criterion.id);
       events.push({
-        type: 'claim', status: 'open', petState: 'proving',
-        summary: `claims: ${criterion.describe || criterion.id}`,
-        detail: { id: criterion.id },
+        type: 'verdict', status: 'pass', petState: 'celebrating',
+        summary: 'all completion checks passed',
+        detail: { criteria: results.map(({ result }) => result) },
       });
-
-      const result = verify(criterion, protocol.workdir);
-      if (result.pass) {
-        settled.add(criterion.id);
-        events.push({
-          type: 'verdict', status: 'pass', petState: 'celebrating',
-          summary: `verified  -  ${result.describe}`,
-          detail: { id: criterion.id, checks: result.checks },
-        });
-      } else {
-        events.push({
-          type: 'verdict', status: 'fail', petState: 'rejecting',
-          summary: `not accepted  -  ${truncate(result.summary, 60)}`,
-          reason: result.summary,
-          detail: { id: criterion.id, checks: result.checks },
-        });
-        notes.push({ criterion, result });
-      }
+      return { events };
     }
 
-    if (!notes.length) return { events };
+    const reason = failed.map(({ result }) => result.summary).join('; ');
+    events.push({
+      type: 'verdict', status: 'fail', petState: 'rejecting',
+      summary: `not finished  -  ${truncate(reason, 60)}`,
+      reason,
+      detail: { criteria: results.map(({ result }) => result) },
+    });
 
-    const lines = notes.flatMap(({ criterion, result }) => [
+    const lines = failed.flatMap(({ criterion, result }) => [
       `  - claim: ${criterion.describe || criterion.id}`,
       ...result.checks.filter((c) => !c.pass).map((c) => `    evidence check failed: ${c.evidence}`),
     ]);

@@ -25,13 +25,25 @@ Or on macOS and Linux:
 bash scripts/install-plugin.sh
 ```
 
+The default installation includes the desktop Pet.
+On macOS, the installer builds a small native host that uses the system WebKit framework and does not download Electron.
+Windows and Linux use the locked Electron runtime.
+Install only the deterministic Guard without a desktop runtime by adding `--guard-only` to either command.
+
+```sh
+bash scripts/install-plugin.sh --guard-only
+```
+
 On Windows, from Command Prompt:
 
 ```bat
 scripts\win\install-plugin.bat
 ```
 
-You also need Node.js, npm, Git, and OpenCode installed.
+You need Node.js 22.12 or newer, Git, and OpenCode installed.
+The default macOS Pet install also needs Xcode Command Line Tools.
+Windows and Linux Pet installs need npm.
+The `--guard-only` install needs neither desktop dependency.
 
 ## Usage
 
@@ -41,13 +53,15 @@ Open any project with OpenCode:
 opencode <path>
 ```
 
-Run the companion by itself to see the demo:
+Resize the Pet from the OpenCode chat with `/size` followed by one of the supported percentages:
 
-```sh
-cd pet
-npm install
-npm run start:demo
+```text
+/size 75
+/size 115
+/size reset
 ```
+
+Resize is command-driven and does not install keyboard shortcuts.
 
 Work on the desktop companion UI:
 
@@ -58,12 +72,15 @@ npm run start:dev
 ```
 
 Animation asset storage and replacement notes live in [docs/ANIMATION_ASSETS.md](docs/ANIMATION_ASSETS.md).
+The Pet validates its complete animation contract before activating it, uses elapsed-time frame scheduling, and shows a stable frame when the operating system requests reduced motion.
 
-Run the tests:
+Run the complete test suite, including native Pet behavior and a real staged install:
 
 ```sh
-node test/run-tests.js
+node test/run-all-tests.js
 ```
+
+Set `BORDER_COLLIE_SKIP_NATIVE_TESTS=1` only on a host that cannot display desktop windows.
 
 The live event inbox defaults to `~/.border-collie/events.jsonl`.
 Set `BORDER_COLLIE_EVENTS` to use a different path.

@@ -6,12 +6,11 @@
  * corner still. Growing from the top-left would walk the pet off the screen.
  */
 
-const BASE_W = 340;
-const BASE_H = 380;
-const BASE_H_LOG = 590;
-
-const SCALES = [0.6, 0.75, 0.9, 1, 1.15, 1.35, 1.6, 2];
-const DEFAULT_SCALE = 1;
+const config = require('../events/pet-config.json');
+const BASE_W = config.baseWidth;
+const BASE_H = config.baseHeight;
+const SCALES = config.scales;
+const DEFAULT_SCALE = config.defaultScale;
 
 function clampScale(s) {
   const n = Number(s);
@@ -19,25 +18,10 @@ function clampScale(s) {
   return Math.min(SCALES[SCALES.length - 1], Math.max(SCALES[0], n));
 }
 
-/** Index of the step nearest to the current scale. */
-function nearestStep(scale) {
-  let best = 0;
-  for (let i = 1; i < SCALES.length; i++) {
-    if (Math.abs(SCALES[i] - scale) < Math.abs(SCALES[best] - scale)) best = i;
-  }
-  return best;
-}
-
-/** One notch bigger (+1) or smaller (-1), stopping at the ends. */
-function stepScale(scale, dir) {
-  const i = nearestStep(clampScale(scale));
-  return SCALES[Math.min(SCALES.length - 1, Math.max(0, i + (dir > 0 ? 1 : -1)))];
-}
-
 /** New size at this scale, anchored on the current bottom-right corner. */
-function boundsFor(prev, scale, logOpen) {
+function boundsFor(prev, scale) {
   const width = Math.round(BASE_W * scale);
-  const height = Math.round((logOpen ? BASE_H_LOG : BASE_H) * scale);
+  const height = Math.round(BASE_H * scale);
   return {
     width,
     height,
@@ -61,13 +45,54 @@ function keepOnScreen(bounds, area) {
   };
 }
 
+function visibleBounds(regions) {
+  if (!Array.isArray(regions) || regions.length === 0) return null;
+  const valid = regions.filter((region) =>
+    Number.isFinite(region?.x) &&
+    Number.isFinite(region?.y) &&
+    Number.isFinite(region?.width) &&
+    Number.isFinite(region?.height) &&
+    region.width > 0 &&
+    region.height > 0,
+  );
+  if (valid.length === 0) return null;
+  const left = Math.min(...valid.map((region) => region.x));
+  const top = Math.min(...valid.map((region) => region.y));
+  const right = Math.max(...valid.map((region) => region.x + region.width));
+  const bottom = Math.max(...valid.map((region) => region.y + region.height));
+  return { x: left, y: top, width: right - left, height: bottom - top };
+}
+
+function keepVisibleOnScreen(bounds, area, regions, scale = 1) {
+  const visible = visibleBounds(regions);
+  if (!visible || !Number.isFinite(scale) || scale <= 0) return keepOnScreen(bounds, area);
+  const minX = area.x - visible.x * scale;
+  const maxX = area.x + area.width - (visible.x + visible.width) * scale;
+  const minY = area.y - visible.y * scale;
+  const maxY = area.y + area.height - (visible.y + visible.height) * scale;
+  return {
+    width: bounds.width,
+    height: bounds.height,
+    x: Math.round(minX > maxX ? minX : Math.max(minX, Math.min(bounds.x, maxX))),
+    y: Math.round(minY > maxY ? minY : Math.max(minY, Math.min(bounds.y, maxY))),
+  };
+}
+
+function dragOrigin(pointer, grabOffset) {
+  const values = [pointer?.x, pointer?.y, grabOffset?.x, grabOffset?.y].map(Number);
+  if (!values.every(Number.isFinite)) return null;
+  return {
+    x: Math.round(values[0] - values[2]),
+    y: Math.round(values[1] - values[3]),
+  };
+}
+
 /**
  * The largest step that actually fits on this display, so scaling up stops at
  * the screen rather than at an arbitrary number. Always returns something.
  */
-function fitScale(scale, area, logOpen) {
-  const baseH = logOpen ? BASE_H_LOG : BASE_H;
-  const fits = (s) => BASE_W * s <= area.width && baseH * s <= area.height;
+function fitScale(scale, area) {
+  const fits = (s) => BASE_W * s <= area.width && BASE_H * s <= area.height;
   if (fits(scale)) return scale;
   for (let i = SCALES.length - 1; i >= 0; i--) {
     if (SCALES[i] <= scale && fits(SCALES[i])) return SCALES[i];
@@ -75,5 +100,5 @@ function fitScale(scale, area, logOpen) {
   return SCALES[0];
 }
 
-module.exports = { BASE_W, BASE_H, BASE_H_LOG, SCALES, DEFAULT_SCALE,
-  clampScale, nearestStep, stepScale, boundsFor, keepOnScreen, fitScale };
+module.exports = { BASE_W, BASE_H, SCALES, DEFAULT_SCALE,
+  clampScale, boundsFor, keepOnScreen, keepVisibleOnScreen, visibleBounds, dragOrigin, fitScale };

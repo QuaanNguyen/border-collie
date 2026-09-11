@@ -7,7 +7,7 @@ They communicate through the plugin inbox file.
 ## Transport
 
 The OpenCode plugin appends every event to the inbox file at `~/.border-collie/events.jsonl` by default.
-Pet Border Collie tails that file and reacts to each event.
+Pet Border Collie starts at the current end of that file and reacts only to events appended during its lifetime.
 
 ## Event object
 
@@ -36,7 +36,7 @@ Border Collie shows it in a speech bubble, so keep it under ~60 chars.
 
 | type        | When                                                    | Typical `status`      |
 |-------------|---------------------------------------------------------|-----------------------|
-| `run`       | Run started or ended                                    | `start` / `end`       |
+| `run`       | Run started, completed normally, or ended                | `start` / `finish` / `end` |
 | `protocol`  | Protocol loaded - carries the envelope in `detail`      | `ok`                  |
 | `thinking`  | The agent started or stopped thinking                   | `ok` / `idle`         |
 | `action`    | A tool call was proposed and allowed                    | `allow`               |
@@ -51,7 +51,7 @@ Border Collie shows it in a speech bubble, so keep it under ~60 chars.
 
 Guard sets `petState` on each event.
 
-The app maps these states to animation folders in `pet/main.js`.
+The shared Pet animation contract in `events/pet-config.json` maps these states to named animation tracks.
 
 | petState | Animation folder |
 |----------|------------------|
@@ -78,6 +78,6 @@ The app maps these states to animation folders in `pet/main.js`.
 1. Guard never imports pet code. Pet never imports Guard code.
 2. Guard always sets `petState`, so the pet never has to infer it from `type`.
 3. Border Collie **never blocks anything**. It reports what already happened.
-4. Silence is the resting state. No event, no reaction - routine allowed
-   actions tick a counter and, apart from a quick nod, say nothing.
+4. Silence is the resting state.
+   No event means no reaction, and routine allowed actions tick a counter and say nothing apart from a quick nod.
 5. `detail` is free-form and may grow; consumers must ignore unknown keys.

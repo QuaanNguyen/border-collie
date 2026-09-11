@@ -1,28 +1,10 @@
 :root {
-  --ink: #f2f6f3;
-  --muted: #9fb0a8;
-  --panel: rgba(14, 20, 18, 0.86);
-  --panel-edge: rgba(255, 255, 255, 0.1);
-
-  --calm: #4cc0a5;
-  --hover: #6fd3b8;
-  --drag: #8fd0e6;
-  --thinking: #5aa9e6;
-  --watching: #58c8d6;
-  --checking: #e0b341;
-  --allowed: #58d68d;
-  --suspicious: #e08a3c;
-  --refused: #e2604a;
-  --denied: #9b6ce3;
-  --proving: #c9a227;
-  --rejecting: #d1487f;
-  --celebrating: #58d68d;
-  --error: #ef7a5a;
-  --sleeping: #7d8f96;
-  --asking: #5aa9e6;
-  --offline: #6b7a74;
-
-  --accent: var(--offline);
+  color-scheme: light;
+  --ink: rgba(24, 24, 27, 0.92);
+  --muted: rgba(60, 60, 67, 0.7);
+  --panel: rgba(248, 248, 250, 0.72);
+  --panel-edge: rgba(255, 255, 255, 0.88);
+  --denial: #b42318;
 }
 
 * {
@@ -38,9 +20,9 @@ body {
   background: transparent;
   overflow: hidden;
   font-family:
-    "Segoe UI",
     -apple-system,
     BlinkMacSystemFont,
+    "Segoe UI",
     Roboto,
     Helvetica,
     Arial,
@@ -60,40 +42,47 @@ body {
   justify-content: flex-end;
   padding: 6px 8px 8px;
   gap: 4px;
-  -webkit-app-region: drag;
 }
 
 .bubble {
   position: relative;
-  max-width: 300px;
+  max-width: 288px;
   background: var(--panel);
   border: 1px solid var(--panel-edge);
-  border-left: 3px solid var(--accent);
-  border-radius: 10px;
-  padding: 8px 11px;
+  border-radius: 16px;
+  padding: 10px 13px 11px;
   color: var(--ink);
-  font-size: 12.5px;
-  line-height: 1.35;
-  backdrop-filter: blur(8px);
-  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.42);
-  animation: pop 220ms cubic-bezier(0.2, 1.3, 0.5, 1) both;
-  margin-bottom: 2px;
+  font-size: 13px;
+  line-height: 1.42;
+  -webkit-backdrop-filter: blur(24px) saturate(1.35);
+  backdrop-filter: blur(24px) saturate(1.35);
+  box-shadow:
+    0 12px 32px rgba(0, 0, 0, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.72);
+  animation: pop 260ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  transform-origin: 32px calc(100% + 6px);
+  margin-bottom: 4px;
 }
 .bubble[hidden] {
   display: none;
 }
 .bubble-line {
-  font-weight: 600;
-  letter-spacing: 0.1px;
+  font-weight: 580;
+  letter-spacing: -0.01em;
+  transition: color 160ms ease;
 }
 .bubble-sub {
-  margin-top: 3px;
+  margin-top: 4px;
   color: var(--muted);
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 400;
-  font-family: ui-monospace, "Cascadia Mono", Consolas, monospace;
   word-break: break-word;
   white-space: pre-line;
+  transition: color 160ms ease;
+}
+.bubble-denial .bubble-line,
+.bubble-denial .bubble-sub {
+  color: var(--denial);
 }
 .bubble-sub[hidden] {
   display: none;
@@ -101,9 +90,9 @@ body {
 .bubble-tail {
   position: absolute;
   left: 26px;
-  bottom: -6px;
-  width: 11px;
-  height: 11px;
+  bottom: -7px;
+  width: 12px;
+  height: 12px;
   background: var(--panel);
   border-right: 1px solid var(--panel-edge);
   border-bottom: 1px solid var(--panel-edge);
@@ -113,7 +102,7 @@ body {
 @keyframes pop {
   from {
     opacity: 0;
-    transform: translateY(6px) scale(0.96);
+    transform: translateY(7px) scale(0.96);
   }
   to {
     opacity: 1;
@@ -123,10 +112,12 @@ body {
 
 .pet {
   position: relative;
-  width: 150px;
+  width: 225px;
   height: 225px;
   display: grid;
   place-items: center;
+  -webkit-app-region: no-drag;
+  touch-action: none;
 }
 .animation {
   width: 225px;
@@ -134,123 +125,13 @@ body {
   object-fit: contain;
   position: relative;
   z-index: 1;
+  transform-origin: center;
+}
+.state-drag .animation.facing-left {
+  transform: scaleX(-1);
 }
 .animation[hidden] {
   display: none;
-}
-
-.state-calm {
-  --accent: var(--calm);
-}
-.state-hover {
-  --accent: var(--hover);
-}
-.state-drag {
-  --accent: var(--drag);
-}
-.state-thinking {
-  --accent: var(--thinking);
-}
-.state-watching {
-  --accent: var(--watching);
-}
-.state-checking {
-  --accent: var(--checking);
-}
-.state-allowed {
-  --accent: var(--allowed);
-}
-.state-suspicious {
-  --accent: var(--suspicious);
-}
-.state-refused {
-  --accent: var(--refused);
-}
-.state-denied {
-  --accent: var(--denied);
-}
-.state-proving {
-  --accent: var(--proving);
-}
-.state-rejecting {
-  --accent: var(--rejecting);
-}
-.state-celebrating {
-  --accent: var(--celebrating);
-}
-.state-error {
-  --accent: var(--error);
-}
-.state-sleeping {
-  --accent: var(--sleeping);
-}
-.state-asking {
-  --accent: var(--asking);
-}
-.state-offline {
-  --accent: var(--offline);
-}
-
-.tray {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  padding: 3px 8px;
-  background: var(--panel);
-  border: 1px solid var(--panel-edge);
-  border-radius: 999px;
-  color: var(--muted);
-  font-size: 10.5px;
-  backdrop-filter: blur(8px);
-}
-.counts {
-  display: flex;
-  gap: 6px;
-  font-family: ui-monospace, Consolas, monospace;
-}
-.c {
-  display: inline-flex;
-  align-items: center;
-  gap: 2px;
-}
-.c::before {
-  content: "";
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  display: inline-block;
-}
-.c.ok::before {
-  background: var(--calm);
-}
-.c.stop::before {
-  background: var(--refused);
-}
-.c.good::before {
-  background: var(--celebrating);
-}
-.c.bad::before {
-  background: var(--rejecting);
-}
-.c b {
-  color: var(--ink);
-  font-weight: 600;
-}
-
-.ghost {
-  -webkit-app-region: no-drag;
-  background: transparent;
-  border: 0;
-  color: var(--muted);
-  font: inherit;
-  font-size: 10.5px;
-  cursor: pointer;
-  padding: 1px 4px;
-  border-radius: 4px;
-}
-.ghost:hover {
-  color: var(--ink);
-  background: rgba(255, 255, 255, 0.09);
 }
 
 .dev-panel {
@@ -280,7 +161,7 @@ body {
   letter-spacing: 0.06em;
   font-size: 9px;
   font-weight: 700;
-  color: var(--accent);
+  color: var(--muted);
 }
 .dev-field select {
   -webkit-app-region: no-drag;
@@ -290,85 +171,6 @@ body {
   border-radius: 6px;
   padding: 3px 4px;
   font: inherit;
-}
-
-.log {
-  -webkit-app-region: no-drag;
-  list-style: none;
-  width: 100%;
-  max-height: 190px;
-  overflow-y: auto;
-  background: var(--panel);
-  border: 1px solid var(--panel-edge);
-  border-radius: 9px;
-  padding: 6px;
-  font-size: 11px;
-  color: var(--ink);
-  backdrop-filter: blur(8px);
-  display: flex;
-  flex-direction: column-reverse;
-  gap: 3px;
-}
-.log[hidden] {
-  display: none;
-}
-.log li {
-  display: flex;
-  gap: 6px;
-  align-items: baseline;
-  padding: 2px 4px;
-  border-radius: 5px;
-  font-family: ui-monospace, Consolas, monospace;
-}
-.log li .k {
-  flex: 0 0 auto;
-  width: 8px;
-  height: 8px;
-  border-radius: 2px;
-  margin-top: 3px;
-}
-.log li .t {
-  color: var(--ink);
-  word-break: break-word;
-}
-.log li.allow .k {
-  background: var(--calm);
-}
-.log li.block .k {
-  background: var(--refused);
-}
-.log li.warn .k {
-  background: var(--suspicious);
-}
-.log li.pass .k {
-  background: var(--celebrating);
-}
-.log li.fail .k {
-  background: var(--rejecting);
-}
-.log li.err .k {
-  background: var(--error);
-}
-.log li.ask .k {
-  background: var(--asking);
-}
-.log li.info .k {
-  background: var(--offline);
-}
-.log li.block .t,
-.log li.fail .t {
-  color: #ffd9d1;
-}
-.log li.err .t {
-  color: #ffcdbf;
-}
-
-.log::-webkit-scrollbar {
-  width: 6px;
-}
-.log::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.16);
-  border-radius: 3px;
 }
 
 @media (prefers-reduced-motion: reduce) {

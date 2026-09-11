@@ -17,6 +17,7 @@ const { createSession } = require(path.join(ROOT, 'guard/lib/session'));
 const { scan } = require(path.join(ROOT, 'guard/lib/injection'));
 const { detectClaims, runCheck, verify } = require(path.join(ROOT, 'guard/lib/verify'));
 const { normalise } = require(path.join(ROOT, 'guard/lib/toolcalls'));
+const { EventBus } = require(path.join(ROOT, 'events'));
 
 let pass = 0, fail = 0;
 const only = process.argv[2];
@@ -156,6 +157,26 @@ t('blocks an agent-chosen argument to an otherwise allowed binary', () => {
   assert.equal(r.rule, 'command_allowlist');
 });
 
+t('blocks inline interpreter code after a compound shell segment', () => {
+  const ordinary = new Protocol({
+    ...P.raw,
+    allow_ordinary_bash: true,
+  }, '/work/project');
+  const r = check(call('bash', { command: 'echo ok && python -c "import os; print(os.listdir())"' }), ordinary);
+  assert.equal(r.decision, 'block');
+  assert.equal(r.rule, 'command_allowlist');
+});
+
+t('blocks inline interpreter code behind a shell wrapper', () => {
+  const ordinary = new Protocol({
+    ...P.raw,
+    allow_ordinary_bash: true,
+  }, '/work/project');
+  const r = check(call('bash', { command: 'command python -c "import os; print(os.listdir())"' }), ordinary);
+  assert.equal(r.decision, 'block');
+  assert.equal(r.rule, 'command_allowlist');
+});
+
 t('blocks a symlink in the working directory that resolves outside it', () => {
   const root = fs.mkdtempSync(path.join(require('node:os').tmpdir(), 'guard-symlink-'));
   const outside = fs.mkdtempSync(path.join(require('node:os').tmpdir(), 'guard-outside-'));
@@ -212,15 +233,7 @@ console.log('\nwindow sizing');
 
 const G = require(path.join(ROOT, 'pet/geometry'));
 
-t('steps through the scale ladder and stops at both ends', () => {
-  assert.equal(G.stepScale(1, 1), 1.15);
-  assert.equal(G.stepScale(1, -1), 0.9);
-  assert.equal(G.stepScale(2, 1), 2, 'must not go past the largest step');
-  assert.equal(G.stepScale(0.6, -1), 0.6, 'must not go past the smallest');
-});
-
-t('snaps to the nearest step from an odd scale', () => {
-  assert.equal(G.stepScale(1.02, 1), 1.15);
+t('clamps requested scale to the supported range', () => {
   assert.equal(G.clampScale(9), 2);
   assert.equal(G.clampScale(0.01), 0.6);
   assert.equal(G.clampScale('nonsense'), 1);
@@ -228,17 +241,10 @@ t('snaps to the nearest step from an odd scale', () => {
 
 t('growing keeps the bottom-right corner still', () => {
   const before = { x: 1000, y: 600, width: 340, height: 380 };
-  const after = G.boundsFor(before, 1.35, false);
+  const after = G.boundsFor(before, 1.35);
   assert.equal(before.x + before.width, after.x + after.width, 'right edge moved');
   assert.equal(before.y + before.height, after.y + after.height, 'bottom edge moved');
   assert.ok(after.width > before.width && after.height > before.height);
-});
-
-t('opening the log makes it taller, not wider', () => {
-  const b = { x: 1000, y: 600, width: 340, height: 380 };
-  const open = G.boundsFor(b, 1, true);
-  assert.equal(open.width, 340);
-  assert.ok(open.height > 380);
 });
 
 t('never lets the window sit off the edge of the display', () => {
@@ -249,10 +255,34 @@ t('never lets the window sit off the edge of the display', () => {
   assert.equal(offTop.y, 0);
 });
 
+t('lets the visible Pet touch every display edge', () => {
+  const area = { x: 0, y: 0, width: 1920, height: 1040 };
+  const window = { x: -500, y: -500, width: 340, height: 380 };
+  const visible = [{ x: 84, y: 190, width: 172, height: 126 }];
+  const topLeft = G.keepVisibleOnScreen(window, area, visible, 1);
+  assert.equal(topLeft.x, -84);
+  assert.equal(topLeft.y, -190);
+
+  const bottomRight = G.keepVisibleOnScreen(
+    { x: 1900, y: 1000, width: 340, height: 380 },
+    area,
+    visible,
+    1,
+  );
+  assert.equal(bottomRight.x, 1664);
+  assert.equal(bottomRight.y, 724);
+});
+
+t('dragging follows the pointer past the transparent window edge', () => {
+  assert.deepEqual(
+    G.dragOrigin({ x: 0, y: 0 }, { x: 84, y: 190 }),
+    { x: -84, y: -190 },
+  );
+});
+
 t('a window bigger than the screen is pinned, never pushed off it', () => {
   const area = { x: 0, y: 0, width: 1280, height: 720 };
-  // 2x with the log open is 680x1180 - taller than this display
-  const grown = G.boundsFor({ x: 940, y: 300, width: 340, height: 380 }, 2, true);
+  const grown = G.boundsFor({ x: 940, y: 300, width: 340, height: 380 }, 2);
   const fitted = G.keepOnScreen(grown, area);
   assert.ok(fitted.x >= area.x, `x went off screen: ${fitted.x}`);
   assert.ok(fitted.y >= area.y, `y went off screen: ${fitted.y}`);
@@ -260,10 +290,10 @@ t('a window bigger than the screen is pinned, never pushed off it', () => {
 
 t('scaling up stops at what the display can hold', () => {
   const small = { x: 0, y: 0, width: 1280, height: 720 };
-  assert.ok(G.fitScale(2, small, true) < 2, 'should refuse a size that cannot fit');
+  assert.ok(G.fitScale(2, small) < 2, 'should refuse a size that cannot fit');
   const big = { x: 0, y: 0, width: 3840, height: 2160 };
-  assert.equal(G.fitScale(2, big, true), 2, 'a large display should allow the largest step');
-  assert.ok(G.fitScale(2, { x: 0, y: 0, width: 200, height: 200 }, false) >= G.SCALES[0],
+  assert.equal(G.fitScale(2, big), 2, 'a large display should allow the largest step');
+  assert.ok(G.fitScale(2, { x: 0, y: 0, width: 200, height: 200 }) >= G.SCALES[0],
     'always returns something, even on an absurd display');
 });
 
@@ -361,6 +391,12 @@ t('file_exists check works both ways', () => {
 
 console.log('\nplugin lifecycle');
 
+t('event streams have unique identities when sessions start together', () => {
+  const first = new EventBus();
+  const second = new EventBus();
+  assert.notEqual(first.state().runId, second.state().runId);
+});
+
 t('interrupted thinking returns the pet to calm', () => {
   const script = `
     import fs from 'node:fs';
@@ -393,7 +429,8 @@ t('the OpenCode adapter blocks a shell escape hidden in interpreter code', () =>
     process.env.BORDER_COLLIE_NO_PET = '1';
     const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'border-collie-shell-boundary-'));
     process.env.BORDER_COLLIE_EVENTS = path.join(dir, 'events.jsonl');
-    fs.writeFileSync(path.join(dir, 'protocol.json'), JSON.stringify({
+    fs.mkdirSync(path.join(dir, '.opencode'), { recursive: true });
+    fs.writeFileSync(path.join(dir, '.opencode', 'protocol.json'), JSON.stringify({
       read_paths: ['**'],
       write_paths: [],
       allow_commands: ['python'],

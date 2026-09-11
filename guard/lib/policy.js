@@ -209,12 +209,15 @@ function check(toolCall, protocol) {
 
   // 2. command allow/deny
   if (call.kind === 'exec' && call.binary) {
-    const bin = call.binary.toLowerCase();
-    if (protocol.denyCommands.includes(bin)) {
-      return deny(call, 'deny_commands', `'${bin}' is on the protocol's deny list`);
+    const denied = (call.binaries || [call.binary]).find((bin) => protocol.denyCommands.includes(bin.toLowerCase()));
+    if (denied) {
+      return deny(call, 'deny_commands', `'${denied}' is on the protocol's deny list`);
     }
     if (!protocol.allowOrdinaryBash && !protocol.commandAllowlist.includes(commandKey(call.command))) {
       return deny(call, 'command_allowlist', 'shell commands require an exact user-approved command');
+    }
+    if (call.requiresExactApproval && !protocol.commandAllowlist.includes(commandKey(call.command))) {
+      return deny(call, 'command_allowlist', 'inline interpreter code requires an exact user-approved command');
     }
   }
 

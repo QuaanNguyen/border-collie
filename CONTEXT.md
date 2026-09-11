@@ -1,17 +1,21 @@
 # Domain
 
-**Guard**  -  deterministic gate and evidence checks. No model in the loop.
+**Guard** - deterministic gate and evidence checks with no model in the loop.
 
-**Border Collie plugin**  -  OpenCode adapter. Source is `plugin/border-collie.js` in this clone.
+**Pet** - optional desktop companion that expresses events without deciding or changing Guard outcomes.
 
-**Border Collie package**  -  what install materializes under `~/.config/opencode/plugins/`:
-entry `border-collie.js` plus folder `border-collie/` (guard + pet). Self-contained; moving this
-clone after install does not break a completed install.
+**Pet host** - platform window boundary that owns focus, pointer routing, movement, shortcuts, and lifecycle while sharing the Pet renderer.
+Production macOS uses AppKit and system WebKit, while Windows, Linux, and development mode use Electron.
 
-**Global bind**  -  one command (`scripts/install-plugin`) copies the package and
-runs `npm install` for the pet. OpenCode loads the entry from the global plugins
-directory.
+**Pet animation contract** - validated shared configuration that maps semantic Pet states to named animation tracks, ordered frames, and per-frame durations before either Pet host activates the renderer.
 
-**Protocol**  -  task envelope in the opened directory (`.opencode/protocol.json`): allowed
-reads/writes, commands, egress, and done criteria. Missing file means the
-conservative default.
+**Event stream** - append-only contract through which the Border Collie plugin publishes events and Pet consumes them.
+
+**Border Collie plugin** - OpenCode adapter whose source is `plugin/border-collie.js` in this clone.
+
+**Border Collie package** - self-contained installation containing the Border Collie plugin, Guard, Event stream contract, and optionally Pet.
+
+**Global bind** - installation operation that materializes a verified Border Collie package under OpenCode's global plugin directory while preserving the prior working package if verification fails.
+
+**Protocol** - task envelope at `.opencode/protocol.json` in the opened directory, containing allowed reads, writes, commands, egress, and done criteria.
+A missing Protocol selects the conservative default.

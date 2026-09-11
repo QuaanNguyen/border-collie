@@ -18,7 +18,7 @@
       </div>
 
       <div id="pet" class="pet" title="Border Collie">
-        <img id="animation" class="animation" alt="" hidden />
+        <img id="animation" class="animation" alt="Border Collie sprite" draggable="false" hidden />
       </div>
 
       <div id="dev-panel" class="dev-panel" hidden>
@@ -35,21 +35,10 @@
           </select>
         </label>
       </div>
-
-      <div class="tray">
-        <span class="counts">
-          <span class="c ok" title="allowed"> <b id="c-allow">0</b></span>
-          <span class="c stop" title="refused"> <b id="c-block">0</b></span>
-          <span class="c good" title="verified"> <b id="c-verify">0</b></span>
-          <span class="c bad" title="rejected"> <b id="c-reject">0</b></span>
-        </span>
-        <button id="toggle" class="ghost" title="Recent events">log</button>
-        <button id="close" class="ghost" title="Hide Border Collie">×</button>
-      </div>
-
-      <ol id="log" class="log" hidden></ol>
     </div>
-    <script src="scheduler.js"></script>
-    <script src="renderer.js"></script>
-  </body>
+  <script src="scheduler.js"></script>
+  <script src="hit-regions.js"></script>
+  <script src="animation-player.js"></script>
+  <script src="renderer.js"></script>
+</body>
 </html>

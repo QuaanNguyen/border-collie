@@ -12,6 +12,7 @@ const suites = [
   'cross-root-enforcement.test.js',
   'protected-paths.test.js',
   'denial-remediation.test.js',
+  'subagent-policy.test.js',
   'install-plugin.test.js',
 ];
 

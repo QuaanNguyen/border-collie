@@ -1,0 +1,876 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "border-collie-source.png",
+    "sha256": "656deba7e0dfe60e516e9e5db6a3247b3fe031038cbf01fec33fd931e6b28cc3",
+    "width": 960,
+    "height": 1536,
+    "columns": 5,
+    "rows": 8
+  },
+  "conversion": {
+    "transparency": "source-alpha",
+    "alignment": "bottom-center",
+    "sourceCell": {
+      "width": 192,
+      "height": 192
+    },
+    "frame": {
+      "width": 192,
+      "height": 208
+    },
+    "bottomPadding": 8,
+    "animations": [
+      "normal",
+      "dragging",
+      "hovering",
+      "thinking",
+      "suspicious",
+      "refused",
+      "denied",
+      "celebrating"
+    ]
+  },
+  "frames": [
+    {
+      "animation": "normal",
+      "index": 1,
+      "file": "border-collie-normal/border-collie-normal-1.png",
+      "sourceCell": {
+        "row": 1,
+        "column": 1
+      },
+      "sourceBounds": {
+        "x": 24,
+        "y": 10,
+        "width": 143,
+        "height": 172
+      },
+      "destination": {
+        "x": 24,
+        "y": 28
+      },
+      "visiblePixels": 14272,
+      "pixelSha256": "116c7bd30a4c67414d12590ead41c6b57f7ecfec3f7affdf7b0e76d4de8af7d9"
+    },
+    {
+      "animation": "normal",
+      "index": 2,
+      "file": "border-collie-normal/border-collie-normal-2.png",
+      "sourceCell": {
+        "row": 1,
+        "column": 2
+      },
+      "sourceBounds": {
+        "x": 23,
+        "y": 11,
+        "width": 146,
+        "height": 171
+      },
+      "destination": {
+        "x": 23,
+        "y": 29
+      },
+      "visiblePixels": 14333,
+      "pixelSha256": "45124377ede09e0ae4db2c475a53dcfe35e152cedc87e187b0874a87c40f2eb8"
+    },
+    {
+      "animation": "normal",
+      "index": 3,
+      "file": "border-collie-normal/border-collie-normal-3.png",
+      "sourceCell": {
+        "row": 1,
+        "column": 3
+      },
+      "sourceBounds": {
+        "x": 23,
+        "y": 10,
+        "width": 145,
+        "height": 172
+      },
+      "destination": {
+        "x": 23,
+        "y": 28
+      },
+      "visiblePixels": 14469,
+      "pixelSha256": "b565fcf2aafe013dea7db52dd5de854e35c3a4b62814da5e575b7680275bed68"
+    },
+    {
+      "animation": "normal",
+      "index": 4,
+      "file": "border-collie-normal/border-collie-normal-4.png",
+      "sourceCell": {
+        "row": 1,
+        "column": 4
+      },
+      "sourceBounds": {
+        "x": 27,
+        "y": 10,
+        "width": 138,
+        "height": 172
+      },
+      "destination": {
+        "x": 27,
+        "y": 28
+      },
+      "visiblePixels": 14310,
+      "pixelSha256": "28169c2a5ec7c25a1a941811c1132498fbf9a4687773797a7578c5a86222ba0c"
+    },
+    {
+      "animation": "normal",
+      "index": 5,
+      "file": "border-collie-normal/border-collie-normal-5.png",
+      "sourceCell": {
+        "row": 1,
+        "column": 5
+      },
+      "sourceBounds": {
+        "x": 30,
+        "y": 10,
+        "width": 131,
+        "height": 172
+      },
+      "destination": {
+        "x": 30,
+        "y": 28
+      },
+      "visiblePixels": 14001,
+      "pixelSha256": "d0a94d063f7d620ed256739798b65c0f8e2f2054f1a00e46dbf3f6bf0ddffda0"
+    },
+    {
+      "animation": "dragging",
+      "index": 1,
+      "file": "border-collie-dragging/border-collie-dragging-1.png",
+      "sourceCell": {
+        "row": 2,
+        "column": 1
+      },
+      "sourceBounds": {
+        "x": 17,
+        "y": 66,
+        "width": 157,
+        "height": 116
+      },
+      "destination": {
+        "x": 17,
+        "y": 84
+      },
+      "visiblePixels": 9405,
+      "pixelSha256": "8927bf77bb3e21fee6afcddbec60f63534bf6d3577f34e97d763f3c477a86027"
+    },
+    {
+      "animation": "dragging",
+      "index": 2,
+      "file": "border-collie-dragging/border-collie-dragging-2.png",
+      "sourceCell": {
+        "row": 2,
+        "column": 2
+      },
+      "sourceBounds": {
+        "x": 13,
+        "y": 82,
+        "width": 165,
+        "height": 100
+      },
+      "destination": {
+        "x": 13,
+        "y": 100
+      },
+      "visiblePixels": 8312,
+      "pixelSha256": "74158113a732bd19c6f3963974d26294e4cdacec21573b06762abb8c180babbc"
+    },
+    {
+      "animation": "dragging",
+      "index": 3,
+      "file": "border-collie-dragging/border-collie-dragging-3.png",
+      "sourceCell": {
+        "row": 2,
+        "column": 3
+      },
+      "sourceBounds": {
+        "x": 19,
+        "y": 94,
+        "width": 153,
+        "height": 88
+      },
+      "destination": {
+        "x": 19,
+        "y": 112
+      },
+      "visiblePixels": 7394,
+      "pixelSha256": "2aafba9d9e71a4cdf16bd6c56fde7a4b52c427fa4f8c4f03c6315ac55a05858d"
+    },
+    {
+      "animation": "dragging",
+      "index": 4,
+      "file": "border-collie-dragging/border-collie-dragging-4.png",
+      "sourceCell": {
+        "row": 2,
+        "column": 4
+      },
+      "sourceBounds": {
+        "x": 10,
+        "y": 74,
+        "width": 172,
+        "height": 108
+      },
+      "destination": {
+        "x": 10,
+        "y": 92
+      },
+      "visiblePixels": 9478,
+      "pixelSha256": "0f9287ad9af9a4f9f5c7653a9da831901788d2420497769ba0405bcb3a9ca502"
+    },
+    {
+      "animation": "dragging",
+      "index": 5,
+      "file": "border-collie-dragging/border-collie-dragging-5.png",
+      "sourceCell": {
+        "row": 2,
+        "column": 5
+      },
+      "sourceBounds": {
+        "x": 17,
+        "y": 66,
+        "width": 157,
+        "height": 116
+      },
+      "destination": {
+        "x": 17,
+        "y": 84
+      },
+      "visiblePixels": 9491,
+      "pixelSha256": "e81289646df563e252981973a04923e39013f0d5aba46502ada588fad26e5bad"
+    },
+    {
+      "animation": "hovering",
+      "index": 1,
+      "file": "border-collie-hovering/border-collie-hovering-1.png",
+      "sourceCell": {
+        "row": 3,
+        "column": 1
+      },
+      "sourceBounds": {
+        "x": 25,
+        "y": 10,
+        "width": 142,
+        "height": 172
+      },
+      "destination": {
+        "x": 25,
+        "y": 28
+      },
+      "visiblePixels": 14468,
+      "pixelSha256": "77cbe4b039ef3589c6394be9db9387b486bb4414636cb85a56b2caf542d7f871"
+    },
+    {
+      "animation": "hovering",
+      "index": 2,
+      "file": "border-collie-hovering/border-collie-hovering-2.png",
+      "sourceCell": {
+        "row": 3,
+        "column": 2
+      },
+      "sourceBounds": {
+        "x": 24,
+        "y": 10,
+        "width": 143,
+        "height": 172
+      },
+      "destination": {
+        "x": 24,
+        "y": 28
+      },
+      "visiblePixels": 14878,
+      "pixelSha256": "fcfb95bab8d79fb5b6a5dfe2218926594904c2448215304f42f285905fc0ec95"
+    },
+    {
+      "animation": "hovering",
+      "index": 3,
+      "file": "border-collie-hovering/border-collie-hovering-3.png",
+      "sourceCell": {
+        "row": 3,
+        "column": 3
+      },
+      "sourceBounds": {
+        "x": 23,
+        "y": 10,
+        "width": 145,
+        "height": 172
+      },
+      "destination": {
+        "x": 23,
+        "y": 28
+      },
+      "visiblePixels": 14423,
+      "pixelSha256": "ad44852fccda6c16e38d49aedaad04631afeff30c42513db9c0585cfa90a8a88"
+    },
+    {
+      "animation": "hovering",
+      "index": 4,
+      "file": "border-collie-hovering/border-collie-hovering-4.png",
+      "sourceCell": {
+        "row": 3,
+        "column": 4
+      },
+      "sourceBounds": {
+        "x": 24,
+        "y": 10,
+        "width": 144,
+        "height": 172
+      },
+      "destination": {
+        "x": 24,
+        "y": 28
+      },
+      "visiblePixels": 14092,
+      "pixelSha256": "39247a5ab272548e282f387b501996e339c8888af9ff5309c736d80e5eec5380"
+    },
+    {
+      "animation": "hovering",
+      "index": 5,
+      "file": "border-collie-hovering/border-collie-hovering-5.png",
+      "sourceCell": {
+        "row": 3,
+        "column": 5
+      },
+      "sourceBounds": {
+        "x": 24,
+        "y": 10,
+        "width": 143,
+        "height": 172
+      },
+      "destination": {
+        "x": 24,
+        "y": 28
+      },
+      "visiblePixels": 14487,
+      "pixelSha256": "4229cc3a47c60fc8ea074f8d0fb8bd55d0515a78787ef75d6637bd4fb1932a5f"
+    },
+    {
+      "animation": "thinking",
+      "index": 1,
+      "file": "border-collie-thinking/border-collie-thinking-1.png",
+      "sourceCell": {
+        "row": 4,
+        "column": 1
+      },
+      "sourceBounds": {
+        "x": 21,
+        "y": 10,
+        "width": 149,
+        "height": 172
+      },
+      "destination": {
+        "x": 21,
+        "y": 28
+      },
+      "visiblePixels": 13054,
+      "pixelSha256": "0702047aaaaa1895e16d20959b6eae3e128a935a97f5836cded831cdd62e9b94"
+    },
+    {
+      "animation": "thinking",
+      "index": 2,
+      "file": "border-collie-thinking/border-collie-thinking-2.png",
+      "sourceCell": {
+        "row": 4,
+        "column": 2
+      },
+      "sourceBounds": {
+        "x": 21,
+        "y": 13,
+        "width": 149,
+        "height": 169
+      },
+      "destination": {
+        "x": 21,
+        "y": 31
+      },
+      "visiblePixels": 12978,
+      "pixelSha256": "ab3e6be20f47bd2612ed5ae2c5e8e97b352b0617fea6f354877512d2fe9b75fe"
+    },
+    {
+      "animation": "thinking",
+      "index": 3,
+      "file": "border-collie-thinking/border-collie-thinking-3.png",
+      "sourceCell": {
+        "row": 4,
+        "column": 3
+      },
+      "sourceBounds": {
+        "x": 21,
+        "y": 10,
+        "width": 149,
+        "height": 172
+      },
+      "destination": {
+        "x": 21,
+        "y": 28
+      },
+      "visiblePixels": 13153,
+      "pixelSha256": "3e979568869ec7f55ca848e95dfec310750b5a64c2432d3badf326d657a0303a"
+    },
+    {
+      "animation": "thinking",
+      "index": 4,
+      "file": "border-collie-thinking/border-collie-thinking-4.png",
+      "sourceCell": {
+        "row": 4,
+        "column": 4
+      },
+      "sourceBounds": {
+        "x": 21,
+        "y": 15,
+        "width": 149,
+        "height": 167
+      },
+      "destination": {
+        "x": 21,
+        "y": 33
+      },
+      "visiblePixels": 13413,
+      "pixelSha256": "1ce5b6dce8a72f20e0ad1a646ce52b29e830c3464249d29c9f6f5e28ae315fe8"
+    },
+    {
+      "animation": "thinking",
+      "index": 5,
+      "file": "border-collie-thinking/border-collie-thinking-5.png",
+      "sourceCell": {
+        "row": 4,
+        "column": 5
+      },
+      "sourceBounds": {
+        "x": 21,
+        "y": 10,
+        "width": 149,
+        "height": 172
+      },
+      "destination": {
+        "x": 21,
+        "y": 28
+      },
+      "visiblePixels": 12992,
+      "pixelSha256": "791fb54894b49cd57d4e58d029c1299254e60499779087824275f4f045cde7c0"
+    },
+    {
+      "animation": "suspicious",
+      "index": 1,
+      "file": "border-collie-suspicious/border-collie-suspicious-1.png",
+      "sourceCell": {
+        "row": 5,
+        "column": 1
+      },
+      "sourceBounds": {
+        "x": 12,
+        "y": 31,
+        "width": 167,
+        "height": 151
+      },
+      "destination": {
+        "x": 12,
+        "y": 49
+      },
+      "visiblePixels": 13691,
+      "pixelSha256": "304fea93b707bdb282cf87e25e7f3f24b0562b3f763a0aba03228853f6924ed3"
+    },
+    {
+      "animation": "suspicious",
+      "index": 2,
+      "file": "border-collie-suspicious/border-collie-suspicious-2.png",
+      "sourceCell": {
+        "row": 5,
+        "column": 2
+      },
+      "sourceBounds": {
+        "x": 12,
+        "y": 31,
+        "width": 168,
+        "height": 151
+      },
+      "destination": {
+        "x": 12,
+        "y": 49
+      },
+      "visiblePixels": 13875,
+      "pixelSha256": "476f54bfa7fbbd517e3d10df2820b47b842266da8a81803210bc65b629353860"
+    },
+    {
+      "animation": "suspicious",
+      "index": 3,
+      "file": "border-collie-suspicious/border-collie-suspicious-3.png",
+      "sourceCell": {
+        "row": 5,
+        "column": 3
+      },
+      "sourceBounds": {
+        "x": 10,
+        "y": 29,
+        "width": 172,
+        "height": 153
+      },
+      "destination": {
+        "x": 10,
+        "y": 47
+      },
+      "visiblePixels": 14695,
+      "pixelSha256": "767d424b19a319e6f8aef66368f6c3a3588935a921e768eefb3c1e8e37b3f64f"
+    },
+    {
+      "animation": "suspicious",
+      "index": 4,
+      "file": "border-collie-suspicious/border-collie-suspicious-4.png",
+      "sourceCell": {
+        "row": 5,
+        "column": 4
+      },
+      "sourceBounds": {
+        "x": 15,
+        "y": 33,
+        "width": 161,
+        "height": 149
+      },
+      "destination": {
+        "x": 15,
+        "y": 51
+      },
+      "visiblePixels": 13468,
+      "pixelSha256": "88af5202f996487758fe7098198382f43f023ef1ffb3edfcd5a63df80fd4e148"
+    },
+    {
+      "animation": "suspicious",
+      "index": 5,
+      "file": "border-collie-suspicious/border-collie-suspicious-5.png",
+      "sourceCell": {
+        "row": 5,
+        "column": 5
+      },
+      "sourceBounds": {
+        "x": 13,
+        "y": 31,
+        "width": 165,
+        "height": 151
+      },
+      "destination": {
+        "x": 13,
+        "y": 49
+      },
+      "visiblePixels": 13795,
+      "pixelSha256": "6ed450cdd6f55af3f1ab83bf4755fefc45ed8cd2224ddc50319a025c7d4baa64"
+    },
+    {
+      "animation": "refused",
+      "index": 1,
+      "file": "border-collie-refused/border-collie-refused-1.png",
+      "sourceCell": {
+        "row": 6,
+        "column": 1
+      },
+      "sourceBounds": {
+        "x": 30,
+        "y": 10,
+        "width": 131,
+        "height": 172
+      },
+      "destination": {
+        "x": 30,
+        "y": 28
+      },
+      "visiblePixels": 13348,
+      "pixelSha256": "6abc970391b9f8abaeeeba941efe1d77dcdbea5c17e80f2b59bd44868d30fde6"
+    },
+    {
+      "animation": "refused",
+      "index": 2,
+      "file": "border-collie-refused/border-collie-refused-2.png",
+      "sourceCell": {
+        "row": 6,
+        "column": 2
+      },
+      "sourceBounds": {
+        "x": 30,
+        "y": 19,
+        "width": 131,
+        "height": 163
+      },
+      "destination": {
+        "x": 30,
+        "y": 37
+      },
+      "visiblePixels": 13197,
+      "pixelSha256": "fd37ebc43ecdf67b4a19ab5a8bfe486919ebbb7ac76aaace521bd6c4ca1571ce"
+    },
+    {
+      "animation": "refused",
+      "index": 3,
+      "file": "border-collie-refused/border-collie-refused-3.png",
+      "sourceCell": {
+        "row": 6,
+        "column": 3
+      },
+      "sourceBounds": {
+        "x": 30,
+        "y": 14,
+        "width": 131,
+        "height": 168
+      },
+      "destination": {
+        "x": 30,
+        "y": 32
+      },
+      "visiblePixels": 12890,
+      "pixelSha256": "c4af4c6f4e0ab6273a5bfec3d448633e5c9e507937ed2ca53f7aedfabeb06f32"
+    },
+    {
+      "animation": "refused",
+      "index": 4,
+      "file": "border-collie-refused/border-collie-refused-4.png",
+      "sourceCell": {
+        "row": 6,
+        "column": 4
+      },
+      "sourceBounds": {
+        "x": 30,
+        "y": 16,
+        "width": 132,
+        "height": 166
+      },
+      "destination": {
+        "x": 30,
+        "y": 34
+      },
+      "visiblePixels": 13198,
+      "pixelSha256": "2f4279bed807a0c69f63ea6e42319868221f0d37a8ca0d91370a3c035fcaa2d2"
+    },
+    {
+      "animation": "refused",
+      "index": 5,
+      "file": "border-collie-refused/border-collie-refused-5.png",
+      "sourceCell": {
+        "row": 6,
+        "column": 5
+      },
+      "sourceBounds": {
+        "x": 30,
+        "y": 10,
+        "width": 131,
+        "height": 172
+      },
+      "destination": {
+        "x": 30,
+        "y": 28
+      },
+      "visiblePixels": 13160,
+      "pixelSha256": "2c526086fcf48385a23935a6502acd7fc694274daec491ea64792129b6e17531"
+    },
+    {
+      "animation": "denied",
+      "index": 1,
+      "file": "border-collie-denied/border-collie-denied-1.png",
+      "sourceCell": {
+        "row": 7,
+        "column": 1
+      },
+      "sourceBounds": {
+        "x": 10,
+        "y": 73,
+        "width": 172,
+        "height": 109
+      },
+      "destination": {
+        "x": 10,
+        "y": 91
+      },
+      "visiblePixels": 12232,
+      "pixelSha256": "d999adbdf927a2781674b2f5845a3da2e06e7825d19c6f779f5b280aaf3fe6b8"
+    },
+    {
+      "animation": "denied",
+      "index": 2,
+      "file": "border-collie-denied/border-collie-denied-2.png",
+      "sourceCell": {
+        "row": 7,
+        "column": 2
+      },
+      "sourceBounds": {
+        "x": 10,
+        "y": 73,
+        "width": 171,
+        "height": 109
+      },
+      "destination": {
+        "x": 10,
+        "y": 91
+      },
+      "visiblePixels": 12184,
+      "pixelSha256": "465f3fed823d2e6b83d7260f5820ac0beb11962f30828a98581e6bddf3405bc7"
+    },
+    {
+      "animation": "denied",
+      "index": 3,
+      "file": "border-collie-denied/border-collie-denied-3.png",
+      "sourceCell": {
+        "row": 7,
+        "column": 3
+      },
+      "sourceBounds": {
+        "x": 11,
+        "y": 73,
+        "width": 169,
+        "height": 109
+      },
+      "destination": {
+        "x": 11,
+        "y": 91
+      },
+      "visiblePixels": 12106,
+      "pixelSha256": "e140eec00da569b5438f010f77050edf0483d68d850900f981fccdabbdacc117"
+    },
+    {
+      "animation": "denied",
+      "index": 4,
+      "file": "border-collie-denied/border-collie-denied-4.png",
+      "sourceCell": {
+        "row": 7,
+        "column": 4
+      },
+      "sourceBounds": {
+        "x": 12,
+        "y": 73,
+        "width": 168,
+        "height": 109
+      },
+      "destination": {
+        "x": 12,
+        "y": 91
+      },
+      "visiblePixels": 12137,
+      "pixelSha256": "61398e33c027308583c8377df757a2a082d776e31b39b618efd8d19668b34c9b"
+    },
+    {
+      "animation": "denied",
+      "index": 5,
+      "file": "border-collie-denied/border-collie-denied-5.png",
+      "sourceCell": {
+        "row": 7,
+        "column": 5
+      },
+      "sourceBounds": {
+        "x": 14,
+        "y": 73,
+        "width": 163,
+        "height": 109
+      },
+      "destination": {
+        "x": 14,
+        "y": 91
+      },
+      "visiblePixels": 11974,
+      "pixelSha256": "b3517915fa0b885cb66ec73ca122809f649ca9d7ed0025276df6351881e1c0cf"
+    },
+    {
+      "animation": "celebrating",
+      "index": 1,
+      "file": "border-collie-celebrating/border-collie-celebrating-1.png",
+      "sourceCell": {
+        "row": 8,
+        "column": 1
+      },
+      "sourceBounds": {
+        "x": 27,
+        "y": 83,
+        "width": 137,
+        "height": 99
+      },
+      "destination": {
+        "x": 27,
+        "y": 101
+      },
+      "visiblePixels": 8405,
+      "pixelSha256": "913f4e6da056b26b3c76c6c5f49ccdae08a7e7de41ad6340287ebe0cea5cd7d9"
+    },
+    {
+      "animation": "celebrating",
+      "index": 2,
+      "file": "border-collie-celebrating/border-collie-celebrating-2.png",
+      "sourceCell": {
+        "row": 8,
+        "column": 2
+      },
+      "sourceBounds": {
+        "x": 39,
+        "y": 23,
+        "width": 114,
+        "height": 159
+      },
+      "destination": {
+        "x": 39,
+        "y": 41
+      },
+      "visiblePixels": 8582,
+      "pixelSha256": "a0936beb46c8392f4a2d0ce58d013156d9462d4ed0a69c5bc2955b07edf4b561"
+    },
+    {
+      "animation": "celebrating",
+      "index": 3,
+      "file": "border-collie-celebrating/border-collie-celebrating-3.png",
+      "sourceCell": {
+        "row": 8,
+        "column": 3
+      },
+      "sourceBounds": {
+        "x": 40,
+        "y": 10,
+        "width": 111,
+        "height": 172
+      },
+      "destination": {
+        "x": 40,
+        "y": 28
+      },
+      "visiblePixels": 9037,
+      "pixelSha256": "d411049e072daeb4448c9b749d0c5a8de845fbbab7c2469acaff1eac2d56cdbd"
+    },
+    {
+      "animation": "celebrating",
+      "index": 4,
+      "file": "border-collie-celebrating/border-collie-celebrating-4.png",
+      "sourceCell": {
+        "row": 8,
+        "column": 4
+      },
+      "sourceBounds": {
+        "x": 42,
+        "y": 20,
+        "width": 108,
+        "height": 162
+      },
+      "destination": {
+        "x": 42,
+        "y": 38
+      },
+      "visiblePixels": 8779,
+      "pixelSha256": "bf6f2a06668935aa98650f7010399b7b375bcc4dc76a22ecaeb189e1d11e4ac0"
+    },
+    {
+      "animation": "celebrating",
+      "index": 5,
+      "file": "border-collie-celebrating/border-collie-celebrating-5.png",
+      "sourceCell": {
+        "row": 8,
+        "column": 5
+      },
+      "sourceBounds": {
+        "x": 28,
+        "y": 84,
+        "width": 136,
+        "height": 98
+      },
+      "destination": {
+        "x": 28,
+        "y": 102
+      },
+      "visiblePixels": 8256,
+      "pixelSha256": "9390faf22f69bb790a89b226d11ec2eaceb3f7cb54a4919e64f832199ecda614"
+    }
+  ]
+}

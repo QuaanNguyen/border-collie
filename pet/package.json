@@ -7,11 +7,10 @@
   "scripts": {
     "start": "electron .",
     "start:solid": "electron . --solid",
-    "start:demo": "electron . --demo",
     "start:dev": "electron . --dev"
   },
-  "devDependencies": {
-    "electron": "^44.0.0"
+  "dependencies": {
+    "electron": "44.3.0"
   },
   "allowScripts": {
     "electron": true

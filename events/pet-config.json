@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "baseWidth": 340,
+  "baseHeight": 380,
+  "scales": [0.6, 0.75, 0.9, 1, 1.15, 1.35, 1.6, 2],
+  "defaultScale": 1,
+  "animationTracks": {
+    "normal": {
+      "folder": "border-collie-normal",
+      "frameDurationsMs": [900, 180, 180, 240, 1200]
+    },
+    "dragging": {
+      "folder": "border-collie-dragging",
+      "frameDurationsMs": [120, 120, 120, 120, 220]
+    },
+    "hovering": {
+      "folder": "border-collie-hovering",
+      "frameDurationsMs": [180, 180, 180, 180, 360]
+    },
+    "thinking": {
+      "folder": "border-collie-thinking",
+      "frameDurationsMs": [140, 140, 140, 140, 260]
+    },
+    "suspicious": {
+      "folder": "border-collie-suspicious",
+      "frameDurationsMs": [180, 180, 180, 180, 420]
+    },
+    "refused": {
+      "folder": "border-collie-refused",
+      "frameDurationsMs": [160, 160, 160, 160, 360]
+    },
+    "denied": {
+      "folder": "border-collie-denied",
+      "frameDurationsMs": [160, 160, 160, 160, 400]
+    },
+    "celebrating": {
+      "folder": "border-collie-celebrating",
+      "frameDurationsMs": [140, 140, 140, 140, 280]
+    }
+  },
+  "stateAnimations": {
+    "calm": "normal",
+    "allowed": "normal",
+    "asking": "thinking",
+    "celebrating": "celebrating",
+    "checking": "thinking",
+    "denied": "denied",
+    "drag": "dragging",
+    "error": "thinking",
+    "hover": "hovering",
+    "offline": "normal",
+    "proving": "thinking",
+    "refused": "refused",
+    "rejecting": "refused",
+    "sleeping": "denied",
+    "suspicious": "suspicious",
+    "thinking": "thinking",
+    "watching": "normal"
+  }
+}

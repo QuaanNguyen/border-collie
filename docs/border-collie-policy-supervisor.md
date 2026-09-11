@@ -24,6 +24,10 @@ Broadening conflicts and malformed active-project policy block the session and c
 
 Routine denials provide agent remediation without creating owner-notification noise.
 
+Subagent dispatch fails closed because the current OpenCode plugin interface cannot attach an authenticated resolved policy to a child session.
+If a child-session tool call reaches the common pre-execution hook, Border Collie applies the same resolved policy and denial-remediation shape used for the parent session.
+The upstream limitation and revisit condition are recorded in [OpenCode Subagent Policy API Research](opencode-subagent-policy-api.md).
+
 Configured protected paths remain readable but cannot be modified.
 
 Configured read-protected paths cannot be inspected or modified.

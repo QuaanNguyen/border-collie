@@ -22,6 +22,19 @@ const MOVE_TOOLS = new Set(['move', 'rename', 'move_file', 'rename_file']);
 const MOVE_SOURCE_KEYS = ['source', 'from', 'oldPath', 'old_path'];
 const MOVE_DESTINATION_KEYS = ['destination', 'to', 'newPath', 'new_path'];
 const MODIFYING_COMMANDS = new Set(['rm', 'mv', 'cp', 'touch', 'mkdir', 'sed', 'tee', 'chmod', 'chown', 'truncate']);
+const INLINE_PROGRAM_FLAGS = new Map([
+  ['python', new Set(['-c'])],
+  ['python3', new Set(['-c'])],
+  ['node', new Set(['-e', '--eval'])],
+  ['ruby', new Set(['-e'])],
+  ['perl', new Set(['-e'])],
+  ['php', new Set(['-r'])],
+  ['powershell', new Set(['-command', '-c'])],
+  ['pwsh', new Set(['-command', '-c'])],
+  ['bash', new Set(['-c'])],
+  ['sh', new Set(['-c'])],
+  ['zsh', new Set(['-c'])],
+]);
 
 const URL_RE = /\bhttps?:\/\/[^\s'"`)>\]}]+/gi;
 // bare host:port or IP that a command might POST to
@@ -148,6 +161,26 @@ function commandStart(tokens) {
   return index;
 }
 
+function requiresExactApproval(command) {
+  return splitShellCommands(command).some((part) => {
+    const tokens = shellTokens(part);
+    return tokens.some((token, index) => {
+      const flags = INLINE_PROGRAM_FLAGS.get(commandName(token));
+      return flags
+        ? tokens.slice(index + 1).some((candidate) => flags.has(candidate.toLowerCase()))
+        : false;
+    });
+  });
+}
+
+function commandBinaries(command) {
+  return splitShellCommands(command).flatMap((part) => {
+    const tokens = shellTokens(part);
+    const start = commandStart(tokens);
+    return tokens[start] ? [commandName(tokens[start])] : [];
+  });
+}
+
 function operandTokens(tokens, start) {
   const out = [];
   for (let i = start; i < tokens.length; i++) {
@@ -269,6 +302,8 @@ function normalise(toolCall) {
     writePaths: [],
     command: null,
     binary: null,
+    binaries: [],
+    requiresExactApproval: false,
     urls: [],
     args,
     summary: rawName,
@@ -281,8 +316,9 @@ function normalise(toolCall) {
   if (EXEC_TOOLS.has(name) || (declaredCmds.length && !READ_TOOLS.has(name) && !WRITE_TOOLS.has(name))) {
     out.kind = 'exec';
     out.command = declaredCmds[0] || declaredPaths[0] || '';
-    const tokens = shellTokens(splitShellCommands(out.command)[0] || '');
-    out.binary = commandName(tokens[commandStart(tokens)]);
+    out.binaries = commandBinaries(out.command);
+    out.binary = out.binaries[0] || null;
+    out.requiresExactApproval = requiresExactApproval(out.command);
     const endpoints = commandEndpoints(out.command);
     out.readPaths = endpoints.readPaths;
     out.writePaths = endpoints.writePaths;

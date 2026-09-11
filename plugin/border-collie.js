@@ -33,10 +33,11 @@ if (!repoRoot) {
 }
 
 const { createSession } = require(path.join(repoRoot, "guard/lib/session.js"));
-const { EventBus, defaultInboxPath } = require(path.join(repoRoot, "guard/lib/events.js"));
+const { EventBus, defaultInboxPath } = require(path.join(repoRoot, "events/index.js"));
 const { loadOwnerPolicy, ownerProtocol } = require(path.join(repoRoot, "guard/lib/owner-policy.js"));
 const { resolvePolicy, policyConflicts } = require(path.join(repoRoot, "guard/lib/policy-resolution.js"));
 const { protectedPathDecision } = require(path.join(repoRoot, "guard/lib/protected-paths.js"));
+const { parseSizeArgument } = require(path.join(repoRoot, "events/size-command.js"));
 
 const TOOL_ACTION = {
   read: "read",
@@ -118,7 +119,7 @@ function resultText(output) {
   return typeof output === "string" ? output : JSON.stringify(output);
 }
 
-function lastAssistantText(payload) {
+function lastAssistantCompletion(payload) {
   const list = Array.isArray(payload)
     ? payload
     : payload?.data || payload?.messages || [];
@@ -129,19 +130,25 @@ function lastAssistantText(payload) {
     if (role !== "assistant") continue;
     const parts = item.parts || info.parts || [];
     const text = parts.map((p) => p.text || p.content || "").join("");
-    if (text.trim()) return text;
-    if (typeof item.content === "string") return item.content;
+    const content = text.trim() ? text : typeof item.content === "string" ? item.content : "";
+    return {
+      id: info.id || item.id || null,
+      text: content,
+      completed: info.time?.completed != null && !info.error && info.finish === "stop",
+      error: info.error || null,
+      finish: info.finish || null,
+    };
   }
-  return "";
+  return null;
 }
 
 function sessionIDOf(event) {
-  const props = event.properties || event;
+  const props = event.properties || event.data || event;
   return props.sessionID || props.session?.id || event.sessionID;
 }
 
 function isBusy(event) {
-  const props = event.properties || event;
+  const props = event.properties || event.data || event;
   const status = props.status;
   return status === "busy" || status?.type === "busy";
 }
@@ -149,7 +156,7 @@ function isBusy(event) {
 function isIdle(event) {
   if (event.type === "session.idle") return true;
   if (event.type === "session.error") return true;
-  const props = event.properties || event;
+  const props = event.properties || event.data || event;
   const status = props.status;
   const type = typeof status === "string" ? status : status?.type;
   return ["idle", "stopped", "stop", "cancelled", "canceled", "error"].includes(type);
@@ -177,10 +184,20 @@ function electronBinary(petDir) {
   return null;
 }
 
-function launchPet(inboxPath) {
+function installedPetEnabled() {
+  try {
+    return JSON.parse(fs.readFileSync(path.join(repoRoot, "install.json"), "utf8")).pet !== false;
+  } catch {
+    return true;
+  }
+}
+
+function launchPet(inboxPath, petEnabled) {
   if (process.env.BORDER_COLLIE_NO_PET === "1") return;
+  if (!petEnabled) return;
   const petDir = path.join(repoRoot, "pet");
-  const bin = electronBinary(petDir);
+  const native = path.join(petDir, "native", "pet-host");
+  const bin = process.platform === "darwin" ? native : electronBinary(petDir);
   if (!bin) {
     console.error(
       "[border-collie] Pet Border Collie not launched: Electron binary missing under " + petDir +
@@ -188,14 +205,28 @@ function launchPet(inboxPath) {
     );
     return;
   }
+  if (!fs.existsSync(bin)) {
+    console.error(
+      "[border-collie] Pet Border Collie not launched: native macOS host missing under " + petDir +
+      ". Re-run: bash scripts/install-plugin.sh",
+    );
+    return;
+  }
+  let eventOffset = 0;
+  try { eventOffset = fs.statSync(inboxPath).size; } catch {
+  }
   const env = {
     ...process.env,
     BORDER_COLLIE_EVENTS: inboxPath,
+    BORDER_COLLIE_EVENT_OFFSET: String(eventOffset),
     BORDER_COLLIE_OWNER_PID: String(process.pid),
   };
   delete env.ELECTRON_RUN_AS_NODE;
   delete env.ELECTRON_SKIP_BINARY_DOWNLOAD;
-  const child = spawn(bin, ["."], {
+  const args = process.platform === "darwin"
+    ? [`--pet-dir=${petDir}`, `--events=${inboxPath}`, `--owner-pid=${process.pid}`]
+    : ["."];
+  const child = spawn(bin, args, {
     cwd: petDir,
     detached: true,
     stdio: "ignore",
@@ -219,10 +250,17 @@ export const BorderCollie = async ({ client, directory }) => {
     ? null
     : resolvePolicy(resolvedOwnerProtocol, projectPolicy.protocol);
   const inboxPath = process.env.BORDER_COLLIE_EVENTS || defaultInboxPath();
-  const bus = new EventBus({ inboxPath });
-  const session = projectPolicy.error || conflicts.length ? null : createSession({ protocol, workdir });
-  const claimed = new Set();
+  const bus = new EventBus({
+    inboxPath,
+    onInboxError(error) {
+      console.error("[border-collie] Pet event delivery disabled: " + error.message);
+    },
+  });
+  const petEnabled = installedPetEnabled();
+  const sessions = new Map();
+  let sizeCommandRegistered = false;
   let ended = false;
+  let lastActiveSessionID = null;
   const invalidPolicyMessage = projectPolicy.error
     ? "Border Collie blocked this session because the active project policy is malformed. Fix or remove the project policy at " + projectPolicy.policyPath + " and restart OpenCode."
     : conflicts.length
@@ -234,19 +272,38 @@ export const BorderCollie = async ({ client, directory }) => {
     for (const e of out.events) bus.emit(e);
   }
 
+  function stateFor(sessionID) {
+    if (projectPolicy.error || conflicts.length) return null;
+    const key = sessionID || "plugin";
+    let state = sessions.get(key);
+    if (state) return state;
+    state = {
+      guard: createSession({ protocol, workdir }),
+      reviewed: new Set(),
+      completionPending: true,
+      review: null,
+    };
+    sessions.set(key, state);
+    publish(state.guard.handle({ kind: "session.start" }));
+    return state;
+  }
+
   function endSession() {
     if (ended) return;
     ended = true;
-    if (!session) return;
-    try {
-      publish(session.handle({ kind: "session.end" }));
-    } catch {
+    for (const state of sessions.values()) {
+      try {
+        publish(state.guard.handle({ kind: "session.end" }));
+      } catch {
+      }
     }
+    bus.close();
   }
 
   process.on("beforeExit", endSession);
   process.on("exit", endSession);
 
+  launchPet(inboxPath, petEnabled);
   if (projectPolicy.error || conflicts.length) {
     bus.emit({
       type: "notification",
@@ -263,32 +320,122 @@ export const BorderCollie = async ({ client, directory }) => {
         remediation: invalidPolicyMessage,
       },
     });
-  } else {
-    publish(session.handle({ kind: "session.start" }));
   }
-  launchPet(inboxPath);
-
-  async function reviewClaims(sessionID) {
-    if (!sessionID || !client?.session?.messages) return;
-    let payload;
-    try { payload = await client.session.messages({ path: { id: sessionID } }); }
-    catch { return; }
-    const text = lastAssistantText(payload);
-    if (!text || claimed.has(text)) return;
-    const out = session.handle({ kind: "assistant", text });
-    publish(out);
-    if (out.events.some((e) => e.type === "claim" || e.type === "ask" || e.type === "verdict")) {
-      claimed.add(text);
+  function resizeCommand(input, output) {
+    if (!sizeCommandRegistered || input.command !== "size") return;
+    const size = parseSizeArgument(input.arguments);
+    if (!size) {
+      output.parts.splice(0, output.parts.length, {
+        type: "text",
+        text: "Usage: /size reset or /size 60|75|90|100|115|135|160|200",
+      });
+      return;
     }
-    if (out.inject && client?.session?.prompt) {
-      await client.session.prompt({
+    bus.emit({
+      type: "control",
+      status: "ok",
+      petState: "calm",
+      summary: `Pet size ${size.percent}%`,
+      detail: { action: "size", scale: size.scale, percent: size.percent },
+    });
+    output.parts.splice(0, output.parts.length, {
+      type: "text",
+      text: `Border Collie size set to ${size.percent}%.`,
+    });
+  }
+
+  async function reviewCompletion(sessionID) {
+    if (!sessionID) return;
+    const state = stateFor(sessionID);
+    if (!client?.session?.messages) {
+      if (state.guard.protocol.doneCriteria.length) {
+        bus.emit({
+          type: "notification",
+          status: "error",
+          petState: "error",
+          summary: "Completion observation is unavailable",
+          reason: "The OpenCode client does not provide session messages.",
+        });
+      }
+      return;
+    }
+    let payload;
+    try {
+      payload = await client.session.messages({ path: { id: sessionID } });
+    } catch (error) {
+      bus.emit({
+        type: "notification",
+        status: "error",
+        petState: "error",
+        summary: "Completion observation failed",
+        reason: String(error?.message || error),
+      });
+      return;
+    }
+    const completion = lastAssistantCompletion(payload);
+    if (!completion) {
+      if (state.guard.protocol.doneCriteria.length) {
+        bus.emit({
+          type: "notification",
+          status: "error",
+          petState: "error",
+          summary: "Completion observation found no assistant response",
+        });
+      }
+      return;
+    }
+    const reviewKey = completion.id || `${completion.finish || ""}:${completion.text}`;
+    if (state.reviewed.has(reviewKey)) return;
+    state.reviewed.add(reviewKey);
+    const out = state.guard.handle({ kind: "assistant", ...completion });
+    publish(out);
+    const sendFeedback = client?.session?.promptAsync || client?.session?.prompt;
+    if (out.inject && sendFeedback) {
+      Promise.resolve().then(() => sendFeedback.call(client.session, {
         path: { id: sessionID },
-        body: { parts: [{ type: "text", text: out.inject }] },
+        body: { noReply: true, parts: [{ type: "text", text: out.inject }] },
+      })).catch((error) => {
+        bus.emit({
+          type: "notification",
+          status: "error",
+          petState: "error",
+          summary: "Completion feedback could not be recorded",
+          reason: String(error?.message || error),
+        });
       });
     }
   }
 
+  function scheduleCompletionReview(sessionID) {
+    if (!sessionID) return;
+    const state = stateFor(sessionID);
+    if (state.review) return state.review;
+    if (!state.completionPending) return Promise.resolve();
+    state.completionPending = false;
+    const review = Promise.resolve()
+      .then(() => reviewCompletion(sessionID))
+      .catch(() => {})
+      .finally(() => {
+        if (state.review === review) state.review = null;
+      });
+    state.review = review;
+    return review;
+  }
+
   return {
+    config(input) {
+      if (!petEnabled) return;
+      input.command ||= {};
+      if (Object.hasOwn(input.command, "size")) return;
+      input.command.size = {
+        template: "$ARGUMENTS",
+        description: "Resize Border Collie: 60|75|90|100|115|135|160|200 or reset",
+      };
+      sizeCommandRegistered = true;
+    },
+
+    "command.execute.before": resizeCommand,
+
     "tool.execute.before": async (input, output) => {
       const tool = input.tool || "";
       const args = output?.args || input.args || {};
@@ -326,7 +473,8 @@ export const BorderCollie = async ({ client, directory }) => {
         }));
       }
       const resources = resourcesFromArgs(tool, args);
-      const out = session.handle({
+      const state = stateFor(input.sessionID);
+      const out = state.guard.handle({
         kind: "permission",
         action: TOOL_ACTION[tool] || tool,
         resources: resources.length ? resources : [tool],
@@ -341,7 +489,8 @@ export const BorderCollie = async ({ client, directory }) => {
 
     "tool.execute.after": async (input, output) => {
       if (invalidPolicyMessage) return;
-      publish(session.handle({
+      const state = stateFor(input.sessionID);
+      publish(state.guard.handle({
         kind: "tool.after",
         tool: input.tool,
         status: output?.error ? "error" : "completed",
@@ -353,16 +502,18 @@ export const BorderCollie = async ({ client, directory }) => {
     event: async ({ event }) => {
       if (invalidPolicyMessage) return;
       if (!event) return;
+      let sessionID = sessionIDOf(event);
+      if (sessionID) lastActiveSessionID = sessionID;
+      else if (event.type === "session.idle" || isIdle(event)) sessionID = lastActiveSessionID;
+      const state = stateFor(sessionID);
       if (event.type === "session.status" && isBusy(event)) {
-        publish(session.handle({ kind: "busy" }));
+        state.completionPending = true;
+        publish(state.guard.handle({ kind: "busy" }));
       }
       if (event.type === "session.idle" || isIdle(event)) {
-        publish(session.handle({ kind: "idle" }));
-        await reviewClaims(sessionIDOf(event));
+        publish(state.guard.handle({ kind: "idle" }));
+        await scheduleCompletionReview(sessionID);
         return;
-      }
-      if (event.type === "message.updated") {
-        await reviewClaims(sessionIDOf(event));
       }
     },
   };
