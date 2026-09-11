@@ -25,14 +25,9 @@ Or on macOS and Linux:
 bash scripts/install-plugin.sh
 ```
 
-The default installation includes the desktop Pet.
+The installation includes Guard and the desktop Pet.
 On macOS, the installer builds a small native host that uses the system WebKit framework and does not download Electron.
 Windows and Linux use the locked Electron runtime.
-Install only the deterministic Guard without a desktop runtime by adding `--guard-only` to either command.
-
-```sh
-bash scripts/install-plugin.sh --guard-only
-```
 
 On Windows, from Command Prompt:
 
@@ -41,9 +36,8 @@ scripts\win\install-plugin.bat
 ```
 
 You need Node.js 22.12 or newer, Git, and OpenCode installed.
-The default macOS Pet install also needs Xcode Command Line Tools.
-Windows and Linux Pet installs need npm.
-The `--guard-only` install needs neither desktop dependency.
+The macOS installation also needs Xcode Command Line Tools.
+Windows and Linux installations need npm.
 
 ## Usage
 

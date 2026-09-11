@@ -21,7 +21,6 @@ The plugin owns the Pet process and sends events through its private input pipe.
 Position, size, events, and active sessions remain in memory and are discarded when their processes exit.
 Electron remains locked for Windows, Linux, and development mode.
 The default macOS installation compiles the native host and does not download Electron.
-The Guard-only installation omits every desktop runtime.
 
 ## Consequences
 

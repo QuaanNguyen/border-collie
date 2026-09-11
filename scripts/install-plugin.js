@@ -258,7 +258,6 @@ function installPlugin(opts = {}) {
   const packageDir = path.join(pluginsDir, 'border-collie');
   const entry = path.join(pluginsDir, 'border-collie.js');
   const skipRuntimeSetup = opts.skipRuntimeSetup === true || opts.skipNpm === true;
-  const installPet = opts.installPet !== false;
 
   const srcPlugin = path.join(repoRoot, 'plugin', 'border-collie.js');
   const srcGuard = path.join(repoRoot, 'guard');
@@ -272,7 +271,7 @@ function installPlugin(opts = {}) {
   if (!fs.existsSync(path.join(srcEvents, 'index.js'))) {
     throw new Error('missing events/index.js under ' + srcEvents);
   }
-  if (installPet && !fs.existsSync(path.join(srcPet, 'package.json'))) {
+  if (!fs.existsSync(path.join(srcPet, 'package.json'))) {
     throw new Error('missing pet/package.json under ' + srcPet);
   }
 
@@ -290,14 +289,11 @@ function installPlugin(opts = {}) {
     fs.copyFileSync(srcPlugin, stageEntry);
     copyTree(srcGuard, path.join(stagePackage, 'guard'));
     copyTree(srcEvents, path.join(stagePackage, 'events'));
-    fs.writeFileSync(path.join(stagePackage, 'install.json'), JSON.stringify({ pet: installPet }) + '\n');
-    if (installPet) {
-      copyTree(srcPet, stagedPetDir, {
-        skip: new Set(['node_modules']),
-      });
-    }
+    copyTree(srcPet, stagedPetDir, {
+      skip: new Set(['node_modules']),
+    });
 
-    if (installPet && !skipRuntimeSetup) {
+    if (!skipRuntimeSetup) {
       const installedPetDir = path.join(packageDir, 'pet');
       if (reusablePetRuntime(srcPet, installedPetDir)) {
         console.log('Reusing the ready Pet runtime…');
@@ -347,7 +343,7 @@ function installPlugin(opts = {}) {
     fs.rmSync(stageRoot, { recursive: true, force: true });
   }
 
-  const petDir = installPet ? path.join(packageDir, 'pet') : null;
+  const petDir = path.join(packageDir, 'pet');
 
   return {
     repoRoot,
@@ -355,7 +351,6 @@ function installPlugin(opts = {}) {
     packageDir,
     dest: entry,
     petDir,
-    installPet,
     petRuntimeReused,
     ownerPolicyPath,
     migrationPreview: ownerPolicyMigration,
@@ -363,12 +358,15 @@ function installPlugin(opts = {}) {
 }
 
 if (require.main === module) {
-  const installPet = !process.argv.slice(2).includes('--guard-only');
+  if (process.argv.length > 2) {
+    console.error('Usage: node scripts/install-plugin.js');
+    process.exit(2);
+  }
   console.log('Installing Border Collie into OpenCode global plugins…');
-  const { dest, packageDir, petDir, ownerPolicyPath, migrationPreview: preview } = installPlugin({ installPet, verifyOpenCode: true });
+  const { dest, packageDir, petDir, ownerPolicyPath, migrationPreview: preview } = installPlugin({ verifyOpenCode: true });
   console.log('Plugin entry:  ' + dest);
-  console.log('Package:       ' + packageDir + (installPet ? '  (guard + pet)' : '  (guard only)'));
-  if (petDir) console.log('Pet runtime:   ' + (process.platform === 'darwin' ? petDir + '/native/pet-host' : petDir + '/node_modules'));
+  console.log('Package:       ' + packageDir + '  (guard + pet)');
+  console.log('Pet runtime:   ' + (process.platform === 'darwin' ? petDir + '/native/pet-host' : petDir + '/node_modules'));
   console.log('Owner policy:  ' + ownerPolicyPath);
   if (preview) {
     if (preview.problem) {

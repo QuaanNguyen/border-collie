@@ -184,14 +184,6 @@ function electronBinary(petDir) {
   return null;
 }
 
-function installedPetEnabled() {
-  try {
-    return JSON.parse(fs.readFileSync(path.join(repoRoot, "install.json"), "utf8")).pet !== false;
-  } catch {
-    return true;
-  }
-}
-
 function launchPet() {
   if (process.env.BORDER_COLLIE_NO_PET === "1") return;
   const petDir = path.join(repoRoot, "pet");
@@ -243,8 +235,7 @@ export const BorderCollie = async ({ client, directory }) => {
   const protocol = projectPolicy.error
     ? null
     : resolvePolicy(resolvedOwnerProtocol, projectPolicy.protocol);
-  const petEnabled = installedPetEnabled();
-  const petProcess = petEnabled ? launchPet() : null;
+  const petProcess = launchPet();
   const bus = new EventBus({
     sink: petProcess?.stdin
       ? (event) => petProcess.stdin.write(JSON.stringify(event) + "\n")
@@ -429,7 +420,6 @@ export const BorderCollie = async ({ client, directory }) => {
 
   return {
     config(input) {
-      if (!petEnabled) return;
       input.command ||= {};
       if (Object.hasOwn(input.command, "size")) return;
       input.command.size = {

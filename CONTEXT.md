@@ -14,7 +14,7 @@ The Pet keeps only a bounded in-memory queue while its renderer starts, and no e
 
 **Border Collie plugin** - OpenCode adapter whose source is `plugin/border-collie.js` in this clone.
 
-**Border Collie package** - self-contained installation containing the Border Collie plugin, Guard, Event stream contract, and optionally Pet.
+**Border Collie package** - self-contained installation containing the Border Collie plugin, Guard, Event stream contract, and Pet.
 
 **Global bind** - installation operation that materializes a verified Border Collie package under OpenCode's global plugin directory while preserving the prior working package if verification fails.
 
