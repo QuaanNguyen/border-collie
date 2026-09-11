@@ -18,7 +18,7 @@ function directWritePaths(tool, args) {
 }
 
 function protectedPathDecision(tool, args, policy, workdir) {
-  const call = normalise({ id: 'rice', type: 'function', function: { name: tool, arguments: JSON.stringify(args || {}) } });
+  const call = normalise({ id: 'border-collie', type: 'function', function: { name: tool, arguments: JSON.stringify(args || {}) } });
   const protectedPaths = policy?.protected_paths || [];
   const readProtectedPaths = policy?.read_protected_paths || [];
   const writes = [...call.writePaths, ...directWritePaths(tool, args)];

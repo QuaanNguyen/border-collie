@@ -366,16 +366,15 @@ t('interrupted thinking returns the pet to calm', () => {
     import fs from 'node:fs';
     import os from 'node:os';
     import path from 'node:path';
-    process.env.RICE_NO_PET = '1';
-    const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'rice-events-'));
-    process.env.RICE_EVENTS = path.join(dir, 'events.jsonl');
-    process.env.RICE_RUNS = path.join(dir, 'runs');
-    const { Rice } = await import(${JSON.stringify(path.join(ROOT, 'plugin/rice.js'))});
-    const hooks = await Rice({ client: {}, directory: ${JSON.stringify(ROOT)} });
+    process.env.BORDER_COLLIE_NO_PET = '1';
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'border-collie-events-'));
+    process.env.BORDER_COLLIE_EVENTS = path.join(dir, 'events.jsonl');
+    const { BorderCollie } = await import(${JSON.stringify(path.join(ROOT, 'plugin/border-collie.js'))});
+    const hooks = await BorderCollie({ client: {}, directory: ${JSON.stringify(ROOT)} });
     await hooks.event({ event: { type: 'session.status', properties: { status: 'busy' } } });
     await hooks.event({ event: { type: 'session.status', properties: { status: 'stopped' } } });
     await new Promise((resolve) => setTimeout(resolve, 50));
-    const events = fs.readFileSync(process.env.RICE_EVENTS, 'utf8').trim().split('\\n').map(JSON.parse);
+    const events = fs.readFileSync(process.env.BORDER_COLLIE_EVENTS, 'utf8').trim().split('\\n').map(JSON.parse);
     if (!events.some((e) => e.type === 'thinking' && e.status === 'ok' && e.petState === 'thinking')) {
       throw new Error('missing thinking event');
     }
@@ -391,18 +390,17 @@ t('the OpenCode adapter blocks a shell escape hidden in interpreter code', () =>
     import fs from 'node:fs';
     import os from 'node:os';
     import path from 'node:path';
-    process.env.RICE_NO_PET = '1';
-    const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'rice-shell-boundary-'));
-    process.env.RICE_EVENTS = path.join(dir, 'events.jsonl');
-    process.env.RICE_RUNS = path.join(dir, 'runs');
+    process.env.BORDER_COLLIE_NO_PET = '1';
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'border-collie-shell-boundary-'));
+    process.env.BORDER_COLLIE_EVENTS = path.join(dir, 'events.jsonl');
     fs.writeFileSync(path.join(dir, 'protocol.json'), JSON.stringify({
       read_paths: ['**'],
       write_paths: [],
       allow_commands: ['python'],
       egress: [],
     }));
-    const { Rice } = await import(${JSON.stringify(path.join(ROOT, 'plugin/rice.js'))});
-    const hooks = await Rice({ client: {}, directory: dir });
+    const { BorderCollie } = await import(${JSON.stringify(path.join(ROOT, 'plugin/border-collie.js'))});
+    const hooks = await BorderCollie({ client: {}, directory: dir });
     let denied = false;
     try {
       await hooks['tool.execute.before'](

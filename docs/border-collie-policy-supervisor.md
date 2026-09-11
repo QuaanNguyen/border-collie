@@ -1,8 +1,8 @@
-# Rice policy supervisor
+# Border Collie policy supervisor
 
-Rice is an owner-defined policy supervisor for OpenCode agents.
+Border Collie is an owner-defined policy supervisor for OpenCode agents.
 
-It allows ordinary work inside the active project while enforcing the owner’s resolved Rice policy through OpenCode’s pre-execution hook.
+It allows ordinary work inside the active project while enforcing the owner’s resolved Border Collie policy through OpenCode’s pre-execution hook.
 
 Research-safe is the default setup package.
 
@@ -22,7 +22,7 @@ Project policy may narrow the owner policy but cannot broaden it.
 
 Broadening conflicts and malformed active-project policy block the session and create high-priority owner notifications.
 
-Routine denials are recorded in Rice’s run record and provide agent remediation without creating owner-notification noise.
+Routine denials provide agent remediation without creating owner-notification noise.
 
 Configured protected paths remain readable but cannot be modified.
 
@@ -30,9 +30,9 @@ Configured read-protected paths cannot be inspected or modified.
 
 Recognizable direct-tool and shell attempts to cross the active-project boundary or modify protected paths are denied.
 
-Rice is not an operating-system sandbox or a distinct security principal from its owner.
+Border Collie is not an operating-system sandbox or a distinct security principal from its owner.
 
-OpenCode permissions remain complementary to Rice’s deterministic policy checks.
+OpenCode permissions remain complementary to Border Collie’s deterministic policy checks.
 
 Arbitrary encoded interpreter behavior cannot be fully contained in normal mode.
 

@@ -1,10 +1,11 @@
 'use strict';
 (function () {
 
-const HIGH = new Set(['refused', 'rejecting', 'error', 'asking', 'celebrating']);
+const HIGH = new Set(['refused', 'denied', 'rejecting', 'error', 'asking', 'celebrating']);
 
 const MIN_DWELL = {
   refused: 2200,
+  denied: 2200,
   rejecting: 2200,
   error: 2200,
   asking: 2200,
@@ -27,6 +28,7 @@ const HOLD = {
   thinking: 0,
   suspicious: 5200,
   refused: 6000,
+  denied: 6500,
   proving: 2600,
   rejecting: 6500,
   celebrating: 4200,
@@ -161,6 +163,6 @@ function createReactionScheduler(opts = {}) {
 
 const api = { createReactionScheduler, HIGH, MIN_DWELL, HOLD };
 
-if (typeof window !== 'undefined') window.RiceScheduler = api;
+if (typeof window !== 'undefined') window.BorderCollieScheduler = api;
 if (typeof module !== 'undefined') module.exports = api;
 })();

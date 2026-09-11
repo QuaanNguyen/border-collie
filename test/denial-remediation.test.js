@@ -8,16 +8,15 @@ const { pathToFileURL } = require('node:url');
 const ROOT = path.resolve(__dirname, '..');
 
 async function hooksFor(projectDir, ownerConfigDir, runDir) {
-  process.env.RICE_NO_PET = '1';
-  process.env.RICE_EVENTS = path.join(runDir, 'events.jsonl');
-  process.env.RICE_RUNS = path.join(runDir, 'runs');
-  process.env.RICE_OWNER_CONFIG = ownerConfigDir;
-  const { Rice } = await import(pathToFileURL(path.join(ROOT, 'plugin/rice.js')).href);
-  return Rice({ client: {}, directory: projectDir });
+  process.env.BORDER_COLLIE_NO_PET = '1';
+  process.env.BORDER_COLLIE_EVENTS = path.join(runDir, 'events.jsonl');
+  process.env.BORDER_COLLIE_OWNER_CONFIG = ownerConfigDir;
+  const { BorderCollie } = await import(pathToFileURL(path.join(ROOT, 'plugin/border-collie.js')).href);
+  return BorderCollie({ client: {}, directory: projectDir });
 }
 
 async function main() {
-  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'rice-remediation-'));
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'border-collie-remediation-'));
   const projectDir = path.join(root, 'project');
   const outsideFile = path.join(root, 'outside', 'private.md');
   const ownerConfigDir = path.join(root, 'owner-config');
@@ -31,7 +30,7 @@ async function main() {
     (error) => /Requested action: read/.test(error.message) &&
       error.message.includes(`Target: ${outsideFile}`) &&
       /Governing rule: read_paths/.test(error.message) &&
-      /Policy layer: resolved Rice policy/.test(error.message) &&
+      /Policy layer: resolved Border Collie policy/.test(error.message) &&
       error.message.includes(`Use a path within the active project: ${projectDir}`) &&
       /Retry: do not retry this target/.test(error.message),
   );

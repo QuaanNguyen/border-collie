@@ -24,12 +24,8 @@ lerna-debug.log*
 .temp
 .tmp
 
-# rice-matters
-/runs
-/demo/work
+# border-collie
 /pet/node_modules
-/pet/assets/local-animations
-/test/shots
 
 # opencode
 .opencode/

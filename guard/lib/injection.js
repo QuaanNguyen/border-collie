@@ -1,18 +1,4 @@
 'use strict';
-/**
- * Instruction-shaped text inside a tool RESULT.
- *
- * IMPORTANT, and say this on stage: this is **not** the security control.
- * The gate in policy.js is what actually stops anything, and it does so
- * without consulting this file. Detection of injected text is only a signal  - 
- * it is what makes Rice look nervous, and it is what lets the run record say
- * "the poison arrived here" instead of only "an action was refused there".
- *
- * We do it this way on purpose. Adaptive attacks defeat injection detectors
- * (arXiv:2510.19091 broke twelve of them). A detector must therefore never be
- * load-bearing. This one is decoration over a deterministic control.
- */
-
 const SIGNALS = [
   { re: /\bignore (all |any )?(previous|prior|above|earlier)\b/i, w: 3, label: 'override instruction' },
   { re: /\bdisregard (the |all )?(previous|prior|above|earlier|system)\b/i, w: 3, label: 'override instruction' },
@@ -56,7 +42,6 @@ function scan(text) {
     }
   }
 
-  // A URL alone is not interesting; it needs company.
   if (score === 1 && labels.length === 1 && labels[0] === 'contains a URL') {
     return { score: 0, level: null, labels: [], excerpt: null };
   }

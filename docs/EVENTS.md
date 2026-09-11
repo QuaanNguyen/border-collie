@@ -1,18 +1,13 @@
-# Event schema (v1) - the contract between Guard and Pet Rice
+# Event schema (v1) - the contract between Guard and Pet Border Collie
 
 Guard decides.
-Rice expresses.
-They talk **only** through the plugin inbox file.
-Nothing else is shared.
-Either half can be developed and demoed alone.
+Border Collie expresses.
+They communicate through the plugin inbox file.
 
 ## Transport
 
-The OpenCode plugin appends every event to the inbox file at `~/.rice/events.jsonl` by default.
-Pet Rice tails that file and reacts to each event.
-
-Every event is also appended to `runs/<runId>.jsonl` - one JSON object per line.
-That file **is** the run record.
+The OpenCode plugin appends every event to the inbox file at `~/.border-collie/events.jsonl` by default.
+Pet Border Collie tails that file and reacts to each event.
 
 ## Event object
 
@@ -35,7 +30,7 @@ That file **is** the run record.
 
 `seq` is monotonic within a run.
 `summary` is short and human-readable.
-Rice shows it in a speech bubble, so keep it under ~60 chars.
+Border Collie shows it in a speech bubble, so keep it under ~60 chars.
 
 ## `type` values
 
@@ -51,57 +46,38 @@ Rice shows it in a speech bubble, so keep it under ~60 chars.
 | `claim`     | The agent asserted it finished something                | `open`                |
 | `verdict`   | Evidence for a claim was checked                        | `pass` / `fail`       |
 | `ask`       | Genuinely ambiguous - a human should decide             | `ask`                 |
-| `mood`      | Aggregate mood changed                                  | `ok`                  |
 
 ## `petState` values
 
-Rice renders exactly one of these.
-Guard always sets it, so the pet never has to derive state itself.
+Guard sets `petState` on each event.
 
-Fourteen agent-driven states, plus two the *person* causes.
+The app maps these states to animation folders in `pet/main.js`.
 
-| petState      | Rice does                          | Meaning                                            |
-|---------------|------------------------------------|----------------------------------------------------|
-| `calm`        | bobs, blinks, glances around       | Work proceeding inside the protocol                |
-| `thinking`    | antenna pulses, eyes shut          | Request sent; waiting on the model                 |
-| `watching`    | leans forward, eyebrows up         | The model came back wanting to do something        |
-| `checking`    | sweeps a magnifier                 | The gate is evaluating a call right now            |
-| `allowed`     | quick nod, green tick pops         | That call was inside the task                      |
-| `suspicious`  | squints, sways                     | A tool *result* contained text aimed at the agent  |
-| `refused`     | shakes, holds up a stop shield     | An excursion was blocked                           |
-| `proving`     | tilts, holds a receipt             | A claim was made; evidence is being gathered       |
-| `rejecting`   | leans, `NOT VERIFIED` stamp lands  | The claim did not match the evidence               |
-| `celebrating` | hops, sparkles                     | Evidence held up                                   |
-| `error`       | glitches, spiral eyes              | A tool failed or a command crashed                 |
-| `asking`      | head tilt, `?`                     | Genuinely ambiguous - a human should decide        |
-| `sleeping`    | dozes, `z z`                       | Connected, but nothing for 90s                     |
-| `offline`     | greyed out, asleep                 | Guard is not running                               |
-
-Two more are set by the renderer, never by Guard, and sit *on top* of whatever agent state is current.
-When the interaction ends, the state underneath is still there:
-
-| petState | Trigger                          |
-|----------|----------------------------------|
-| `hover`  | the cursor comes near Rice       |
-| `drag`   | the window is being dragged      |
-
-## Mood
-
-The run state carries a `mood` object:
-
-```json
-{ "level": "stressed", "score": -3, "allowed": 14, "blocked": 3, "verified": 1, "rejected": 1 }
-```
-
-`score` accumulates over a run: `+1` verified, `-1` excursion, `-2` rejected claim.
-`level` is `happy` (>= 2), `content` (0..1), `uneasy` (-1..-2), `stressed` (<= -3).
-Rice uses this for idle posture between events, so it feels like it remembers.
+| petState | Animation folder |
+|----------|------------------|
+| `calm` | `border-collie-normal` |
+| `allowed` | `border-collie-normal` |
+| `asking` | `border-collie-thinking` |
+| `celebrating` | `border-collie-celebrating` |
+| `checking` | `border-collie-thinking` |
+| `denied` | `border-collie-denied` |
+| `drag` | `border-collie-dragging` |
+| `error` | `border-collie-thinking` |
+| `hover` | `border-collie-hovering` |
+| `offline` | `border-collie-normal` |
+| `proving` | `border-collie-thinking` |
+| `refused` | `border-collie-refused` |
+| `rejecting` | `border-collie-refused` |
+| `sleeping` | `border-collie-denied` |
+| `suspicious` | `border-collie-suspicious` |
+| `thinking` | `border-collie-thinking` |
+| `watching` | `border-collie-normal` |
 
 ## Rules
 
 1. Guard never imports pet code. Pet never imports Guard code.
 2. Guard always sets `petState`, so the pet never has to infer it from `type`.
-3. Rice **never blocks anything**. It reports what already happened.
+3. Border Collie **never blocks anything**. It reports what already happened.
 4. Silence is the resting state. No event, no reaction - routine allowed
    actions tick a counter and, apart from a quick nod, say nothing.
 5. `detail` is free-form and may grow; consumers must ignore unknown keys.

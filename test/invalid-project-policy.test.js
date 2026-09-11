@@ -8,22 +8,20 @@ const { pathToFileURL } = require('node:url');
 const ROOT = path.resolve(__dirname, '..');
 
 function temporaryDirectory() {
-  return fs.mkdtempSync(path.join(os.tmpdir(), 'rice-invalid-project-policy-'));
+  return fs.mkdtempSync(path.join(os.tmpdir(), 'border-collie-invalid-project-policy-'));
 }
 
 async function hooksFor(projectDir, ownerConfigDir, runDir) {
-  process.env.RICE_NO_PET = '1';
-  process.env.RICE_EVENTS = path.join(runDir, 'events.jsonl');
-  process.env.RICE_RUNS = path.join(runDir, 'runs');
-  process.env.RICE_OWNER_CONFIG = ownerConfigDir;
-  const { Rice } = await import(pathToFileURL(path.join(ROOT, 'plugin/rice.js')).href);
-  return Rice({ client: {}, directory: projectDir });
+  process.env.BORDER_COLLIE_NO_PET = '1';
+  process.env.BORDER_COLLIE_EVENTS = path.join(runDir, 'events.jsonl');
+  process.env.BORDER_COLLIE_OWNER_CONFIG = ownerConfigDir;
+  const { BorderCollie } = await import(pathToFileURL(path.join(ROOT, 'plugin/border-collie.js')).href);
+  return BorderCollie({ client: {}, directory: projectDir });
 }
 
-async function readRunEvents(runDir) {
+async function readEvents(runDir) {
   await new Promise((resolve) => setTimeout(resolve, 10));
-  const [record] = fs.readdirSync(path.join(runDir, 'runs'));
-  return fs.readFileSync(path.join(runDir, 'runs', record), 'utf8')
+  return fs.readFileSync(path.join(runDir, 'events.jsonl'), 'utf8')
     .trim()
     .split('\n')
     .filter(Boolean)
@@ -43,7 +41,7 @@ async function runTest(name, fn) {
 async function main() {
   console.log('invalid project policy');
 
-  await runTest('a malformed active project policy fails closed with a high-priority run-record notification', async () => {
+  await runTest('a malformed active project policy fails closed with a high-priority notification', async () => {
     const root = temporaryDirectory();
     const projectDir = path.join(root, 'project');
     const ownerConfigDir = path.join(root, 'owner-config');
@@ -64,7 +62,7 @@ async function main() {
       /Fix or remove the project policy/,
     );
 
-    const events = await readRunEvents(runDir);
+    const events = await readEvents(runDir);
     const notification = events.find((event) => event.type === 'notification');
     assert.equal(notification.status, 'error');
     assert.equal(notification.detail.priority, 'high');
@@ -93,7 +91,7 @@ async function main() {
       /Fix or remove the project policy/,
     );
 
-    const events = await readRunEvents(runDir);
+    const events = await readEvents(runDir);
     assert.equal(events.find((event) => event.type === 'notification').detail.priority, 'high');
   });
 }

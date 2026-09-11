@@ -1,6 +1,6 @@
 "use strict";
 /**
- * Rice  -  the window.
+ * Border Collie  -  the window.
  *
  * A frameless, transparent, always-on-top companion that floats over whatever
  * you are working in. It has no idea what Guard is beyond one URL: it reads the
@@ -36,7 +36,7 @@ const { BASE_W, BASE_H, DEFAULT_SCALE, clampScale } = G;
 
 if (!app || typeof app.requestSingleInstanceLock !== "function") {
   console.error(
-    "[rice] Electron app API missing. Unset ELECTRON_RUN_AS_NODE and relaunch via the Electron binary.",
+    "[border-collie] Electron app API missing. Unset ELECTRON_RUN_AS_NODE and relaunch via the Electron binary.",
   );
   process.exit(1);
 }
@@ -51,23 +51,35 @@ const arg = (name, fallback) => {
 };
 const EVENTS_FILE = arg(
   "events",
-  process.env.RICE_EVENTS || defaultInboxPath(),
+  process.env.BORDER_COLLIE_EVENTS || defaultInboxPath(),
 );
 const MOD = "Control+Alt";
 const TOGGLE_KEY = arg("shortcut", `${MOD}+R`);
 const DEV_H = 460;
-const LOCAL_ANIMATION_FOLDERS = {
-  calm: "rice-normal",
-  checking: "rice-checking",
-  drag: "rice-drag",
-  hover: "rice-hover",
-  thinking: "rice-thinking",
+const DEFAULT_ANIMATION_FOLDERS = {
+  calm: "border-collie-normal",
+  allowed: "border-collie-normal",
+  asking: "border-collie-thinking",
+  celebrating: "border-collie-celebrating",
+  checking: "border-collie-thinking",
+  denied: "border-collie-denied",
+  drag: "border-collie-dragging",
+  error: "border-collie-thinking",
+  hover: "border-collie-hovering",
+  offline: "border-collie-normal",
+  proving: "border-collie-thinking",
+  refused: "border-collie-refused",
+  rejecting: "border-collie-refused",
+  sleeping: "border-collie-denied",
+  suspicious: "border-collie-suspicious",
+  thinking: "border-collie-thinking",
+  watching: "border-collie-normal",
 };
 
-function localAnimations() {
-  const root = path.join(__dirname, "assets", "local-animations");
+function defaultAnimations() {
+  const root = path.join(__dirname, "assets", "default-animations");
   return Object.fromEntries(
-    Object.entries(LOCAL_ANIMATION_FOLDERS).flatMap(([state, folder]) => {
+    Object.entries(DEFAULT_ANIMATION_FOLDERS).flatMap(([state, folder]) => {
       try {
         const frames = fs
           .readdirSync(path.join(root, folder), { withFileTypes: true })
@@ -95,12 +107,12 @@ let logOpen = false;
 let settings = { scale: DEFAULT_SCALE, x: null, y: null };
 
 if (DEV) {
-  app.setName("pet-rice-dev");
-  app.setPath("userData", path.join(os.homedir(), ".rice", "dev-userdata"));
+  app.setName("pet-border-collie-dev");
+  app.setPath("userData", path.join(os.homedir(), ".border-collie", "dev-userdata"));
 }
 
 const settingsPath = () =>
-  path.join(app.getPath("userData"), "rice-settings.json");
+  path.join(app.getPath("userData"), "border-collie-settings.json");
 
 function loadSettings() {
   try {
@@ -181,11 +193,11 @@ function setScale(next) {
   settings.scale = s;
   applyLayout();
   if (win && !win.isDestroyed()) {
-    win.webContents.send("rice:scaled", Math.round(s * 100));
+    win.webContents.send("borderCollie:scaled", Math.round(s * 100));
   }
 }
 
-const initialOwner = parseOwnerPid(process.env.RICE_OWNER_PID);
+const initialOwner = parseOwnerPid(process.env.BORDER_COLLIE_OWNER_PID);
 const gotLock = app.requestSingleInstanceLock({
   ownerPid: initialOwner,
   dev: DEV,
@@ -271,7 +283,7 @@ if (!gotLock) {
     if (!DEMO && !DEV) {
       win.webContents.once("did-finish-load", () => {
         const watcher = watchInbox(EVENTS_FILE, (e) => {
-          if (win && !win.isDestroyed()) win.webContents.send("rice:event", e);
+          if (win && !win.isDestroyed()) win.webContents.send("borderCollie:event", e);
         });
         win.on("closed", () => watcher.close());
       });
@@ -282,7 +294,7 @@ if (!gotLock) {
       const now = Date.now();
       if (now - moveTick > 60) {
         moveTick = now;
-        if (!win.isDestroyed()) win.webContents.send("rice:dragging");
+        if (!win.isDestroyed()) win.webContents.send("borderCollie:dragging");
       }
       const b = win.getBounds();
       settings.x = b.x;
@@ -361,7 +373,7 @@ if (!gotLock) {
     }
 
     console.log("");
-    console.log("  Rice is watching.");
+    console.log("  Border Collie is watching.");
     console.log(
       `    Mac:     ${prettyShortcut(TOGGLE_KEY, "darwin")}    show / hide`,
     );
@@ -374,7 +386,7 @@ if (!gotLock) {
     console.log(
       `             ${prettyShortcut(`${MOD}+=`, "win32")} / ${prettyShortcut(`${MOD}+-`, "win32")}         bigger / smaller     ${prettyShortcut(`${MOD}+0`, "win32")}        reset`,
     );
-    console.log("    Ctrl+wheel over Rice also resizes.");
+    console.log("    Ctrl+wheel over Border Collie also resizes.");
     if (failed.length) {
       console.log("");
       console.log(
@@ -387,7 +399,7 @@ if (!gotLock) {
     console.log("");
   }
 
-  ipcMain.handle("rice:config", () => ({
+  ipcMain.handle("borderCollie:config", () => ({
     eventsFile: EVENTS_FILE,
     demo: DEMO,
     solid: SOLID,
@@ -395,25 +407,25 @@ if (!gotLock) {
     scale: settings.scale,
     toggleKey: prettyShortcut(TOGGLE_KEY),
     resetKey: prettyShortcut(`${MOD}+0`),
-    animations: localAnimations(),
+    animations: defaultAnimations(),
   }));
-  ipcMain.on("rice:quit", () => app.quit());
-  ipcMain.on("rice:hide", () => {
+  ipcMain.on("borderCollie:quit", () => app.quit());
+  ipcMain.on("borderCollie:hide", () => {
     if (DEV) {
       app.quit();
       return;
     }
     if (win && !win.isDestroyed()) win.hide();
   });
-  ipcMain.on("rice:open", (_e, url) => {
+  ipcMain.on("borderCollie:open", (_e, url) => {
     if (/^https?:/.test(url)) shell.openExternal(url);
   });
-  ipcMain.on("rice:log", (_e, open) => {
+  ipcMain.on("borderCollie:log", (_e, open) => {
     logOpen = !!open;
     applyLayout();
   });
-  ipcMain.on("rice:scale-step", (_e, dir) => stepScale(dir > 0 ? 1 : -1));
-  ipcMain.on("rice:scale-set", (_e, s) => setScale(s));
+  ipcMain.on("borderCollie:scale-step", (_e, dir) => stepScale(dir > 0 ? 1 : -1));
+  ipcMain.on("borderCollie:scale-set", (_e, s) => setScale(s));
 
   app.whenReady().then(() => {
     loadSettings();

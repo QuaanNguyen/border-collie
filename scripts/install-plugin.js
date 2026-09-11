@@ -9,7 +9,7 @@ function defaultPluginsDir() {
 }
 
 function defaultOwnerConfigDir() {
-  return path.join(os.homedir(), '.config', 'opencode', 'rice');
+  return path.join(os.homedir(), '.config', 'opencode', 'border-collie');
 }
 
 function researchSafePolicy() {
@@ -129,7 +129,7 @@ function ensureElectron(petDir, repoRoot) {
   }
   if (!electronReady(petDir)) {
     throw new Error(
-      'Electron binary did not install. From the rice-matters clone run: cd pet && npm install\n' +
+      'Electron binary did not install. From the border-collie clone run: cd pet && npm install\n' +
       'Then re-run scripts/install-plugin.',
     );
   }
@@ -139,11 +139,11 @@ function installPlugin(opts = {}) {
   const repoRoot = path.resolve(opts.repoRoot || path.join(__dirname, '..'));
   const pluginsDir = opts.destDir || defaultPluginsDir();
   const ownerConfigDir = opts.ownerConfigDir || defaultOwnerConfigDir();
-  const packageDir = path.join(pluginsDir, 'rice');
-  const entry = path.join(pluginsDir, 'rice.js');
+  const packageDir = path.join(pluginsDir, 'border-collie');
+  const entry = path.join(pluginsDir, 'border-collie.js');
   const skipNpm = opts.skipNpm === true;
 
-  const srcPlugin = path.join(repoRoot, 'plugin', 'rice.js');
+  const srcPlugin = path.join(repoRoot, 'plugin', 'border-collie.js');
   const srcGuard = path.join(repoRoot, 'guard');
   const srcPet = path.join(repoRoot, 'pet');
 
@@ -187,7 +187,7 @@ function installPlugin(opts = {}) {
 }
 
 if (require.main === module) {
-  console.log('Installing Rice into OpenCode global plugins…');
+  console.log('Installing Border Collie into OpenCode global plugins…');
   const { dest, packageDir, petDir, ownerPolicyPath, migrationPreview: preview } = installPlugin();
   console.log('Plugin entry:  ' + dest);
   console.log('Package:       ' + packageDir + '  (guard + pet)');

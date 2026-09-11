@@ -8,7 +8,7 @@ const ROOT = path.resolve(__dirname, '..');
 const { installPlugin } = require(path.join(ROOT, 'scripts/install-plugin'));
 
 function temporaryDirectory() {
-  return fs.mkdtempSync(path.join(os.tmpdir(), 'rice-install-'));
+  return fs.mkdtempSync(path.join(os.tmpdir(), 'border-collie-install-'));
 }
 
 function runTest(name, fn) {

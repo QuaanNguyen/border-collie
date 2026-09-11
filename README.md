@@ -7,9 +7,8 @@ A desktop border collie that watches your AI coding agent and reacts when someth
 ## What It Does
 
 Border Collie is a small desktop companion for OpenCode.
-In plain terms, it sits beside your coding agent, watches what the agent tries to do, and changes mood when the agent is working, blocked, refused, failed, or claiming it is done.
+In plain terms, it sits beside your coding agent, watches what the agent tries to do, and reacts when the agent is working, blocked, refused, failed, or claiming it is done.
 
-It also keeps a run record so you can look back at what happened.
 The guard checks actions before they run, blocks work outside the task, and verifies important finish claims against the files in the project.
 
 ## Installation
@@ -58,11 +57,13 @@ npm install
 npm run start:dev
 ```
 
+Animation asset storage and replacement notes live in [docs/ANIMATION_ASSETS.md](docs/ANIMATION_ASSETS.md).
+
 Run the tests:
 
 ```sh
 node test/run-tests.js
 ```
 
-The live event inbox defaults to `~/.rice/events.jsonl`, and replayable run records default to `~/.rice/runs/`.
-Set `RICE_EVENTS` or `RICE_RUNS` to use different paths.
+The live event inbox defaults to `~/.border-collie/events.jsonl`.
+Set `BORDER_COLLIE_EVENTS` to use a different path.

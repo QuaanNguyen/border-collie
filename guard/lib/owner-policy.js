@@ -4,10 +4,10 @@ const os = require('node:os');
 const path = require('node:path');
 
 function defaultOwnerConfigDir() {
-  return path.join(os.homedir(), '.config', 'opencode', 'rice');
+  return path.join(os.homedir(), '.config', 'opencode', 'border-collie');
 }
 
-function loadOwnerPolicy(configDir = process.env.RICE_OWNER_CONFIG || defaultOwnerConfigDir()) {
+function loadOwnerPolicy(configDir = process.env.BORDER_COLLIE_OWNER_CONFIG || defaultOwnerConfigDir()) {
   const policyPath = path.join(configDir, 'policy.json');
   if (!fs.existsSync(policyPath)) return null;
   try {

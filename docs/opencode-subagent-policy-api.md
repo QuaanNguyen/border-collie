@@ -20,7 +20,7 @@ OpenCode itself does propagate a limited native permission subset when it create
 
 The current implementation carries the parent's deny rules and `external_directory` rules into the child session, but intentionally leaves the child agent's own permissions to determine its capabilities.
 
-Consequently, a plugin cannot safely implement issue #15 by attaching a per-child Rice policy envelope through a documented dispatch API.
+Consequently, a plugin cannot safely implement issue #15 by attaching a per-child Border Collie policy envelope through a documented dispatch API.
 
 A plugin can still enforce a policy independently by throwing from `tool.execute.before` for every relevant tool call, including calls from child sessions, but that is a plugin-owned guard rather than inherited child-session authority.
 
@@ -74,7 +74,7 @@ This is the supported interception point for a plugin-owned, fail-closed guard t
 
 ## Implementation implication
 
-Keep Rice's current fail-closed denial of subagent dispatch unless the project deliberately adopts a design that guards every child tool call using the same resolved Rice policy.
+Keep Border Collie's current fail-closed denial of subagent dispatch unless the project deliberately adopts a design that guards every child tool call using the same resolved Border Collie policy.
 
 Do not treat prompt injection as policy inheritance, and do not rely on a fabricated `policy` argument or an undocumented child-session mutation API.
 

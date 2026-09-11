@@ -3,7 +3,7 @@
  * Did a tool result come back broken?
  *
  * Deliberately narrow. A file that merely contains the word "error" is not a
- * failure, and Rice should not glitch every time the agent reads a log file.
+ * failure, and Border Collie should not glitch every time the agent reads a log file.
  * We only match shapes that mean "this did not run".
  */
 

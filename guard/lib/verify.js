@@ -56,10 +56,6 @@ function git(workdir, args) {
   }
 }
 
-/**
- * Run one check. Every check returns the same shape so the record is uniform.
- * @returns {{id:string,type:string,pass:boolean,evidence:string,where:string[]}}
- */
 function runCheck(check, workdir) {
   const type = check.type;
 

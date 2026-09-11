@@ -1,7 +1,6 @@
 import { createRequire } from "node:module";
 import { spawn } from "node:child_process";
 import fs from "node:fs";
-import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -20,8 +19,8 @@ function findRepo(start) {
 }
 
 function resolveRoot(start) {
-  if (process.env.RICE_ROOT) return process.env.RICE_ROOT;
-  const bundled = path.join(start, "rice");
+  if (process.env.BORDER_COLLIE_ROOT) return process.env.BORDER_COLLIE_ROOT;
+  const bundled = path.join(start, "border-collie");
   if (fs.existsSync(path.join(bundled, "guard/lib/session.js"))) return bundled;
   return findRepo(start);
 }
@@ -29,7 +28,7 @@ function resolveRoot(start) {
 const repoRoot = resolveRoot(here);
 if (!repoRoot) {
   throw new Error(
-    "Rice cannot find guard/lib/session.js. Run scripts/install-plugin (copies guard + pet next to the plugin), or set RICE_ROOT.",
+    "Border Collie cannot find guard/lib/session.js. Run scripts/install-plugin (copies guard + pet next to the plugin), or set BORDER_COLLIE_ROOT.",
   );
 }
 
@@ -99,12 +98,12 @@ function ordinaryDenialMessage(tool, args, event, workdir) {
   const rule = event?.rule || 'resolved_policy';
   const alternative = rule === 'read_paths' || rule === 'write_paths'
     ? 'Use a path within the active project: ' + workdir
-    : 'Choose an action allowed by the resolved Rice policy.';
+    : 'Choose an action allowed by the resolved Border Collie policy.';
   return denialMessage({
     action: tool,
     target,
     rule,
-    layer: 'resolved Rice policy',
+    layer: 'resolved Border Collie policy',
     reason: event?.reason || 'the action is not permitted',
     alternative,
     retry: 'do not retry this target; use the permitted alternative or ask the owner to change policy.',
@@ -156,10 +155,6 @@ function isIdle(event) {
   return ["idle", "stopped", "stop", "cancelled", "canceled", "error"].includes(type);
 }
 
-// The plugin runs inside OpenCode, which is a Bun binary, so require() of the
-// electron package is not a reliable way to get the executable path - it works
-// under Node and silently returns nothing here, which is why Rice stopped
-// appearing while the run record kept filling. Look on disk first.
 const DIST_CANDIDATES = [
   "node_modules/electron/dist/electron.exe",
   "node_modules/electron/dist/electron",
@@ -183,20 +178,20 @@ function electronBinary(petDir) {
 }
 
 function launchPet(inboxPath) {
-  if (process.env.RICE_NO_PET === "1") return;
+  if (process.env.BORDER_COLLIE_NO_PET === "1") return;
   const petDir = path.join(repoRoot, "pet");
   const bin = electronBinary(petDir);
   if (!bin) {
     console.error(
-      "[rice] Pet Rice not launched: Electron binary missing under " + petDir +
+      "[border-collie] Pet Border Collie not launched: Electron binary missing under " + petDir +
       ". Re-run: bash scripts/install-plugin.sh",
     );
     return;
   }
   const env = {
     ...process.env,
-    RICE_EVENTS: inboxPath,
-    RICE_OWNER_PID: String(process.pid),
+    BORDER_COLLIE_EVENTS: inboxPath,
+    BORDER_COLLIE_OWNER_PID: String(process.pid),
   };
   delete env.ELECTRON_RUN_AS_NODE;
   delete env.ELECTRON_SKIP_BINARY_DOWNLOAD;
@@ -207,12 +202,12 @@ function launchPet(inboxPath) {
     env,
   });
   child.on("error", (err) => {
-    console.error("[rice] failed to launch Pet Rice:", err.message);
+    console.error("[border-collie] failed to launch Pet Border Collie:", err.message);
   });
   child.unref();
 }
 
-export const Rice = async ({ client, directory }) => {
+export const BorderCollie = async ({ client, directory }) => {
   const workdir = directory || process.cwd();
   const projectPolicy = loadProtocol(workdir);
   const ownerPolicy = loadOwnerPolicy();
@@ -223,16 +218,15 @@ export const Rice = async ({ client, directory }) => {
   const protocol = projectPolicy.error
     ? null
     : resolvePolicy(resolvedOwnerProtocol, projectPolicy.protocol);
-  const inboxPath = process.env.RICE_EVENTS || defaultInboxPath();
-  const runsDir = process.env.RICE_RUNS || path.join(os.homedir(), ".rice", "runs");
-  const bus = new EventBus({ inboxPath, runsDir });
+  const inboxPath = process.env.BORDER_COLLIE_EVENTS || defaultInboxPath();
+  const bus = new EventBus({ inboxPath });
   const session = projectPolicy.error || conflicts.length ? null : createSession({ protocol, workdir });
   const claimed = new Set();
   let ended = false;
   const invalidPolicyMessage = projectPolicy.error
-    ? "Rice blocked this session because the active project policy is malformed. Fix or remove the project policy at " + projectPolicy.policyPath + " and restart OpenCode."
+    ? "Border Collie blocked this session because the active project policy is malformed. Fix or remove the project policy at " + projectPolicy.policyPath + " and restart OpenCode."
     : conflicts.length
-      ? "Rice blocked this session because the project policy attempts to broaden the owner policy for " + conflicts.map((conflict) => conflict.field).join(', ') + ". Remove or narrow those project policy settings, then restart OpenCode."
+      ? "Border Collie blocked this session because the project policy attempts to broaden the owner policy for " + conflicts.map((conflict) => conflict.field).join(', ') + ". Remove or narrow those project policy settings, then restart OpenCode."
       : null;
 
   function publish(out) {
@@ -257,7 +251,7 @@ export const Rice = async ({ client, directory }) => {
     bus.emit({
       type: "notification",
       status: "error",
-      petState: "refused",
+      petState: "denied",
       summary: projectPolicy.error ? "Project policy is malformed" : "Project policy broadens owner authority",
       reason: projectPolicy.error
         ? "The active project policy is malformed and was not loaded."
@@ -315,7 +309,7 @@ export const Rice = async ({ client, directory }) => {
         bus.emit({
           type: "excursion",
           status: "block",
-          petState: "refused",
+          petState: "denied",
           tool,
           summary: tool + " targets a protected path",
           reason: protection.reason,
@@ -325,7 +319,7 @@ export const Rice = async ({ client, directory }) => {
           action: tool,
           target,
           rule: protection.rule,
-          layer: 'resolved Rice policy',
+          layer: 'resolved Border Collie policy',
           reason: protection.reason,
           alternative: protection.rule === 'protected_paths' ? 'Read the path without modifying it, or ask the owner to change protection.' : 'Ask the owner to change read protection.',
           retry: 'do not retry this action until policy changes.',
