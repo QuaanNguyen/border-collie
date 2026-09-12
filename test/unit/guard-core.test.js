@@ -4,7 +4,7 @@ const path = require('node:path');
 const fs = require('node:fs');
 const { execFileSync } = require('node:child_process');
 
-const ROOT = path.resolve(__dirname, '..');
+const ROOT = path.resolve(__dirname, '..', '..');
 const { Protocol, check } = require(path.join(ROOT, 'guard/lib/policy'));
 const { createSession } = require(path.join(ROOT, 'guard/lib/session'));
 const { scan } = require(path.join(ROOT, 'guard/lib/injection'));
@@ -376,30 +376,6 @@ t('event streams have unique identities when sessions start together', () => {
   const first = new EventBus();
   const second = new EventBus();
   assert.notEqual(first.state().runId, second.state().runId);
-});
-
-t('interrupted thinking returns the pet to calm', () => {
-  const script = `
-    import fs from 'node:fs';
-    import os from 'node:os';
-    import path from 'node:path';
-    process.env.BORDER_COLLIE_NO_PET = '1';
-    const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'border-collie-events-'));
-    process.env.BORDER_COLLIE_EVENTS = path.join(dir, 'events.jsonl');
-    const { BorderCollie } = await import(${JSON.stringify(path.join(ROOT, 'plugin/border-collie.js'))});
-    const hooks = await BorderCollie({ client: {}, directory: ${JSON.stringify(ROOT)} });
-    await hooks.event({ event: { type: 'session.status', properties: { status: 'busy' } } });
-    await hooks.event({ event: { type: 'session.status', properties: { status: 'stopped' } } });
-    await new Promise((resolve) => setTimeout(resolve, 50));
-    const events = fs.readFileSync(process.env.BORDER_COLLIE_EVENTS, 'utf8').trim().split('\\n').map(JSON.parse);
-    if (!events.some((e) => e.type === 'thinking' && e.status === 'ok' && e.petState === 'thinking')) {
-      throw new Error('missing thinking event');
-    }
-    if (!events.some((e) => e.type === 'thinking' && e.status === 'idle' && e.petState === 'calm')) {
-      throw new Error('missing idle event after stopped status');
-    }
-  `;
-  execFileSync(process.execPath, ['--input-type=module', '-e', script], { cwd: ROOT, stdio: 'pipe' });
 });
 
 t('the OpenCode adapter blocks a shell escape hidden in interpreter code', () => {

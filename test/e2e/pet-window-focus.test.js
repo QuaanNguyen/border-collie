@@ -4,13 +4,13 @@ const os = require('os')
 const path = require('path')
 const { spawn, spawnSync } = require('child_process')
 
-const ROOT = path.resolve(__dirname, '..')
+const ROOT = path.resolve(__dirname, '..', '..')
 const PET_DIR = path.join(ROOT, 'pet')
-const FOCUS_FIXTURE_DIR = path.join(__dirname, 'fixtures', 'focus-probe')
-const POINTER_SOURCE = path.join(__dirname, 'fixtures', 'macos-pointer.swift')
+const FOCUS_FIXTURE_DIR = path.join(__dirname, '..', 'fixtures', 'focus-probe')
+const POINTER_SOURCE = path.join(__dirname, '..', 'fixtures', 'macos-pointer.swift')
 const electronPath = require(path.join(PET_DIR, 'node_modules', 'electron'))
-const { buildNativePet } = require('../scripts/build-native-pet')
-const { EventBus } = require('../events')
+const { buildNativePet } = require('../../scripts/build-native-pet')
+const { EventBus } = require('../../events')
 
 function delay(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms))

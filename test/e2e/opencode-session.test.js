@@ -5,8 +5,8 @@ const os = require('os')
 const path = require('path')
 const { spawn } = require('child_process')
 
-const ROOT = path.resolve(__dirname, '..')
-const { installPlugin } = require('../scripts/install-plugin')
+const ROOT = path.resolve(__dirname, '..', '..')
+const { installPlugin } = require('../../scripts/install-plugin')
 
 function runOpenCode(args, options) {
   return new Promise((resolve, reject) => {

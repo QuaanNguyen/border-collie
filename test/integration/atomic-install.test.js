@@ -3,7 +3,7 @@ const fs = require('fs')
 const os = require('os')
 const path = require('path')
 
-const { installPlugin, replaceInstallation } = require('../scripts/install-plugin')
+const { installPlugin, replaceInstallation } = require('../../scripts/install-plugin')
 
 const root = fs.mkdtempSync(path.join(os.tmpdir(), 'border-collie-atomic-install-'))
 const repoRoot = path.join(root, 'repo')

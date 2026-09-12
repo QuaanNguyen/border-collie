@@ -5,7 +5,7 @@ const test = require('node:test');
 const { spawnSync } = require('node:child_process');
 const path = require('node:path');
 
-const cli = path.resolve(__dirname, '..', 'scripts', 'border-collie.js');
+const cli = path.resolve(__dirname, '..', '..', 'scripts', 'border-collie.js');
 
 test('CLI documents the install command', () => {
   const result = spawnSync(process.execPath, [cli, '--help'], { encoding: 'utf8' });

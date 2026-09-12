@@ -1,7 +1,7 @@
 'use strict'
 
 const assert = require('node:assert')
-const { createAnimationPlayer } = require('../pet/src/animation-player')
+const { createAnimationPlayer } = require('../../pet/src/animation-player')
 
 function createClock() {
   let time = 0

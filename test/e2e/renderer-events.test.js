@@ -5,11 +5,11 @@ const path = require('path')
 const { pathToFileURL } = require('url')
 const { spawn } = require('child_process')
 
-const ROOT = path.resolve(__dirname, '..')
+const ROOT = path.resolve(__dirname, '..', '..')
 const PET_DIR = path.join(ROOT, 'pet')
-const FIXTURE_DIR = path.join(__dirname, 'fixtures', 'renderer-probe')
+const FIXTURE_DIR = path.join(__dirname, '..', 'fixtures', 'renderer-probe')
 const electronPath = require(path.join(PET_DIR, 'node_modules', 'electron'))
-const { EventBus } = require('../events')
+const { EventBus } = require('../../events')
 
 function delay(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms))

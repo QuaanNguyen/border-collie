@@ -5,7 +5,7 @@ const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
 const test = require('node:test');
-const { installPlugin } = require('../scripts/install-plugin');
+const { installPlugin } = require('../../scripts/install-plugin');
 
 test('Global bind stages a complete package without downloading a runtime', () => {
   const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'border-collie-install-'));

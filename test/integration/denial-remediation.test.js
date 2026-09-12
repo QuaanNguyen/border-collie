@@ -5,7 +5,7 @@ const os = require('node:os');
 const path = require('node:path');
 const { pathToFileURL } = require('node:url');
 
-const ROOT = path.resolve(__dirname, '..');
+const ROOT = path.resolve(__dirname, '..', '..');
 
 async function hooksFor(projectDir, ownerConfigDir, runDir) {
   process.env.BORDER_COLLIE_NO_PET = '1';

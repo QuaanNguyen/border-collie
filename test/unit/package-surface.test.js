@@ -2,7 +2,7 @@ const assert = require('assert')
 const fs = require('fs')
 const path = require('path')
 
-const ROOT = path.resolve(__dirname, '..')
+const ROOT = path.resolve(__dirname, '..', '..')
 const petPackage = require(path.join(ROOT, 'pet', 'package.json'))
 const readme = fs.readFileSync(path.join(ROOT, 'README.md'), 'utf8')
 const main = fs.readFileSync(path.join(ROOT, 'pet', 'main.js'), 'utf8')

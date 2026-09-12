@@ -5,7 +5,7 @@ const os = require('node:os');
 const path = require('node:path');
 const { spawnSync } = require('node:child_process');
 
-const ROOT = path.resolve(__dirname, '..');
+const ROOT = path.resolve(__dirname, '..', '..');
 const { installPlugin } = require(path.join(ROOT, 'scripts/install-plugin'));
 const temporaryDirectories = [];
 

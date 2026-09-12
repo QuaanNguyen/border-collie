@@ -3,8 +3,8 @@ const fs = require('fs')
 const os = require('os')
 const path = require('path')
 
-const ROOT = path.resolve(__dirname, '..')
-const { electronReady, installPlugin, nativePetReady } = require('../scripts/install-plugin')
+const ROOT = path.resolve(__dirname, '..', '..')
+const { electronReady, installPlugin, nativePetReady } = require('../../scripts/install-plugin')
 
 const root = fs.mkdtempSync(path.join(os.tmpdir(), 'border-collie-full-install-'))
 const originalNodeEnv = process.env.NODE_ENV

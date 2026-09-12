@@ -3,7 +3,7 @@ const fs = require('fs')
 const os = require('os')
 const path = require('path')
 
-const ROOT = path.resolve(__dirname, '..')
+const ROOT = path.resolve(__dirname, '..', '..')
 
 async function main() {
   const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'border-collie-liveness-'))

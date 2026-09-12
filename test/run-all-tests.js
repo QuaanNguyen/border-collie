@@ -16,20 +16,20 @@ function electronMatchesLock() {
 }
 
 const suites = [
-  'run-tests.js',
-  'install-plugin.test.js',
-  'animation-assets.test.js',
-  'animation-manifest.test.js',
-  'animation-player.test.js',
-  'policy-supervisor-workflow.test.js',
-  'atomic-install.test.js',
-  'install-diagnostics.test.js',
-  'full-install.test.js',
-  'package-surface.test.js',
-  'pet-session-behavior.test.js',
-  'plugin-liveness.test.js',
-  'opencode-session.test.js',
-  'window-interaction.test.js',
+  'unit/guard-core.test.js',
+  'unit/animation-assets.test.js',
+  'unit/animation-manifest.test.js',
+  'unit/animation-player.test.js',
+  'unit/package-surface.test.js',
+  'unit/pet-session-behavior.test.js',
+  'unit/window-interaction.test.js',
+  'integration/install-plugin.test.js',
+  'integration/policy-supervisor-workflow.test.js',
+  'integration/atomic-install.test.js',
+  'integration/install-diagnostics.test.js',
+  'integration/full-install.test.js',
+  'integration/plugin-liveness.test.js',
+  'e2e/opencode-session.test.js',
 ]
 
 for (const suite of suites) {
@@ -43,7 +43,7 @@ if (process.env.BORDER_COLLIE_SKIP_NATIVE_TESTS !== '1') {
   if (!electronMatchesLock()) {
     execFileSync(npm, ['ci'], { cwd: PET_DIR, stdio: 'inherit' })
   }
-  for (const suite of ['renderer-events.test.js', 'pet-window-focus.test.js']) {
+  for (const suite of ['e2e/renderer-events.test.js', 'e2e/pet-window-focus.test.js']) {
     execFileSync(process.execPath, [path.join(__dirname, suite)], {
       cwd: ROOT,
       stdio: 'inherit',

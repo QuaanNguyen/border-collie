@@ -7,7 +7,7 @@ const path = require('node:path')
 const zlib = require('node:zlib')
 const { spawnSync } = require('node:child_process')
 
-const ROOT = path.resolve(__dirname, '..')
+const ROOT = path.resolve(__dirname, '..', '..')
 const SOURCE = path.join(ROOT, 'docs', 'assets', 'border-collie-source.png')
 const SCRIPT = path.join(ROOT, 'scripts', 'package-animation-assets.js')
 const RUNTIME = path.join(ROOT, 'pet', 'assets', 'default-animations')

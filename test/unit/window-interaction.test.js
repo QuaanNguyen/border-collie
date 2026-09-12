@@ -1,7 +1,7 @@
 const assert = require('assert')
-const { createWindowInteraction } = require('../pet/lib/window-interaction')
-const { regionsFromAlpha, placeAlphaRegions } = require('../pet/src/hit-regions')
-const { parseSizeArgument } = require('../events/size-command')
+const { createWindowInteraction } = require('../../pet/lib/window-interaction')
+const { regionsFromAlpha, placeAlphaRegions } = require('../../pet/src/hit-regions')
+const { parseSizeArgument } = require('../../events/size-command')
 
 assert.deepStrictEqual(parseSizeArgument('reset'), { scale: 1, percent: 100 })
 assert.deepStrictEqual(parseSizeArgument('115%'), { scale: 1.15, percent: 115 })

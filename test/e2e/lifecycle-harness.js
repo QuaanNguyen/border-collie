@@ -4,7 +4,7 @@ const path = require('node:path');
 const os = require('node:os');
 const { spawn } = require('node:child_process');
 
-const ROOT = path.resolve(__dirname, '..');
+const ROOT = path.resolve(__dirname, '..', '..');
 const PET = path.join(ROOT, 'pet');
 const electron = require(path.join(PET, 'node_modules/electron'));
 

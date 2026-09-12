@@ -2,10 +2,10 @@
 
 const assert = require('node:assert')
 const path = require('node:path')
-const config = require('../events/pet-config.json')
-const { loadAnimationTracks } = require('../pet/lib/animation-manifest')
+const config = require('../../events/pet-config.json')
+const { loadAnimationTracks } = require('../../pet/lib/animation-manifest')
 
-const ROOT = path.resolve(__dirname, '..')
+const ROOT = path.resolve(__dirname, '..', '..')
 const PET_DIR = path.join(ROOT, 'pet')
 
 const animations = loadAnimationTracks(PET_DIR, config)
