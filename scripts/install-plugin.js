@@ -204,7 +204,7 @@ function ensureElectron(petDir, donorPetDirs = []) {
 function verifyStagedPlugin(entry, cwd) {
   const href = require('node:url').pathToFileURL(entry).href;
   const script = `const plugin = await import(${JSON.stringify(href)}); if (typeof plugin.BorderCollie !== 'function') process.exit(2)`;
-  runCommand(process.execPath, ['--input-type=module', '-e', script], cwd, { capture: true });
+  runCommand(process.execPath, ['--experimental-default-type=module', '--input-type=module', '-e', script], cwd, { capture: true });
 }
 
 function verifyOpenCode(cwd, ownerConfigDir) {

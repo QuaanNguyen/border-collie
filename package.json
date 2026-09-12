@@ -1,0 +1,33 @@
+{
+  "name": "border-collie",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A guard and desktop companion for OpenCode coding agents.",
+  "license": "MIT",
+  "type": "commonjs",
+  "bin": {
+    "border-collie": "scripts/border-collie.js"
+  },
+  "files": [
+    "events/",
+    "guard/",
+    "pet/",
+    "!pet/node_modules/",
+    "plugin/",
+    "scripts/border-collie.js",
+    "scripts/build-native-pet.js",
+    "scripts/check-package.js",
+    "scripts/check-syntax.js",
+    "scripts/install-plugin.js",
+    "LICENSE",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=22.12"
+  },
+  "scripts": {
+    "check": "node scripts/check-syntax.js",
+    "test": "node --test",
+    "test:package": "node scripts/check-package.js"
+  }
+}

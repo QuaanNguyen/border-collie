@@ -13,6 +13,10 @@ The guard checks actions before they run, blocks work outside the task, and veri
 
 ## Installation
 
+OpenCode is the currently supported integration. The npm package is being
+prepared as the first official distribution; until its name and publisher are
+finalized, install from a clone as described below.
+
 Install the plugin from this repo:
 
 ```sh
@@ -68,13 +72,18 @@ npm run start:dev
 Animation asset storage and replacement notes live in [docs/ANIMATION_ASSETS.md](docs/ANIMATION_ASSETS.md).
 The Pet validates its complete animation contract before activating it, uses elapsed-time frame scheduling, and shows a stable frame when the operating system requests reduced motion.
 
-Run the complete test suite, including native Pet behavior and a real staged install:
+Run the fast release-readiness checks:
 
 ```sh
-node test/run-all-tests.js
+npm test
+npm run test:package
 ```
 
-Set `BORDER_COLLIE_SKIP_NATIVE_TESTS=1` only on a host that cannot display desktop windows.
+The current automated suite exercises the CLI, a no-download staged install,
+and the contents of the npm tarball. See [the release guide](docs/RELEASING.md)
+for the release plan, test layers, and the work GitHub Actions can automate.
+Native Pet and real OpenCode integration coverage are later test layers in that
+plan; the fast suite does not claim to exercise them.
 
 Guard events, active sessions, Pet position, and Pet size exist only while OpenCode and the Pet are running.
 The plugin sends events over the Pet process's private input pipe and does not create `~/.border-collie` or replay events from previous sessions.
