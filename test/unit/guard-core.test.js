@@ -385,7 +385,11 @@ t('the OpenCode adapter blocks a shell escape hidden in interpreter code', () =>
     import path from 'node:path';
     process.env.BORDER_COLLIE_NO_PET = '1';
     const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'border-collie-shell-boundary-'));
-    process.env.BORDER_COLLIE_EVENTS = path.join(dir, 'events.jsonl');
+    const ownerDir = fs.mkdtempSync(path.join(os.tmpdir(), 'border-collie-owner-'));
+    process.env.BORDER_COLLIE_OWNER_CONFIG = ownerDir;
+    fs.writeFileSync(path.join(ownerDir, 'policy.json'), JSON.stringify({
+      setup_package: 'research-safe',
+    }));
     fs.mkdirSync(path.join(dir, '.opencode'), { recursive: true });
     fs.writeFileSync(path.join(dir, '.opencode', 'protocol.json'), JSON.stringify({
       read_paths: ['**'],
