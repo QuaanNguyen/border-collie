@@ -13,6 +13,10 @@ The guard checks actions before they run, blocks work outside the task, and veri
 
 ## Installation
 
+OpenCode is the currently supported integration. The npm package is being
+prepared as the first official distribution; until its name and publisher are
+finalized, install from a clone as described below.
+
 Install the plugin from this repo:
 
 ```sh
@@ -68,7 +72,18 @@ npm run start:dev
 Animation asset storage and replacement notes live in [docs/ANIMATION_ASSETS.md](docs/ANIMATION_ASSETS.md).
 The Pet validates its complete animation contract before activating it, uses elapsed-time frame scheduling, and shows a stable frame when the operating system requests reduced motion.
 
-Run Guard and plugin behavior tests:
+Run the fast release-readiness checks:
+
+```sh
+npm test
+npm run test:package
+```
+
+The current automated suite exercises unit behavior, non-UI integration behavior, the CLI, a no-download staged install, and the contents of the npm tarball.
+See [the release guide](docs/RELEASING.md) for the release plan, test layers, and the work GitHub Actions can automate.
+Pet UI, native window, renderer, and real OpenCode process coverage live in the e2e layer.
+
+Run the focused Guard and plugin behavior tests:
 
 ```sh
 node --test test/guard/*.test.js test/plugin/*.test.mjs

@@ -71,7 +71,7 @@ function createLiveProtocol(opts = {}) {
         fingerprint: source.fingerprint,
         protocol: null,
         file: source.file,
-        reason: `project Protocol attempts to broaden owner policy for ${conflicts.map((conflict) => conflict.field).join(', ')}`,
+        reason: `project policy attempts to broaden the owner policy for ${conflicts.map((conflict) => conflict.field).join(', ')}`,
         conflicts,
       };
       return { ...current, changed: true };

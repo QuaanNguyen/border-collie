@@ -233,7 +233,10 @@ export const BorderCollie = async ({ client, directory }) => {
   let quarantinedProtocolFingerprint = null;
 
   function policyFailureMessage(state) {
-    return "Border Collie blocked this session because " + state.reason + ". Fix or remove the active project policy at " + state.file + ".";
+    const action = state.conflicts?.length
+      ? 'Remove or narrow the project policy'
+      : 'Fix or remove the project policy';
+    return "Border Collie blocked this session because " + state.reason + ". " + action + " at " + state.file + ".";
   }
 
   function refreshPolicy() {
