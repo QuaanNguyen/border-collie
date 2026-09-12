@@ -75,13 +75,15 @@ The Pet validates its complete animation contract before activating it, uses ela
 Run the fast release-readiness checks:
 
 ```sh
-npm run check
+npm test
 npm run test:package
 ```
 
-The tracked automated release checks exercise JavaScript syntax and the contents of the npm tarball.
-Local-only tests can cover the CLI, a no-download staged install, native Pet behavior, and real OpenCode integration without adding `test/` to the public repository.
-See [the release guide](docs/RELEASING.md) for the release plan, test layers, and the work GitHub Actions can automate.
+The current automated suite exercises the CLI, a no-download staged install,
+and the contents of the npm tarball. See [the release guide](docs/RELEASING.md)
+for the release plan, test layers, and the work GitHub Actions can automate.
+Native Pet and real OpenCode integration coverage are later test layers in that
+plan; the fast suite does not claim to exercise them.
 
 Guard events, active sessions, Pet position, and Pet size exist only while OpenCode and the Pet are running.
 The plugin sends events over the Pet process's private input pipe and does not create `~/.border-collie` or replay events from previous sessions.

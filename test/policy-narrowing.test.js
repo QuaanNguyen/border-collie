@@ -1,0 +1,125 @@
+'use strict';
+const assert = require('node:assert');
+const fs = require('node:fs');
+const os = require('node:os');
+const path = require('node:path');
+const { pathToFileURL } = require('node:url');
+
+const ROOT = path.resolve(__dirname, '..');
+
+function temporaryDirectory() {
+  return fs.mkdtempSync(path.join(os.tmpdir(), 'border-collie-policy-narrowing-'));
+}
+
+function writeJson(file, value) {
+  fs.mkdirSync(path.dirname(file), { recursive: true });
+  fs.writeFileSync(file, JSON.stringify(value));
+}
+
+async function hooksFor(projectDir, ownerConfigDir, runDir) {
+  process.env.BORDER_COLLIE_NO_PET = '1';
+  process.env.BORDER_COLLIE_EVENTS = path.join(runDir, 'events.jsonl');
+  process.env.BORDER_COLLIE_OWNER_CONFIG = ownerConfigDir;
+  const { BorderCollie } = await import(pathToFileURL(path.join(ROOT, 'plugin/border-collie.js')).href);
+  return BorderCollie({ client: {}, directory: projectDir });
+}
+
+async function runTest(name, fn) {
+  try {
+    await fn();
+    console.log(`  \x1b[32m✓\x1b[0m ${name}`);
+  } catch (error) {
+    console.log(`  \x1b[31m✗\x1b[0m ${name}\n      ${error.message}`);
+    process.exitCode = 1;
+  }
+}
+
+function ownerPolicy(overrides = {}) {
+  return {
+    schema_version: 1,
+    setup_package: 'research-safe',
+    trusted_workspace_roots: [],
+    ...overrides,
+  };
+}
+
+async function main() {
+  console.log('policy narrowing');
+
+  await runTest('project allow-lists cannot broaden owner path authority', async () => {
+    const root = temporaryDirectory();
+    const projectDir = path.join(root, 'project');
+    const ownerConfigDir = path.join(root, 'owner-config');
+    fs.mkdirSync(projectDir, { recursive: true });
+    writeJson(path.join(ownerConfigDir, 'policy.json'), ownerPolicy({
+      read_paths: ['allowed.md'],
+      write_paths: [],
+    }));
+    writeJson(path.join(projectDir, '.opencode', 'protocol.json'), {
+      read_paths: ['**'],
+      write_paths: [],
+    });
+    const hooks = await hooksFor(projectDir, ownerConfigDir, path.join(root, 'run'));
+
+    await assert.rejects(
+      hooks['tool.execute.before']({ tool: 'read' }, { args: { path: path.join(projectDir, 'allowed.md') } }),
+      /project policy.*owner policy.*read_paths/i,
+    );
+  });
+
+  await runTest('omitted project fields inherit owner restrictions and project denials accumulate', async () => {
+    const root = temporaryDirectory();
+    const projectDir = path.join(root, 'project');
+    const ownerConfigDir = path.join(root, 'owner-config');
+    fs.mkdirSync(projectDir, { recursive: true });
+    writeJson(path.join(ownerConfigDir, 'policy.json'), ownerPolicy({
+      read_paths: ['notes.md'],
+      deny_commands: ['node'],
+    }));
+    writeJson(path.join(projectDir, '.opencode', 'protocol.json'), { write_paths: [] });
+    const hooks = await hooksFor(projectDir, ownerConfigDir, path.join(root, 'run'));
+
+    await hooks['tool.execute.before']({ tool: 'read' }, { args: { path: path.join(projectDir, 'notes.md') } });
+    await assert.rejects(
+      hooks['tool.execute.before']({ tool: 'bash' }, { args: { command: 'node --version' } }),
+      /refused/,
+    );
+  });
+
+  await runTest('a project cannot enable ordinary Bash disabled by the owner', async () => {
+    const root = temporaryDirectory();
+    const projectDir = path.join(root, 'project');
+    const ownerConfigDir = path.join(root, 'owner-config');
+    fs.mkdirSync(projectDir, { recursive: true });
+    writeJson(path.join(ownerConfigDir, 'policy.json'), ownerPolicy({ allow_ordinary_bash: false }));
+    writeJson(path.join(projectDir, '.opencode', 'protocol.json'), { allow_ordinary_bash: true });
+    const hooks = await hooksFor(projectDir, ownerConfigDir, path.join(root, 'run'));
+
+    await assert.rejects(
+      hooks['tool.execute.before']({ tool: 'bash' }, { args: { command: 'node --version' } }),
+      /project policy.*owner policy.*allow_ordinary_bash/i,
+    );
+  });
+
+  await runTest('project protected paths accumulate with owner protected paths', async () => {
+    const root = temporaryDirectory();
+    const projectDir = path.join(root, 'project');
+    const ownerConfigDir = path.join(root, 'owner-config');
+    fs.mkdirSync(projectDir, { recursive: true });
+    fs.writeFileSync(path.join(projectDir, 'owner.md'), 'owner protected\n');
+    fs.writeFileSync(path.join(projectDir, 'project.md'), 'project protected\n');
+    writeJson(path.join(ownerConfigDir, 'policy.json'), ownerPolicy({
+      protected_paths: ['owner.md'],
+    }));
+    writeJson(path.join(projectDir, '.opencode', 'protocol.json'), {
+      protected_paths: ['project.md'],
+    });
+    const hooks = await hooksFor(projectDir, ownerConfigDir, path.join(root, 'run'));
+    const before = hooks['tool.execute.before'];
+
+    await assert.rejects(before({ tool: 'edit' }, { args: { path: path.join(projectDir, 'owner.md') } }), /protected/);
+    await assert.rejects(before({ tool: 'edit' }, { args: { path: path.join(projectDir, 'project.md') } }), /protected/);
+  });
+}
+
+main();

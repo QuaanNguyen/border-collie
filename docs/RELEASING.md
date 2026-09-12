@@ -14,8 +14,9 @@ The CI workflow runs on Linux, macOS, and Windows.
 It can cheaply catch more than unit-test failures:
 
 - JavaScript syntax errors;
+- the CLI contract and a no-download Global bind smoke test;
 - missing files or accidentally bundled `node_modules` in the npm tarball;
-- package-manager differences in the tarball report shape.
+- platform-specific path and process regressions.
 
 Future workflows can also automate dependency updates, CodeQL/security scans, license checks, changelog generation, release artifact checksums, npm provenance, publishing, and post-publish installation tests.
 Publishing should remain separate from CI: trigger it only from a protected version tag or GitHub Release and use npm trusted publishing rather than a long-lived token.
@@ -25,9 +26,9 @@ They should not be confused with unit tests and should not block every small cha
 
 ## Test layers
 
-1. **Tracked release checks** parse JavaScript entrypoints and inspect the exact npm tarball file list.
-2. **Local-only unit tests** call deterministic Guard, Event stream, installer, and Pet helpers with fake inputs.
-3. **Local-only install smoke tests** install into temporary directories without Electron downloads or a user's real OpenCode configuration.
+1. **Unit tests** call deterministic Guard, Event stream, installer, and Pet helpers with fake inputs using Node's built-in `node:test` runner.
+2. **Package tests** run `npm pack` and inspect the exact tarball file list.
+3. **Install smoke tests** install into temporary directories without Electron downloads or a user's real OpenCode configuration.
 4. **Integration tests** run OpenCode and the Pet host on each supported OS.
 5. **Release smoke tests** install the exact published version into a clean environment and exercise `border-collie install`.
 
@@ -40,7 +41,7 @@ Package/plugin code is tested the same way as other code: keep most logic in ord
 3. Decide whether `0.1.0` accurately describes the compatibility promise.
 4. Keep the root package version, Git tag, and GitHub Release identical.
 5. Make CI required on the protected default branch and require reviewed pull requests.
-6. Run `npm run check`, `npm run test:package`, and the local-only test suite locally.
+6. Run `npm test`, `npm run check`, and `npm run test:package` locally.
 7. Inspect the tarball with `npm pack --dry-run`; never publish from an uncommitted working tree.
 8. Configure npm trusted publishing for the release workflow and require a GitHub environment approval for the first few releases.
 9. Publish a release candidate with the `next` dist tag, install it on all three operating systems, and test it with OpenCode.
