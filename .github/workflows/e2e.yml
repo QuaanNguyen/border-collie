@@ -58,4 +58,5 @@ jobs:
           node-version: 22.12
           cache: npm
           cache-dependency-path: pet/package-lock.json
+      - run: npm ci --prefix pet
       - run: npm run test:e2e
