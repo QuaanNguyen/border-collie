@@ -83,5 +83,11 @@ The current automated suite exercises unit behavior, non-UI integration behavior
 See [the release guide](docs/RELEASING.md) for the release plan, test layers, and the work GitHub Actions can automate.
 Pet UI, native window, renderer, and real OpenCode process coverage live in the e2e layer.
 
+Run the focused Guard and plugin behavior tests:
+
+```sh
+node --test test/guard/*.test.js test/plugin/*.test.mjs
+```
+
 Guard events, active sessions, Pet position, and Pet size exist only while OpenCode and the Pet are running.
 The plugin sends events over the Pet process's private input pipe and does not create `~/.border-collie` or replay events from previous sessions.

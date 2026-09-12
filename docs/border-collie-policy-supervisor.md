@@ -20,9 +20,25 @@ Project policy lives only at `.opencode/protocol.json` in the active project.
 
 Project policy may narrow the owner policy but cannot broaden it.
 
-Broadening conflicts and malformed active-project policy block the session and create high-priority owner notifications.
+The Protocol is reloaded before every guarded tool action and completion evaluation.
+
+Valid human edits apply to the active session and reset its completion verification state.
+
+Broadening conflicts and malformed active-project policy block the session until a human corrects the file.
+
+The Protocol file is automatically protected from direct agent writes.
+
+A Protocol change observed while an agent tool is executing is quarantined until a human saves a different correction.
 
 Routine denials provide agent remediation without creating owner-notification noise.
+
+Completion verification runs only when the agent explicitly completes and makes a criterion-matching claim.
+
+Failed criteria receive compact remediation twice before the Guard stops further tool use and asks the agent to give the human the deterministic failure summary.
+
+Command evidence checks use explicit argv values, a bounded timeout, and a sanitized environment.
+
+Repository evidence checks can require the original base commit, a changed worktree diff, declared path scope, and no new ignored or untracked artifacts.
 
 Subagent dispatch fails closed because the current OpenCode plugin interface cannot attach an authenticated resolved policy to a child session.
 If a child-session tool call reaches the common pre-execution hook, Border Collie applies the same resolved policy and denial-remediation shape used for the parent session.

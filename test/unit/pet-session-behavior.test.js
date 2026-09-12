@@ -46,7 +46,7 @@ async function main() {
       }
     });
 
-    await run('completed evidence celebrates without magic completion wording', () => {
+    await run('a declared completion claim celebrates when its evidence passes', () => {
       fs.writeFileSync(path.join(tempDir, 'output.txt'), 'ready\n');
       const session = createSession({
         workdir: tempDir,
@@ -61,7 +61,7 @@ async function main() {
           }],
         },
       });
-      const result = session.handle({ kind: 'assistant', text: 'The requested work is ready.' });
+      const result = session.handle({ kind: 'assistant', text: 'I fixed the output.', completed: true });
       assert.ok(result.events.some((event) => (
         event.type === 'verdict'
         && event.status === 'pass'
@@ -69,17 +69,17 @@ async function main() {
       )));
     });
 
-    await run('a normally completed agent turn celebrates without configured evidence', () => {
+    await run('a generic completion claim without configured evidence asks for human review', () => {
       const session = createSession({ workdir: tempDir, protocol: { task: 'Reply to the user' } });
       const result = session.handle({
         kind: 'assistant',
-        text: 'Here is the result.',
+        text: 'The work is done.',
         completed: true,
       });
       assert.ok(result.events.some((event) => (
-        event.type === 'run'
-        && event.status === 'finish'
-        && event.petState === 'celebrating'
+        event.type === 'ask'
+        && event.status === 'ask'
+        && event.petState === 'asking'
       )));
     });
 

@@ -35,7 +35,7 @@ if (!repoRoot) {
 const { createSession } = require(path.join(repoRoot, "guard/lib/session.js"));
 const { EventBus } = require(path.join(repoRoot, "events/index.js"));
 const { loadOwnerPolicy, ownerProtocol } = require(path.join(repoRoot, "guard/lib/owner-policy.js"));
-const { resolvePolicy, policyConflicts } = require(path.join(repoRoot, "guard/lib/policy-resolution.js"));
+const { createLiveProtocol } = require(path.join(repoRoot, "guard/lib/live-protocol.js"));
 const { protectedPathDecision } = require(path.join(repoRoot, "guard/lib/protected-paths.js"));
 const { parseSizeArgument } = require(path.join(repoRoot, "events/size-command.js"));
 
@@ -51,20 +51,6 @@ const TOOL_ACTION = {
   webfetch: "webfetch",
   websearch: "webfetch",
 };
-
-function loadProtocol(workdir) {
-  const local = path.join(workdir, ".opencode", "protocol.json");
-  if (!fs.existsSync(local)) return { protocol: null, policyPath: local };
-  try {
-    const protocol = JSON.parse(fs.readFileSync(local, "utf8"));
-    if (!protocol || Array.isArray(protocol) || typeof protocol !== 'object') {
-      return { protocol: null, policyPath: local, error: new Error('project policy must be a JSON object') };
-    }
-    return { protocol, policyPath: local };
-  } catch (error) {
-    return { protocol: null, policyPath: local, error };
-  }
-}
 
 function resourcesFromArgs(tool, args) {
   const a = args || {};
@@ -226,15 +212,14 @@ function launchPet() {
 
 export const BorderCollie = async ({ client, directory }) => {
   const workdir = directory || process.cwd();
-  const projectPolicy = loadProtocol(workdir);
   const ownerPolicy = loadOwnerPolicy();
   const resolvedOwnerProtocol = ownerProtocol(ownerPolicy);
-  const conflicts = projectPolicy.error
-    ? []
-    : policyConflicts(resolvedOwnerProtocol || {}, projectPolicy.protocol, ownerPolicy?.trusted_workspace_roots || []);
-  const protocol = projectPolicy.error
-    ? null
-    : resolvePolicy(resolvedOwnerProtocol, projectPolicy.protocol);
+  const liveProtocol = createLiveProtocol({
+    workdir,
+    owner: resolvedOwnerProtocol,
+    ownerTrustedWorkspaceRoots: ownerPolicy?.trusted_workspace_roots || [],
+  });
+  let policyState = liveProtocol.refresh();
   const petProcess = launchPet();
   const bus = new EventBus({
     sink: petProcess?.stdin
@@ -245,27 +230,66 @@ export const BorderCollie = async ({ client, directory }) => {
   let sizeCommandRegistered = false;
   let ended = false;
   let lastActiveSessionID = null;
-  const invalidPolicyMessage = projectPolicy.error
-    ? "Border Collie blocked this session because the active project policy is malformed. Fix or remove the project policy at " + projectPolicy.policyPath + " and restart OpenCode."
-    : conflicts.length
-      ? "Border Collie blocked this session because the project policy attempts to broaden the owner policy for " + conflicts.map((conflict) => conflict.field).join(', ') + ". Remove or narrow those project policy settings, then restart OpenCode."
-      : null;
+  let quarantinedProtocolFingerprint = null;
+
+  function policyFailureMessage(state) {
+    const action = state.conflicts?.length
+      ? 'Remove or narrow the project policy'
+      : 'Fix or remove the project policy';
+    return "Border Collie blocked this session because " + state.reason + ". " + action + " at " + state.file + ".";
+  }
+
+  function refreshPolicy() {
+    const nextPolicy = liveProtocol.refresh();
+    if (quarantinedProtocolFingerprint === nextPolicy.fingerprint) {
+      policyState = {
+        ...nextPolicy,
+        valid: false,
+        reason: 'the Protocol changed during an agent tool execution. A human must save a corrected Protocol before work can continue',
+        conflicts: [],
+      };
+      return policyState;
+    }
+    quarantinedProtocolFingerprint = null;
+    policyState = nextPolicy;
+    return policyState;
+  }
 
   function publish(out) {
     if (!out || !out.events) return;
     for (const e of out.events) bus.emit(e);
   }
 
-  function stateFor(sessionID) {
-    if (projectPolicy.error || conflicts.length) return null;
+  function syncProtocol(state, nextPolicy) {
+    if (!nextPolicy.valid || state.protocolRevision === nextPolicy.revision) return;
+    state.guard.replaceProtocol(nextPolicy.protocol);
+    state.protocolRevision = nextPolicy.revision;
+    state.protocolFingerprint = nextPolicy.fingerprint;
+    publish({
+      events: [{
+        type: "protocol",
+        status: "ok",
+        petState: "calm",
+        summary: "Protocol reloaded",
+        detail: nextPolicy.protocol.summary(),
+      }],
+    });
+  }
+
+  function stateFor(sessionID, nextPolicy = refreshPolicy()) {
     const key = sessionID || "plugin";
     let state = sessions.get(key);
-    if (state) return state;
+    if (state) {
+      syncProtocol(state, nextPolicy);
+      return state;
+    }
     state = {
-      guard: createSession({ protocol, workdir }),
+      guard: createSession({ protocol: nextPolicy.valid ? nextPolicy.protocol : null, workdir }),
       reviewed: new Set(),
       completionPending: true,
       review: null,
+      protocolRevision: nextPolicy.valid ? nextPolicy.revision : null,
+      protocolFingerprint: nextPolicy.valid ? nextPolicy.fingerprint : null,
     };
     sessions.set(key, state);
     publish(state.guard.handle({ kind: "session.start" }));
@@ -300,20 +324,18 @@ export const BorderCollie = async ({ client, directory }) => {
   process.on("beforeExit", endSession);
   process.on("exit", endSession);
 
-  if (projectPolicy.error || conflicts.length) {
+  if (!policyState.valid) {
     bus.emit({
       type: "notification",
       status: "error",
       petState: "denied",
-      summary: projectPolicy.error ? "Project policy is malformed" : "Project policy broadens owner authority",
-      reason: projectPolicy.error
-        ? "The active project policy is malformed and was not loaded."
-        : "The active project policy attempts to broaden the owner policy.",
+      summary: "Project policy cannot be applied",
+      reason: policyState.reason,
       detail: {
         priority: "high",
-        policyPath: projectPolicy.policyPath,
-        conflicts,
-        remediation: invalidPolicyMessage,
+        policyPath: policyState.file,
+        conflicts: policyState.conflicts || [],
+        remediation: policyFailureMessage(policyState),
       },
     });
   }
@@ -342,7 +364,18 @@ export const BorderCollie = async ({ client, directory }) => {
 
   async function reviewCompletion(sessionID) {
     if (!sessionID) return;
-    const state = stateFor(sessionID);
+    const nextPolicy = refreshPolicy();
+    const state = stateFor(sessionID, nextPolicy);
+    if (!nextPolicy.valid) {
+      bus.emit({
+        type: "notification",
+        status: "error",
+        petState: "denied",
+        summary: "Project policy cannot be applied",
+        reason: nextPolicy.reason,
+      });
+      return;
+    }
     if (!client?.session?.messages) {
       if (state.guard.protocol.doneCriteria.length) {
         bus.emit({
@@ -435,18 +468,23 @@ export const BorderCollie = async ({ client, directory }) => {
       const tool = input.tool || "";
       const args = output?.args || input.args || {};
       const target = resourcesFromArgs(tool, args)[0] || tool;
-      if (invalidPolicyMessage) {
+      const nextPolicy = refreshPolicy();
+      if (!nextPolicy.valid) {
         throw new Error(denialMessage({
           action: tool,
           target,
-          rule: projectPolicy.error ? 'project_policy_validity' : 'owner_policy_broadening',
-          layer: projectPolicy.error ? 'active project policy' : 'owner policy',
-          reason: invalidPolicyMessage,
-          alternative: 'Fix or remove the active project policy, then restart OpenCode.',
+          rule: 'project_policy_validity',
+          layer: 'active project policy',
+          reason: policyFailureMessage(nextPolicy),
+          alternative: 'Ask the owner to correct the active project policy.',
           retry: 'owner action is required; do not retry until the policy is fixed.',
         }));
       }
-      const protection = protectedPathDecision(tool, args, protocol, workdir);
+      const protectedPolicy = {
+        ...nextPolicy.protocol.raw,
+        protected_paths: [...(nextPolicy.protocol.raw.protected_paths || []), '.opencode/protocol.json'],
+      };
+      const protection = protectedPathDecision(tool, args, protectedPolicy, workdir);
       if (protection) {
         bus.emit({
           type: "excursion",
@@ -468,7 +506,7 @@ export const BorderCollie = async ({ client, directory }) => {
         }));
       }
       const resources = resourcesFromArgs(tool, args);
-      const state = stateFor(input.sessionID);
+      const state = stateFor(input.sessionID, nextPolicy);
       const out = state.guard.handle({
         kind: "permission",
         action: TOOL_ACTION[tool] || tool,
@@ -483,8 +521,23 @@ export const BorderCollie = async ({ client, directory }) => {
     },
 
     "tool.execute.after": async (input, output) => {
-      if (invalidPolicyMessage) return;
-      const state = stateFor(input.sessionID);
+      const existing = sessions.get(input.sessionID || "plugin");
+      const observedPolicy = liveProtocol.refresh();
+      if (existing && existing.protocolFingerprint && existing.protocolFingerprint !== observedPolicy.fingerprint) {
+        quarantinedProtocolFingerprint = observedPolicy.fingerprint;
+        const quarantinedPolicy = refreshPolicy();
+        bus.emit({
+          type: "notification",
+          status: "error",
+          petState: "denied",
+          summary: "Project policy needs human correction",
+          reason: quarantinedPolicy.reason,
+        });
+        return;
+      }
+      const nextPolicy = refreshPolicy();
+      if (!nextPolicy.valid) return;
+      const state = stateFor(input.sessionID, nextPolicy);
       publish(state.guard.handle({
         kind: "tool.after",
         tool: input.tool,
@@ -495,8 +548,9 @@ export const BorderCollie = async ({ client, directory }) => {
     },
 
     event: async ({ event }) => {
-      if (invalidPolicyMessage) return;
       if (!event) return;
+      const nextPolicy = refreshPolicy();
+      if (!nextPolicy.valid) return;
       let sessionID = sessionIDOf(event);
       if (sessionID) lastActiveSessionID = sessionID;
       else if (event.type === "session.idle" || isIdle(event)) sessionID = lastActiveSessionID;
@@ -504,7 +558,7 @@ export const BorderCollie = async ({ client, directory }) => {
         releaseSession(sessionID);
         return;
       }
-      const state = stateFor(sessionID);
+      const state = stateFor(sessionID, nextPolicy);
       if (event.type === "session.status" && isBusy(event)) {
         state.completionPending = true;
         publish(state.guard.handle({ kind: "busy" }));

@@ -81,7 +81,7 @@ async function runScenario(tempDir) {
         messageReads += 1
         return [{
           info: { id: `assistant-${messageReads}`, role: 'assistant', finish: 'stop', time: { completed: Date.now() } },
-          parts: [{ text: 'The requested work is ready.' }],
+          parts: [{ text: 'I fixed the output.' }],
         }]
       },
       prompt: async (request) => {
