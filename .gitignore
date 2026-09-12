@@ -26,6 +26,7 @@ lerna-debug.log*
 
 # border-collie
 /pet/node_modules
+/test/
 
 # opencode
 .opencode/

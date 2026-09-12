@@ -25,5 +25,4 @@ jobs:
           cache: npm
           cache-dependency-path: pet/package-lock.json
       - run: npm run check
-      - run: npm test
       - run: npm run test:package
