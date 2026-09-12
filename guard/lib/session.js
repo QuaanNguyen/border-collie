@@ -1,7 +1,8 @@
 'use strict';
 const { Protocol, check, deriveDefault } = require('./policy');
 const { scan } = require('./injection');
-const { verify } = require('./verify');
+const { detectClaims, verify } = require('./verify');
+const { captureRepositoryState } = require('./repository');
 const { truncate } = require('./toolcalls');
 const { toolFailed } = require('./toolerror');
 
@@ -30,16 +31,31 @@ function asToolCall(action, resource) {
   return { id: 'opencode', type: 'function', function: { name, arguments: JSON.stringify(args) } };
 }
 
+function repositoryPatterns(protocol) {
+  const patterns = [];
+  for (const criterion of protocol.doneCriteria) {
+    for (const check of criterion.checks || []) {
+      if (check.type !== 'repository_state') continue;
+      if (check.allow_ignored === false) patterns.push('**');
+      patterns.push(...(check.allowed_paths || []), ...(check.forbidden_paths || []));
+    }
+  }
+  return [...new Set(patterns)];
+}
+
 function createSession(opts = {}) {
   const workdir = opts.workdir;
-  const protocol = opts.protocol instanceof Protocol
+  let protocol = opts.protocol instanceof Protocol
     ? opts.protocol
     : opts.protocol
       ? new Protocol(opts.protocol, workdir)
       : deriveDefault(null, workdir);
   const settled = new Set();
+  const repository = captureRepositoryState(protocol.workdir, { ignoredPatterns: repositoryPatterns(protocol) });
   let askedAboutDone = false;
   const seenResults = new Set();
+  const remediationAttempts = new Map();
+  let terminal = false;
   let actionSeq = 0;
 
   function handle(event) {
@@ -79,6 +95,19 @@ function createSession(opts = {}) {
   function permission(event) {
     if (event.action === 'question') {
       return { events: [] };
+    }
+
+    if (terminal) {
+      const summary = 'completion evaluation stopped the session';
+      return {
+        deny: { effect: 'deny', message: 'Guard stopped this session after unverified completion claims. Wait for a corrected task or Protocol.' },
+        events: [{
+          type: 'excursion', status: 'block', petState: 'refused',
+          tool: event.action || 'tool', summary,
+          reason: 'human action is required before further tool use',
+          rule: 'completion_terminal',
+        }],
+      };
     }
 
     const resources = event.resources && event.resources.length ? event.resources : ['*'];
@@ -179,15 +208,7 @@ function createSession(opts = {}) {
     const text = event.text || '';
 
     if (!protocol.doneCriteria.length) {
-      if (event.completed === true) {
-        return {
-          events: [{
-            type: 'run', status: 'finish', petState: 'celebrating',
-            summary: 'agent finished normally',
-          }],
-        };
-      }
-      if (GENERIC_CLAIM.test(text) && !askedAboutDone) {
+      if (event.completed === true && GENERIC_CLAIM.test(text) && !askedAboutDone) {
         askedAboutDone = true;
         return {
           events: [{
@@ -202,11 +223,13 @@ function createSession(opts = {}) {
     }
 
     const pending = protocol.doneCriteria.filter((criterion) => !settled.has(criterion.id));
-    if (!pending.length || event.error) return { events: [] };
+    if (!pending.length || event.error || event.completed !== true || terminal) return { events: [] };
+    const claimed = detectClaims(text, pending);
+    if (!claimed.length) return { events: [] };
 
-    const results = pending.map((criterion) => ({
+    const results = claimed.map((criterion) => ({
       criterion,
-      result: verify(criterion, protocol.workdir),
+      result: verify(criterion, protocol.workdir, { repository }),
     }));
     const failed = results.filter(({ result }) => !result.pass);
     const events = [{
@@ -216,21 +239,29 @@ function createSession(opts = {}) {
     }];
 
     if (!failed.length) {
-      for (const criterion of pending) settled.add(criterion.id);
+      for (const criterion of claimed) settled.add(criterion.id);
       events.push({
         type: 'verdict', status: 'pass', petState: 'celebrating',
-        summary: 'all completion checks passed',
+        summary: settled.size === protocol.doneCriteria.length
+          ? 'all completion checks passed'
+          : 'claimed completion checks passed',
         detail: { criteria: results.map(({ result }) => result) },
       });
       return { events };
     }
 
     const reason = failed.map(({ result }) => result.summary).join('; ');
+    const reachedLimit = failed.some(({ criterion }) => {
+      const attempts = (remediationAttempts.get(criterion.id) || 0) + 1;
+      remediationAttempts.set(criterion.id, attempts);
+      return attempts > 2;
+    });
+    if (reachedLimit) terminal = true;
     events.push({
       type: 'verdict', status: 'fail', petState: 'rejecting',
-      summary: `not finished  -  ${truncate(reason, 60)}`,
+      summary: terminal ? `evaluation stopped  -  ${truncate(reason, 60)}` : `not finished  -  ${truncate(reason, 60)}`,
       reason,
-      detail: { criteria: results.map(({ result }) => result) },
+      detail: { criteria: results.map(({ result }) => result), terminal },
     });
 
     const lines = failed.flatMap(({ criterion, result }) => [
@@ -238,18 +269,36 @@ function createSession(opts = {}) {
       ...result.checks.filter((c) => !c.pass).map((c) => `    evidence check failed: ${c.evidence}`),
     ]);
 
-    const inject = [
-      'Guard did not accept this as done. Evidence was checked against the working tree:',
-      '',
-      ...lines,
-      '',
-      'The task is still open. Address the failing evidence above, then report again.',
-    ].join('\n');
+    const inject = terminal
+      ? [
+        'Evaluation stopped. Tell the user:',
+        ...lines,
+        'Wait for a corrected task or Protocol. Do not call tools.',
+      ].join('\n')
+      : [
+        'Guard did not accept this as done:',
+        ...lines,
+        'Address the failed evidence, then report completion again.',
+      ].join('\n');
 
     return { inject, events };
   }
 
-  return { handle, protocol };
+  function replaceProtocol(nextProtocol) {
+    protocol = nextProtocol instanceof Protocol
+      ? nextProtocol
+      : new Protocol(nextProtocol || {}, workdir);
+    settled.clear();
+    remediationAttempts.clear();
+    terminal = false;
+    askedAboutDone = false;
+  }
+
+  return {
+    handle,
+    replaceProtocol,
+    get protocol() { return protocol; },
+  };
 }
 
 module.exports = { createSession, asToolCall };

@@ -68,13 +68,11 @@ npm run start:dev
 Animation asset storage and replacement notes live in [docs/ANIMATION_ASSETS.md](docs/ANIMATION_ASSETS.md).
 The Pet validates its complete animation contract before activating it, uses elapsed-time frame scheduling, and shows a stable frame when the operating system requests reduced motion.
 
-Run the complete test suite, including native Pet behavior and a real staged install:
+Run Guard and plugin behavior tests:
 
 ```sh
-node test/run-all-tests.js
+node --test test/guard/*.test.js test/plugin/*.test.mjs
 ```
-
-Set `BORDER_COLLIE_SKIP_NATIVE_TESTS=1` only on a host that cannot display desktop windows.
 
 Guard events, active sessions, Pet position, and Pet size exist only while OpenCode and the Pet are running.
 The plugin sends events over the Pet process's private input pipe and does not create `~/.border-collie` or replay events from previous sessions.
