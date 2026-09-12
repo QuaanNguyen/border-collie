@@ -4,6 +4,7 @@ const assert = require('node:assert')
 const fs = require('node:fs')
 const os = require('node:os')
 const path = require('node:path')
+const { pathToFileURL } = require('node:url')
 
 const ROOT = path.resolve(__dirname, '..', '..')
 
@@ -28,7 +29,7 @@ async function main() {
   process.env.BORDER_COLLIE_EVENTS = path.join(workspace, 'events.jsonl')
 
   try {
-    const { BorderCollie } = await import(path.join(ROOT, 'plugin', 'border-collie.js'))
+    const { BorderCollie } = await import(pathToFileURL(path.join(ROOT, 'plugin', 'border-collie.js')).href)
     const hooks = await BorderCollie({ client: {}, directory: project })
     const before = hooks['tool.execute.before']
 

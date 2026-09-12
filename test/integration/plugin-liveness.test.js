@@ -2,6 +2,7 @@ const assert = require('assert')
 const fs = require('fs')
 const os = require('os')
 const path = require('path')
+const { pathToFileURL } = require('url')
 
 const ROOT = path.resolve(__dirname, '..', '..')
 
@@ -46,7 +47,7 @@ async function runDefaultCompletionScenario(tempDir) {
       }],
     },
   }
-  const { BorderCollie } = await import(path.join(ROOT, 'plugin', 'border-collie.js'))
+  const { BorderCollie } = await import(pathToFileURL(path.join(ROOT, 'plugin', 'border-collie.js')).href)
   const hooks = await BorderCollie({ client, directory: tempDir })
   await hooks.event({ event: { type: 'session.idle', properties: { sessionID: 'finished-session' } } })
   await new Promise((resolve) => setTimeout(resolve, 25))
@@ -90,7 +91,7 @@ async function runScenario(tempDir) {
       },
     },
   }
-  const { BorderCollie } = await import(path.join(ROOT, 'plugin', 'border-collie.js'))
+  const { BorderCollie } = await import(pathToFileURL(path.join(ROOT, 'plugin', 'border-collie.js')).href)
   const hooks = await BorderCollie({ client, directory: tempDir })
   const config = {}
   await hooks.config(config)

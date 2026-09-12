@@ -3,6 +3,7 @@ const assert = require('node:assert');
 const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
+const { pathToFileURL } = require('node:url');
 const { spawnSync } = require('node:child_process');
 
 const ROOT = path.resolve(__dirname, '..', '..');
@@ -65,7 +66,7 @@ runTest('install includes the desktop runtime source and remains importable', ()
   const check = spawnSync(process.execPath, [
     '--input-type=module',
     '-e',
-    `process.env.BORDER_COLLIE_NO_PET = '1'; import { BorderCollie } from ${JSON.stringify(result.dest)}; const hooks = await BorderCollie({ client: {}, directory: ${JSON.stringify(root)} }); const config = {}; await hooks.config(config); if (config.command === undefined) process.exit(2); process.emit('beforeExit');`,
+    `process.env.BORDER_COLLIE_NO_PET = '1'; import { BorderCollie } from ${JSON.stringify(pathToFileURL(result.dest).href)}; const hooks = await BorderCollie({ client: {}, directory: ${JSON.stringify(root)} }); const config = {}; await hooks.config(config); if (config.command === undefined) process.exit(2); process.emit('beforeExit');`,
   ], { encoding: 'utf8' });
   assert.strictEqual(check.status, 0, check.stderr);
 });

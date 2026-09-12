@@ -66,13 +66,15 @@ async function main() {
       before({ tool: 'move' }, { args: { source: outsideFile, destination: path.join(projectDir, 'notes.md') } }),
       /refused/,
     );
+    const outsideShellPath = outsideFile.replace(/\\/g, '/');
+    const projectShellPath = path.join(projectDir, 'notes.md').replace(/\\/g, '/');
     for (const command of [
-      `cat ${outsideFile}`,
-      `echo changed > ${outsideFile}`,
-      `cp ${path.join(projectDir, 'notes.md')} ${outsideFile}`,
-      `mv ${path.join(projectDir, 'notes.md')} ${outsideFile}`,
-      `rm ${outsideFile}`,
-      `chmod 600 ${outsideFile}`,
+      `cat ${outsideShellPath}`,
+      `echo changed > ${outsideShellPath}`,
+      `cp ${projectShellPath} ${outsideShellPath}`,
+      `mv ${projectShellPath} ${outsideShellPath}`,
+      `rm ${outsideShellPath}`,
+      `chmod 600 ${outsideShellPath}`,
     ]) {
       await assert.rejects(before({ tool: 'bash' }, { args: { command } }), /refused/);
     }

@@ -3,6 +3,7 @@ const assert = require('node:assert');
 const path = require('node:path');
 const fs = require('node:fs');
 const { execFileSync } = require('node:child_process');
+const { pathToFileURL } = require('node:url');
 
 const ROOT = path.resolve(__dirname, '..', '..');
 const { Protocol, check } = require(path.join(ROOT, 'guard/lib/policy'));
@@ -397,7 +398,7 @@ t('the OpenCode adapter blocks a shell escape hidden in interpreter code', () =>
       allow_commands: ['python'],
       egress: [],
     }));
-    const { BorderCollie } = await import(${JSON.stringify(path.join(ROOT, 'plugin/border-collie.js'))});
+    const { BorderCollie } = await import(${JSON.stringify(pathToFileURL(path.join(ROOT, 'plugin/border-collie.js')).href)});
     const hooks = await BorderCollie({ client: {}, directory: dir });
     let denied = false;
     try {
