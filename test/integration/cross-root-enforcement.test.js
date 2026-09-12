@@ -19,15 +19,6 @@ async function hooksFor(projectDir, ownerConfigDir, runDir) {
   return BorderCollie({ client: {}, directory: projectDir });
 }
 
-async function readEvents(runDir) {
-  await new Promise((resolve) => setTimeout(resolve, 10));
-  return fs.readFileSync(path.join(runDir, 'events.jsonl'), 'utf8')
-    .trim()
-    .split('\n')
-    .filter(Boolean)
-    .map((line) => JSON.parse(line));
-}
-
 async function runTest(name, fn) {
   try {
     await fn();
@@ -41,7 +32,7 @@ async function runTest(name, fn) {
 async function main() {
   console.log('cross-root enforcement');
 
-  await runTest('emits and denies direct and recognizable shell cross-root actions', async () => {
+  await runTest('denies direct and recognizable shell cross-root actions', async () => {
     const root = temporaryDirectory();
     const projectDir = path.join(root, 'project');
     const outsideDir = path.join(root, 'outside');
@@ -86,14 +77,6 @@ async function main() {
       await assert.rejects(before({ tool: 'bash' }, { args: { command } }), /refused/);
     }
 
-    const events = await readEvents(runDir);
-    assert.ok(events.some((event) => event.type === 'action' && event.status === 'allow'));
-    const ordinaryDenial = events.find((event) => event.type === 'excursion');
-    assert.equal(ordinaryDenial.rule, 'read_paths');
-    assert.match(ordinaryDenial.reason, /outside the working directory/);
-    assert.match(ordinaryDenial.summary, /read/);
-    assert.ok(events.filter((event) => event.type === 'excursion').length >= 8);
-    assert.equal(events.some((event) => event.type === 'notification' || event.type === 'ask'), false);
   });
 }
 

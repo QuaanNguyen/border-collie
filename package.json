@@ -26,7 +26,7 @@
   },
   "scripts": {
     "check": "node scripts/check-syntax.js",
-    "test": "node --test test/integration/cli.test.js test/integration/install-package.test.js",
+    "test": "node --test test/unit/*.test.js test/integration/*.test.js",
     "test:package": "node scripts/check-package.js"
   }
 }

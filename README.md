@@ -79,11 +79,9 @@ npm test
 npm run test:package
 ```
 
-The current automated suite exercises the CLI, a no-download staged install,
-and the contents of the npm tarball. See [the release guide](docs/RELEASING.md)
-for the release plan, test layers, and the work GitHub Actions can automate.
-Native Pet and real OpenCode integration coverage are later test layers in that
-plan; the fast suite does not claim to exercise them.
+The current automated suite exercises unit behavior, non-UI integration behavior, the CLI, a no-download staged install, and the contents of the npm tarball.
+See [the release guide](docs/RELEASING.md) for the release plan, test layers, and the work GitHub Actions can automate.
+Pet UI, native window, renderer, and real OpenCode process coverage live in the e2e layer.
 
 Guard events, active sessions, Pet position, and Pet size exist only while OpenCode and the Pet are running.
 The plugin sends events over the Pet process's private input pipe and does not create `~/.border-collie` or replay events from previous sessions.

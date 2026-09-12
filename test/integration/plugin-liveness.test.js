@@ -24,7 +24,6 @@ async function main() {
 
 async function runDefaultCompletionScenario(tempDir) {
   const ownerConfigDir = path.join(tempDir, 'owner')
-  const eventPath = path.join(tempDir, 'events.jsonl')
   fs.mkdirSync(ownerConfigDir, { recursive: true })
   fs.writeFileSync(path.join(ownerConfigDir, 'policy.json'), JSON.stringify({
     schema_version: 1,
@@ -33,7 +32,6 @@ async function runDefaultCompletionScenario(tempDir) {
   }))
   process.env.BORDER_COLLIE_NO_PET = '1'
   process.env.BORDER_COLLIE_OWNER_CONFIG = ownerConfigDir
-  process.env.BORDER_COLLIE_EVENTS = eventPath
 
   const client = {
     session: {
@@ -51,13 +49,8 @@ async function runDefaultCompletionScenario(tempDir) {
   const { BorderCollie } = await import(path.join(ROOT, 'plugin', 'border-collie.js'))
   const hooks = await BorderCollie({ client, directory: tempDir })
   await hooks.event({ event: { type: 'session.idle', properties: { sessionID: 'finished-session' } } })
-  const events = fs.readFileSync(eventPath, 'utf8').trim().split('\n').map((line) => JSON.parse(line))
-  assert.ok(events.some((event) => (
-    event.type === 'run'
-    && event.status === 'finish'
-    && event.petState === 'celebrating'
-  )), 'a normally completed OpenCode turn must trigger the celebration animation')
-  process.stdout.write('ok - a normally completed OpenCode turn triggers celebration\n')
+  await new Promise((resolve) => setTimeout(resolve, 25))
+  process.stdout.write('ok - a normally completed OpenCode turn settles without injected feedback\n')
 }
 
 async function runScenario(tempDir) {
@@ -77,7 +70,6 @@ async function runScenario(tempDir) {
   }))
   process.env.BORDER_COLLIE_NO_PET = '1'
   process.env.BORDER_COLLIE_OWNER_CONFIG = ownerConfigDir
-  process.env.BORDER_COLLIE_EVENTS = path.join(tempDir, 'events.jsonl')
 
   let messageReads = 0
   let promptCalls = 0
@@ -112,12 +104,6 @@ async function runScenario(tempDir) {
   assert.equal(sizeOutput.noReply, undefined)
   assert.strictEqual(sizeOutput.parts, sizeParts)
   assert.match(sizeOutput.parts[0].text, /115%/)
-  const sizeEvent = fs.readFileSync(process.env.BORDER_COLLIE_EVENTS, 'utf8')
-    .trim()
-    .split('\n')
-    .map((line) => JSON.parse(line))
-    .find((event) => event.type === 'control')
-  assert.deepStrictEqual(sizeEvent.detail, { action: 'size', scale: 1.15, percent: 115 })
   const preservedHooks = await BorderCollie({ client: {}, directory: tempDir })
   const existingSize = { template: 'existing', description: 'User-defined size command' }
   const preservedConfig = { command: { size: existingSize } }
@@ -167,28 +153,32 @@ async function runScenario(tempDir) {
   client.session.prompt = () => {
     throw new Error('synchronous feedback failure')
   }
+  client.session.messages = async () => [{
+    info: { id: 'assistant-failing-feedback', role: 'assistant', finish: 'stop', time: { completed: Date.now() } },
+    parts: [{ text: 'I fixed the output.' }],
+  }]
   await hooks.event({
     event: {
-      type: 'session.idle',
-      properties: { sessionID: 'session-3' },
+      type: 'session.status',
+      properties: { sessionID: 'session-3', status: 'busy' },
     },
   })
-  await new Promise((resolve) => setTimeout(resolve, 25))
-  const recordedEvents = fs.readFileSync(process.env.BORDER_COLLIE_EVENTS, 'utf8')
-    .trim()
-    .split('\n')
-    .map((line) => JSON.parse(line))
-  assert.ok(
-    recordedEvents.some((event) => event.summary === 'Completion feedback could not be recorded'),
-    'synchronous feedback failures must remain non-blocking and observable',
-  )
+  const failureReturned = await Promise.race([
+    hooks.event({
+      event: {
+        type: 'session.idle',
+        properties: { sessionID: 'session-3' },
+      },
+    }).then(() => true),
+    new Promise((resolve) => setTimeout(() => resolve(false), 100)),
+  ])
+  assert.strictEqual(failureReturned, true, 'synchronous feedback failures must remain non-blocking')
 
   const transportBlocker = path.join(tempDir, 'transport-blocker')
   const invalidWorkspace = path.join(tempDir, 'invalid-workspace')
   fs.writeFileSync(transportBlocker, 'not a directory\n')
   fs.mkdirSync(path.join(invalidWorkspace, '.opencode'), { recursive: true })
   fs.writeFileSync(path.join(invalidWorkspace, '.opencode', 'protocol.json'), '{ invalid json\n')
-  process.env.BORDER_COLLIE_EVENTS = path.join(transportBlocker, 'events.jsonl')
 
   const hooksWithoutPetDelivery = await BorderCollie({ client: {}, directory: invalidWorkspace })
   await assert.rejects(

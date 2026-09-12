@@ -27,9 +27,9 @@ They should not be confused with unit tests and should not block every small cha
 ## Test layers
 
 1. **Unit tests** call deterministic Guard, Event stream, installer, and Pet helpers with fake inputs using Node's built-in `node:test` runner.
-2. **Package tests** run `npm pack` and inspect the exact tarball file list.
-3. **Install smoke tests** install into temporary directories without Electron downloads or a user's real OpenCode configuration.
-4. **Integration tests** run OpenCode and the Pet host on each supported OS.
+2. **Integration tests** compose Border Collie modules across the OpenCode adapter, installer, owner policy, project policy, and package CLI boundaries.
+3. **Package tests** run `npm pack` and inspect the exact tarball file list.
+4. **E2E tests** run OpenCode, external processes, the Pet host, native macOS behavior, renderer startup, and desktop window behavior.
 5. **Release smoke tests** install the exact published version into a clean environment and exercise `border-collie install`.
 
 Package/plugin code is tested the same way as other code: keep most logic in ordinary exported functions, unit-test those functions, then use a small number of boundary tests for OpenCode and the desktop host.
@@ -42,12 +42,13 @@ Package/plugin code is tested the same way as other code: keep most logic in ord
 4. Keep the root package version, Git tag, and GitHub Release identical.
 5. Make CI required on the protected default branch and require reviewed pull requests.
 6. Run `npm test`, `npm run check`, and `npm run test:package` locally.
-7. Inspect the tarball with `npm pack --dry-run`; never publish from an uncommitted working tree.
-8. Configure npm trusted publishing for the release workflow and require a GitHub environment approval for the first few releases.
-9. Publish a release candidate with the `next` dist tag, install it on all three operating systems, and test it with OpenCode.
-10. Publish `0.1.0`, tag the exact commit `v0.1.0`, and create matching GitHub release notes with supported platforms, Node/OpenCode prerequisites, known limitations, and upgrade instructions.
-11. Test the public command from a clean directory.
-12. If it is broken, deprecate the npm version; do not reuse or move an existing version tag.
+7. Run the e2e suite on hosts that can launch OpenCode and the Pet UI.
+8. Inspect the tarball with `npm pack --dry-run`; never publish from an uncommitted working tree.
+9. Configure npm trusted publishing for the release workflow and require a GitHub environment approval for the first few releases.
+10. Publish a release candidate with the `next` dist tag, install it on all three operating systems, and test it with OpenCode.
+11. Publish `0.1.0`, tag the exact commit `v0.1.0`, and create matching GitHub release notes with supported platforms, Node/OpenCode prerequisites, known limitations, and upgrade instructions.
+12. Test the public command from a clean directory.
+13. If it is broken, deprecate the npm version; do not reuse or move an existing version tag.
 
 Homebrew and WinGet should come later, once the npm package has a stable CLI and upgrade behavior.
 They are extra distribution channels, not different implementations.

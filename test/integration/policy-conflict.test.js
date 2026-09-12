@@ -24,15 +24,6 @@ async function hooksFor(projectDir, ownerConfigDir, runDir) {
   return BorderCollie({ client: {}, directory: projectDir });
 }
 
-async function readEvents(runDir) {
-  await new Promise((resolve) => setTimeout(resolve, 10));
-  return fs.readFileSync(path.join(runDir, 'events.jsonl'), 'utf8')
-    .trim()
-    .split('\n')
-    .filter(Boolean)
-    .map((line) => JSON.parse(line));
-}
-
 async function runTest(name, fn) {
   try {
     await fn();
@@ -46,7 +37,7 @@ async function runTest(name, fn) {
 async function main() {
   console.log('policy conflict');
 
-  await runTest('broadening paths, commands, tools, trusted roots, and Bash blocks the session with a high-priority notification', async () => {
+  await runTest('broadening paths, commands, tools, trusted roots, and Bash blocks the session', async () => {
     const root = temporaryDirectory();
     const projectDir = path.join(root, 'project');
     const ownerConfigDir = path.join(root, 'owner-config');
@@ -76,23 +67,12 @@ async function main() {
     const hooks = await hooksFor(projectDir, ownerConfigDir, runDir);
     await assert.rejects(
       hooks['tool.execute.before']({ tool: 'read' }, { args: { path: path.join(projectDir, 'private.md') } }),
-      /project policy.*owner policy.*read_paths/i,
+      (error) => {
+        assert.match(error.message, /project policy.*owner policy.*read_paths/i);
+        assert.match(error.message, /Remove or narrow/);
+        return true;
+      },
     );
-
-    const events = await readEvents(runDir);
-    const notification = events.find((event) => event.type === 'notification');
-    assert.equal(notification.status, 'error');
-    assert.equal(notification.detail.priority, 'high');
-    assert.deepEqual(notification.detail.conflicts.map((conflict) => conflict.field), [
-      'read_paths',
-      'write_paths',
-      'allow_commands',
-      'command_allowlist',
-      'allow_tools',
-      'trusted_workspace_roots',
-      'allow_ordinary_bash',
-    ]);
-    assert.match(notification.detail.remediation, /Remove or narrow/);
   });
 }
 

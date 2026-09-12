@@ -19,15 +19,6 @@ async function hooksFor(projectDir, ownerConfigDir, runDir) {
   return BorderCollie({ client: {}, directory: projectDir });
 }
 
-async function readEvents(runDir) {
-  await new Promise((resolve) => setTimeout(resolve, 10));
-  return fs.readFileSync(path.join(runDir, 'events.jsonl'), 'utf8')
-    .trim()
-    .split('\n')
-    .filter(Boolean)
-    .map((line) => JSON.parse(line));
-}
-
 async function runTest(name, fn) {
   try {
     await fn();
@@ -59,15 +50,12 @@ async function main() {
     const hooks = await hooksFor(projectDir, ownerConfigDir, runDir);
     await assert.rejects(
       hooks['tool.execute.before']({ tool: 'read' }, { args: { path: path.join(projectDir, 'notes.md') } }),
-      /Fix or remove the project policy/,
+      (error) => {
+        assert.match(error.message, /Fix or remove the project policy/);
+        assert.match(error.message, new RegExp(policyPath.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
+        return true;
+      },
     );
-
-    const events = await readEvents(runDir);
-    const notification = events.find((event) => event.type === 'notification');
-    assert.equal(notification.status, 'error');
-    assert.equal(notification.detail.priority, 'high');
-    assert.equal(notification.detail.policyPath, policyPath);
-    assert.match(notification.reason, /malformed/);
   });
 
   await runTest('a non-object active project policy fails closed', async () => {
@@ -90,9 +78,6 @@ async function main() {
       hooks['tool.execute.before']({ tool: 'read' }, { args: { path: path.join(projectDir, 'notes.md') } }),
       /Fix or remove the project policy/,
     );
-
-    const events = await readEvents(runDir);
-    assert.equal(events.find((event) => event.type === 'notification').detail.priority, 'high');
   });
 }
 
