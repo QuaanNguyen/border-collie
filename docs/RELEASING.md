@@ -24,6 +24,20 @@ Publishing should remain separate from CI: trigger it only from a protected vers
 GUI behavior, native host behavior, and a real OpenCode launch belong in a slower integration job.
 They should not be confused with unit tests and should not block every small change until reliable hosted-runner fixtures exist.
 
+## Workflows
+
+`CI` is the required merge gate.
+It runs syntax checks, unit tests, non-UI integration tests, and package surface checks on Linux, macOS, and Windows across supported Node.js versions.
+
+`Package Compatibility` checks that npm, pnpm, Yarn, and Bun can consume the packed npm artifact.
+It proves client compatibility without creating separate packages for those clients.
+
+`E2E` is the slower host-behavior lane.
+It runs on relevant path changes, on a schedule, and by manual dispatch for OpenCode, external process, renderer, Electron, and native Pet coverage.
+
+`Release` is the tag-driven publishing lane.
+It verifies the package before publishing and fails early while the package remains marked `private`.
+
 ## Test layers
 
 1. **Unit tests** call deterministic Guard, Event stream, installer, and Pet helpers with fake inputs using Node's built-in `node:test` runner.

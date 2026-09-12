@@ -1,0 +1,61 @@
+name: E2E
+
+on:
+  pull_request:
+    paths:
+      - events/**
+      - pet/**
+      - plugin/**
+      - scripts/install-plugin.js
+      - scripts/build-native-pet.js
+      - test/e2e/**
+      - test/fixtures/**
+      - test/run-all-tests.js
+      - .github/workflows/e2e.yml
+  push:
+    branches: [main]
+    paths:
+      - events/**
+      - pet/**
+      - plugin/**
+      - scripts/install-plugin.js
+      - scripts/build-native-pet.js
+      - test/e2e/**
+      - test/fixtures/**
+      - test/run-all-tests.js
+      - .github/workflows/e2e.yml
+  schedule:
+    - cron: "30 9 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  non-native:
+    name: Non-native E2E on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.12
+          cache: npm
+          cache-dependency-path: pet/package-lock.json
+      - run: npm run test:e2e:skip-native
+
+  native-macos:
+    name: Native macOS Pet
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.12
+          cache: npm
+          cache-dependency-path: pet/package-lock.json
+      - run: npm run test:e2e

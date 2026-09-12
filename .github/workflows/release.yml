@@ -1,0 +1,50 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: Publish to npm
+        required: true
+        default: "false"
+        type: choice
+        options:
+          - "false"
+          - "true"
+
+permissions:
+  contents: write
+  id-token: write
+
+jobs:
+  verify:
+    name: Verify Release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.12
+          registry-url: https://registry.npmjs.org
+      - run: npm run check
+      - run: npm test
+      - run: npm run test:package
+      - run: npm pack --dry-run
+
+  publish:
+    name: Publish npm Package
+    needs: verify
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v') || inputs.publish == 'true'
+    environment: npm
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.12
+          registry-url: https://registry.npmjs.org
+      - run: node -e "const pkg = require('./package.json'); if (pkg.private) throw new Error('package.json is still private')"
+      - run: npm publish --provenance

@@ -24,8 +24,13 @@ try {
   for (const required of [
     'package.json',
     'scripts/border-collie.js',
+    'scripts/check-package-client.js',
+    'scripts/check-package.js',
+    'scripts/check-syntax.js',
     'scripts/install-plugin.js',
+    'scripts/run-e2e.js',
     'plugin/border-collie.js',
+    'plugin/package.json',
     'guard/lib/session.js',
     'events/index.js',
     'pet/package.json',

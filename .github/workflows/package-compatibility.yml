@@ -1,0 +1,56 @@
+name: Package Compatibility
+
+on:
+  pull_request:
+    paths:
+      - package.json
+      - scripts/**
+      - plugin/**
+      - guard/**
+      - events/**
+      - pet/**
+      - test/unit/**
+      - test/integration/**
+      - .github/workflows/package-compatibility.yml
+  push:
+    branches: [main]
+    paths:
+      - package.json
+      - scripts/**
+      - plugin/**
+      - guard/**
+      - events/**
+      - pet/**
+      - test/unit/**
+      - test/integration/**
+      - .github/workflows/package-compatibility.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  npm-clients:
+    name: ${{ matrix.client }} on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        client: [npm, pnpm, yarn, bun]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.12
+      - if: matrix.client == 'pnpm'
+        uses: pnpm/action-setup@v4
+        with:
+          version: latest
+      - if: matrix.client == 'bun'
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      - if: matrix.client == 'yarn'
+        run: corepack enable
+      - run: node scripts/check-package-client.js ${{ matrix.client }}
