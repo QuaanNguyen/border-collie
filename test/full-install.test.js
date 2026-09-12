@@ -21,13 +21,11 @@ try {
   else process.env.NODE_ENV = originalNodeEnv
 }
 
-assert.strictEqual(result.installPet, true)
 assert.strictEqual(process.platform === 'darwin' ? nativePetReady(result.petDir) : electronReady(result.petDir), true)
-assert.deepStrictEqual(
-  JSON.parse(fs.readFileSync(path.join(result.packageDir, 'install.json'), 'utf8')),
-  { pet: true },
-)
 assert.ok(fs.existsSync(result.dest))
+assert.ok(fs.existsSync(path.join(result.packageDir, 'guard', 'lib', 'session.js')))
+assert.ok(fs.existsSync(path.join(result.packageDir, 'events', 'index.js')))
+assert.ok(fs.existsSync(path.join(result.packageDir, 'pet', 'package.json')))
 
 const emptyBin = path.join(root, 'empty-bin')
 const originalPath = process.env.PATH

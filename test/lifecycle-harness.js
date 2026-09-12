@@ -1,8 +1,4 @@
 'use strict';
-/**
- * Process harness for Border Collie ownership / single-instance behaviour.
- * Spawns real Electron (no OpenCode). Usage: node test/lifecycle-harness.js
- */
 const assert = require('node:assert');
 const path = require('node:path');
 const os = require('node:os');

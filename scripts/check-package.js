@@ -16,7 +16,8 @@ try {
     shell: process.platform === 'win32',
   });
   assert.equal(packed.status, 0, packed.stderr || packed.stdout);
-  const report = JSON.parse(packed.stdout);
+  const parsedReport = JSON.parse(packed.stdout);
+  const report = Array.isArray(parsedReport) ? parsedReport : Object.values(parsedReport);
   assert.equal(report.length, 1, 'npm pack should create exactly one package');
 
   const files = new Set(report[0].files.map(({ path: file }) => file));

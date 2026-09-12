@@ -1,11 +1,4 @@
 'use strict';
-/**
- * Test suite. No framework - node test/run-tests.js
- *
- * Unit tests for the three things that must be right (the gate, the evidence
- * checks, the injection signal), then a full end-to-end run through a real
- * proxy against the mock model, asserting on the emitted event stream.
- */
 const assert = require('node:assert');
 const path = require('node:path');
 const fs = require('node:fs');
@@ -34,8 +27,6 @@ async function ta(name, fn) {
 }
 
 const call = (name, args) => ({ id: 'c1', type: 'function', function: { name, arguments: JSON.stringify(args) } });
-
-/* ================= tool call normalisation ================= */
 
 console.log('\ntool calls');
 
@@ -72,8 +63,6 @@ t('an unknown tool is still inspected', () => {
   assert.ok(n.readPaths.includes('../secrets'));
   assert.ok(n.urls.length > 0);
 });
-
-/* ================= the gate ================= */
 
 console.log('\ngate');
 
@@ -204,8 +193,6 @@ t('the gate consults no model and is therefore deterministic', () => {
   assert.equal(runs.size, 1);
 });
 
-/* ================= injection signal ================= */
-
 console.log('\ninjection signal (not load-bearing)');
 
 t('flags an instruction hidden in a comment', () => {
@@ -226,8 +213,6 @@ t('ignores ordinary prose', () => {
 t('a lone URL is not suspicious', () => {
   assert.equal(scan('See https://example.edu/docs for details.').level, null);
 });
-
-/* ================= window sizing ================= */
 
 console.log('\nwindow sizing');
 
@@ -297,8 +282,6 @@ t('scaling up stops at what the display can hold', () => {
     'always returns something, even on an absurd display');
 });
 
-/* ================= tool failures ================= */
-
 console.log('\ntool failures');
 
 const { toolFailed } = require(path.join(ROOT, 'guard/lib/toolerror'));
@@ -336,8 +319,6 @@ t('reports the offending line, not the whole blob', () => {
   assert.match(out, /^error: ENOENT/);
   assert.ok(out.length < 60);
 });
-
-/* ================= evidence ================= */
 
 console.log('\nevidence');
 

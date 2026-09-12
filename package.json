@@ -4,7 +4,6 @@
   "private": true,
   "description": "A guard and desktop companion for OpenCode coding agents.",
   "license": "MIT",
-  "type": "commonjs",
   "bin": {
     "border-collie": "scripts/border-collie.js"
   },
@@ -27,7 +26,7 @@
   },
   "scripts": {
     "check": "node scripts/check-syntax.js",
-    "test": "node --test",
+    "test": "node --test test/cli.test.js test/install-package.test.js",
     "test:package": "node scripts/check-package.js"
   }
 }

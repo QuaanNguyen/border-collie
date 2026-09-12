@@ -51,22 +51,21 @@ runTest('first install accepts Custom only with supported owner settings', () =>
   assert.deepEqual(JSON.parse(fs.readFileSync(path.join(ownerConfigDir, 'policy.json'), 'utf8')), { schema_version: 1, setup_package: 'custom', trusted_workspace_roots: [], read_paths: ['src/**'], allow_ordinary_bash: false });
 });
 
-runTest('Guard-only install omits the desktop runtime and remains importable', () => {
+runTest('install includes the desktop runtime source and remains importable', () => {
   const root = temporaryDirectory();
   const result = installPlugin({
     repoRoot: ROOT,
     destDir: path.join(root, 'plugins'),
     ownerConfigDir: path.join(root, 'owner-config'),
-    installPet: false,
+    skipRuntimeSetup: true,
   });
 
-  assert.strictEqual(result.petDir, null);
-  assert.equal(fs.existsSync(path.join(result.packageDir, 'pet')), false);
-  assert.deepEqual(JSON.parse(fs.readFileSync(path.join(result.packageDir, 'install.json'), 'utf8')), { pet: false });
+  assert.equal(result.petDir, path.join(result.packageDir, 'pet'));
+  assert.equal(fs.existsSync(path.join(result.packageDir, 'pet', 'package.json')), true);
   const check = spawnSync(process.execPath, [
     '--input-type=module',
     '-e',
-    `import { BorderCollie } from ${JSON.stringify(result.dest)}; const hooks = await BorderCollie({ client: {}, directory: ${JSON.stringify(root)} }); const config = {}; await hooks.config(config); if (config.command !== undefined) process.exit(2); process.emit('beforeExit');`,
+    `process.env.BORDER_COLLIE_NO_PET = '1'; import { BorderCollie } from ${JSON.stringify(result.dest)}; const hooks = await BorderCollie({ client: {}, directory: ${JSON.stringify(root)} }); const config = {}; await hooks.config(config); if (config.command === undefined) process.exit(2); process.emit('beforeExit');`,
   ], { encoding: 'utf8' });
   assert.strictEqual(check.status, 0, check.stderr);
 });

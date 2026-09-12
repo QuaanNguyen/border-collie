@@ -17,11 +17,13 @@ const originalPath = process.env.PATH
 fs.mkdirSync(path.join(repoRoot, 'plugin'), { recursive: true })
 fs.mkdirSync(path.join(repoRoot, 'guard', 'lib'), { recursive: true })
 fs.mkdirSync(path.join(repoRoot, 'events'), { recursive: true })
+fs.mkdirSync(path.join(repoRoot, 'pet'), { recursive: true })
 fs.mkdirSync(packageDir, { recursive: true })
 fs.mkdirSync(executableDir, { recursive: true })
 fs.writeFileSync(path.join(repoRoot, 'plugin', 'border-collie.js'), 'export const BorderCollie = async () => ({})\n')
 fs.writeFileSync(path.join(repoRoot, 'guard', 'lib', 'session.js'), 'module.exports = {}\n')
 fs.writeFileSync(path.join(repoRoot, 'events', 'index.js'), 'module.exports = {}\n')
+fs.writeFileSync(path.join(repoRoot, 'pet', 'package.json'), '{}\n')
 fs.writeFileSync(entryPath, 'old entry\n')
 fs.writeFileSync(path.join(packageDir, 'old-marker'), 'old package\n')
 fs.writeFileSync(executable, '#!/bin/sh\nprintf "loader exploded: invalid plugin config\\n" >&2\nexit 19\n')
@@ -33,7 +35,7 @@ try {
     repoRoot,
     destDir: pluginsDir,
     ownerConfigDir: path.join(root, 'owner'),
-    installPet: false,
+    skipRuntimeSetup: true,
     verifyOpenCode: true,
   }), /loader exploded: invalid plugin config/)
   assert.strictEqual(fs.readFileSync(entryPath, 'utf8'), 'old entry\n')
