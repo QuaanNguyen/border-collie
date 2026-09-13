@@ -1,5 +1,7 @@
 'use strict';
 const { randomUUID } = require('node:crypto');
+const fs = require('node:fs');
+const path = require('node:path');
 
 const SCHEMA_VERSION = 1;
 
@@ -9,6 +11,7 @@ class EventBus {
     this.seq = 0;
     this.petState = 'calm';
     this.sink = typeof opts.sink === 'function' ? opts.sink : null;
+    this.inboxPath = opts.inboxPath || process.env.BORDER_COLLIE_EVENTS || null;
     this.onError = typeof opts.onError === 'function' ? opts.onError : () => {};
   }
 
@@ -28,6 +31,14 @@ class EventBus {
       detail: event.detail || {},
     };
     this.petState = entry.petState;
+    if (this.inboxPath) {
+      try {
+        fs.mkdirSync(path.dirname(this.inboxPath), { recursive: true });
+        fs.appendFileSync(this.inboxPath, JSON.stringify(entry) + '\n');
+      } catch (error) {
+        this.onError(error);
+      }
+    }
     if (this.sink) {
       try {
         this.sink(entry);
@@ -48,6 +59,7 @@ class EventBus {
 
   close() {
     this.sink = null;
+    this.inboxPath = null;
   }
 }
 

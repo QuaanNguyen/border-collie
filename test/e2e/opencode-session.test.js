@@ -97,8 +97,8 @@ async function main() {
         : isResizeRequest
           ? 'Pet resized.'
         : conversationNumber === 1
-          ? 'The requested work is ready.'
-          : 'pong'
+          ? 'I fixed the output.'
+          : 'pong - I fixed the output.'
       const chunks = [
         { id: 'chatcmpl-border-collie', object: 'chat.completion.chunk', created, model: 'echo', choices: [{ index: 0, delta: { role: 'assistant', content }, finish_reason: null }] },
         { id: 'chatcmpl-border-collie', object: 'chat.completion.chunk', created, model: 'echo', choices: [{ index: 0, delta: {}, finish_reason: 'stop' }] },
@@ -187,11 +187,11 @@ async function main() {
 
     assert.strictEqual(first.signal, null, 'first OpenCode turn timed out')
     assert.strictEqual(first.code, 0, first.stderr)
-    assert.match(first.stdout, /"text":"The requested work is ready\."/)
+    assert.match(first.stdout, /"text":"I fixed the output\."/)
     assert.strictEqual(completionObserved, true)
     assert.strictEqual(second.signal, null, 'post-idle OpenCode turn timed out')
     assert.strictEqual(second.code, 0, second.stderr)
-    assert.match(second.stdout, /"text":"pong"/)
+    assert.match(second.stdout, /"text":"pong\b/)
     let completionAccepted
     try {
       completionAccepted = await waitFor(() => {
