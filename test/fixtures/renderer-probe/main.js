@@ -6,8 +6,36 @@ const root = process.env.BORDER_COLLIE_ROOT || process.argv.at(-3)
 const statusPath = process.argv.at(-2)
 const eventPath = process.argv.at(-1)
 const frame = process.env.BORDER_COLLIE_TEST_FRAME
-const { watchInbox } = require(path.join(root, 'events'))
 let watcher
+
+function watchEventFile(filePath, onEvent, interval = 25) {
+  let offset = 0
+  let closed = false
+  const timer = setInterval(() => {
+    if (closed) return
+    let content
+    try {
+      content = fs.readFileSync(filePath, 'utf8')
+    } catch {
+      return
+    }
+    const chunk = content.slice(offset)
+    offset = content.length
+    for (const line of chunk.split('\n')) {
+      if (!line.trim()) continue
+      try {
+        onEvent(JSON.parse(line))
+      } catch {
+      }
+    }
+  }, interval)
+  return {
+    close() {
+      closed = true
+      clearInterval(timer)
+    },
+  }
+}
 
 function writeStatus(status) {
   fs.writeFileSync(statusPath, JSON.stringify(status))
@@ -119,7 +147,7 @@ app.whenReady().then(async () => {
     win.webContents.send('borderCollie:dragging', { phase: 'end', deltaX: 0 })
     await delay(50)
     const endedDrag = await rendererStatus(win)
-    watcher = watchInbox(eventPath, async (event) => {
+    watcher = watchEventFile(eventPath, async (event) => {
       try {
         win.webContents.send('borderCollie:event', event)
         const status = await waitForState(win, event.petState)
