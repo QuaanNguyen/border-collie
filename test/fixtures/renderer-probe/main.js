@@ -120,6 +120,7 @@ app.whenReady().then(async () => {
       },
     },
     dev: false,
+    live: true,
     eventsFile: eventPath,
   }))
   for (const channel of ['borderCollie:hit-regions', 'borderCollie:scale-set']) {
