@@ -3,6 +3,7 @@ const fs = require('fs')
 const path = require('path')
 
 const ROOT = path.resolve(__dirname, '..', '..')
+const rootPackage = require(path.join(ROOT, 'package.json'))
 const petPackage = require(path.join(ROOT, 'pet', 'package.json'))
 const readme = fs.readFileSync(path.join(ROOT, 'README.md'), 'utf8')
 const main = fs.readFileSync(path.join(ROOT, 'pet', 'main.js'), 'utf8')
@@ -13,6 +14,19 @@ const html = fs.readFileSync(path.join(ROOT, 'pet', 'src', 'index.html'), 'utf8'
 const animationPlayer = fs.readFileSync(path.join(ROOT, 'pet', 'src', 'animation-player.js'), 'utf8')
 
 assert.strictEqual(petPackage.scripts['start:demo'], undefined)
+assert.strictEqual(rootPackage.name, 'border-collie')
+assert.strictEqual(rootPackage.version, '0.1.0')
+assert.strictEqual(rootPackage.private, undefined)
+assert.deepStrictEqual(rootPackage.repository, {
+  type: 'git',
+  url: 'https://github.com/QuaanNguyen/border-collie.git',
+})
+assert.deepStrictEqual(rootPackage.bugs, {
+  url: 'https://github.com/QuaanNguyen/border-collie/issues',
+})
+assert.strictEqual(rootPackage.homepage, 'https://github.com/QuaanNguyen/border-collie#readme')
+assert.match(readme, /npm install --global border-collie/)
+assert.match(readme, /border-collie install/)
 assert.doesNotMatch(readme, /start:demo/)
 assert.doesNotMatch(main, /--demo/)
 assert.doesNotMatch(renderer, /DEMO_SCRIPT/)

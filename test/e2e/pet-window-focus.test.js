@@ -37,7 +37,10 @@ function readStatus(statusPath) {
 function launchElectron(args, options = {}) {
   const env = { ...process.env, ...options.env }
   delete env.ELECTRON_RUN_AS_NODE
-  return spawn(electronPath, args, {
+  const launchArgs = process.env.CI === 'true' && process.platform === 'linux'
+    ? ['--disable-gpu', '--no-sandbox', '--disable-dev-shm-usage', ...args]
+    : args
+  return spawn(electronPath, launchArgs, {
     cwd: options.cwd || ROOT,
     env,
     stdio: 'ignore',

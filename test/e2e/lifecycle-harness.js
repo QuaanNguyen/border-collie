@@ -41,7 +41,10 @@ function spawnOwner() {
   };
   delete env.ELECTRON_RUN_AS_NODE;
   delete env.ELECTRON_SKIP_BINARY_DOWNLOAD;
-  const borderCollie = spawn(electron, ['.'], {
+  const electronArgs = process.env.CI === 'true' && process.platform === 'linux'
+    ? ['--disable-gpu', '--no-sandbox', '--disable-dev-shm-usage', '.']
+    : ['.']
+  const borderCollie = spawn(electron, electronArgs, {
     cwd: PET,
     env,
     stdio: 'ignore',

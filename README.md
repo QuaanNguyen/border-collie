@@ -13,13 +13,22 @@ The guard checks actions before they run, blocks work outside the task, and veri
 
 ## Installation
 
-OpenCode is the currently supported integration. The npm package is being
-prepared as the first official distribution; until its name and publisher are
-finalized, install from a clone as described below.
+OpenCode is the currently supported integration.
 
-Install the plugin from this repo:
+For the public npm package, install the CLI globally and then install the plugin:
 
 ```sh
+npm install --global border-collie
+border-collie install
+```
+
+The npm installation includes Guard and the desktop Pet.
+
+To install from a source clone for development:
+
+```sh
+git clone https://github.com/QuaanNguyen/border-collie.git
+cd border-collie
 node scripts/install-plugin.js
 ```
 

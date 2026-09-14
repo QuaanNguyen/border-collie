@@ -39,6 +39,9 @@ async function main() {
   const eventPath = path.join(tempDir, 'events.jsonl')
   const env = { ...process.env }
   delete env.ELECTRON_RUN_AS_NODE
+  env.BORDER_COLLIE_ROOT = ROOT
+  env.BORDER_COLLIE_STATUS_PATH = statusPath
+  env.BORDER_COLLIE_EVENT_PATH = eventPath
   env.BORDER_COLLIE_TEST_FRAME = pathToFileURL(path.join(
     PET_DIR,
     'assets',
@@ -48,22 +51,29 @@ async function main() {
   )).href
 
   let diagnostic = ''
-  const child = spawn(electronPath, [FIXTURE_DIR, ROOT, statusPath, eventPath], {
+  let childState = 'running'
+  const electronArgs = process.env.CI === 'true' && process.platform === 'linux'
+    ? ['--disable-gpu', '--no-sandbox', '--disable-dev-shm-usage', FIXTURE_DIR]
+    : [FIXTURE_DIR]
+  const child = spawn(electronPath, electronArgs, {
     env,
     stdio: ['ignore', 'ignore', 'pipe'],
   })
   child.stderr.on('data', (chunk) => { diagnostic += chunk })
+  child.on('error', (error) => { childState = `spawn error: ${error.message}` })
+  child.on('exit', (code, signal) => { childState = `exit code=${code} signal=${signal}` })
 
   try {
     let ready
     try {
       ready = await waitFor(() => {
         const current = readStatus(statusPath)
-        return current?.ready === true ? current : null
+        return current?.ready === true || current?.error ? current : null
       })
     } catch (error) {
-      throw new Error(`${error.message}${diagnostic ? `\n${diagnostic.trim()}` : ''}`)
+      throw new Error(`${error.message} (${childState})${diagnostic ? `\n${diagnostic.trim()}` : ''}`)
     }
+    assert.strictEqual(ready.error, undefined, ready.error)
     assert.ok(ready.leftDragScale < 0, 'leftward dragging must mirror the running animation')
     assert.ok(ready.rightDragScale > 0, 'rightward dragging must keep the running animation facing right')
     assert.strictEqual(ready.dragHeldDuringPause, true, 'the running animation must last until mouse-up')

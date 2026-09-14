@@ -77,7 +77,7 @@ function splitShellCommands(cmd) {
       escaped = false;
       continue;
     }
-    if (c === '\\' && quote !== "'") {
+    if (process.platform !== 'win32' && c === '\\' && quote !== "'") {
       current += c;
       escaped = true;
       continue;
@@ -117,7 +117,7 @@ function shellTokens(cmd) {
       escaped = false;
       continue;
     }
-    if (c === '\\' && quote !== "'") {
+    if (process.platform !== 'win32' && c === '\\' && quote !== "'") {
       escaped = true;
       continue;
     }
