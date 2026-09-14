@@ -53,7 +53,7 @@ async function main() {
   let diagnostic = ''
   let childState = 'running'
   const electronArgs = process.env.CI === 'true' && process.platform === 'linux'
-    ? ['--disable-gpu', FIXTURE_DIR]
+    ? ['--disable-gpu', '--no-sandbox', '--disable-dev-shm-usage', FIXTURE_DIR]
     : [FIXTURE_DIR]
   const child = spawn(electronPath, electronArgs, {
     env,
