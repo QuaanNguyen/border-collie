@@ -48,7 +48,10 @@ async function main() {
   )).href
 
   let diagnostic = ''
-  const child = spawn(electronPath, [FIXTURE_DIR, ROOT, statusPath, eventPath], {
+  const electronArgs = process.env.CI === 'true' && process.platform === 'linux'
+    ? ['--disable-gpu', FIXTURE_DIR, ROOT, statusPath, eventPath]
+    : [FIXTURE_DIR, ROOT, statusPath, eventPath]
+  const child = spawn(electronPath, electronArgs, {
     env,
     stdio: ['ignore', 'ignore', 'pipe'],
   })
