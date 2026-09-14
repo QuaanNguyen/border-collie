@@ -18,7 +18,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 22.12
+          node-version: 24
           registry-url: https://registry.npmjs.org
       - run: npm run check
       - run: npm test
@@ -37,7 +37,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 22.12
+          node-version: 24
           registry-url: https://registry.npmjs.org
       - run: node -e "const pkg = require('./package.json'); if (pkg.private) throw new Error('package.json is still private')"
-      - run: npm publish --provenance
+      - run: npm publish --provenance --access public
