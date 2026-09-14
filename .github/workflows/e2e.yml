@@ -35,6 +35,8 @@ jobs:
   non-native:
     name: Non-native E2E on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
+    env:
+      ELECTRON_DISABLE_SANDBOX: ${{ matrix.os == 'ubuntu-latest' && '1' || '' }}
     strategy:
       fail-fast: false
       matrix:
