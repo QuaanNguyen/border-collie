@@ -51,6 +51,7 @@ async function main() {
   )).href
 
   let diagnostic = ''
+  let childState = 'running'
   const electronArgs = process.env.CI === 'true' && process.platform === 'linux'
     ? ['--disable-gpu', FIXTURE_DIR]
     : [FIXTURE_DIR]
@@ -59,6 +60,8 @@ async function main() {
     stdio: ['ignore', 'ignore', 'pipe'],
   })
   child.stderr.on('data', (chunk) => { diagnostic += chunk })
+  child.on('error', (error) => { childState = `spawn error: ${error.message}` })
+  child.on('exit', (code, signal) => { childState = `exit code=${code} signal=${signal}` })
 
   try {
     let ready
@@ -68,7 +71,7 @@ async function main() {
         return current?.ready === true || current?.error ? current : null
       })
     } catch (error) {
-      throw new Error(`${error.message}${diagnostic ? `\n${diagnostic.trim()}` : ''}`)
+      throw new Error(`${error.message} (${childState})${diagnostic ? `\n${diagnostic.trim()}` : ''}`)
     }
     assert.strictEqual(ready.error, undefined, ready.error)
     assert.ok(ready.leftDragScale < 0, 'leftward dragging must mirror the running animation')
