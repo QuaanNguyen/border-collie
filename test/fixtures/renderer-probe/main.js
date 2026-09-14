@@ -166,7 +166,7 @@ app.whenReady().then(async () => {
         writeStatus({ error: error.message })
         app.quit()
       }
-    }, { interval: 25 })
+    }, 25)
     writeStatus({
       ready: true,
       leftDragScale: leftDrag.horizontalScale,
