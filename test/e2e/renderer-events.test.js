@@ -39,6 +39,7 @@ async function main() {
   const eventPath = path.join(tempDir, 'events.jsonl')
   const env = { ...process.env }
   delete env.ELECTRON_RUN_AS_NODE
+  env.BORDER_COLLIE_ROOT = ROOT
   env.BORDER_COLLIE_TEST_FRAME = pathToFileURL(path.join(
     PET_DIR,
     'assets',

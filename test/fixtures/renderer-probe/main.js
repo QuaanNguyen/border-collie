@@ -2,7 +2,7 @@ const fs = require('fs')
 const path = require('path')
 const { app, BrowserWindow, ipcMain } = require('electron')
 
-const root = process.argv.at(-3)
+const root = process.env.BORDER_COLLIE_ROOT || process.argv.at(-3)
 const statusPath = process.argv.at(-2)
 const eventPath = process.argv.at(-1)
 const frame = process.env.BORDER_COLLIE_TEST_FRAME
