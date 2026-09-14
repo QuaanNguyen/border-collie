@@ -34,8 +34,9 @@ The protected default branch should require the complete `CI` workflow to pass.
 It runs on Linux, macOS, and Windows with Node.js 22.12 when package or package-related paths change, and should be green before a public release.
 
 `E2E` is the slower host-behavior lane.
-Its non-native job runs on relevant path changes, on a schedule, and by manual dispatch across Linux, macOS, and Windows.
+Its non-native job runs the Electron renderer and lifecycle coverage on Ubuntu with a virtual display.
 Its native macOS Pet job runs only on scheduled or manually dispatched runs.
+Windows UI behavior is covered by the contributor Windows test procedure and should be exercised on a Windows host before a public release.
 Run the relevant E2E coverage before a public release; it is not part of the fast `CI` merge gate.
 
 `Release` is the tag-driven publishing lane.
