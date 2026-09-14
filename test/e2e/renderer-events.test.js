@@ -62,11 +62,12 @@ async function main() {
     try {
       ready = await waitFor(() => {
         const current = readStatus(statusPath)
-        return current?.ready === true ? current : null
+        return current?.ready === true || current?.error ? current : null
       })
     } catch (error) {
       throw new Error(`${error.message}${diagnostic ? `\n${diagnostic.trim()}` : ''}`)
     }
+    assert.strictEqual(ready.error, undefined, ready.error)
     assert.ok(ready.leftDragScale < 0, 'leftward dragging must mirror the running animation')
     assert.ok(ready.rightDragScale > 0, 'rightward dragging must keep the running animation facing right')
     assert.strictEqual(ready.dragHeldDuringPause, true, 'the running animation must last until mouse-up')
