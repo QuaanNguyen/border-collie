@@ -18,7 +18,7 @@ OpenCode is the currently supported integration.
 For the public npm package, install the CLI globally and then install the plugin:
 
 ```sh
-npm install --global border-collie
+npm install --global @quaannguyen/border-collie
 border-collie install
 ```
 

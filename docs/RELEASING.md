@@ -4,7 +4,7 @@ Border Collie's first supported public distribution should be one npm package an
 The npm registry also serves npm, pnpm, Yarn, and Bun, so those clients do not need separate packages.
 OpenCode is the only supported adapter for the first release; other agent and editor integrations should be designed and tested as adapters before they are advertised as supported.
 
-The root package is configured as the public unscoped `border-collie@0.1.0` package.
+The root package is configured as the public scoped `@quaannguyen/border-collie@0.1.0` package.
 The npm package name and repository metadata are recorded in `package.json`.
 The remaining public-release gates are npm ownership and trusted-publisher configuration, protected-branch controls, release-candidate validation, and clean installation checks.
 
