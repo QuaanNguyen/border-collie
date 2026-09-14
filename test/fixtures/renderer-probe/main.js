@@ -3,8 +3,8 @@ const path = require('path')
 const { app, BrowserWindow, ipcMain } = require('electron')
 
 const root = process.env.BORDER_COLLIE_ROOT || process.argv.at(-3)
-const statusPath = process.argv.at(-2)
-const eventPath = process.argv.at(-1)
+const statusPath = process.env.BORDER_COLLIE_STATUS_PATH || process.argv.at(-2)
+const eventPath = process.env.BORDER_COLLIE_EVENT_PATH || process.argv.at(-1)
 const frame = process.env.BORDER_COLLIE_TEST_FRAME
 let watcher
 

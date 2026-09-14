@@ -40,6 +40,8 @@ async function main() {
   const env = { ...process.env }
   delete env.ELECTRON_RUN_AS_NODE
   env.BORDER_COLLIE_ROOT = ROOT
+  env.BORDER_COLLIE_STATUS_PATH = statusPath
+  env.BORDER_COLLIE_EVENT_PATH = eventPath
   env.BORDER_COLLIE_TEST_FRAME = pathToFileURL(path.join(
     PET_DIR,
     'assets',
@@ -50,8 +52,8 @@ async function main() {
 
   let diagnostic = ''
   const electronArgs = process.env.CI === 'true' && process.platform === 'linux'
-    ? ['--disable-gpu', FIXTURE_DIR, ROOT, statusPath, eventPath]
-    : [FIXTURE_DIR, ROOT, statusPath, eventPath]
+    ? ['--disable-gpu', FIXTURE_DIR]
+    : [FIXTURE_DIR]
   const child = spawn(electronPath, electronArgs, {
     env,
     stdio: ['ignore', 'ignore', 'pipe'],
