@@ -40,7 +40,7 @@ Windows UI behavior is covered by the contributor Windows test procedure and sho
 Run the relevant E2E coverage before a public release; it is not part of the fast `CI` merge gate.
 
 `Release` is the tag-driven publishing lane.
-For a version tag matching `v*.*.*`, its Ubuntu Node.js 22.12 verification job runs `npm run check`, `npm test`, `npm run test:package`, and `npm pack --dry-run` before the publish job can start.
+For a version tag matching `v*.*.*`, its Ubuntu Node.js 24 verification job runs `npm run check`, `npm test`, `npm run test:package`, and `npm pack --dry-run` before the publish job can start.
 Manual dispatch runs the verification job without publishing.
 The tag-triggered publish job requires the `npm` environment, refuses to publish a private package, and publishes with npm provenance.
 
