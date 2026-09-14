@@ -178,7 +178,10 @@ try {
   assert.deepStrictEqual({ width: qa.width, height: qa.height }, { width: 1440, height: 1664 })
   assert.strictEqual(sha256(first.qa), sha256(second.qa))
   assert.deepStrictEqual(decodePng(QA), qa, 'the checked-in QA artifact must match the packaged frames')
-  assert.strictEqual(fs.readFileSync(first.manifest, 'utf8'), fs.readFileSync(path.join(RUNTIME, 'manifest.json'), 'utf8'))
+  assert.deepStrictEqual(
+    JSON.parse(fs.readFileSync(first.manifest, 'utf8')),
+    JSON.parse(fs.readFileSync(path.join(RUNTIME, 'manifest.json'), 'utf8')),
+  )
   process.stdout.write('ok - sprite packaging preserves source alpha and visible artwork\n')
 } finally {
   fs.rmSync(tempRoot, { recursive: true, force: true })

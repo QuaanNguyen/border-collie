@@ -11,7 +11,7 @@ const pluginsDir = path.join(root, 'plugins')
 const packageDir = path.join(pluginsDir, 'border-collie')
 const entryPath = path.join(pluginsDir, 'border-collie.js')
 const executableDir = path.join(root, 'bin')
-const executable = path.join(executableDir, process.platform === 'win32' ? 'opencode.exe' : 'opencode')
+const executable = path.join(executableDir, process.platform === 'win32' ? 'opencode.cmd' : 'opencode')
 const originalPath = process.env.PATH
 
 fs.mkdirSync(path.join(repoRoot, 'plugin'), { recursive: true })
@@ -26,8 +26,12 @@ fs.writeFileSync(path.join(repoRoot, 'events', 'index.js'), 'module.exports = {}
 fs.writeFileSync(path.join(repoRoot, 'pet', 'package.json'), '{}\n')
 fs.writeFileSync(entryPath, 'old entry\n')
 fs.writeFileSync(path.join(packageDir, 'old-marker'), 'old package\n')
-fs.writeFileSync(executable, '#!/bin/sh\nprintf "loader exploded: invalid plugin config\\n" >&2\nexit 19\n')
-fs.chmodSync(executable, 0o755)
+if (process.platform === 'win32') {
+  fs.writeFileSync(executable, '@echo off\r\necho loader exploded: invalid plugin config 1>&2\r\nexit /b 19\r\n')
+} else {
+  fs.writeFileSync(executable, '#!/bin/sh\nprintf "loader exploded: invalid plugin config\\n" >&2\nexit 19\n')
+  fs.chmodSync(executable, 0o755)
+}
 
 try {
   process.env.PATH = executableDir + path.delimiter + originalPath
@@ -37,6 +41,7 @@ try {
     ownerConfigDir: path.join(root, 'owner'),
     skipRuntimeSetup: true,
     verifyOpenCode: true,
+    openCodeCommand: executable,
   }), /loader exploded: invalid plugin config/)
   assert.strictEqual(fs.readFileSync(entryPath, 'utf8'), 'old entry\n')
   assert.strictEqual(fs.readFileSync(path.join(packageDir, 'old-marker'), 'utf8'), 'old package\n')

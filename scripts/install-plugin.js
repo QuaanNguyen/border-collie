@@ -207,11 +207,11 @@ function verifyStagedPlugin(entry, cwd) {
   runCommand(process.execPath, ['--input-type=module', '-e', script], cwd, { capture: true });
 }
 
-function verifyOpenCode(cwd, ownerConfigDir) {
+function verifyOpenCode(cwd, ownerConfigDir, command = process.platform === 'win32' ? 'opencode.exe' : 'opencode') {
   const env = installEnv();
   env.BORDER_COLLIE_NO_PET = '1';
   env.BORDER_COLLIE_OWNER_CONFIG = ownerConfigDir;
-  runCommand(process.platform === 'win32' ? 'opencode.exe' : 'opencode', ['debug', 'config'], cwd, {
+  runCommand(command, ['debug', 'config'], cwd, {
     capture: true,
     env,
     timeout: 120000,
@@ -336,7 +336,7 @@ function installPlugin(opts = {}) {
       pluginsDir,
       verify: opts.verifyOpenCode === true ? () => {
         console.log('Verifying OpenCode plugin readiness…');
-        verifyOpenCode(repoRoot, ownerConfigDir);
+        verifyOpenCode(repoRoot, ownerConfigDir, opts.openCodeCommand);
       } : null,
     });
   } finally {
