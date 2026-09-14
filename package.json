@@ -1,9 +1,16 @@
 {
   "name": "border-collie",
   "version": "0.1.0",
-  "private": true,
   "description": "A guard and desktop companion for OpenCode coding agents.",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/QuaanNguyen/border-collie.git"
+  },
+  "bugs": {
+    "url": "https://github.com/QuaanNguyen/border-collie/issues"
+  },
+  "homepage": "https://github.com/QuaanNguyen/border-collie#readme",
   "bin": {
     "border-collie": "scripts/border-collie.js"
   },

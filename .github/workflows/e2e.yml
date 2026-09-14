@@ -46,7 +46,7 @@ jobs:
           node-version: 22.12
           cache: npm
           cache-dependency-path: pet/package-lock.json
-      - run: npm run test:e2e:skip-native
+      - run: npm run test:e2e
 
   native-macos:
     name: Native macOS Pet

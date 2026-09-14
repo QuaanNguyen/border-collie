@@ -79,9 +79,9 @@ The acceptance test decodes PNG data independently from the packager so a shared
 Verify:
 
 ```sh
-node test/animation-assets.test.js
-node test/animation-manifest.test.js
-node test/animation-player.test.js
+node test/unit/animation-assets.test.js
+node test/unit/animation-manifest.test.js
+node test/unit/animation-player.test.js
 node test/run-all-tests.js
 ```
 

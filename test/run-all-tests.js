@@ -15,40 +15,20 @@ function electronMatchesLock() {
   return require(electronPackage).version === lockedElectronVersion
 }
 
-const suites = [
-  'unit/guard-core.test.js',
-  'unit/animation-assets.test.js',
-  'unit/animation-manifest.test.js',
-  'unit/animation-player.test.js',
-  'unit/package-surface.test.js',
-  'unit/pet-session-behavior.test.js',
-  'unit/window-interaction.test.js',
-  'integration/install-plugin.test.js',
-  'integration/policy-supervisor-workflow.test.js',
-  'integration/atomic-install.test.js',
-  'integration/install-diagnostics.test.js',
-  'integration/full-install.test.js',
-  'integration/plugin-liveness.test.js',
-  'e2e/opencode-session.test.js',
-]
-
-for (const suite of suites) {
-  execFileSync(process.execPath, [path.join(__dirname, suite)], {
-    cwd: ROOT,
-    stdio: 'inherit',
-  })
+function run(command, args, cwd = ROOT) {
+  execFileSync(command, args, { cwd, stdio: 'inherit' })
 }
+
+run(npm, ['test'])
+run(process.execPath, ['--test', 'test/guard/*.test.js', 'test/plugin/*.test.mjs'])
 
 if (process.env.BORDER_COLLIE_SKIP_NATIVE_TESTS !== '1') {
   if (!electronMatchesLock()) {
-    execFileSync(npm, ['ci'], { cwd: PET_DIR, stdio: 'inherit' })
+    run(npm, ['ci'], PET_DIR)
   }
-  for (const suite of ['e2e/renderer-events.test.js', 'e2e/pet-window-focus.test.js']) {
-    execFileSync(process.execPath, [path.join(__dirname, suite)], {
-      cwd: ROOT,
-      stdio: 'inherit',
-    })
-  }
+  run(npm, ['run', 'test:e2e'])
+} else {
+  run(npm, ['run', 'test:e2e:skip-native'])
 }
 
 process.stdout.write('complete Border Collie test suite verified\n')
