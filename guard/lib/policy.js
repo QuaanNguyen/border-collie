@@ -143,7 +143,6 @@ class Protocol {
     this.workdir = toPosix(workdir || spec.workdir || process.cwd());
     this.readPaths = (spec.read_paths || []).map(toPosix);
     this.writePaths = (spec.write_paths || []).map(toPosix);
-    this.allowCommands = (spec.allow_commands || []).map((s) => s.toLowerCase());
     this.denyCommands = (spec.deny_commands || []).map((s) => s.toLowerCase());
     this.commandAllowlist = (spec.command_allowlist || []).map(commandKey);
     this.allowOrdinaryBash = spec.allow_ordinary_bash === true;
@@ -178,7 +177,6 @@ class Protocol {
       workdir: this.workdir,
       read_paths: this.readPaths,
       write_paths: this.writePaths,
-      allow_commands: this.allowCommands,
       deny_commands: this.denyCommands,
       command_allowlist: this.commandAllowlist,
       allow_ordinary_bash: this.allowOrdinaryBash,
@@ -262,7 +260,6 @@ function deriveDefault(task, workdir) {
     task: task || '(no task declared)',
     read_paths: ['**'],
     write_paths: [],
-    allow_commands: [],
     command_allowlist: [],
     allow_tools: [],
     deny_commands: ['curl', 'wget', 'nc', 'ncat', 'netcat', 'ssh', 'scp', 'rm'],

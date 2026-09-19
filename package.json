@@ -12,7 +12,8 @@
   },
   "homepage": "https://github.com/QuaanNguyen/border-collie#readme",
   "bin": {
-    "border-collie": "scripts/border-collie.js"
+    "border-collie": "scripts/border-collie.js",
+    "bc": "scripts/border-collie.js"
   },
   "files": [
     "events/",

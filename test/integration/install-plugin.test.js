@@ -66,7 +66,7 @@ runTest('install includes the desktop runtime source and remains importable', ()
   const check = spawnSync(process.execPath, [
     '--input-type=module',
     '-e',
-    `process.env.BORDER_COLLIE_NO_PET = '1'; import { BorderCollie } from ${JSON.stringify(pathToFileURL(result.dest).href)}; const hooks = await BorderCollie({ client: {}, directory: ${JSON.stringify(root)} }); const config = {}; await hooks.config(config); if (config.command === undefined) process.exit(2); process.emit('beforeExit');`,
+    `process.env.BORDER_COLLIE_NO_PET = '1'; import { BorderCollie } from ${JSON.stringify(pathToFileURL(result.dest).href)}; const hooks = await BorderCollie({ client: {}, directory: ${JSON.stringify(root)} }); if (typeof hooks['tool.execute.before'] !== 'function') process.exit(2); process.emit('beforeExit');`,
   ], { encoding: 'utf8' });
   assert.strictEqual(check.status, 0, check.stderr);
 });

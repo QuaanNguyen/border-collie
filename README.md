@@ -13,7 +13,8 @@ The guard checks actions before they run, blocks work outside the task, and veri
 
 ## Installation
 
-OpenCode is the currently supported integration.
+OpenCode is the currently supported Guard-enforcing integration.
+Codex CLI and Claude Code are not yet advertised as Guard-enforcing because their deny-before-run coverage has not been verified.
 
 For the public npm package, install the CLI globally and then install the plugin:
 
@@ -60,15 +61,26 @@ Open any project with OpenCode:
 opencode <path>
 ```
 
-Resize the Pet from the OpenCode chat with `/size` followed by one of the supported percentages:
+Inspect and select Border Collie profiles from the CLI:
 
-```text
-/size 75
-/size 115
-/size reset
+```sh
+bc profile list
+bc profile create lab-research --from research
+bc profile assign opencode lab-research
 ```
 
-Resize is command-driven and does not install keyboard shortcuts.
+Set up the harness-neutral project Protocol without editing an OpenCode configuration path:
+
+```sh
+bc project setup --profile governed --write-path 'src/**'
+```
+
+Resize the Pet directly, without sending a UI preference through an agent conversation:
+
+```sh
+bc pet size 115
+bc pet size reset
+```
 
 Work on the desktop companion UI:
 
@@ -98,5 +110,6 @@ Run the focused Guard and plugin behavior tests:
 node --test test/guard/*.test.js test/plugin/*.test.mjs
 ```
 
-Guard events, active sessions, Pet position, and Pet size exist only while OpenCode and the Pet are running.
-The plugin sends events over the Pet process's private input pipe and does not create `~/.border-collie` or replay events from previous sessions.
+Guard events and active sessions exist only while OpenCode and the Pet are running.
+The plugin sends Guard events over the Pet process's private input pipe.
+Profiles and Pet size are persistent Border Collie owner preferences in the canonical Border Collie configuration.

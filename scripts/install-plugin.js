@@ -10,7 +10,7 @@ function defaultPluginsDir() {
 }
 
 function defaultOwnerConfigDir() {
-  return path.join(os.homedir(), '.config', 'opencode', 'border-collie');
+  return process.env.BORDER_COLLIE_CONFIG_ROOT || path.join(os.homedir(), '.config', 'border-collie');
 }
 
 function researchSafePolicy() {
@@ -21,7 +21,7 @@ function researchSafePolicy() {
   };
 }
 
-const CUSTOM_FIELDS = ['trusted_workspace_roots', 'read_paths', 'write_paths', 'allow_commands', 'command_allowlist', 'allow_ordinary_bash', 'allow_tools', 'egress', 'done_criteria', 'deny_commands', 'protected_paths', 'read_protected_paths'];
+const CUSTOM_FIELDS = ['trusted_workspace_roots', 'read_paths', 'write_paths', 'command_allowlist', 'allow_ordinary_bash', 'allow_tools', 'egress', 'done_criteria', 'deny_commands', 'protected_paths', 'read_protected_paths'];
 
 function initialOwnerPolicy(opts) {
   if (!opts.setupPackage || opts.setupPackage === 'research-safe') return researchSafePolicy();

@@ -7,6 +7,10 @@ const { Protocol, deriveDefault } = require('./policy');
 const { policyConflicts, resolvePolicy } = require('./policy-resolution');
 
 function protocolPath(workdir) {
+  return path.join(workdir, '.border-collie', 'protocol.json');
+}
+
+function legacyProtocolPath(workdir) {
   return path.join(workdir, '.opencode', 'protocol.json');
 }
 
@@ -15,9 +19,11 @@ function fingerprint(contents) {
 }
 
 function readProjectProtocol(workdir) {
-  const file = protocolPath(workdir);
+  const canonical = protocolPath(workdir);
+  const legacy = legacyProtocolPath(workdir);
+  const file = fs.existsSync(canonical) ? canonical : legacy;
   if (!fs.existsSync(file)) {
-    return { file, fingerprint: fingerprint('missing'), protocol: null, error: null };
+    return { file: canonical, fingerprint: fingerprint('missing'), protocol: null, error: null, legacy: false };
   }
   let contents;
   try {
@@ -30,7 +36,7 @@ function readProjectProtocol(workdir) {
     if (!protocol || Array.isArray(protocol) || typeof protocol !== 'object') {
       throw new Error('project policy must be a JSON object');
     }
-    return { file, fingerprint: fingerprint(contents), protocol, error: null };
+    return { file, fingerprint: fingerprint(contents), protocol, error: null, legacy: file === legacy };
   } catch (error) {
     return { file, fingerprint: fingerprint(contents), protocol: null, error };
   }
@@ -39,6 +45,7 @@ function readProjectProtocol(workdir) {
 function createLiveProtocol(opts = {}) {
   const workdir = opts.workdir || process.cwd();
   const owner = opts.owner || null;
+  const resolveOwner = opts.resolveOwner || null;
   const ownerTrustedWorkspaceRoots = opts.ownerTrustedWorkspaceRoots || [];
   let lastFingerprint = null;
   let revision = 0;
@@ -63,7 +70,27 @@ function createLiveProtocol(opts = {}) {
       return { ...current, changed: true };
     }
 
-    const conflicts = policyConflicts(owner || {}, source.protocol, ownerTrustedWorkspaceRoots);
+    const selected = resolveOwner ? resolveOwner(source.protocol?.profile || null) : { active: true, protocol: owner };
+    if (!selected.active) {
+      current = {
+        valid: false, revision, fingerprint: source.fingerprint, protocol: null, file: source.file,
+        reason: selected.reason, conflicts: [],
+      };
+      return { ...current, changed: true };
+    }
+    const project = source.protocol ? { ...source.protocol } : null;
+    if (project) delete project.profile;
+    const missingProjectFields = (selected.profile?.required_project_fields || [])
+      .filter((field) => !Object.hasOwn(project || {}, field));
+    if (missingProjectFields.length) {
+      current = {
+        valid: false, revision, fingerprint: source.fingerprint, protocol: null, file: source.file,
+        reason: `${selected.profile.name} requires a human project scope for ${missingProjectFields.join(', ')}`,
+        conflicts: [],
+      };
+      return { ...current, changed: true };
+    }
+    const conflicts = policyConflicts(selected.protocol || {}, project, ownerTrustedWorkspaceRoots);
     if (conflicts.length) {
       current = {
         valid: false,
@@ -77,7 +104,7 @@ function createLiveProtocol(opts = {}) {
       return { ...current, changed: true };
     }
 
-    const resolved = resolvePolicy(owner, source.protocol);
+    const resolved = resolvePolicy(selected.protocol, project);
     const protocol = resolved ? new Protocol(resolved, workdir) : deriveDefault(null, workdir);
     revision += 1;
     current = {
@@ -92,7 +119,7 @@ function createLiveProtocol(opts = {}) {
     return { ...current, changed: true };
   }
 
-  return { refresh, protocolPath: protocolPath(workdir) };
+  return { refresh, protocolPath: protocolPath(workdir), legacyProtocolPath: legacyProtocolPath(workdir) };
 }
 
-module.exports = { createLiveProtocol, protocolPath, readProjectProtocol };
+module.exports = { createLiveProtocol, protocolPath, legacyProtocolPath, readProjectProtocol };

@@ -93,29 +93,6 @@ async function runScenario(tempDir) {
   }
   const { BorderCollie } = await import(pathToFileURL(path.join(ROOT, 'plugin', 'border-collie.js')).href)
   const hooks = await BorderCollie({ client, directory: tempDir })
-  const config = {}
-  await hooks.config(config)
-  assert.match(config.command.size.description, /reset/)
-  const sizeParts = []
-  const sizeOutput = { parts: sizeParts }
-  await hooks['command.execute.before'](
-    { command: 'size', sessionID: 'session-1', arguments: '115' },
-    sizeOutput,
-  )
-  assert.equal(sizeOutput.noReply, undefined)
-  assert.strictEqual(sizeOutput.parts, sizeParts)
-  assert.match(sizeOutput.parts[0].text, /115%/)
-  const preservedHooks = await BorderCollie({ client: {}, directory: tempDir })
-  const existingSize = { template: 'existing', description: 'User-defined size command' }
-  const preservedConfig = { command: { size: existingSize } }
-  await preservedHooks.config(preservedConfig)
-  assert.strictEqual(preservedConfig.command.size, existingSize)
-  const preservedOutput = { parts: [] }
-  await preservedHooks['command.execute.before'](
-    { command: 'size', sessionID: 'session-existing-size', arguments: '115' },
-    preservedOutput,
-  )
-  assert.deepStrictEqual(preservedOutput, { parts: [] })
   await hooks.event({
     event: {
       type: 'message.updated',

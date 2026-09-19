@@ -1,10 +1,10 @@
 # Border Collie policy supervisor
 
-Border Collie is an owner-defined policy supervisor for OpenCode agents.
+Border Collie is an owner-defined policy supervisor with OpenCode as its reference adapter.
 
 It allows ordinary work inside the active project while enforcing the owner’s resolved Border Collie policy through OpenCode’s pre-execution hook.
 
-Research-safe is the default setup package.
+Casual, research, and governed are stable owner profile templates.
 
 It permits normal reads, edits, and ordinary Bash inside the active project.
 
@@ -16,7 +16,11 @@ Custom configures the supported owner-policy fields.
 
 High-containment is future work and is not an available setup package.
 
-Project policy lives only at `.opencode/protocol.json` in the active project.
+Project policy lives at `.border-collie/protocol.json` in the active project.
+The legacy `.opencode/protocol.json` remains read-compatible during migration and is never rewritten automatically.
+
+Projects may select only an owner-approved profile for their adapter.
+Governed requires a human-authored project `write_paths` scope that narrows its project-wide owner ceiling.
 
 Project policy may narrow the owner policy but cannot broaden it.
 
@@ -26,7 +30,7 @@ Valid human edits apply to the active session and reset its completion verificat
 
 Broadening conflicts and malformed active-project policy block the session until a human corrects the file.
 
-The Protocol file is automatically protected from direct agent writes.
+Canonical and legacy Protocol files are automatically protected from direct agent writes.
 
 A Protocol change observed while an agent tool is executing is quarantined until a human saves a different correction.
 
@@ -57,3 +61,6 @@ OpenCode permissions remain complementary to Border Collie’s deterministic pol
 Arbitrary encoded interpreter behavior cannot be fully contained in normal mode.
 
 A hard execution boundary requires a real sandbox, container, VM, separate identity, or equivalent isolation.
+
+`allow_commands` is not supported because Guard does not enforce it.
+Use `allow_ordinary_bash`, `command_allowlist`, and `deny_commands` instead.

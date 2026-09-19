@@ -3,7 +3,6 @@
 const NARROWED_LIST_FIELDS = [
   'read_paths',
   'write_paths',
-  'allow_commands',
   'command_allowlist',
   'allow_tools',
   'egress',

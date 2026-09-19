@@ -32,12 +32,13 @@ if (!repoRoot) {
   );
 }
 
-const { createSession } = require(path.join(repoRoot, "guard/lib/session.js"));
+const { createGuardAdapter } = require(path.join(repoRoot, "guard/lib/adapter.js"));
 const { EventBus } = require(path.join(repoRoot, "events/index.js"));
-const { loadOwnerPolicy, ownerProtocol } = require(path.join(repoRoot, "guard/lib/owner-policy.js"));
+const { startControlServer } = require(path.join(repoRoot, "pet/control.js"));
+const { readConfig } = require(path.join(repoRoot, "guard/lib/config.js"));
+const { resolveOwnerPolicy, resolveProjectOwnerPolicy } = require(path.join(repoRoot, "guard/lib/owner-policy.js"));
 const { createLiveProtocol } = require(path.join(repoRoot, "guard/lib/live-protocol.js"));
 const { protectedPathDecision } = require(path.join(repoRoot, "guard/lib/protected-paths.js"));
-const { parseSizeArgument } = require(path.join(repoRoot, "events/size-command.js"));
 
 const TOOL_ACTION = {
   read: "read",
@@ -212,12 +213,12 @@ function launchPet() {
 
 export const BorderCollie = async ({ client, directory }) => {
   const workdir = directory || process.cwd();
-  const ownerPolicy = loadOwnerPolicy();
-  const resolvedOwnerProtocol = ownerProtocol(ownerPolicy);
+  const ownerState = resolveOwnerPolicy('opencode');
   const liveProtocol = createLiveProtocol({
     workdir,
-    owner: resolvedOwnerProtocol,
-    ownerTrustedWorkspaceRoots: ownerPolicy?.trusted_workspace_roots || [],
+    owner: ownerState.protocol,
+    resolveOwner: (projectProfile) => resolveProjectOwnerPolicy('opencode', projectProfile),
+    ownerTrustedWorkspaceRoots: [],
   });
   let policyState = liveProtocol.refresh();
   const petProcess = launchPet();
@@ -226,8 +227,19 @@ export const BorderCollie = async ({ client, directory }) => {
       ? (event) => petProcess.stdin.write(JSON.stringify(event) + "\n")
       : null,
   });
+  const petControl = petProcess ? startControlServer((control) => {
+    if (control.action !== 'size' || !Number.isFinite(control.scale)) return;
+    bus.emit({
+      type: 'control', status: 'ok', petState: 'calm', summary: `Pet size ${Math.round(control.scale * 100)}%`,
+      detail: { action: 'size', scale: control.scale, percent: Math.round(control.scale * 100) },
+    });
+  }) : null;
+  const petConfig = readConfig();
+  if (!petConfig.error) {
+    const scale = petConfig.config.pet.scale;
+    bus.emit({ type: 'control', status: 'ok', petState: 'calm', summary: `Pet size ${Math.round(scale * 100)}%`, detail: { action: 'size', scale, percent: Math.round(scale * 100) } });
+  }
   const sessions = new Map();
-  let sizeCommandRegistered = false;
   let ended = false;
   let lastActiveSessionID = null;
   let quarantinedProtocolFingerprint = null;
@@ -284,7 +296,7 @@ export const BorderCollie = async ({ client, directory }) => {
       return state;
     }
     state = {
-      guard: createSession({ protocol: nextPolicy.valid ? nextPolicy.protocol : null, workdir }),
+      guard: createGuardAdapter({ protocol: nextPolicy.valid ? nextPolicy.protocol : null, workdir }),
       reviewed: new Set(),
       completionPending: true,
       review: null,
@@ -292,7 +304,7 @@ export const BorderCollie = async ({ client, directory }) => {
       protocolFingerprint: nextPolicy.valid ? nextPolicy.fingerprint : null,
     };
     sessions.set(key, state);
-    publish(state.guard.handle({ kind: "session.start" }));
+    publish(state.guard.start());
     return state;
   }
 
@@ -301,7 +313,7 @@ export const BorderCollie = async ({ client, directory }) => {
     const state = sessions.get(sessionID);
     if (!state) return;
     try {
-      publish(state.guard.handle({ kind: "session.end" }));
+      publish(state.guard.end());
     } catch {
     }
     sessions.delete(sessionID);
@@ -313,11 +325,12 @@ export const BorderCollie = async ({ client, directory }) => {
     ended = true;
     for (const state of sessions.values()) {
       try {
-        publish(state.guard.handle({ kind: "session.end" }));
+        publish(state.guard.end());
       } catch {
       }
     }
     bus.close();
+    petControl?.close();
     petProcess?.stdin?.end();
   }
 
@@ -339,29 +352,6 @@ export const BorderCollie = async ({ client, directory }) => {
       },
     });
   }
-  function resizeCommand(input, output) {
-    if (!sizeCommandRegistered || input.command !== "size") return;
-    const size = parseSizeArgument(input.arguments);
-    if (!size) {
-      output.parts.splice(0, output.parts.length, {
-        type: "text",
-        text: "Usage: /size reset or /size 60|75|90|100|115|135|160|200",
-      });
-      return;
-    }
-    bus.emit({
-      type: "control",
-      status: "ok",
-      petState: "calm",
-      summary: `Pet size ${size.percent}%`,
-      detail: { action: "size", scale: size.scale, percent: size.percent },
-    });
-    output.parts.splice(0, output.parts.length, {
-      type: "text",
-      text: `Border Collie size set to ${size.percent}%.`,
-    });
-  }
-
   async function reviewCompletion(sessionID) {
     if (!sessionID) return;
     const nextPolicy = refreshPolicy();
@@ -416,7 +406,7 @@ export const BorderCollie = async ({ client, directory }) => {
     const reviewKey = completion.id || `${completion.finish || ""}:${completion.text}`;
     if (state.reviewed.has(reviewKey)) return;
     state.reviewed.add(reviewKey);
-    const out = state.guard.handle({ kind: "assistant", ...completion });
+    const out = state.guard.assistantCompletion(completion);
     publish(out);
     const sendFeedback = client?.session?.promptAsync || client?.session?.prompt;
     if (out.inject && sendFeedback) {
@@ -452,18 +442,6 @@ export const BorderCollie = async ({ client, directory }) => {
   }
 
   return {
-    config(input) {
-      input.command ||= {};
-      if (Object.hasOwn(input.command, "size")) return;
-      input.command.size = {
-        template: "$ARGUMENTS",
-        description: "Resize Border Collie: 60|75|90|100|115|135|160|200 or reset",
-      };
-      sizeCommandRegistered = true;
-    },
-
-    "command.execute.before": resizeCommand,
-
     "tool.execute.before": async (input, output) => {
       const tool = input.tool || "";
       const args = output?.args || input.args || {};
@@ -482,7 +460,7 @@ export const BorderCollie = async ({ client, directory }) => {
       }
       const protectedPolicy = {
         ...nextPolicy.protocol.raw,
-        protected_paths: [...(nextPolicy.protocol.raw.protected_paths || []), '.opencode/protocol.json'],
+        protected_paths: [...(nextPolicy.protocol.raw.protected_paths || []), '.border-collie/protocol.json', '.opencode/protocol.json'],
       };
       const protection = protectedPathDecision(tool, args, protectedPolicy, workdir);
       if (protection) {
@@ -507,8 +485,7 @@ export const BorderCollie = async ({ client, directory }) => {
       }
       const resources = resourcesFromArgs(tool, args);
       const state = stateFor(input.sessionID, nextPolicy);
-      const out = state.guard.handle({
-        kind: "permission",
+      const out = state.guard.proposedAction({
         action: TOOL_ACTION[tool] || tool,
         resources: resources.length ? resources : [tool],
         toolCall: toolCallFromArgs(tool, args),
@@ -538,8 +515,7 @@ export const BorderCollie = async ({ client, directory }) => {
       const nextPolicy = refreshPolicy();
       if (!nextPolicy.valid) return;
       const state = stateFor(input.sessionID, nextPolicy);
-      publish(state.guard.handle({
-        kind: "tool.after",
+      publish(state.guard.toolResult({
         tool: input.tool,
         status: output?.error ? "error" : "completed",
         result: resultText(output),
@@ -561,10 +537,10 @@ export const BorderCollie = async ({ client, directory }) => {
       const state = stateFor(sessionID, nextPolicy);
       if (event.type === "session.status" && isBusy(event)) {
         state.completionPending = true;
-        publish(state.guard.handle({ kind: "busy" }));
+        publish(state.guard.lifecycle("busy"));
       }
       if (event.type === "session.idle" || isIdle(event)) {
-        publish(state.guard.handle({ kind: "idle" }));
+        publish(state.guard.lifecycle("idle"));
         await scheduleCompletionReview(sessionID);
         return;
       }

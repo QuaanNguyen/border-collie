@@ -109,10 +109,10 @@ Open a disposable project with OpenCode from a separate directory.
 opencode <path-to-disposable-project>
 ```
 
-Exercise the `/size` command with `75`, `115`, and `reset`, and confirm that the Pet changes size without installing keyboard shortcuts.
+Exercise `bc pet size` with `75`, `115`, and `reset`, and confirm that the Pet changes size without installing keyboard shortcuts.
 Exercise an allowed read or edit inside the project and confirm that the Pet remains quiet or shows the expected allowed activity.
 Exercise a path, command, or egress action outside the active Protocol and confirm that Guard refuses it with a remediation message.
-Create or modify `.opencode/protocol.json` only as a human during this test, because project policy may narrow the owner policy but cannot broaden it.
+Create or modify `.border-collie/protocol.json` only as a human during this test, because project policy may narrow the owner policy but cannot broaden it.
 Ask OpenCode to make a completion claim that is missing required evidence, then satisfy the criterion and continue the session to verify failed and accepted completion verdicts.
 Confirm that an OpenCode restart starts a fresh event stream and that events are not replayed from a previous session.
 Use a disposable owner configuration and disposable project when testing installer or policy migration behavior.

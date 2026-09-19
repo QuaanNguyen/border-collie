@@ -18,5 +18,6 @@ The Pet keeps only a bounded in-memory queue while its renderer starts, and no e
 
 **Global bind** - installation operation that materializes a verified Border Collie package under OpenCode's global plugin directory while preserving the prior working package if verification fails.
 
-**Protocol** - task envelope at `.opencode/protocol.json` in the opened directory, containing allowed reads, writes, commands, egress, and done criteria.
+**Protocol** - task envelope at `.border-collie/protocol.json` in the opened directory, containing allowed reads, writes, commands, egress, and done criteria.
+The legacy `.opencode/protocol.json` remains read-compatible during migration.
 A missing Protocol selects the conservative default.
