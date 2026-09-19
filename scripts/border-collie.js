@@ -6,7 +6,9 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { parseSizeArgument } = require('../events/size-command');
 const { sendControl } = require('../pet/control');
-const { BUILTIN_PROFILES, defaultConfig, readConfig, writeConfig, profile, resolveAdapter } = require('../guard/lib/config');
+const { BUILTIN_PROFILES, readConfig, writeConfig, profile } = require('../guard/lib/config');
+const { resolveProjectOwnerPolicy } = require('../guard/lib/owner-policy');
+const { policyConflicts } = require('../guard/lib/policy-resolution');
 
 function usage() {
   return `Usage: border-collie <command>
@@ -105,6 +107,12 @@ function handleProject(args) {
     const protocol = {};
     if (selected) protocol.profile = selected;
     if (writePaths.length) protocol.write_paths = writePaths;
+    const owner = resolveProjectOwnerPolicy('opencode', selected || null);
+    if (!owner.active) throw new Error(owner.reason);
+    const missing = (owner.profile?.required_project_fields || []).filter((field) => !Object.hasOwn(protocol, field));
+    if (missing.length) throw new Error(`${owner.profile.name} requires a human project scope for ${missing.join(', ')}`);
+    const conflicts = policyConflicts(owner.protocol, protocol);
+    if (conflicts.length) throw new Error(`project Protocol broadens ${conflicts.map((conflict) => conflict.field).join(', ')}`);
     const file = writeProjectProtocol(protocol);
     process.stdout.write(`Wrote ${file}.\n`);
     return;
@@ -117,6 +125,12 @@ function handleProject(args) {
     let protocol;
     try { protocol = JSON.parse(fs.readFileSync(source, 'utf8')); } catch { throw new Error('legacy Protocol is malformed'); }
     if (Object.hasOwn(protocol, 'allow_commands')) delete protocol.allow_commands;
+    const owner = resolveProjectOwnerPolicy('opencode', protocol.profile || null);
+    if (!owner.active) throw new Error(owner.reason);
+    const project = { ...protocol };
+    delete project.profile;
+    const conflicts = policyConflicts(owner.protocol, project);
+    if (conflicts.length) throw new Error(`legacy Protocol broadens ${conflicts.map((conflict) => conflict.field).join(', ')}`);
     const file = writeProjectProtocol(protocol);
     process.stdout.write(`Copied legacy Protocol to ${file}. The old file was not changed.\n`);
     return;

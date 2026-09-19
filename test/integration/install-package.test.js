@@ -19,11 +19,12 @@ test('Global bind stages a complete package without downloading a runtime', () =
     assert(fs.existsSync(path.join(result.packageDir, 'events', 'index.js')));
     assert(fs.existsSync(path.join(result.petDir, 'package.json')));
 
-    const policy = JSON.parse(fs.readFileSync(result.ownerPolicyPath, 'utf8'));
-    assert.deepEqual(policy, {
-      schema_version: 1,
-      setup_package: 'research-safe',
-      trusted_workspace_roots: [],
+    const config = JSON.parse(fs.readFileSync(result.ownerPolicyPath, 'utf8'));
+    assert.deepEqual(config, {
+      schema_version: 2,
+      pet: { scale: 1 },
+      profiles: {},
+      adapters: { opencode: { default_profile: 'research', allowed_project_profiles: ['research', 'governed'] } },
     });
   } finally {
     fs.rmSync(temp, { recursive: true, force: true });

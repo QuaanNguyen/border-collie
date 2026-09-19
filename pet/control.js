@@ -14,14 +14,17 @@ function controlSocketPath(root = defaultConfigRoot()) {
 function sendControl(control, root = defaultConfigRoot()) {
   return new Promise((resolve) => {
     const socket = net.createConnection(controlSocketPath(root));
+    let finished = false;
     const finish = (applied) => {
+      if (finished) return;
+      finished = true;
       socket.destroy();
       resolve(applied);
     };
     socket.setTimeout(250, () => finish(false));
     socket.once('error', () => finish(false));
+    socket.once('data', (result) => finish(result.toString() === 'ok'));
     socket.once('connect', () => socket.end(JSON.stringify(control) + '\n'));
-    socket.once('close', () => resolve(true));
   });
 }
 
@@ -36,8 +39,10 @@ function startControlServer(onControl, root = defaultConfigRoot()) {
     let input = '';
     connection.on('data', (chunk) => { input += chunk; });
     connection.on('end', () => {
-      try { onControl(JSON.parse(input)); } catch {
+      let accepted = false;
+      try { accepted = onControl(JSON.parse(input)) === true; } catch {
       }
+      connection.end(accepted ? 'ok' : 'denied');
     });
   });
   server.on('error', () => {});

@@ -28,20 +28,21 @@ function runTest(name, fn) {
 
 console.log('install plugin');
 
-runTest('first install creates a Research-safe owner policy outside the package', () => {
+runTest('first install creates canonical Border Collie configuration outside the package', () => {
   const root = temporaryDirectory();
   const pluginsDir = path.join(root, 'plugins');
   const ownerConfigDir = path.join(root, 'owner-config');
   const result = installPlugin({ repoRoot: ROOT, destDir: pluginsDir, ownerConfigDir, skipRuntimeSetup: true });
-  const policyPath = path.join(ownerConfigDir, 'policy.json');
+  const policyPath = path.join(ownerConfigDir, 'config.json');
 
   assert.ok(fs.existsSync(result.dest));
   assert.ok(fs.existsSync(policyPath));
   assert.equal(fs.existsSync(path.join(result.packageDir, 'policy.json')), false);
   assert.deepEqual(JSON.parse(fs.readFileSync(policyPath, 'utf8')), {
-    schema_version: 1,
-    setup_package: 'research-safe',
-    trusted_workspace_roots: [],
+    schema_version: 2,
+    pet: { scale: 1 },
+    profiles: {},
+    adapters: { opencode: { default_profile: 'research', allowed_project_profiles: ['research', 'governed'] } },
   });
 });
 
@@ -49,7 +50,7 @@ runTest('first install accepts Custom only with supported owner settings', () =>
   const root = temporaryDirectory();
   const ownerConfigDir = path.join(root, 'owner-config');
   installPlugin({ repoRoot: ROOT, destDir: path.join(root, 'plugins'), ownerConfigDir, skipRuntimeSetup: true, setupPackage: 'custom', customPolicy: { read_paths: ['src/**'], allow_ordinary_bash: false, high_containment: true } });
-  assert.deepEqual(JSON.parse(fs.readFileSync(path.join(ownerConfigDir, 'policy.json'), 'utf8')), { schema_version: 1, setup_package: 'custom', trusted_workspace_roots: [], read_paths: ['src/**'], allow_ordinary_bash: false });
+  assert.deepEqual(JSON.parse(fs.readFileSync(path.join(ownerConfigDir, 'config.json'), 'utf8')).profiles.custom, { extends: 'research', policy: { read_paths: ['src/**'], allow_ordinary_bash: false } });
 });
 
 runTest('install includes the desktop runtime source and remains importable', () => {

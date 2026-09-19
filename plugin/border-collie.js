@@ -228,16 +228,14 @@ export const BorderCollie = async ({ client, directory }) => {
       : null,
   });
   const petControl = petProcess ? startControlServer((control) => {
-    if (control.action !== 'size' || !Number.isFinite(control.scale)) return;
-    bus.emit({
-      type: 'control', status: 'ok', petState: 'calm', summary: `Pet size ${Math.round(control.scale * 100)}%`,
-      detail: { action: 'size', scale: control.scale, percent: Math.round(control.scale * 100) },
-    });
+    if (control.action !== 'size' || ![0.6, 0.75, 0.9, 1, 1.15, 1.35, 1.6, 2].includes(control.scale)) return false;
+    emitPetSize(control.scale);
+    return true;
   }) : null;
   const petConfig = readConfig();
   if (!petConfig.error) {
     const scale = petConfig.config.pet.scale;
-    bus.emit({ type: 'control', status: 'ok', petState: 'calm', summary: `Pet size ${Math.round(scale * 100)}%`, detail: { action: 'size', scale, percent: Math.round(scale * 100) } });
+    emitPetSize(scale);
   }
   const sessions = new Map();
   let ended = false;
@@ -270,6 +268,13 @@ export const BorderCollie = async ({ client, directory }) => {
   function publish(out) {
     if (!out || !out.events) return;
     for (const e of out.events) bus.emit(e);
+  }
+
+  function emitPetSize(scale) {
+    bus.emit({
+      type: 'control', status: 'ok', petState: 'calm', summary: `Pet size ${Math.round(scale * 100)}%`,
+      detail: { action: 'size', scale, percent: Math.round(scale * 100) },
+    });
   }
 
   function syncProtocol(state, nextPolicy) {

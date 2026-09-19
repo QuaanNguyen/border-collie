@@ -4,6 +4,7 @@ const os = require('node:os');
 const path = require('node:path');
 const { spawnSync } = require('node:child_process');
 const { buildNativePet } = require('./build-native-pet');
+const { defaultConfig, writeConfig } = require('../guard/lib/config');
 
 function defaultPluginsDir() {
   return path.join(os.homedir(), '.config', 'opencode', 'plugins');
@@ -34,15 +35,26 @@ function initialOwnerPolicy(opts) {
 }
 
 function ensureOwnerPolicy(ownerConfigDir, opts = {}) {
-  const policyPath = path.join(ownerConfigDir, 'policy.json');
-  if (!fs.existsSync(policyPath)) {
-    fs.mkdirSync(ownerConfigDir, { recursive: true });
-    fs.writeFileSync(policyPath, JSON.stringify(initialOwnerPolicy(opts), null, 2) + '\n');
+  const configFile = path.join(ownerConfigDir, 'config.json');
+  const legacyPolicyPath = path.join(ownerConfigDir, 'policy.json');
+  if (!fs.existsSync(configFile) && !fs.existsSync(legacyPolicyPath)) {
+    const config = defaultConfig();
+    if (opts.setupPackage === 'custom') {
+      const policy = initialOwnerPolicy(opts);
+      delete policy.schema_version;
+      delete policy.setup_package;
+      delete policy.trusted_workspace_roots;
+      config.profiles.custom = { extends: 'research', policy };
+      config.adapters.opencode.default_profile = 'custom';
+      config.adapters.opencode.allowed_project_profiles = ['custom', 'governed'];
+    }
+    writeConfig(config, ownerConfigDir);
   }
-  return policyPath;
+  return fs.existsSync(configFile) ? configFile : legacyPolicyPath;
 }
 
 function migrationPreview(policyPath) {
+  if (path.basename(policyPath) === 'config.json') return null;
   const target = researchSafePolicy();
   let current;
   try {

@@ -60,7 +60,9 @@ test('governed project scope is required and canonical Protocol takes precedence
   const configRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'border-collie-config-'));
   const project = fs.mkdtempSync(path.join(os.tmpdir(), 'border-collie-project-'));
   const missingScope = run(configRoot, ['project', 'setup', '--profile', 'governed'], project);
-  assert.equal(missingScope.status, 0, missingScope.stderr);
+  assert.equal(missingScope.status, 2);
+  fs.mkdirSync(path.join(project, '.border-collie'), { recursive: true });
+  fs.writeFileSync(path.join(project, '.border-collie', 'protocol.json'), JSON.stringify({ profile: 'governed' }));
   const { createLiveProtocol } = require('../../guard/lib/live-protocol');
   const { resolveProjectOwnerPolicy } = require('../../guard/lib/owner-policy');
   const prior = process.env.BORDER_COLLIE_CONFIG_ROOT;
