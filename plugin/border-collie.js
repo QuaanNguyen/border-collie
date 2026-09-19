@@ -124,6 +124,7 @@ function lastAssistantCompletion(payload) {
       completed: info.time?.completed != null && !info.error && info.finish === "stop",
       error: info.error || null,
       finish: info.finish || null,
+      claims: item.claims || info.claims || [],
     };
   }
   return null;

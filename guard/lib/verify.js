@@ -131,6 +131,57 @@ function runCommandCheck(check, workdir) {
     evidence: `command passed ${repeats} run(s)` };
 }
 
+function structuredClaimCheck(requirement, workdir, context) {
+  const claims = Array.isArray(context.claims) ? context.claims : [];
+  const observations = claims.filter((claim) => claim?.kind === 'observation');
+  const minimum = Number.isInteger(requirement.minimum_observations) && requirement.minimum_observations > 0
+    ? requirement.minimum_observations
+    : 1;
+  if (observations.length < minimum) {
+    return { id: 'structured_claims', type: 'structured_claims', pass: false, where: [],
+      evidence: `structured evidence requires ${minimum} observation claim(s)` };
+  }
+  if (!context.repository?.available) {
+    return { id: 'structured_claims', type: 'structured_claims', pass: false, where: [],
+      evidence: 'repository baseline is unavailable for structured claims' };
+  }
+  const current = captureRepositoryState(workdir);
+  if (!current.available || current.head !== context.repository.head) {
+    return { id: 'structured_claims', type: 'structured_claims', pass: false, where: [],
+      evidence: 'repository identity changed since the session baseline' };
+  }
+  for (const claim of observations) {
+    if (!claim || typeof claim.path !== 'string' || !claim.path || !Number.isInteger(claim.line) || claim.line < 1
+      || typeof claim.repository !== 'string' || claim.repository !== context.repository.head
+      || !Number.isFinite(claim.confidence) || claim.confidence < 0 || claim.confidence > 1) {
+      return { id: 'structured_claims', type: 'structured_claims', pass: false, where: [],
+        evidence: 'structured observation has invalid path, anchor, repository identity, or confidence' };
+    }
+    const target = path.resolve(workdir, claim.path);
+    const relative = path.relative(workdir, target);
+    if (relative === '..' || relative.startsWith(`..${path.sep}`) || path.isAbsolute(relative) || !fs.existsSync(target)) {
+      return { id: 'structured_claims', type: 'structured_claims', pass: false, where: [claim.path],
+        evidence: `structured claim path does not exist: ${claim.path}` };
+    }
+    let lines;
+    try { lines = fs.readFileSync(target, 'utf8').split(/\r?\n/); } catch {
+      return { id: 'structured_claims', type: 'structured_claims', pass: false, where: [claim.path],
+        evidence: `structured claim path cannot be read: ${claim.path}` };
+    }
+    const line = lines[claim.line - 1];
+    if (line === undefined || !line.trim()) {
+      return { id: 'structured_claims', type: 'structured_claims', pass: false, where: [claim.path],
+        evidence: `structured claim line anchor is stale: ${claim.path}:${claim.line}` };
+    }
+    if (claim.symbol !== undefined && (typeof claim.symbol !== 'string' || !new RegExp(`\\b${escapeRe(claim.symbol)}\\b`).test(line))) {
+      return { id: 'structured_claims', type: 'structured_claims', pass: false, where: [claim.path],
+        evidence: `structured claim symbol is unknown at ${claim.path}:${claim.line}` };
+    }
+  }
+  return { id: 'structured_claims', type: 'structured_claims', pass: true, where: observations.map((claim) => claim.path),
+    evidence: `verified ${observations.length} structured observation claim(s)` };
+}
+
 function runCheck(check, workdir, context = {}) {
   const type = check.type;
 
@@ -233,12 +284,30 @@ function runCheck(check, workdir, context = {}) {
     evidence: `unknown check type '${type}'` };
 }
 
+function projectIntegrity(checks, completionPass) {
+  const dimensions = ['repository', 'test', 'environment', 'reproduction', 'patch_scope', 'behavioral_regression'];
+  const integrity = Object.fromEntries(dimensions.map((dimension) => [dimension, { status: 'not-applicable' }]));
+  for (const check of checks) {
+    const dimension = check.dimension || check.integrity_dimension || (check.type === 'repository_state' ? 'repository' : null);
+    if (!dimension || !Object.hasOwn(integrity, dimension)) continue;
+    if (check.pass) integrity[dimension] = { status: 'verified', evidence: check.evidence };
+    else if (dimension === 'environment' && /could not run|timed out|unavailable/i.test(check.evidence)) {
+      integrity[dimension] = { status: 'inconclusive', evidence: check.evidence };
+    } else {
+      integrity[dimension] = { status: 'failed', evidence: check.evidence };
+    }
+  }
+  integrity.completion = { status: completionPass ? 'verified' : 'failed' };
+  return integrity;
+}
+
 /**
  * Verify one criterion. All checks must pass.
  * @returns {{id,pass,checks,summary}}
  */
 function verify(criterion, workdir, context = {}) {
-  const checks = (criterion.checks || []).map((c) => runCheck(c, workdir, context));
+  const checks = (criterion.checks || []).map((c) => ({ ...runCheck(c, workdir, context), dimension: c.dimension }));
+  if (criterion.structured_claims) checks.push(structuredClaimCheck(criterion.structured_claims, workdir, context));
   const pass = checks.length > 0 && checks.every((c) => c.pass);
   const failing = checks.filter((c) => !c.pass);
   return {
@@ -246,10 +315,11 @@ function verify(criterion, workdir, context = {}) {
     describe: criterion.describe || criterion.id,
     pass,
     checks,
+    integrity: projectIntegrity(checks, pass),
     summary: pass
       ? `verified: ${criterion.describe || criterion.id}`
       : failing.map((f) => f.evidence).join('; ') || 'no evidence supplied',
   };
 }
 
-module.exports = { detectClaims, verify, runCheck, CLAIM_RE };
+module.exports = { detectClaims, verify, runCheck, projectIntegrity, CLAIM_RE };

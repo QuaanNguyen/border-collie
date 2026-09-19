@@ -229,7 +229,7 @@ function createSession(opts = {}) {
 
     const results = claimed.map((criterion) => ({
       criterion,
-      result: verify(criterion, protocol.workdir, { repository }),
+      result: verify(criterion, protocol.workdir, { repository, claims: event.claims }),
     }));
     const failed = results.filter(({ result }) => !result.pass);
     const events = [{
