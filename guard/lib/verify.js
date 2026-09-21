@@ -76,6 +76,10 @@ function commandEnvironment(values) {
   return env;
 }
 
+function testOutputIsIncomplete(stdout) {
+  return /\b0\s+(?:tests?|specs?)\b|\bno\s+tests?\b|\b(?:tests?|specs?)\s*:\s*0\b|\bskipped\b/i.test(stdout);
+}
+
 function runCommandCheck(check, workdir) {
   const argv = check.argv;
   if (!Array.isArray(argv) || argv.length === 0 || argv.some((value) => typeof value !== 'string' || !value)) {
@@ -125,6 +129,10 @@ function runCommandCheck(check, workdir) {
     if (matcher && !matcher.test(stdout)) {
       return { id: check.id || check.type, type: check.type, pass: false, where: argv,
         evidence: `command output does not match ${check.stdout_matches} on run ${attempt}` };
+    }
+    if ((check.dimension || check.integrity_dimension) === 'test' && testOutputIsIncomplete(stdout)) {
+      return { id: check.id || check.type, type: check.type, pass: false, where: argv,
+        evidence: `test command reported zero or skipped tests on run ${attempt}` };
     }
   }
   return { id: check.id || check.type, type: check.type, pass: true, where: argv,
@@ -291,7 +299,9 @@ function projectIntegrity(checks, completionPass) {
     const dimension = check.dimension || check.integrity_dimension || (check.type === 'repository_state' ? 'repository' : null);
     if (!dimension || !Object.hasOwn(integrity, dimension)) continue;
     if (check.pass) integrity[dimension] = { status: 'verified', evidence: check.evidence };
-    else if (dimension === 'environment' && /could not run|timed out|unavailable/i.test(check.evidence)) {
+    else if (dimension === 'repository' && /repository.*unavailable|no Git repository|Git state.*unavailable/i.test(check.evidence)) {
+      integrity[dimension] = { status: 'inconclusive', evidence: check.evidence };
+    } else if (dimension === 'environment' && /could not run|timed out|unavailable/i.test(check.evidence)) {
       integrity[dimension] = { status: 'inconclusive', evidence: check.evidence };
     } else {
       integrity[dimension] = { status: 'failed', evidence: check.evidence };

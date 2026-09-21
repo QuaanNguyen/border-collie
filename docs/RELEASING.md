@@ -4,7 +4,7 @@ Border Collie's first supported public distribution should be one npm package an
 The npm registry also serves npm, pnpm, Yarn, and Bun, so those clients do not need separate packages.
 OpenCode is the only supported adapter for the first release; other agent and editor integrations should be designed and tested as adapters before they are advertised as supported.
 
-The root package is configured as the public scoped `@quaannguyen/border-collie@0.1.0` package.
+The root package is configured for the next public scoped `@quaannguyen/border-collie@0.1.1` package.
 The npm package name and repository metadata are recorded in `package.json`.
 The remaining public-release gates are npm ownership and trusted-publisher configuration, protected-branch controls, release-candidate validation, and clean installation checks.
 
@@ -58,7 +58,7 @@ Package/plugin code is tested the same way as other code: keep most logic in ord
 
 1. Choose and reserve the npm package name.
 2. Verify `repository`, `bugs`, and `homepage` metadata in `package.json`, record the npm trusted-publisher configuration, and keep the package public for the release candidate.
-3. Decide whether `0.1.0` accurately describes the compatibility promise.
+3. Decide whether `0.1.1` accurately describes the compatibility promise.
 4. Keep the root package version, Git tag, and GitHub Release identical.
 5. Make the complete `CI` workflow required on the protected default branch and require reviewed pull requests.
 6. Run `npm test`, `npm run check`, and `npm run test:package` locally.
@@ -67,7 +67,7 @@ Package/plugin code is tested the same way as other code: keep most logic in ord
 9. Inspect the tarball with `npm pack --dry-run`; never publish from an uncommitted working tree.
 10. Configure npm trusted publishing for the release workflow and require a GitHub environment approval for the first few releases.
 11. Publish a release candidate with the `next` dist tag, install it on all three operating systems, and test it with OpenCode.
-12. Tag the exact release commit as `v0.1.0` and let the tag-driven `Release` workflow verify and publish it.
+12. Tag the exact release commit as `v0.1.1` and let the tag-driven `Release` workflow verify and publish it.
 13. Create matching GitHub release notes with supported platforms, Node/OpenCode prerequisites, known limitations, and upgrade instructions.
 14. Test the public command from a clean directory.
 15. If it is broken, deprecate the npm version; do not reuse or move an existing version tag.
