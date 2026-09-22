@@ -167,6 +167,7 @@ app.whenReady().then(async () => {
       await clickDevScenario(win, 'Refused')
       const status = await waitForState(win, 'denied')
       writeStatus({ ...status, ready: true, devControlCount: await win.webContents.executeJavaScript("document.querySelectorAll('#dev-events button').length") })
+      await delay(250)
       app.quit()
       return
     }

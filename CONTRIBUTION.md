@@ -83,6 +83,8 @@ Run the E2E lane directly when changing external processes, OpenCode integration
 npm run test:e2e
 ```
 
+The E2E lane includes a local Pet development-harness check that clicks a scenario control and verifies the rendered reaction.
+
 Run the non-native E2E subset on Windows, Linux, or a machine where native macOS acceptance is not available.
 
 ```sh
