@@ -74,7 +74,7 @@ Run the full local orchestrator when changing Pet, installation, lifecycle, or c
 node test/run-all-tests.js
 ```
 
-The full orchestrator runs the selected unit and integration suites, the real OpenCode session test, and the renderer and window tests when the locked Electron runtime is available.
+The full orchestrator runs the selected unit and integration suites plus the renderer and window tests when the locked Electron runtime is available.
 Use `BORDER_COLLIE_SKIP_NATIVE_TESTS=1 node test/run-all-tests.js` when native or Electron acceptance is unavailable, but report that reduced coverage in the pull request.
 
 Run the E2E lane directly when changing external processes, OpenCode integration, the renderer, or the Pet host.
@@ -88,8 +88,6 @@ Run the non-native E2E subset on Windows, Linux, or a machine where native macOS
 ```sh
 npm run test:e2e:skip-native
 ```
-
-The CI environment automatically skips the live OpenCode E2E test when `CI=true`, so a passing CI run is not a substitute for a local live OpenCode check when the adapter changes.
 
 ## Live OpenCode testing
 
@@ -117,15 +115,6 @@ Ask OpenCode to make a completion claim that is missing required evidence, then 
 Confirm that an OpenCode restart starts a fresh event stream and that events are not replayed from a previous session.
 Use a disposable owner configuration and disposable project when testing installer or policy migration behavior.
 Do not put real API keys, private data, or production workspaces in test fixtures or issue reports.
-
-The deterministic OpenCode E2E test uses a local mock OpenAI-compatible server and does not require a model API key.
-Run it through the normal E2E command when `opencode` is installed and available on `PATH`.
-
-```sh
-node test/e2e/opencode-session.test.js
-```
-
-The test installs the plugin into temporary OpenCode configuration, runs the `size` command, observes a failed completion claim, then verifies a later accepted claim without recursively starting another model turn.
 
 ## Windows testing
 
