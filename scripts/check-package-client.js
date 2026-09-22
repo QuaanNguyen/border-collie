@@ -7,6 +7,7 @@ const path = require('node:path');
 const { spawnSync } = require('node:child_process');
 
 const root = path.resolve(__dirname, '..');
+const packageName = require(path.join(root, 'package.json')).name;
 const client = process.argv[2];
 
 if (!['npm', 'pnpm', 'yarn', 'bun'].includes(client)) {
@@ -49,8 +50,9 @@ try {
   if (client === 'yarn') run('yarn', ['add', tarball], installDir);
   if (client === 'bun') run('bun', ['add', tarball], installDir);
 
-  assert.ok(fs.existsSync(path.join(installDir, 'node_modules', 'border-collie', 'scripts', 'border-collie.js')));
-  assert.ok(fs.existsSync(path.join(installDir, 'node_modules', 'border-collie', 'plugin', 'border-collie.js')));
+  const packageDir = path.join(installDir, 'node_modules', ...packageName.split('/'));
+  assert.ok(fs.existsSync(path.join(packageDir, 'scripts', 'border-collie.js')));
+  assert.ok(fs.existsSync(path.join(packageDir, 'plugin', 'border-collie.js')));
   process.stdout.write(`ok - ${client} installs the packed Border Collie package\n`);
 } finally {
   fs.rmSync(workspace, { recursive: true, force: true });
