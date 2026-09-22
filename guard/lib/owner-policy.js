@@ -51,7 +51,7 @@ function ownerProtocol(policy) {
 function resolveOwnerPolicy(adapter = 'opencode') {
   const canonical = readConfig();
   if (canonical.error) return { active: false, reason: `Border Collie configuration is invalid: ${canonical.error.message}`, file: canonical.file };
-  if (canonical.exists || process.env.BORDER_COLLIE_CONFIG_ROOT) {
+  if ((canonical.exists || process.env.BORDER_COLLIE_CONFIG_ROOT) && !process.env.BORDER_COLLIE_OWNER_CONFIG) {
     const resolved = resolveAdapter(canonical.config, adapter);
     if (!resolved.active) return { ...resolved, file: canonical.file };
     return { ...resolved, active: true, protocol: resolved.profile.policy, file: canonical.file, canonical: true };
@@ -63,7 +63,7 @@ function resolveOwnerPolicy(adapter = 'opencode') {
 function resolveProjectOwnerPolicy(adapter, projectProfile) {
   const canonical = readConfig();
   if (canonical.error) return { active: false, reason: `Border Collie configuration is invalid: ${canonical.error.message}`, file: canonical.file };
-  if (canonical.exists || process.env.BORDER_COLLIE_CONFIG_ROOT) {
+  if ((canonical.exists || process.env.BORDER_COLLIE_CONFIG_ROOT) && !process.env.BORDER_COLLIE_OWNER_CONFIG) {
     const resolved = resolveAdapter(canonical.config, adapter, projectProfile);
     if (!resolved.active) return { ...resolved, file: canonical.file };
     return { ...resolved, active: true, protocol: resolved.profile.policy, file: canonical.file, canonical: true };

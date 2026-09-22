@@ -11,6 +11,8 @@ ipcRenderer.on('borderCollie:event', (_event, value) => {
 
 contextBridge.exposeInMainWorld('borderCollie', {
   config: () => ipcRenderer.invoke('borderCollie:config'),
+  devScenarios: () => ipcRenderer.invoke('borderCollie:dev-scenarios'),
+  triggerDevEvent: (id) => ipcRenderer.invoke('borderCollie:dev-event', id),
   setHitRegions: (regions, dragRegions) => ipcRenderer.send('borderCollie:hit-regions', regions, dragRegions),
   setScale: (s) => ipcRenderer.send('borderCollie:scale-set', s),
   onScaled: (fn) => ipcRenderer.on('borderCollie:scaled', (_e, pct) => fn(pct)),

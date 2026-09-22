@@ -172,6 +172,21 @@ body {
   padding: 3px 4px;
   font: inherit;
 }
+.dev-events {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  width: 100%;
+}
+.dev-events button {
+  -webkit-app-region: no-drag;
+  background: rgba(0, 0, 0, 0.28);
+  color: var(--ink);
+  border: 1px solid var(--panel-edge);
+  border-radius: 6px;
+  padding: 3px 5px;
+  font: inherit;
+}
 
 @media (prefers-reduced-motion: reduce) {
   .bubble {

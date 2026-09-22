@@ -326,6 +326,18 @@ function runDev() {
       setInteraction(value === "none" ? null : value);
     });
   }
+  const events = document.getElementById("dev-events");
+  if (events && window.borderCollie.devScenarios && window.borderCollie.triggerDevEvent) {
+    window.borderCollie.devScenarios().then((scenarios) => {
+      for (const scenario of scenarios) {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.textContent = scenario.label;
+        button.addEventListener("click", () => window.borderCollie.triggerDevEvent(scenario.id));
+        events.append(button);
+      }
+    });
+  }
 }
 
 if (window.borderCollie.onScaled) {

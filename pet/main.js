@@ -26,6 +26,7 @@ const path = require("node:path");
 const os = require("node:os");
 const fs = require("node:fs");
 const { readLiveEvents } = require("./live-events");
+const { createDevHarness } = require("./dev-harness");
 const { createWindowInteraction } = require("./lib/window-interaction");
 const { loadAnimationTracks } = require("./lib/animation-manifest");
 const G = require("./geometry");
@@ -62,6 +63,7 @@ let liveEventReader = null;
 let windowInteraction = null;
 let dragRegions = [];
 let pointerDrag = null;
+const devHarness = DEV ? createDevHarness() : null;
 const settings = { scale: DEFAULT_SCALE, x: null, y: null };
 let animations = null;
 const pendingEvents = [];
@@ -285,6 +287,16 @@ if (!gotLock) {
     toggleKey: prettyShortcut(TOGGLE_KEY),
     animations,
   }));
+  ipcMain.handle("borderCollie:dev-scenarios", (event) => {
+    if (!DEV || !devHarness || !win || win.isDestroyed() || event.sender !== win.webContents) return [];
+    return devHarness.scenarios();
+  });
+  ipcMain.handle("borderCollie:dev-event", (event, id) => {
+    if (!DEV || !devHarness || !win || win.isDestroyed() || event.sender !== win.webContents) return null;
+    const entry = devHarness.trigger(id);
+    if (entry) win.webContents.send("borderCollie:event", entry);
+    return entry;
+  });
   ipcMain.on("borderCollie:hit-regions", (event, regions, nextDragRegions) => {
     if (!win || win.isDestroyed() || event.sender !== win.webContents) return;
     if (windowInteraction) windowInteraction.updateRegions(regions);

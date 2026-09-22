@@ -90,6 +90,10 @@ npm install
 npm run start:dev
 ```
 
+The development window includes animation controls plus local Event stream scenarios for working, allowed and refused actions, completion verdicts, review requests, errors, and Pet size.
+It is a visual harness only: it does not start a network listener or alter the private Adapter-to-Pet event path used in production.
+Use it to inspect the Pet's focus, visibility, geometry, dragging, and reactions without starting OpenCode.
+
 Animation asset storage and replacement notes live in [docs/ANIMATION_ASSETS.md](docs/ANIMATION_ASSETS.md).
 The Pet validates its complete animation contract before activating it, uses elapsed-time frame scheduling, and shows a stable frame when the operating system requests reduced motion.
 
