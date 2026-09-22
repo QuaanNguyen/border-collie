@@ -8,7 +8,7 @@
 
 `plugin/` contains Node test-runner coverage for the OpenCode plugin lifecycle and policy hooks.
 
-`e2e/` contains tests that exercise external processes, OpenCode, Electron, native macOS behavior, renderer startup, and desktop window behavior.
+`e2e/` contains tests that exercise Electron renderer startup and native macOS desktop window behavior.
 
 `fixtures/` contains helper applications and native probes used by the e2e tests.
 

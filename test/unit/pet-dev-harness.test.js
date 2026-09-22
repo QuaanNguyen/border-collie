@@ -1,6 +1,9 @@
 'use strict';
 
 const assert = require('node:assert');
+const fs = require('node:fs');
+const os = require('node:os');
+const path = require('node:path');
 const { SCHEMA_VERSION } = require('../../events');
 const { createDevHarness } = require('../../pet/dev-harness');
 
@@ -23,5 +26,13 @@ for (const scenario of scenarios) {
 
 assert.deepStrictEqual(harness.trigger('size-115').detail, { action: 'size', scale: 1.15, percent: 115 });
 assert.strictEqual(harness.trigger('missing'), null);
+
+const eventPath = path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'border-collie-dev-harness-')), 'events.jsonl');
+const previousEvents = process.env.BORDER_COLLIE_EVENTS;
+process.env.BORDER_COLLIE_EVENTS = eventPath;
+createDevHarness().trigger('refused');
+assert.strictEqual(fs.existsSync(eventPath), false);
+if (previousEvents === undefined) delete process.env.BORDER_COLLIE_EVENTS;
+else process.env.BORDER_COLLIE_EVENTS = previousEvents;
 
 process.stdout.write('ok - Pet development scenarios use production Event stream entries\n');

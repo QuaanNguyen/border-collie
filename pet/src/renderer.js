@@ -372,6 +372,7 @@ window.borderCollie.config().then((cfg) => {
   });
   if (cfg.toggleKey) toggleKey = cfg.toggleKey;
   if (cfg.dev) {
+    window.borderCollie.onEvent((e) => handle(e));
     return runDev();
   }
   if (cfg.live) {

@@ -15,7 +15,7 @@ const SCENARIOS = [
 ];
 
 function createDevHarness() {
-  const bus = new EventBus({ runId: `pet-dev-${process.pid}` });
+  const bus = new EventBus({ runId: `pet-dev-${process.pid}`, inboxPath: null });
   return {
     scenarios() {
       return SCENARIOS.map(({ id, label }) => ({ id, label }));

@@ -6,6 +6,7 @@ const root = process.env.BORDER_COLLIE_ROOT || process.argv.at(-3)
 const statusPath = process.env.BORDER_COLLIE_STATUS_PATH || process.argv.at(-2)
 const eventPath = process.env.BORDER_COLLIE_EVENT_PATH || process.argv.at(-1)
 const frame = process.env.BORDER_COLLIE_TEST_FRAME
+const devHarness = process.env.BORDER_COLLIE_DEV_HARNESS === '1'
 let watcher
 
 function watchEventFile(filePath, onEvent, interval = 25) {
@@ -101,6 +102,23 @@ function delay(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms))
 }
 
+async function clickDevScenario(win, label) {
+  const deadline = Date.now() + 3000
+  while (Date.now() < deadline) {
+    const clicked = await win.webContents.executeJavaScript(`
+      (() => {
+        const button = [...document.querySelectorAll('#dev-events button')].find((candidate) => candidate.textContent === ${JSON.stringify(label)})
+        if (!button) return false
+        button.click()
+        return true
+      })()
+    `)
+    if (clicked) return
+    await delay(25)
+  }
+  throw new Error(`development scenario '${label}' was not available`)
+}
+
 process.on('SIGTERM', () => app.quit())
 
 app.whenReady().then(async () => {
@@ -119,10 +137,17 @@ app.whenReady().then(async () => {
         frameDurationsMs: [140, 140, 140, 140, 280],
       },
     },
-    dev: false,
-    live: true,
+    dev: devHarness,
+    live: !devHarness,
     eventsFile: eventPath,
   }))
+  ipcMain.handle('borderCollie:dev-scenarios', () => devHarness ? [{ id: 'refused', label: 'Refused' }] : [])
+  ipcMain.handle('borderCollie:dev-event', (_event, id) => {
+    if (!devHarness || id !== 'refused') return null
+    const entry = { type: 'excursion', status: 'block', petState: 'denied', summary: 'Outside the task', reason: 'The path is not allowed' }
+    win.webContents.send('borderCollie:event', entry)
+    return entry
+  })
   for (const channel of ['borderCollie:hit-regions', 'borderCollie:scale-set']) {
     ipcMain.on(channel, () => {})
   }
@@ -138,6 +163,13 @@ app.whenReady().then(async () => {
   try {
     await win.loadFile(path.join(root, 'pet', 'src', 'index.html'))
     await rendererStatus(win)
+    if (devHarness) {
+      await clickDevScenario(win, 'Refused')
+      const status = await waitForState(win, 'denied')
+      writeStatus({ ...status, ready: true, devControlCount: await win.webContents.executeJavaScript("document.querySelectorAll('#dev-events button').length") })
+      app.quit()
+      return
+    }
     win.webContents.send('borderCollie:dragging', { phase: 'start', deltaX: 0 })
     win.webContents.send('borderCollie:dragging', { phase: 'move', deltaX: -24 })
     const leftDrag = await waitForState(win, 'drag')

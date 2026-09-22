@@ -11,7 +11,7 @@ class EventBus {
     this.seq = 0;
     this.petState = 'calm';
     this.sink = typeof opts.sink === 'function' ? opts.sink : null;
-    this.inboxPath = opts.inboxPath || process.env.BORDER_COLLIE_EVENTS || null;
+    this.inboxPath = Object.hasOwn(opts, 'inboxPath') ? opts.inboxPath : process.env.BORDER_COLLIE_EVENTS || null;
     this.onError = typeof opts.onError === 'function' ? opts.onError : () => {};
   }
 
