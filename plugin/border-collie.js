@@ -35,67 +35,34 @@ if (!repoRoot) {
 const { createGuardAdapter } = require(path.join(repoRoot, "guard/lib/adapter.js"));
 const { EventBus } = require(path.join(repoRoot, "events/index.js"));
 const { startControlServer } = require(path.join(repoRoot, "pet/control.js"));
-const { readConfig } = require(path.join(repoRoot, "guard/lib/config.js"));
-const { resolveOwnerPolicy, resolveProjectOwnerPolicy } = require(path.join(repoRoot, "guard/lib/owner-policy.js"));
-const { createLiveProtocol } = require(path.join(repoRoot, "guard/lib/live-protocol.js"));
-const { protectedPathDecision } = require(path.join(repoRoot, "guard/lib/protected-paths.js"));
+const { PET_SCALES, readConfig } = require(path.join(repoRoot, "guard/lib/config.js"));
+const { createLivePreference } = require(path.join(repoRoot, "guard/lib/preference.js"));
+const { createNeedleJudge } = require(path.join(repoRoot, "guard/lib/judge.js"));
 
-const TOOL_ACTION = {
-  read: "read",
-  glob: "glob",
-  grep: "grep",
-  edit: "edit",
-  write: "edit",
-  patch: "edit",
-  bash: "shell",
-  shell: "shell",
-  webfetch: "webfetch",
-  websearch: "webfetch",
-};
-
-function resourcesFromArgs(tool, args) {
+function targetOf(tool, args) {
   const a = args || {};
-  if (tool === "bash" || tool === "shell") return [a.command || a.cmd].filter(Boolean);
-  if (tool === "webfetch" || tool === "websearch") return [a.url || a.query].filter(Boolean);
-  return [a.filePath || a.path || a.pattern || a.glob].filter(Boolean);
+  return a.command || a.cmd || a.url || a.query || a.filePath || a.path || a.pattern || tool;
 }
 
-function toolCallFromArgs(tool, args) {
-  return {
-    id: 'opencode',
-    type: 'function',
-    function: { name: tool, arguments: JSON.stringify(args || {}) },
-  };
-}
-
-function denialMessage({ action, target, rule, layer, reason, alternative, retry }) {
+function sessionBlockedMessage(tool, args, reason) {
   return [
     'Guard refused this action.',
-    'Requested action: ' + action,
-    'Target: ' + target,
-    'Governing rule: ' + rule,
-    'Policy layer: ' + layer,
+    'Requested action: ' + tool,
+    'Target: ' + targetOf(tool, args),
+    'Governing rule: preference_validity',
+    'Decided by: folder Preference',
     'Reason: ' + reason,
-    'Permitted alternative: ' + alternative,
-    'Retry: ' + retry,
+    'Permitted alternative: Ask the owner to correct the folder Preference.',
+    'Retry: owner action is required; do not retry until the Preference is fixed.',
   ].join('\n');
 }
 
-function ordinaryDenialMessage(tool, args, event, workdir) {
-  const target = resourcesFromArgs(tool, args)[0] || tool;
-  const rule = event?.rule || 'resolved_policy';
-  const alternative = rule === 'read_paths' || rule === 'write_paths'
-    ? 'Use a path within the active project: ' + workdir
-    : 'Choose an action allowed by the resolved Border Collie policy.';
-  return denialMessage({
-    action: tool,
-    target,
-    rule,
-    layer: 'resolved Border Collie policy',
-    reason: event?.reason || 'the action is not permitted',
-    alternative,
-    retry: 'do not retry this target; use the permitted alternative or ask the owner to change policy.',
-  });
+function userText(parts) {
+  return (parts || [])
+    .filter((part) => part && (part.type === undefined || part.type === 'text') && !part.synthetic && !part.ignored)
+    .map((part) => part.text || part.content || '')
+    .join('\n')
+    .trim();
 }
 
 function resultText(output) {
@@ -212,16 +179,11 @@ function launchPet() {
   return child;
 }
 
-export const BorderCollie = async ({ client, directory }) => {
+export const BorderCollie = async ({ client, directory }, options = {}) => {
   const workdir = directory || process.cwd();
-  const ownerState = resolveOwnerPolicy('opencode');
-  const liveProtocol = createLiveProtocol({
-    workdir,
-    owner: ownerState.protocol,
-    resolveOwner: (projectProfile) => resolveProjectOwnerPolicy('opencode', projectProfile),
-    ownerTrustedWorkspaceRoots: [],
-  });
-  let policyState = liveProtocol.refresh();
+  const livePreference = createLivePreference({ workdir });
+  const judge = typeof options?.judge === "function" ? options.judge : createNeedleJudge();
+  let preferenceState = livePreference.refresh();
   const petProcess = launchPet();
   const bus = new EventBus({
     sink: petProcess?.stdin
@@ -229,7 +191,7 @@ export const BorderCollie = async ({ client, directory }) => {
       : null,
   });
   const petControl = petProcess ? startControlServer((control) => {
-    if (control.action !== 'size' || ![0.6, 0.75, 0.9, 1, 1.15, 1.35, 1.6, 2].includes(control.scale)) return false;
+    if (control.action !== 'size' || !PET_SCALES.includes(control.scale)) return false;
     emitPetSize(control.scale);
     return true;
   }) : null;
@@ -239,31 +201,29 @@ export const BorderCollie = async ({ client, directory }) => {
     emitPetSize(scale);
   }
   const sessions = new Map();
+  const userMessages = new Map();
+  const guardFeedback = new Set();
   let ended = false;
   let lastActiveSessionID = null;
-  let quarantinedProtocolFingerprint = null;
+  let quarantinedPreferenceFingerprint = null;
 
-  function policyFailureMessage(state) {
-    const action = state.conflicts?.length
-      ? 'Remove or narrow the project policy'
-      : 'Fix or remove the project policy';
-    return "Border Collie blocked this session because " + state.reason + ". " + action + " at " + state.file + ".";
+  function blockedReason(state) {
+    return "Border Collie blocked this session because " + state.reason + ". Fix the Preference at " + state.file + ".";
   }
 
-  function refreshPolicy() {
-    const nextPolicy = liveProtocol.refresh();
-    if (quarantinedProtocolFingerprint === nextPolicy.fingerprint) {
-      policyState = {
-        ...nextPolicy,
+  function refreshPreference() {
+    const next = livePreference.refresh();
+    if (quarantinedPreferenceFingerprint === next.fingerprint) {
+      preferenceState = {
+        ...next,
         valid: false,
-        reason: 'the Protocol changed during an agent tool execution. A human must save a corrected Protocol before work can continue',
-        conflicts: [],
+        reason: 'the Preference changed during an agent tool execution. A human must save a corrected Preference before work can continue',
       };
-      return policyState;
+      return preferenceState;
     }
-    quarantinedProtocolFingerprint = null;
-    policyState = nextPolicy;
-    return policyState;
+    quarantinedPreferenceFingerprint = null;
+    preferenceState = next;
+    return preferenceState;
   }
 
   function publish(out) {
@@ -278,36 +238,36 @@ export const BorderCollie = async ({ client, directory }) => {
     });
   }
 
-  function syncProtocol(state, nextPolicy) {
-    if (!nextPolicy.valid || state.protocolRevision === nextPolicy.revision) return;
-    state.guard.replaceProtocol(nextPolicy.protocol);
-    state.protocolRevision = nextPolicy.revision;
-    state.protocolFingerprint = nextPolicy.fingerprint;
+  function syncPreference(state, next) {
+    if (!next.valid || state.preferenceRevision === next.revision) return;
+    state.guard.replacePreference(next.preference);
+    state.preferenceRevision = next.revision;
+    state.preferenceFingerprint = next.fingerprint;
     publish({
       events: [{
         type: "protocol",
         status: "ok",
         petState: "calm",
-        summary: "Protocol reloaded",
-        detail: nextPolicy.protocol.summary(),
+        summary: "Preference reloaded",
+        detail: { purpose: next.preference.purpose, source: next.source },
       }],
     });
   }
 
-  function stateFor(sessionID, nextPolicy = refreshPolicy()) {
+  function stateFor(sessionID, next = refreshPreference()) {
     const key = sessionID || "plugin";
     let state = sessions.get(key);
     if (state) {
-      syncProtocol(state, nextPolicy);
+      syncPreference(state, next);
       return state;
     }
     state = {
-      guard: createGuardAdapter({ protocol: nextPolicy.valid ? nextPolicy.protocol : null, workdir }),
+      guard: createGuardAdapter({ preference: next.valid ? next.preference : null, workdir, judge }),
       reviewed: new Set(),
       completionPending: true,
       review: null,
-      protocolRevision: nextPolicy.valid ? nextPolicy.revision : null,
-      protocolFingerprint: nextPolicy.valid ? nextPolicy.fingerprint : null,
+      preferenceRevision: next.valid ? next.revision : null,
+      preferenceFingerprint: next.valid ? next.fingerprint : null,
     };
     sessions.set(key, state);
     publish(state.guard.start());
@@ -316,6 +276,7 @@ export const BorderCollie = async ({ client, directory }) => {
 
   function releaseSession(sessionID) {
     if (!sessionID) return;
+    userMessages.delete(sessionID);
     const state = sessions.get(sessionID);
     if (!state) return;
     try {
@@ -338,42 +299,69 @@ export const BorderCollie = async ({ client, directory }) => {
     bus.close();
     petControl?.close();
     petProcess?.stdin?.end();
+    judge.dispose?.();
   }
 
   process.on("beforeExit", endSession);
   process.on("exit", endSession);
 
-  if (!policyState.valid) {
+  if (!preferenceState.valid) {
     bus.emit({
       type: "notification",
       status: "error",
       petState: "denied",
-      summary: "Project policy cannot be applied",
-      reason: policyState.reason,
+      summary: "Folder Preference cannot be applied",
+      reason: preferenceState.reason,
       detail: {
         priority: "high",
-        policyPath: policyState.file,
-        conflicts: policyState.conflicts || [],
-        remediation: policyFailureMessage(policyState),
+        preferencePath: preferenceState.file,
+        remediation: blockedReason(preferenceState),
       },
     });
   }
+
+  function rememberUserMessage(sessionID, text) {
+    if (!sessionID || !text || guardFeedback.has(text)) return;
+    userMessages.set(sessionID, text);
+  }
+
+  async function latestUserMessage(sessionID) {
+    if (!sessionID) return '';
+    if (userMessages.has(sessionID)) return userMessages.get(sessionID);
+    if (!client?.session?.messages) return '';
+    let payload;
+    try {
+      payload = await client.session.messages({ path: { id: sessionID } });
+    } catch {
+      return '';
+    }
+    const list = Array.isArray(payload) ? payload : payload?.data || payload?.messages || [];
+    for (let i = list.length - 1; i >= 0; i--) {
+      const info = list[i].info || list[i];
+      if (info.role !== "user") continue;
+      const text = userText(list[i].parts || info.parts);
+      if (text && !guardFeedback.has(text)) return text;
+    }
+    return '';
+  }
+
   async function reviewCompletion(sessionID) {
     if (!sessionID) return;
-    const nextPolicy = refreshPolicy();
-    const state = stateFor(sessionID, nextPolicy);
-    if (!nextPolicy.valid) {
+    const next = refreshPreference();
+    const state = stateFor(sessionID, next);
+    if (!next.valid) {
       bus.emit({
         type: "notification",
         status: "error",
         petState: "denied",
-        summary: "Project policy cannot be applied",
-        reason: nextPolicy.reason,
+        summary: "Folder Preference cannot be applied",
+        reason: next.reason,
       });
       return;
     }
+    const doneCriteria = state.guard.preference.done_criteria;
     if (!client?.session?.messages) {
-      if (state.guard.protocol.doneCriteria.length) {
+      if (doneCriteria.length) {
         bus.emit({
           type: "notification",
           status: "error",
@@ -399,7 +387,7 @@ export const BorderCollie = async ({ client, directory }) => {
     }
     const completion = lastAssistantCompletion(payload);
     if (!completion) {
-      if (state.guard.protocol.doneCriteria.length) {
+      if (doneCriteria.length) {
         bus.emit({
           type: "notification",
           status: "error",
@@ -416,6 +404,7 @@ export const BorderCollie = async ({ client, directory }) => {
     publish(out);
     const sendFeedback = client?.session?.promptAsync || client?.session?.prompt;
     if (out.inject && sendFeedback) {
+      guardFeedback.add(out.inject.trim());
       Promise.resolve().then(() => sendFeedback.call(client.session, {
         path: { id: sessionID },
         body: { noReply: true, parts: [{ type: "text", text: out.inject }] },
@@ -448,79 +437,43 @@ export const BorderCollie = async ({ client, directory }) => {
   }
 
   return {
+    "chat.message": async (input, output) => {
+      rememberUserMessage(input?.sessionID, userText(output?.parts));
+    },
+
     "tool.execute.before": async (input, output) => {
       const tool = input.tool || "";
       const args = output?.args || input.args || {};
-      const target = resourcesFromArgs(tool, args)[0] || tool;
-      const nextPolicy = refreshPolicy();
-      if (!nextPolicy.valid) {
-        throw new Error(denialMessage({
-          action: tool,
-          target,
-          rule: 'project_policy_validity',
-          layer: 'active project policy',
-          reason: policyFailureMessage(nextPolicy),
-          alternative: 'Ask the owner to correct the active project policy.',
-          retry: 'owner action is required; do not retry until the policy is fixed.',
-        }));
-      }
-      const protectedPolicy = {
-        ...nextPolicy.protocol.raw,
-        protected_paths: [...(nextPolicy.protocol.raw.protected_paths || []), '.border-collie/protocol.json', '.opencode/protocol.json'],
-      };
-      const protection = protectedPathDecision(tool, args, protectedPolicy, workdir);
-      if (protection) {
-        bus.emit({
-          type: "excursion",
-          status: "block",
-          petState: "denied",
-          tool,
-          summary: tool + " targets a protected path",
-          reason: protection.reason,
-          rule: protection.rule,
-        });
-        throw new Error(denialMessage({
-          action: tool,
-          target,
-          rule: protection.rule,
-          layer: 'resolved Border Collie policy',
-          reason: protection.reason,
-          alternative: protection.rule === 'protected_paths' ? 'Read the path without modifying it, or ask the owner to change protection.' : 'Ask the owner to change read protection.',
-          retry: 'do not retry this action until policy changes.',
-        }));
-      }
-      const resources = resourcesFromArgs(tool, args);
-      const state = stateFor(input.sessionID, nextPolicy);
-      const out = state.guard.proposedAction({
-        action: TOOL_ACTION[tool] || tool,
-        resources: resources.length ? resources : [tool],
-        toolCall: toolCallFromArgs(tool, args),
+      const next = refreshPreference();
+      if (!next.valid) throw new Error(sessionBlockedMessage(tool, args, blockedReason(next)));
+      const state = stateFor(input.sessionID, next);
+      const out = await state.guard.proposedAction({
+        tool,
+        args,
+        userMessage: await latestUserMessage(input.sessionID),
       });
       publish(out);
-      if (out.deny) {
-        const event = out.events.find((item) => item.type === 'excursion');
-        throw new Error(ordinaryDenialMessage(tool, args, event, workdir));
-      }
+      if (out.decision !== "allow") throw new Error(out.message);
     },
 
     "tool.execute.after": async (input, output) => {
       const existing = sessions.get(input.sessionID || "plugin");
-      const observedPolicy = liveProtocol.refresh();
-      if (existing && existing.protocolFingerprint && existing.protocolFingerprint !== observedPolicy.fingerprint) {
-        quarantinedProtocolFingerprint = observedPolicy.fingerprint;
-        const quarantinedPolicy = refreshPolicy();
+      const observed = livePreference.refresh();
+      if (existing && existing.preferenceFingerprint && existing.preferenceFingerprint !== observed.fingerprint) {
+        quarantinedPreferenceFingerprint = observed.fingerprint;
+        const quarantined = refreshPreference();
         bus.emit({
           type: "notification",
           status: "error",
           petState: "denied",
-          summary: "Project policy needs human correction",
-          reason: quarantinedPolicy.reason,
+          summary: "Folder Preference needs human correction",
+          reason: quarantined.reason,
         });
         return;
       }
-      const nextPolicy = refreshPolicy();
-      if (!nextPolicy.valid) return;
-      const state = stateFor(input.sessionID, nextPolicy);
+      const next = refreshPreference();
+      if (!next.valid) return;
+      const state = stateFor(input.sessionID, next);
       publish(state.guard.toolResult({
         tool: input.tool,
         status: output?.error ? "error" : "completed",
@@ -531,8 +484,8 @@ export const BorderCollie = async ({ client, directory }) => {
 
     event: async ({ event }) => {
       if (!event) return;
-      const nextPolicy = refreshPolicy();
-      if (!nextPolicy.valid) return;
+      const next = refreshPreference();
+      if (!next.valid) return;
       let sessionID = sessionIDOf(event);
       if (sessionID) lastActiveSessionID = sessionID;
       else if (event.type === "session.idle" || isIdle(event)) sessionID = lastActiveSessionID;
@@ -540,7 +493,7 @@ export const BorderCollie = async ({ client, directory }) => {
         releaseSession(sessionID);
         return;
       }
-      const state = stateFor(sessionID, nextPolicy);
+      const state = stateFor(sessionID, next);
       if (event.type === "session.status" && isBusy(event)) {
         state.completionPending = true;
         publish(state.guard.lifecycle("busy"));

@@ -19,13 +19,13 @@ Nothing is replayed after OpenCode exits, and the runtime does not create `~/.bo
   "seq": 12,
   "ts": "2026-09-03T14:22:31.004Z",
   "runId": "run-20260903-142120",
-  "type": "action",
+  "type": "excursion",
   "status": "block",
   "petState": "refused",
   "tool": "bash",
   "summary": "curl -X POST http://198.51.100.7",
-  "reason": "host not in protocol.egress",
-  "rule": "egress",
+  "reason": "the Judge found this action outside the folder Preference",
+  "rule": "judge",
   "detail": {}
 }
 ```
@@ -39,7 +39,7 @@ Border Collie shows it in a speech bubble, so keep it under ~60 chars.
 | type        | When                                                    | Typical `status`      |
 |-------------|---------------------------------------------------------|-----------------------|
 | `run`       | Run started, completed normally, or ended                | `start` / `finish` / `end` |
-| `protocol`  | Protocol loaded - carries the envelope in `detail`      | `ok`                  |
+| `protocol`  | Folder Preference loaded - carries it in `detail`       | `ok`                  |
 | `thinking`  | The agent started or stopped thinking                   | `ok` / `idle`         |
 | `action`    | A tool call was proposed and allowed                    | `allow`               |
 | `excursion` | A tool call was proposed and refused                    | `block`               |
@@ -47,7 +47,7 @@ Border Collie shows it in a speech bubble, so keep it under ~60 chars.
 | `toolerror` | A tool *result* came back broken                        | `error`               |
 | `claim`     | The agent asserted it finished something                | `open`                |
 | `verdict`   | Evidence for a claim was checked                        | `pass` / `fail`       |
-| `ask`       | Genuinely ambiguous - a human should decide             | `ask`                 |
+| `ask`       | The Judge held a call for the owner, or a completion claim needs a human | `ask`    |
 
 ## `petState` values
 

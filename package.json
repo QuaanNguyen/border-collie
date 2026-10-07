@@ -12,8 +12,7 @@
   },
   "homepage": "https://github.com/QuaanNguyen/border-collie#readme",
   "bin": {
-    "border-collie": "scripts/border-collie.js",
-    "bc": "scripts/border-collie.js"
+    "bdc": "scripts/border-collie.js"
   },
   "files": [
     "events/",
@@ -27,6 +26,7 @@
     "scripts/check-package.js",
     "scripts/check-syntax.js",
     "scripts/install-plugin.js",
+    "scripts/migrate.js",
     "scripts/run-e2e.js",
     "LICENSE",
     "README.md"
@@ -36,6 +36,7 @@
   },
   "scripts": {
     "check": "node scripts/check-syntax.js",
+    "eval:judge": "node scripts/evaluate-judge.js",
     "test": "node --test test/unit/*.test.js test/integration/*.test.js",
     "test:e2e": "node scripts/run-e2e.js",
     "test:e2e:skip-native": "node scripts/run-e2e.js --skip-native",

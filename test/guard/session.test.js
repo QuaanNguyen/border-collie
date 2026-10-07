@@ -8,21 +8,21 @@ const test = require('node:test');
 
 const { createSession } = require('../../guard/lib/session');
 
-function withWorkdir(run) {
+async function withWorkdir(run) {
   const workdir = fs.mkdtempSync(path.join(os.tmpdir(), 'border-collie-session-'));
   try {
-    return run(workdir);
+    return await run(workdir);
   } finally {
     fs.rmSync(workdir, { recursive: true, force: true });
   }
 }
 
-test('a Protocol replacement resets completion verification', () => {
+test('a Preference replacement resets completion verification', () => {
   withWorkdir((workdir) => {
     fs.writeFileSync(path.join(workdir, 'first.txt'), 'first');
     const session = createSession({
       workdir,
-      protocol: {
+      preference: {
         task: 'verify the first result',
         done_criteria: [{
           id: 'first-result',
@@ -34,7 +34,7 @@ test('a Protocol replacement resets completion verification', () => {
     const first = session.handle({ kind: 'assistant', completed: true, text: 'Done.' });
     assert.equal(first.events.at(-1).status, 'pass');
 
-    session.replaceProtocol({
+    session.replacePreference({
       task: 'verify the second result',
       done_criteria: [{
         id: 'second-result',
@@ -48,11 +48,11 @@ test('a Protocol replacement resets completion verification', () => {
   });
 });
 
-test('completion claims receive bounded remediation and then stop the session', () => {
-  withWorkdir((workdir) => {
+test('completion claims receive bounded remediation and then stop the session', async () => {
+  await withWorkdir(async (workdir) => {
     const session = createSession({
       workdir,
-      protocol: {
+      preference: {
         task: 'fix the parser',
         read_paths: ['**'],
         write_paths: ['src/**'],
@@ -85,16 +85,13 @@ test('completion claims receive bounded remediation and then stop the session', 
     assert.equal(terminal.events.at(-1).status, 'fail');
     assert.equal(terminal.events.at(-1).detail.terminal, true);
 
-    const blocked = session.handle({
-      kind: 'permission',
-      action: 'edit',
-      resources: ['src/parser.js'],
-    });
-    assert.ok(blocked.deny);
+    const blocked = await session.propose({ tool: 'edit', args: { filePath: 'src/parser.js' } });
+    assert.equal(blocked.decision, 'disallow');
+    assert.equal(blocked.events.at(-1).rule, 'completion_terminal');
 
     fs.mkdirSync(path.join(workdir, 'src'));
     fs.writeFileSync(path.join(workdir, 'src', 'parser.js'), 'export const parser = true;\n');
-    session.replaceProtocol({
+    session.replacePreference({
       task: 'verify parser',
       done_criteria: [{
         id: 'parser-exists',

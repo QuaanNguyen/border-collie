@@ -358,5 +358,21 @@ function truncate(s, n) {
   return s.length > n ? s.slice(0, n - 1) + '…' : s;
 }
 
-module.exports = { normalise, pathsInCommand, urlsIn, truncate,
+const SEARCH_TOOLS = new Set(['grep', 'search', 'codesearch']);
+
+function proposedCall(tool, args) {
+  const call = normalise({ id: 'border-collie', type: 'function', function: { name: tool, arguments: JSON.stringify(args || {}) } });
+  const searchedPaths = collect(call.args, ['path', 'directory', 'dir']);
+  return {
+    tool: call.name,
+    args: call.args,
+    kind: call.kind,
+    summary: call.summary,
+    readPaths: SEARCH_TOOLS.has(String(tool).toLowerCase()) ? searchedPaths : call.readPaths,
+    writePaths: call.writePaths,
+    urls: [...new Set(call.urls)],
+  };
+}
+
+module.exports = { normalise, pathsInCommand, proposedCall, urlsIn, truncate,
   READ_TOOLS, WRITE_TOOLS, EXEC_TOOLS, NET_TOOLS };

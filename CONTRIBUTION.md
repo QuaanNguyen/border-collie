@@ -99,7 +99,7 @@ Install the current worktree into OpenCode's global plugin directory before test
 node scripts/install-plugin.js
 ```
 
-The installer stages and verifies the plugin before replacing the existing global package, preserves the owner policy, and builds the native macOS Pet or installs the locked Electron runtime on other platforms.
+The installer retrieves the Needle Judge and checks it against pinned SHA-256 digests, stages and verifies the plugin before replacing the existing global package, and builds the native macOS Pet or installs the locked Electron runtime on other platforms.
 The installer may download Electron on Windows and Linux when a matching installed runtime is not reusable.
 OpenCode must be restarted after installation because it loads global plugins at startup.
 
@@ -109,13 +109,13 @@ Open a disposable project with OpenCode from a separate directory.
 opencode <path-to-disposable-project>
 ```
 
-Exercise `bc pet size` with `75`, `115`, and `reset`, and confirm that the Pet changes size without installing keyboard shortcuts.
-Exercise an allowed read or edit inside the project and confirm that the Pet remains quiet or shows the expected allowed activity.
-Exercise a path, command, or egress action outside the active Protocol and confirm that Guard refuses it with a remediation message.
-Create or modify `.border-collie/protocol.json` only as a human during this test, because project policy may narrow the owner policy but cannot broaden it.
+Exercise `bdc pet size` with `75`, `115`, and `reset`, and confirm that the Pet changes size without installing keyboard shortcuts.
+Exercise an ordinary read or edit inside the project and confirm that the Pet shows the allowed or refused reaction that matches the Judge's Verdict.
+Exercise a path outside the project folder and an edit to `.border-collie/preference.json`, and confirm that Guard refuses both without consulting the Judge.
+Create or modify `.border-collie/preference.json` only as a human during this test, and run `npm run eval:judge` when a change could affect the Judge's input.
 Ask OpenCode to make a completion claim that is missing required evidence, then satisfy the criterion and continue the session to verify failed and accepted completion verdicts.
 Confirm that an OpenCode restart starts a fresh event stream and that events are not replayed from a previous session.
-Use a disposable owner configuration and disposable project when testing installer or policy migration behavior.
+Use a disposable Border Collie configuration and disposable project when testing installer or `bdc migrate` behavior.
 Do not put real API keys, private data, or production workspaces in test fixtures or issue reports.
 
 ## Windows testing
@@ -164,8 +164,8 @@ For OpenCode API or permission claims, record the version or date checked and li
 
 Start by reproducing a user-visible bug through the closest E2E path, especially for installation, OpenCode, process lifecycle, renderer, native host, and Windows issues.
 Reduce the reproduction to a deterministic unit or integration test after confirming the end-user failure.
-Keep the fix at the narrowest responsible boundary, such as Guard policy resolution, the OpenCode adapter, the event stream, the Pet host, or packaging.
-Preserve fail-closed behavior for ambiguous policy, malformed active-project Protocol files, protected paths, and unsupported subagent policy inheritance.
+Keep the fix at the narrowest responsible boundary, such as the folder boundary, the Judge, the OpenCode adapter, the event stream, the Pet host, or packaging.
+Preserve fail-closed behavior for a missing Verdict, an unavailable Judge, an unreadable Preference, Preference edits, paths outside the project folder, and unsupported subagent dispatch.
 Do not describe OpenCode permissions as an operating-system sandbox or as a complete shell filesystem boundary.
 Run the relevant focused tests, the fast checks, and the closest E2E coverage before submitting the change.
 
