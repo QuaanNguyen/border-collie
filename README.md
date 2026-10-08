@@ -40,6 +40,7 @@ bash scripts/install-plugin.sh
 ```
 
 The installation includes Guard and the desktop Pet.
+OpenCode v2 loads the package directory `~/.config/opencode/plugins/border-collie`. A configured path must point at that directory; a bare `border-collie.js` file is not a v2 plugin.
 On macOS, the installer builds a small native host that uses the system WebKit framework and does not download Electron.
 Windows and Linux use the locked Electron runtime.
 

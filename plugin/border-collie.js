@@ -553,3 +553,94 @@ export const BorderCollie = async ({ client, directory }) => {
     },
   };
 };
+
+function messageText(parts) {
+  return (parts || []).map((part) => part?.text || part?.content || "").join("");
+}
+
+function v2Messages(messages) {
+  return (messages || []).map((message) => {
+    if (message?.info || message?.parts) return message;
+    const parts = message.text ? [{ type: "text", text: message.text }] : [];
+    return {
+      info: {
+        id: message.id,
+        role: message.role,
+        finish: message.finish,
+        time: message.time,
+        error: message.error,
+      },
+      parts,
+      content: message.content || messageText(parts),
+    };
+  });
+}
+
+function v2Client(ctx) {
+  return {
+    session: {
+      async messages({ path }) {
+        const sessionID = path?.id;
+        if (typeof ctx.session?.context === "function") return v2Messages(await ctx.session.context({ sessionID }));
+        if (typeof ctx.session?.messages === "function") return ctx.session.messages({ path });
+        return [];
+      },
+      prompt({ path, body }) {
+        const sessionID = path?.id;
+        const text = messageText(body?.parts);
+        if (typeof ctx.session?.synthetic === "function") return ctx.session.synthetic({ sessionID, text });
+        if (typeof ctx.session?.prompt === "function") return ctx.session.prompt({ sessionID, text });
+        return Promise.resolve();
+      },
+      promptAsync(input) {
+        return this.prompt(input);
+      },
+    },
+  };
+}
+
+function isRecord(value) {
+  return value !== null && typeof value === "object" && !Array.isArray(value);
+}
+
+function toolInput(event) {
+  if (isRecord(event?.input)) return event.input;
+  if (isRecord(event?.args)) return event.args;
+  return {};
+}
+
+export default {
+  id: "border-collie",
+  async setup(ctx) {
+    const directory = ctx.location?.directory || ctx.location?.project?.directory || process.cwd();
+    const hooks = await BorderCollie({ client: v2Client(ctx), directory });
+    await ctx.tool.hook("execute.before", async (event) => {
+      await hooks["tool.execute.before"](
+        { tool: event.tool, sessionID: event.sessionID, callID: event.callID },
+        { args: toolInput(event) },
+      );
+    });
+    await ctx.tool.hook("execute.after", async (event) => {
+      const failed = event.status === "error" || event.error;
+      await hooks["tool.execute.after"](
+        { tool: event.tool, sessionID: event.sessionID, callID: event.callID, args: toolInput(event) },
+        failed
+          ? { error: event.error }
+          : { output: typeof event.result === "string" ? event.result : event.result?.output || event.output || "" },
+      );
+    });
+    const controller = new AbortController();
+    if (typeof ctx.event?.subscribe === "function") {
+      void (async () => {
+        try {
+          for await (const event of ctx.event.subscribe({ signal: controller.signal })) {
+            await hooks.event({ event });
+          }
+        } catch (error) {
+          if (error?.name !== "AbortError") throw error;
+        }
+      })();
+    }
+    return () => controller.abort();
+  },
+};

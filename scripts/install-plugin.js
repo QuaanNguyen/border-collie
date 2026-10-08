@@ -215,7 +215,7 @@ function ensureElectron(petDir, donorPetDirs = []) {
 
 function verifyStagedPlugin(entry, cwd) {
   const href = require('node:url').pathToFileURL(entry).href;
-  const script = `const plugin = await import(${JSON.stringify(href)}); if (typeof plugin.BorderCollie !== 'function') process.exit(2)`;
+  const script = `const plugin = await import(${JSON.stringify(href)}); if (typeof plugin.BorderCollie !== 'function') process.exit(2); if (plugin.default != null && (plugin.default.id !== 'border-collie' || typeof plugin.default.setup !== 'function')) process.exit(3)`;
   runCommand(process.execPath, ['--input-type=module', '-e', script], cwd, { capture: true });
 }
 
@@ -244,8 +244,10 @@ function replaceInstallation({ stagePackage, stageEntry, packageDir, entry, plug
     fs.renameSync(stagePackage, packageDir);
     installedPackage = true;
     if (hadEntry) fs.renameSync(entry, entryBackup);
-    fs.renameSync(stageEntry, entry);
-    installedEntry = true;
+    if (stageEntry) {
+      fs.renameSync(stageEntry, entry);
+      installedEntry = true;
+    }
     if (verify) verify();
   } catch (error) {
     if (installedEntry && fs.existsSync(entry)) fs.rmSync(entry, { force: true });
@@ -290,7 +292,7 @@ function installPlugin(opts = {}) {
   fs.mkdirSync(pluginsDir, { recursive: true });
   const stageRoot = fs.mkdtempSync(path.join(pluginsDir, '.border-collie-stage-'));
   const stagePackage = path.join(stageRoot, 'border-collie');
-  const stageEntry = path.join(stageRoot, 'border-collie.js');
+  const stageIndex = path.join(stagePackage, 'index.mjs');
   const stagedPetDir = path.join(stagePackage, 'pet');
   let ownerPolicyPath;
   let ownerPolicyMigration;
@@ -298,7 +300,11 @@ function installPlugin(opts = {}) {
 
   try {
     fs.mkdirSync(stagePackage, { recursive: true });
-    fs.copyFileSync(srcPlugin, stageEntry);
+    fs.copyFileSync(srcPlugin, stageIndex);
+    fs.writeFileSync(path.join(stagePackage, 'package.json'), JSON.stringify({
+      name: 'border-collie',
+      exports: { '.': './index.mjs' },
+    }, null, 2) + '\n');
     copyTree(srcGuard, path.join(stagePackage, 'guard'));
     copyTree(srcEvents, path.join(stagePackage, 'events'));
     copyTree(srcPet, stagedPetDir, {
@@ -337,12 +343,11 @@ function installPlugin(opts = {}) {
       }
     }
 
-    verifyStagedPlugin(stageEntry, stageRoot);
+    verifyStagedPlugin(stageIndex, stageRoot);
     ownerPolicyPath = ensureOwnerPolicy(ownerConfigDir, opts);
     ownerPolicyMigration = migrationPreview(ownerPolicyPath);
     replaceInstallation({
       stagePackage,
-      stageEntry,
       packageDir,
       entry,
       pluginsDir,
@@ -361,7 +366,7 @@ function installPlugin(opts = {}) {
     repoRoot,
     pluginsDir,
     packageDir,
-    dest: entry,
+    dest: path.join(packageDir, 'index.mjs'),
     petDir,
     petRuntimeReused,
     ownerPolicyPath,
@@ -390,7 +395,7 @@ if (require.main === module) {
       console.log('Recommended policy: ' + JSON.stringify(preview.recommendedPolicy));
     }
   }
-  console.log('OpenCode loads ~/.config/opencode/plugins/*.js at startup.');
+  console.log('OpenCode V2 loads the package directory ~/.config/opencode/plugins/border-collie.');
   console.log('Done. Open any project with: opencode <path>');
 }
 

@@ -7,7 +7,8 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const pluginUrl = pathToFileURL(path.join(here, '../../plugin/border-collie.js')).href;
-const { BorderCollie } = await import(pluginUrl);
+const pluginModule = await import(pluginUrl);
+const { BorderCollie } = pluginModule;
 
 async function withWorkdir(run) {
   const workdir = fs.mkdtempSync(path.join(os.tmpdir(), 'border-collie-plugin-'));
@@ -167,6 +168,54 @@ test('a Protocol change made during an agent tool run is quarantined', async () 
       });
 
       await before({ tool: 'edit', sessionID: 'session-3', args: { path: 'lib/allowed.js' } }, {});
+    } finally {
+      if (previous === undefined) delete process.env.BORDER_COLLIE_NO_PET;
+      else process.env.BORDER_COLLIE_NO_PET = previous;
+    }
+  });
+});
+
+test('OpenCode V2 applies policy to the live tool input', async () => {
+  await withWorkdir(async (workdir) => {
+    const previous = process.env.BORDER_COLLIE_NO_PET;
+    process.env.BORDER_COLLIE_NO_PET = '1';
+    try {
+      writeProtocol(workdir, protocol(['**']));
+      const registered = {};
+      assert.equal(pluginModule.default.id, 'border-collie');
+      const cleanup = await pluginModule.default.setup({
+        location: { directory: workdir },
+        session: { context: async () => [] },
+        tool: {
+          hook: async (name, callback) => {
+            registered[name] = callback;
+          },
+        },
+        event: {
+          subscribe() {
+            return (async function* () {})();
+          },
+        },
+      });
+      await assert.rejects(
+        registered['execute.before']({
+          tool: 'edit',
+          sessionID: 'session-v2',
+          callID: 'call-1',
+          agent: 'build',
+          messageID: 'msg-1',
+          id: 'call-1',
+          input: { path: '.opencode/protocol.json', update: true },
+        }),
+        /protected path/i,
+      );
+      await registered['execute.before']({
+        tool: 'read',
+        sessionID: 'session-v2',
+        callID: 'call-2',
+        input: { path: 'README.md' },
+      });
+      cleanup();
     } finally {
       if (previous === undefined) delete process.env.BORDER_COLLIE_NO_PET;
       else process.env.BORDER_COLLIE_NO_PET = previous;

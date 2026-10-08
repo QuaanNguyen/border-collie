@@ -13,8 +13,12 @@ test('Global bind stages a complete package without downloading a runtime', () =
   const ownerConfigDir = path.join(temp, 'owner');
 
   try {
+    fs.mkdirSync(destDir, { recursive: true });
+    fs.writeFileSync(path.join(destDir, 'border-collie.js'), 'legacy\n');
     const result = installPlugin({ destDir, ownerConfigDir, skipRuntimeSetup: true });
-    assert.equal(result.dest, path.join(destDir, 'border-collie.js'));
+    assert.equal(result.dest, path.join(result.packageDir, 'index.mjs'));
+    assert.equal(fs.existsSync(path.join(destDir, 'border-collie.js')), false);
+    assert(fs.existsSync(path.join(result.packageDir, 'index.mjs')));
     assert(fs.existsSync(path.join(result.packageDir, 'guard', 'lib', 'session.js')));
     assert(fs.existsSync(path.join(result.packageDir, 'events', 'index.js')));
     assert(fs.existsSync(path.join(result.petDir, 'package.json')));
