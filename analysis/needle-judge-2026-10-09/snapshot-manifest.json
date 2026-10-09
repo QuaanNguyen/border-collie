@@ -1,0 +1,4888 @@
+{
+  "schemaVersion": 1,
+  "createdAt": "2026-10-09T19:35:02.150282+00:00",
+  "repository": "/Users/quan/Repos/border-collie",
+  "workspace": "/Users/quan/Repos/border-collie/analysis/needle-judge-2026-10-09",
+  "remoteContacted": false,
+  "records": [
+    {
+      "path": ".env.example",
+      "sha256": "246c4ff14e778ea8343eaa76029b95bc6d92c0d2b868e21bce78b1af842249df",
+      "bytes": 504,
+      "mtimeNs": 1791478049487060857,
+      "copied": true
+    },
+    {
+      "path": ".gitignore",
+      "sha256": "db75431858b660e7b5b2f70de96c32f39b2a42b03eff9fad8963d05e9c7907cc",
+      "bytes": 381,
+      "mtimeNs": 1791482791121917828,
+      "copied": true
+    },
+    {
+      "path": "AGENTS.md",
+      "sha256": "eac15055d7b51f472a4cab0cddd61dae2e223c3b80d2c7bb3d8c6966fd3537e2",
+      "bytes": 313,
+      "mtimeNs": 1789102939465858578,
+      "copied": true
+    },
+    {
+      "path": "CONTEXT.md",
+      "sha256": "a8681595bfa8329fb79aeda1042836339edd9f6ec1568dafc4d76bc7813cff2c",
+      "bytes": 3050,
+      "mtimeNs": 1791336204536104182,
+      "copied": true
+    },
+    {
+      "path": "docs/agents/domain.md",
+      "sha256": "7c40c098158f87f39e0de45e983416a9e2494a699c2e8bd724a507f358252f7f",
+      "bytes": 310,
+      "mtimeNs": 1789102939503807397,
+      "copied": true
+    },
+    {
+      "path": "docs/agents/issue-tracker.md",
+      "sha256": "b204159e3f84a06035a133d539b683dba66136d5043cb42d35e66cd392c0bcbe",
+      "bytes": 793,
+      "mtimeNs": 1789102939503494816,
+      "copied": true
+    },
+    {
+      "path": "docs/agents/triage-labels.md",
+      "sha256": "b012fa84b0db30165117440cb03b80f739bb690905d7e08410d343b3a6044260",
+      "bytes": 583,
+      "mtimeNs": 1789102939503665898,
+      "copied": true
+    },
+    {
+      "path": "docs/guard-and-judge.md",
+      "sha256": "77835b64c20f15431e675e9ffd4489775199f775b293c1001b34f0981c17cf07",
+      "bytes": 3497,
+      "mtimeNs": 1791338852182266253,
+      "copied": true
+    },
+    {
+      "path": "events/index.js",
+      "sha256": "1edbb41a3b4efb9db3781b647ecce5c4588b008948472d74aa12dbe687a81a22",
+      "bytes": 1691,
+      "mtimeNs": 1790047883977631201,
+      "copied": true
+    },
+    {
+      "path": "events/pet-config.json",
+      "sha256": "2612cb6f0dde03d9a32aaf2cab91a664f0d5f6e77d495b3bd5f2f8af3c124ff9",
+      "bytes": 1598,
+      "mtimeNs": 1789157730655175881,
+      "copied": true
+    },
+    {
+      "path": "events/size-command.js",
+      "sha256": "05f69f7085350e2b5c1dcbe9840157e2dd4be6507027d2f4168391c3ccade0d0",
+      "bytes": 466,
+      "mtimeNs": 1789150852887479109,
+      "copied": true
+    },
+    {
+      "path": "guard/lib/adapter.js",
+      "sha256": "f77f06ea9335d0eee626bdbe5aa6a330c4add96f8fdee68d8a176602953efbf0",
+      "bytes": 781,
+      "mtimeNs": 1791338381508462483,
+      "copied": true
+    },
+    {
+      "path": "guard/lib/boundary.js",
+      "sha256": "dd59ac30e9d65428b023a89dee4b2401aee00310cafac10a0646f44399c9092e",
+      "bytes": 4133,
+      "mtimeNs": 1791338320203623216,
+      "copied": true
+    },
+    {
+      "path": "guard/lib/config.js",
+      "sha256": "1dd30a3fae2f847607876839c85d090ccd5f89688fb28d783c5682670fe8ae99",
+      "bytes": 1910,
+      "mtimeNs": 1791338399270448905,
+      "copied": true
+    },
+    {
+      "path": "guard/lib/glob.js",
+      "sha256": "032c8ec7c8e5dcab5fa1d1d882057f671604860b61fe9bc5485149048ddb7c66",
+      "bytes": 663,
+      "mtimeNs": 1791338386538969820,
+      "copied": true
+    },
+    {
+      "path": "guard/lib/injection.js",
+      "sha256": "4caf5e4f3fb678f3b0005a859636b3ad151b521483b83bb6732db6e879c3113e",
+      "bytes": 2541,
+      "mtimeNs": 1789104741431112325,
+      "copied": true
+    },
+    {
+      "path": "guard/lib/judge-artifacts.js",
+      "sha256": "e333e222bcbc29a8f8bd47759fc1cbd54d656f9c107a74c2ed52aadcacc537b9",
+      "bytes": 5980,
+      "mtimeNs": 1791338161582815606,
+      "copied": true
+    },
+    {
+      "path": "guard/lib/judge.js",
+      "sha256": "0b7044dbba773f94526b8c4635fd8405b5924bec20dc005df1fd7e6117ffdf9e",
+      "bytes": 6071,
+      "mtimeNs": 1791497600479709045,
+      "copied": true
+    },
+    {
+      "path": "guard/lib/preference.js",
+      "sha256": "5afab549e3399e3f5648207ddc4bf85e8c89b7609d0a8c90d88672d6d961bd88",
+      "bytes": 5110,
+      "mtimeNs": 1791338341759676783,
+      "copied": true
+    },
+    {
+      "path": "guard/lib/repository.js",
+      "sha256": "4844b9614c73b453259dbd47ce78e0068dcf04879878b40459f4c3fb00c4e61f",
+      "bytes": 6252,
+      "mtimeNs": 1791338387463639150,
+      "copied": true
+    },
+    {
+      "path": "guard/lib/session.js",
+      "sha256": "0ef5ec2f74d5bbd536e3da4ac534bb8ee61ee397f0e07ce91754f6549a51dd4a",
+      "bytes": 12030,
+      "mtimeNs": 1791338379428004383,
+      "copied": true
+    },
+    {
+      "path": "guard/lib/toolcalls.js",
+      "sha256": "eb5f0145fb5c1f3d1d66de3303a1b4eb22e06e1adfa8093ce99e8842dacabfd3",
+      "bytes": 12329,
+      "mtimeNs": 1791338215877943527,
+      "copied": true
+    },
+    {
+      "path": "guard/lib/toolerror.js",
+      "sha256": "ed016f719e9ed188cb56782694bf9911d1e756fa22813dfa81253680996f2430",
+      "bytes": 1053,
+      "mtimeNs": 1789102939463904965,
+      "copied": true
+    },
+    {
+      "path": "guard/lib/verify.js",
+      "sha256": "f509f55694f6153b2287bde64fabecda029d2454c404d69a03abc5b23ecc4f12",
+      "bytes": 15123,
+      "mtimeNs": 1789963983865554532,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/.npmignore",
+      "sha256": "4381e2edd27eecb57a23013489f488ae855380609d636869f2622b8be53e4504",
+      "bytes": 16,
+      "mtimeNs": 1791487592493448740,
+      "copied": false
+    },
+    {
+      "path": "guard/prototype/GENERATION.md",
+      "sha256": "0fa619242ba46f5ca7d28f7302cda2c8c6d7dac7bff1fd04029d98be5c5dc880",
+      "bytes": 23341,
+      "mtimeNs": 1791571820243752244,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/analyze-needle-results.py",
+      "sha256": "0601baad1f9867c408e0fe1b1b30c0a895087f5f64998be3086c440c16930586",
+      "bytes": 5451,
+      "mtimeNs": 1791558640539865266,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/base-diagnostic.js",
+      "sha256": "c32642ffe2c1b99542ba5440683ebcac81f35a6cb175370f2a83b247b5ef6a09",
+      "bytes": 6537,
+      "mtimeNs": 1791488186397761626,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/collect-needle-batch.py",
+      "sha256": "e67f1ddaa8a3074c0b27db9ea7c8e26d82d71132b96d542e746f95654b540107",
+      "bytes": 7698,
+      "mtimeNs": 1791558016681633698,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/data/stage2/accepted.jsonl",
+      "sha256": "09bdff908a0ca6724c07d57e0477daad87e4277cb1677ab1bc8c0d347af5b077",
+      "bytes": 3443832,
+      "mtimeNs": 1791571419924964255,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/data/stage2/base-evaluation.json",
+      "sha256": "b18de74747faadfa32d0781be5243aaef668fd48d5c433a69142fbe94974ce8b",
+      "bytes": 334048,
+      "mtimeNs": 1791491317119274979,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/data/stage2/evaluation-freeze.json",
+      "sha256": "c45a2c782bedc07cb6e72be9f85c30cc0c1e85c00333ceac7e8680182410bdab",
+      "bytes": 5260,
+      "mtimeNs": 1791491004107308878,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/data/stage2/held-out.jsonl",
+      "sha256": "c5b8976840c846f032c1cf13cfd69ae4589c24263335919c3f50f741b3753382",
+      "bytes": 344423,
+      "mtimeNs": 1791491004107184753,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/data/stage2/provenance.json",
+      "sha256": "fd181931847ed0182d02c2378e62dd3c4b032c13000a0981086655b4113468d2",
+      "bytes": 3972,
+      "mtimeNs": 1791571419942289961,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/evaluate-sol-experiment.js",
+      "sha256": "abedc43f63288c8ea781dbc2b4c93ad840acdef3bbf1690d5f943e321fd6a2b5",
+      "bytes": 5770,
+      "mtimeNs": 1791497600498474876,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/finetune-pipeline.js",
+      "sha256": "a72b392c829038689b46a4cc2c84e93e6f25ea8bc18d52eb22da08ae7c095160",
+      "bytes": 60291,
+      "mtimeNs": 1791571362850459279,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/generation-plan.js",
+      "sha256": "ebf83db21d297ff48fed4c9c40b4ddfa7461a527191139da9a78691de58e3e81",
+      "bytes": 18290,
+      "mtimeNs": 1791489445271290316,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/needle-4bit-study.py",
+      "sha256": "db60624e57e7886b099914e731e70c36d9379703b178df85fc7a658fc8b18e5e",
+      "bytes": 16537,
+      "mtimeNs": 1791562413108357737,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/needle-batch-native-probe.js",
+      "sha256": "49c7826b0d4aa828c3be5dd8e147e3c5658d001b043bf9e4f7b28d1e4af115b6",
+      "bytes": 2049,
+      "mtimeNs": 1791497468316138962,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/needle-batch-smoke.js",
+      "sha256": "d23dd2b1c8d054392e90cdb92d07201b37b8394cb1ab5b05d30e466c6864a70a",
+      "bytes": 3047,
+      "mtimeNs": 1791497600513830241,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/needle-batch-task.py",
+      "sha256": "da19f998ec3bce2df59f0c1df448da58e7f555466873cf766b7e5d07947317a6",
+      "bytes": 300,
+      "mtimeNs": 1791496802200577366,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/latest/accepted.jsonl",
+      "sha256": "61475e1d355799e0720a92489c102f4f3ce123da56324d5e31932ca18aacc470",
+      "bytes": 100259,
+      "mtimeNs": 1791485909691687145,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/latest/attempts.json",
+      "sha256": "ee108b5ba78a54f1bfa5fe6539cb56327d6a55975daf8b2df21d985523f0ce45",
+      "bytes": 265058,
+      "mtimeNs": 1791485909691449728,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/latest/base-diagnostic.json",
+      "sha256": "8e28f7e373805ef0a98b40aae7022a85ab7abeb885c4fbf58525f6caa33ff984",
+      "bytes": 132404,
+      "mtimeNs": 1791485909693005775,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/latest/held-out.jsonl",
+      "sha256": "c900b72f8619a9931d53fc121b300dfeea10642438800c7a2b84eedf34b55d2f",
+      "bytes": 1634,
+      "mtimeNs": 1791485909691748729,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/latest/labels.json",
+      "sha256": "cab5870ed5ec268681c9e0e7893657b8540e9ad6b2d24084f53be6406395592b",
+      "bytes": 32394,
+      "mtimeNs": 1791485909690813101,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/latest/plan.json",
+      "sha256": "cb135bb801fda6afd5297b02a3f7d4096a89927b74ffbfbc8ba3fe5d77a3e701",
+      "bytes": 76672,
+      "mtimeNs": 1791485909690447100,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/latest/proposed.jsonl",
+      "sha256": "c9638d7fc8f0801f5ec21bd4ae8b95d1f45def413d16a82bdcaac49cdea1bc28",
+      "bytes": 78119,
+      "mtimeNs": 1791485909690684184,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/latest/provenance.json",
+      "sha256": "28d4aa63cf993cf91cb77e5440c62a2c0872976dc97c201f6424ca33b013285d",
+      "bytes": 328,
+      "mtimeNs": 1791485909692772441,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/latest/report.json",
+      "sha256": "5dde080d3bda9b5d5197506ae8c49b8a2316b5c9ab2a409d7567937862805841",
+      "bytes": 7554,
+      "mtimeNs": 1791485909692073355,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/latest/train.jsonl",
+      "sha256": "1afe1f1b269e4f37ea9f28ceb570a412fbd7413211a541e5c17041b60658c24f",
+      "bytes": 66999,
+      "mtimeNs": 1791485909691906188,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/latest/validation.jsonl",
+      "sha256": "27ebcdb75118ae2b91976167c4fe7a127f25d0ce6aa9ca38a7c3625c8a40271f",
+      "bytes": 21993,
+      "mtimeNs": 1791485909691991980,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-4bit-balanced-updates/balance-subsets-source.py",
+      "sha256": "df3749bba2384e431883826a1abc234e82c3cd136995a80ddb171e3ac2e1566d",
+      "bytes": 3776,
+      "mtimeNs": 1791563937657819267,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-4bit-balanced-updates/held-out-scenarios.jsonl",
+      "sha256": "c5b8976840c846f032c1cf13cfd69ae4589c24263335919c3f50f741b3753382",
+      "bytes": 344423,
+      "mtimeNs": 1791563926353915436,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-4bit-balanced-updates/heldOut-requests.jsonl",
+      "sha256": "f563737bcc9835a78773b39f073d85724a32f40b489c4ecd29a0104d6606f4c3",
+      "bytes": 398898,
+      "mtimeNs": 1791563927309906458,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-4bit-balanced-updates/resource-check-2026-10-09.json",
+      "sha256": "cbb1500fb77e0e564e1eae0ababde11c49e39d65d993d48d7d740abf093ef14b",
+      "bytes": 1883,
+      "mtimeNs": 1791564687741836877,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-4bit-balanced-updates/study-plan.json",
+      "sha256": "7cd3fa7aff49c658a09ab0a5cff7f75bca7cbc3ad3cfe31bb727c43933f51b04",
+      "bytes": 142260,
+      "mtimeNs": 1791563923674495264,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-4bit-balanced-updates/submission.json",
+      "sha256": "ac022240e667de780dd0eb082c76e604074d878d9b72a2e73f6bc5eb21f1bb22",
+      "bytes": 18639,
+      "mtimeNs": 1791563923960295116,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-4bit-balanced-updates/train-100-scenarios.jsonl",
+      "sha256": "f98130b31e16bbcea11ff2985fd9f569d02c259c1695581d1749e03775c3bf34",
+      "bytes": 141119,
+      "mtimeNs": 1791563927762382067,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-4bit-balanced-updates/train-100.jsonl",
+      "sha256": "64dc93c52ee01b249be89c43b9fefb8f943a4cbb8ef5a50c788fd33f1339b73f",
+      "bytes": 109493,
+      "mtimeNs": 1791563928164302293,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-4bit-balanced-updates/train-1000-scenarios.jsonl",
+      "sha256": "e1f99d88ababfb087257f7ad8978110dcc015dfb41ae6d83d30d11f37d321d5d",
+      "bytes": 1422053,
+      "mtimeNs": 1791563929991865683,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-4bit-balanced-updates/train-1000.jsonl",
+      "sha256": "f717a0a79bb080997a078f42405d4d44c81ea8a75a29aaad2e81d69a280284bd",
+      "bytes": 1102259,
+      "mtimeNs": 1791563931082786784,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-4bit-balanced-updates/train-2000-scenarios.jsonl",
+      "sha256": "4ca50e3d84c68b701fe29f7e10eb899a9138fac6e7018b5b3445cc726ba5308c",
+      "bytes": 2843456,
+      "mtimeNs": 1791563932670701311,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-4bit-balanced-updates/train-2000.jsonl",
+      "sha256": "6cf11cf90253659c095c5fe1654dbe187f8ffe4e471ee8d504cf216632e5b250",
+      "bytes": 2213073,
+      "mtimeNs": 1791563933761742704,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-4bit-balanced-updates/train-300-scenarios.jsonl",
+      "sha256": "5fbfebafb574ee3e14b08d55d3e43a8920ca65439a3bbe7abe529304116d7521",
+      "bytes": 425805,
+      "mtimeNs": 1791563934227363203,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-4bit-balanced-updates/train-300.jsonl",
+      "sha256": "4ba72d86061b7be6a450b70a43b83da8d9a081694c4336431ad20ddde63f8fff",
+      "bytes": 330324,
+      "mtimeNs": 1791563934675109918,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-4bit-balanced-updates/train-600-scenarios.jsonl",
+      "sha256": "85aa59cc658a5138159facfac0989a727f82d5abd8de613186ec1bdef1f68062",
+      "bytes": 852052,
+      "mtimeNs": 1791563935261778645,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-4bit-balanced-updates/train-600.jsonl",
+      "sha256": "2be124fdbc9dfcd259c4d35eff369010f06dadbbe77aab5af8f428bd53a76b30",
+      "bytes": 660608,
+      "mtimeNs": 1791563935785350143,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-4bit-balanced-updates/validation-requests.jsonl",
+      "sha256": "e747562bd169053d9925b58d55971ec4796050752270ab195f719c0b6c31de2b",
+      "bytes": 132217,
+      "mtimeNs": 1791563936182712183,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-4bit-balanced-updates/validation-scenarios.jsonl",
+      "sha256": "5ff8cfa15717c0c52380e6adb4605ffa0f094df8a5373adc1680223cf378b981",
+      "bytes": 143102,
+      "mtimeNs": 1791563936572281481,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-4bit-balanced-updates/validation.jsonl",
+      "sha256": "77ce51fd55d7fb6cd74ac4600d7822319dacfdfedada0861c78610c9a9a07f4a",
+      "bytes": 110347,
+      "mtimeNs": 1791563936959792228,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-4bit-controlled-study/held-out-scenarios.jsonl",
+      "sha256": "c5b8976840c846f032c1cf13cfd69ae4589c24263335919c3f50f741b3753382",
+      "bytes": 344423,
+      "mtimeNs": 1791562359689324097,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-4bit-controlled-study/heldOut-requests.jsonl",
+      "sha256": "f563737bcc9835a78773b39f073d85724a32f40b489c4ecd29a0104d6606f4c3",
+      "bytes": 398898,
+      "mtimeNs": 1791562359746534293,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-4bit-controlled-study/study-plan.json",
+      "sha256": "d699b4df91c2d7f5e88b1fe0af652fec2cb3bdad0f1594b52626224fdb4214e0",
+      "bytes": 137083,
+      "mtimeNs": 1791562413304912286,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-4bit-controlled-study/submission.json",
+      "sha256": "8f7b912ea1091031ad800995b0530453f27d80d5e962e497d72b534080d78570",
+      "bytes": 18338,
+      "mtimeNs": 1791562617588151671,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-4bit-controlled-study/train-100-scenarios.jsonl",
+      "sha256": "8035a161e65464fcffffe80b510b59e4945d28f901a444c57632f2e969cfb90e",
+      "bytes": 140247,
+      "mtimeNs": 1791562359690936686,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-4bit-controlled-study/train-100.jsonl",
+      "sha256": "3f6d4dac6ae9286b7d9e41421aa34984dfd4a70df2cd3ea7ea32e70878ae1512",
+      "bytes": 109058,
+      "mtimeNs": 1791562359691994106,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-4bit-controlled-study/train-1000-scenarios.jsonl",
+      "sha256": "0106d293e4e053616dda7d4cf12089066f1a0e8d443a3314548fc7078561bef3",
+      "bytes": 1411242,
+      "mtimeNs": 1791562359706410156,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-4bit-controlled-study/train-1000.jsonl",
+      "sha256": "a5725783cdb34f48858e3376b7460f2fe234a1db82053e0add4ec8221e1245b9",
+      "bytes": 1098309,
+      "mtimeNs": 1791562359714866935,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-4bit-controlled-study/train-2000-scenarios.jsonl",
+      "sha256": "4ca50e3d84c68b701fe29f7e10eb899a9138fac6e7018b5b3445cc726ba5308c",
+      "bytes": 2843456,
+      "mtimeNs": 1791562359720325620,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-4bit-controlled-study/train-2000.jsonl",
+      "sha256": "6cf11cf90253659c095c5fe1654dbe187f8ffe4e471ee8d504cf216632e5b250",
+      "bytes": 2213073,
+      "mtimeNs": 1791562359736524634,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-4bit-controlled-study/train-300-scenarios.jsonl",
+      "sha256": "c5e5996317b6baa84de194a2ab620c038c7a5b65ed08f55dad5ba8cf16ca9e2c",
+      "bytes": 425884,
+      "mtimeNs": 1791562359692816401,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-4bit-controlled-study/train-300.jsonl",
+      "sha256": "c4d55a089139101862b7034e204481508cbf188a96e8161928bfcc737ae99490",
+      "bytes": 329491,
+      "mtimeNs": 1791562359695819703,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-4bit-controlled-study/train-600-scenarios.jsonl",
+      "sha256": "d45341e11878d3871ae5d8985411618cba81ffe24c034c2322967f6d0ac52f84",
+      "bytes": 848410,
+      "mtimeNs": 1791562359697688084,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-4bit-controlled-study/train-600.jsonl",
+      "sha256": "0efa17b0e13b8b45c0535544e407c96de9593120aab5e38aa888ad190055f91b",
+      "bytes": 659842,
+      "mtimeNs": 1791562359703131853,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-4bit-controlled-study/validation-requests.jsonl",
+      "sha256": "e747562bd169053d9925b58d55971ec4796050752270ab195f719c0b6c31de2b",
+      "bytes": 132217,
+      "mtimeNs": 1791562359740180938,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-4bit-controlled-study/validation-scenarios.jsonl",
+      "sha256": "5ff8cfa15717c0c52380e6adb4605ffa0f094df8a5373adc1680223cf378b981",
+      "bytes": 143102,
+      "mtimeNs": 1791562359688734637,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-4bit-controlled-study/validation.jsonl",
+      "sha256": "77ce51fd55d7fb6cd74ac4600d7822319dacfdfedada0861c78610c9a9a07f4a",
+      "bytes": 110347,
+      "mtimeNs": 1791562359690569601,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-4bit-matched-updates/held-out-scenarios.jsonl",
+      "sha256": "c5b8976840c846f032c1cf13cfd69ae4589c24263335919c3f50f741b3753382",
+      "bytes": 344423,
+      "mtimeNs": 1791563310221628407,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-4bit-matched-updates/heldOut-requests.jsonl",
+      "sha256": "f563737bcc9835a78773b39f073d85724a32f40b489c4ecd29a0104d6606f4c3",
+      "bytes": 398898,
+      "mtimeNs": 1791563310230507320,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-4bit-matched-updates/study-plan.json",
+      "sha256": "3468883b07f11794a53a44f582956fca66815fe234f127fbddf2492282a6e9f7",
+      "bytes": 137607,
+      "mtimeNs": 1791563310233582000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-4bit-matched-updates/submission.json",
+      "sha256": "1ff463eedfec6833137e04842f31fef24a7242296c64790a1745c721c2b680cb",
+      "bytes": 18628,
+      "mtimeNs": 1791563397086724826,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-4bit-matched-updates/train-100-scenarios.jsonl",
+      "sha256": "8035a161e65464fcffffe80b510b59e4945d28f901a444c57632f2e969cfb90e",
+      "bytes": 140247,
+      "mtimeNs": 1791563310222217076,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-4bit-matched-updates/train-100.jsonl",
+      "sha256": "3f6d4dac6ae9286b7d9e41421aa34984dfd4a70df2cd3ea7ea32e70878ae1512",
+      "bytes": 109058,
+      "mtimeNs": 1791563310222510202,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-4bit-matched-updates/train-1000-scenarios.jsonl",
+      "sha256": "0106d293e4e053616dda7d4cf12089066f1a0e8d443a3314548fc7078561bef3",
+      "bytes": 1411242,
+      "mtimeNs": 1791563310225958884,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-4bit-matched-updates/train-1000.jsonl",
+      "sha256": "a5725783cdb34f48858e3376b7460f2fe234a1db82053e0add4ec8221e1245b9",
+      "bytes": 1098309,
+      "mtimeNs": 1791563310226864262,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-4bit-matched-updates/train-2000-scenarios.jsonl",
+      "sha256": "4ca50e3d84c68b701fe29f7e10eb899a9138fac6e7018b5b3445cc726ba5308c",
+      "bytes": 2843456,
+      "mtimeNs": 1791563310228334477,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-4bit-matched-updates/train-2000.jsonl",
+      "sha256": "6cf11cf90253659c095c5fe1654dbe187f8ffe4e471ee8d504cf216632e5b250",
+      "bytes": 2213073,
+      "mtimeNs": 1791563310229749150,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-4bit-matched-updates/train-300-scenarios.jsonl",
+      "sha256": "c5e5996317b6baa84de194a2ab620c038c7a5b65ed08f55dad5ba8cf16ca9e2c",
+      "bytes": 425884,
+      "mtimeNs": 1791563310222905412,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-4bit-matched-updates/train-300.jsonl",
+      "sha256": "c4d55a089139101862b7034e204481508cbf188a96e8161928bfcc737ae99490",
+      "bytes": 329491,
+      "mtimeNs": 1791563310223540040,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-4bit-matched-updates/train-600-scenarios.jsonl",
+      "sha256": "d45341e11878d3871ae5d8985411618cba81ffe24c034c2322967f6d0ac52f84",
+      "bytes": 848410,
+      "mtimeNs": 1791563310224320210,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-4bit-matched-updates/train-600.jsonl",
+      "sha256": "0efa17b0e13b8b45c0535544e407c96de9593120aab5e38aa888ad190055f91b",
+      "bytes": 659842,
+      "mtimeNs": 1791563310224904962,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-4bit-matched-updates/validation-requests.jsonl",
+      "sha256": "e747562bd169053d9925b58d55971ec4796050752270ab195f719c0b6c31de2b",
+      "bytes": 132217,
+      "mtimeNs": 1791563310230087235,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-4bit-matched-updates/validation-scenarios.jsonl",
+      "sha256": "5ff8cfa15717c0c52380e6adb4605ffa0f094df8a5373adc1680223cf378b981",
+      "bytes": 143102,
+      "mtimeNs": 1791563310221264905,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-4bit-matched-updates/validation.jsonl",
+      "sha256": "77ce51fd55d7fb6cd74ac4600d7822319dacfdfedada0861c78610c9a9a07f4a",
+      "bytes": 110347,
+      "mtimeNs": 1791563310221935908,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-4bit-repetitions/held-out-scenarios.jsonl",
+      "sha256": "c5b8976840c846f032c1cf13cfd69ae4589c24263335919c3f50f741b3753382",
+      "bytes": 344423,
+      "mtimeNs": 1791561752413003313,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-4bit-repetitions/heldOut-requests.jsonl",
+      "sha256": "7bec8053229b6f9447843e97369a376138ee953e3533ff23dfcce212637e8702",
+      "bytes": 339927,
+      "mtimeNs": 1791561752462825556,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-4bit-repetitions/study-plan.json",
+      "sha256": "6e5c1806fa625e80b1fda53d906c784540fd2e4580321fbec6a631c2dcbf8609",
+      "bytes": 127424,
+      "mtimeNs": 1791562037315897220,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-4bit-repetitions/train-100-scenarios.jsonl",
+      "sha256": "8035a161e65464fcffffe80b510b59e4945d28f901a444c57632f2e969cfb90e",
+      "bytes": 140247,
+      "mtimeNs": 1791561752414500818,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-4bit-repetitions/train-100.jsonl",
+      "sha256": "3f6d4dac6ae9286b7d9e41421aa34984dfd4a70df2cd3ea7ea32e70878ae1512",
+      "bytes": 109058,
+      "mtimeNs": 1791561752415470655,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-4bit-repetitions/train-1000-scenarios.jsonl",
+      "sha256": "40d685148a27d8dbf9b92eec38ef8a8917860262e66e43ec32807fd637a51628",
+      "bytes": 1410457,
+      "mtimeNs": 1791561752428111945,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-4bit-repetitions/train-1000.jsonl",
+      "sha256": "4343894985ec3c6e324ebef4a59da595bfb76d5a2544da83d250528377308d1b",
+      "bytes": 1097424,
+      "mtimeNs": 1791561752435833970,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-4bit-repetitions/train-2000-scenarios.jsonl",
+      "sha256": "798c6d2cb5ed80d9d2a283469335cab39bfc5c1e314490aa0b07eb98435f4cb8",
+      "bytes": 2840747,
+      "mtimeNs": 1791561752440956611,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-4bit-repetitions/train-2000.jsonl",
+      "sha256": "7ecef4b098b7084ba933d8dda3b24ca71925ae53da4bec3fb014d91fffa611c2",
+      "bytes": 2210640,
+      "mtimeNs": 1791561752456113618,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-4bit-repetitions/train-300-scenarios.jsonl",
+      "sha256": "ac45f5719d7433a32935943dfd5e4a2dc1a2f43b6ae7c48252706d79a4fdfb3b",
+      "bytes": 425884,
+      "mtimeNs": 1791561752416191949,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-4bit-repetitions/train-300.jsonl",
+      "sha256": "c4d55a089139101862b7034e204481508cbf188a96e8161928bfcc737ae99490",
+      "bytes": 329491,
+      "mtimeNs": 1791561752418905332,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-4bit-repetitions/train-600-scenarios.jsonl",
+      "sha256": "bfcdaf554020b980b3f5edbb20ac81516053e2baf33a9e206132b9274dea06bc",
+      "bytes": 848237,
+      "mtimeNs": 1791561752420521629,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-4bit-repetitions/train-600.jsonl",
+      "sha256": "8519a3d699730c5a2132c8d92cfeee8d54b66f6c66531373f536ff0f27b1099b",
+      "bytes": 659727,
+      "mtimeNs": 1791561752425270978,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-4bit-repetitions/validation-requests.jsonl",
+      "sha256": "b8df7cfe4a5703c890a04bbedbf6d48a5d8a746d845852261540494f80143947",
+      "bytes": 112652,
+      "mtimeNs": 1791561752458814043,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-4bit-repetitions/validation-scenarios.jsonl",
+      "sha256": "5ff8cfa15717c0c52380e6adb4605ffa0f094df8a5373adc1680223cf378b981",
+      "bytes": 143102,
+      "mtimeNs": 1791561752412420645,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-4bit-repetitions/validation.jsonl",
+      "sha256": "77ce51fd55d7fb6cd74ac4600d7822319dacfdfedada0861c78610c9a9a07f4a",
+      "bytes": 110347,
+      "mtimeNs": 1791561752414191775,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/base-local-export/base-local-export-decisions.csv",
+      "sha256": "7321ea3ce77e9e2d376b892473a6b3afb16dc0a60eacea73b22cb1b406a52cb3",
+      "bytes": 93318,
+      "mtimeNs": 1791496473216358072,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/base-local-export/base-local-export-heldOut.json",
+      "sha256": "add9e153cc1374fc34b8cab69a9e44162fd601f42dd7491a87f45f73ef7d8027",
+      "bytes": 342664,
+      "mtimeNs": 1791496473214753373,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/base-local-export/base-local-export-summary.csv",
+      "sha256": "84fcf0b7b370e8915c82b14123ae267175953efcdc150895b7e9cbb1b8af0ba8",
+      "bytes": 12076,
+      "mtimeNs": 1791496473215709951,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/base-local-export/base-local-export-validation.json",
+      "sha256": "40875b894e57e6baf1efd5b44ece372667aac76ad00129e3ffb87eb77f03f260",
+      "bytes": 137691,
+      "mtimeNs": 1791496434778189995,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/base-local-export/build.log",
+      "sha256": "0cc1d24cf34e653f8c5e953e90539e4fae5028e79210c2069614c025b6f83b0e",
+      "bytes": 835,
+      "mtimeNs": 1791496294599391856,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/base-local-export/candidate.cact",
+      "sha256": "3bde318ede183eb06eb65524c9139f83d749e929f46feadfe516cefa3c8e8863",
+      "bytes": 63437076,
+      "mtimeNs": 1791496294354273961,
+      "copied": false
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/base-local-export/evaluation-cache/3bde318ede183eb06eb65524c9139f83d749e929f46feadfe516cefa3c8e8863/candidate.cact",
+      "kind": "symlink",
+      "linkTarget": "/Users/quan/Repos/border-collie/guard/prototype/output/needle-official-ladder/base-local-export/candidate.cact",
+      "bytes": 110,
+      "copied": false
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/base-local-export/evaluation-cache/3bde318ede183eb06eb65524c9139f83d749e929f46feadfe516cefa3c8e8863/needle",
+      "kind": "symlink",
+      "linkTarget": "/private/tmp/bc-judge-root/2ae11323dc000f5e70c49f7403efa6af12ba9e67/needle",
+      "bytes": 74,
+      "copied": false
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/base-local-export/experiment.json",
+      "sha256": "8bb10e552530057b3ab69dc03cdfc70baf71827cd2a75fc6d37dd7fdc72d5e2b",
+      "bytes": 1672,
+      "mtimeNs": 1791496422177580912,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/base-local-export/held-out-scenarios.jsonl",
+      "sha256": "c5b8976840c846f032c1cf13cfd69ae4589c24263335919c3f50f741b3753382",
+      "bytes": 344423,
+      "mtimeNs": 1791496422177458454,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/base-local-export/run.json",
+      "sha256": "16202bf87f18848d510b3403e01aaeac34e79e01a7bfed8d8613a2a6de44bb40",
+      "bytes": 771,
+      "mtimeNs": 1791496279936899757,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/base-local-export/validation-scenarios.jsonl",
+      "sha256": "5ff8cfa15717c0c52380e6adb4605ffa0f094df8a5373adc1680223cf378b981",
+      "bytes": 143102,
+      "mtimeNs": 1791496422176381586,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/base-local-export/zero.safetensors",
+      "sha256": "9cc0e1ea33fd80a987d122acb81b17f643a7ccf56404fa35aeca5037c57f407c",
+      "bytes": 7906632,
+      "mtimeNs": 1791496279713545897,
+      "copied": false
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/batch-native-probe.json",
+      "sha256": "28616a114e417cb0c6441c88e0c931cb8ad1a82c0b6bb28b07ff021bd95c43c8",
+      "bytes": 1372,
+      "mtimeNs": 1791497829121519328,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/batch-smoke.json",
+      "sha256": "f6da9115cae25b71013dca09764feb00cfbb032c76acfab0d7e1b5d3247d61e3",
+      "bytes": 3131,
+      "mtimeNs": 1791497816748037155,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/batch-source-sha256.txt",
+      "sha256": "fcd79dfb201b02f98563cd61aad18ecfa8ca2dbc9b524f33e2b75364b80dec77",
+      "bytes": 1086,
+      "mtimeNs": 1791497834975439008,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/batch-submission.json",
+      "sha256": "8c93a8a9aef8a8e93187f44df8e5ee6270c3565af0400f55c2c627c49e910626",
+      "bytes": 3004,
+      "mtimeNs": 1791497811121861370,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/evaluation-runtime.json",
+      "sha256": "545937573edc4e0e704eb943947c658e420ce6b8761c94dd693616949666facc",
+      "bytes": 410,
+      "mtimeNs": 1791497823086598477,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/final-slurm-status.txt",
+      "sha256": "eb7f8a811e3d7936f94cf5c3f1cc262ee25668c0242c62f38be0f762d8fa5b2f",
+      "bytes": 1830,
+      "mtimeNs": 1791558265774437125,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/forced-probe.json",
+      "sha256": "56bc0de421af370d168ef251e04e6a343e61b5ace9d9f3f31ff448df5d07654d",
+      "bytes": 1733,
+      "mtimeNs": 1791495867254789339,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/held-out-scenarios.jsonl",
+      "sha256": "c5b8976840c846f032c1cf13cfd69ae4589c24263335919c3f50f741b3753382",
+      "bytes": 344423,
+      "mtimeNs": 1791495808315484901,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/ladder-plan.json",
+      "sha256": "acec12633f4a4eb7ec25713cd885a035ef585e64dfead7c95891c19e8e1427ed",
+      "bytes": 65778,
+      "mtimeNs": 1791495808337129103,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-evaluation.log",
+      "sha256": "f56b33b8b5d1c6e07271bac92e80bbbceb371e2ce7be5ec4b95e2a9c3bf293b8",
+      "bytes": 647,
+      "mtimeNs": 1791558924275965881,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-results.tar.gz",
+      "sha256": "9328654e221eef2757a5b889e4551026966a635a8d85e2272eebfeb3a05c6eca",
+      "bytes": 2585875,
+      "mtimeNs": 1791559196924450509,
+      "copied": false
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/analysis-source/guard/lib/judge.js",
+      "sha256": "0b7044dbba773f94526b8c4635fd8405b5924bec20dc005df1fd7e6117ffdf9e",
+      "bytes": 6071,
+      "mtimeNs": 1791559196715437434,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/analysis-source/guard/lib/toolcalls.js",
+      "sha256": "eb5f0145fb5c1f3d1d66de3303a1b4eb22e06e1adfa8093ce99e8842dacabfd3",
+      "bytes": 12329,
+      "mtimeNs": 1791559196715720810,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/analysis-source/guard/prototype/analyze-needle-results.py",
+      "sha256": "0601baad1f9867c408e0fe1b1b30c0a895087f5f64998be3086c440c16930586",
+      "bytes": 5451,
+      "mtimeNs": 1791559196716075435,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/analysis-source/guard/prototype/base-diagnostic.js",
+      "sha256": "c32642ffe2c1b99542ba5440683ebcac81f35a6cb175370f2a83b247b5ef6a09",
+      "bytes": 6537,
+      "mtimeNs": 1791559196715303267,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/analysis-source/guard/prototype/collect-needle-batch.py",
+      "sha256": "e67f1ddaa8a3074c0b27db9ea7c8e26d82d71132b96d542e746f95654b540107",
+      "bytes": 7698,
+      "mtimeNs": 1791559196714805850,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/analysis-source/guard/prototype/evaluate-sol-experiment.js",
+      "sha256": "abedc43f63288c8ea781dbc2b4c93ad840acdef3bbf1690d5f943e321fd6a2b5",
+      "bytes": 5770,
+      "mtimeNs": 1791559196715172642,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/analysis-source/guard/prototype/plot-needle-ladder.py",
+      "sha256": "dcda3e9ad6b2ed180eb303a8a7d635053a5eec2ca4a646c092c6f1b1cc5658d8",
+      "bytes": 4510,
+      "mtimeNs": 1791559196716342519,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/analyze-restrictiveness.py",
+      "sha256": "b7c2be6f4bdca381c46542307c0d8b63624a1caf51a0f5f46a33e02a23efcd1c",
+      "bytes": 6159,
+      "mtimeNs": 1791561474846765418,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/base-local-export/base-local-export-decisions.csv",
+      "sha256": "64ab431233afba56d90573e1192e61b557855d086ccbef566a35d2ab7b084e2d",
+      "bytes": 93356,
+      "mtimeNs": 1791558389555819869,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/base-local-export/base-local-export-heldOut.json",
+      "sha256": "7e40b24937bbc33052baca1647f0b28953289fc67cece41426a8ee3067896b67",
+      "bytes": 342717,
+      "mtimeNs": 1791558389553981960,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/base-local-export/base-local-export-summary.csv",
+      "sha256": "84fcf0b7b370e8915c82b14123ae267175953efcdc150895b7e9cbb1b8af0ba8",
+      "bytes": 12076,
+      "mtimeNs": 1791558389555099455,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/base-local-export/base-local-export-validation.json",
+      "sha256": "956eff1a12e3b2719b100b0fd6d4f4634c1ec3fa9f53f1e7a6beaa9fc5c28cb2",
+      "bytes": 137720,
+      "mtimeNs": 1791558349796929032,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/base-local-export/candidate.cact",
+      "kind": "symlink",
+      "linkTarget": "/Users/quan/Repos/border-collie/guard/prototype/output/needle-official-ladder/base-local-export/candidate.cact",
+      "bytes": 110,
+      "copied": false
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/base-local-export/experiment.json",
+      "sha256": "8bb10e552530057b3ab69dc03cdfc70baf71827cd2a75fc6d37dd7fdc72d5e2b",
+      "bytes": 1672,
+      "mtimeNs": 1791558336440911387,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/base-local-export/held-out-scenarios.jsonl",
+      "sha256": "c5b8976840c846f032c1cf13cfd69ae4589c24263335919c3f50f741b3753382",
+      "bytes": 344423,
+      "mtimeNs": 1791558336440794137,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/base-local-export/native-evaluation.log",
+      "sha256": "a12d0566459a5d5e2964e82138482e156f50d1f81a4d9b69195ec177948a5a79",
+      "bytes": 4486,
+      "mtimeNs": 1791558389555886910,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/base-local-export/run.json",
+      "sha256": "16202bf87f18848d510b3403e01aaeac34e79e01a7bfed8d8613a2a6de44bb40",
+      "bytes": 771,
+      "mtimeNs": 1791558285839135979,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/base-local-export/validation-scenarios.jsonl",
+      "sha256": "5ff8cfa15717c0c52380e6adb4605ffa0f094df8a5373adc1680223cf378b981",
+      "bytes": 143102,
+      "mtimeNs": 1791558336440474972,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/batch-comparison.csv",
+      "sha256": "c75a648fb22b85ef8957a558835805a6420dd8bddba792a5dd34f492c9b4d9e5",
+      "bytes": 8422,
+      "mtimeNs": 1791558919071572260,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/batch-comparison.json",
+      "sha256": "89c0335dfe7b49a1411828803431ff2a1ccbdc5c3fb2a0389b3db6055d0611ee",
+      "bytes": 23707,
+      "mtimeNs": 1791558919072879887,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/batch-heldOut-comparison.png",
+      "sha256": "97c3a4b666a17f4efe1cc5f09c74f4f3c4ab295a094d478482a409f6edc6ff24",
+      "bytes": 217088,
+      "mtimeNs": 1791559100921261476,
+      "copied": false
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/batch-heldOut-comparison.svg",
+      "sha256": "751885b3f6b597454d29afbf9c42f1868db3665cc1c7cfe423f55f439bcbe27b",
+      "bytes": 126053,
+      "mtimeNs": 1791559100988732789,
+      "copied": false
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/batch-validation-comparison.png",
+      "sha256": "09571342822f0eee6945c6d4cce14699f1441055300dd29c0ba27850b69d0fed",
+      "bytes": 232089,
+      "mtimeNs": 1791559100679028767,
+      "copied": false
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/batch-validation-comparison.svg",
+      "sha256": "82f3f49350954ea4ae15020d8fd019bb0ef084c3f0fd9aa2365171cbed60ecdd",
+      "bytes": 125381,
+      "mtimeNs": 1791559100748369749,
+      "copied": false
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/batch-validation-loss.png",
+      "sha256": "bbb154438f1ebc4c95d064348389187544185a15e6d5798f7f5f45de02112323",
+      "bytes": 168882,
+      "mtimeNs": 1791559101079772555,
+      "copied": false
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/batch-validation-loss.svg",
+      "sha256": "226d1be6216506c3dab904c13e2e048b92a9ab9e799da7d2f0d335c9d55d1137",
+      "bytes": 79027,
+      "mtimeNs": 1791559101114007359,
+      "copied": false
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/held-out-scenarios.jsonl",
+      "sha256": "c5b8976840c846f032c1cf13cfd69ae4589c24263335919c3f50f741b3753382",
+      "bytes": 344423,
+      "mtimeNs": 1791558285514842363,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/official-plan.json",
+      "sha256": "a2de6d91fa1218d0638c0150c18f896467f5986dd9cd063bd168458bbed252df",
+      "bytes": 67682,
+      "mtimeNs": 1791558285514049533,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/paired-comparisons.csv",
+      "sha256": "2493463fe4a789720ec0da5398ddd9dea4b99d6101fbfa4f1984aebc2be8cfd2",
+      "bytes": 12663,
+      "mtimeNs": 1791558965060859737,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/prior-custom-300-seed42/candidate.cact",
+      "kind": "symlink",
+      "linkTarget": "/Users/quan/Repos/border-collie/guard/prototype/output/needle-official-ladder/sol-batch-results/prior-custom-300-seed42/candidate.cact",
+      "bytes": 134,
+      "copied": false
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/prior-custom-300-seed42/experiment.json",
+      "sha256": "76e05f8ef1b82d5e6eb9b54f6b2bcc37334a635d7e7251f4e33ebbeaed7e3553",
+      "bytes": 1672,
+      "mtimeNs": 1791558389561782509,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/prior-custom-300-seed42/held-out-scenarios.jsonl",
+      "sha256": "c5b8976840c846f032c1cf13cfd69ae4589c24263335919c3f50f741b3753382",
+      "bytes": 344423,
+      "mtimeNs": 1791558389561657593,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/prior-custom-300-seed42/native-evaluation.log",
+      "sha256": "da8d3640b6086ad6557ec24780151ccb50536539b36c25ad58c51e41892ab179",
+      "bytes": 4719,
+      "mtimeNs": 1791558441284599529,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/prior-custom-300-seed42/prior-custom-300-seed42-decisions.csv",
+      "sha256": "afc791e27f4fcd5045c65f8e6e791798ced743788b0569da993ae4405ac8affa",
+      "bytes": 96346,
+      "mtimeNs": 1791558441284530155,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/prior-custom-300-seed42/prior-custom-300-seed42-heldOut.json",
+      "sha256": "1340b25fadb664c8d3aee2e4949db889de66e86daa1a54f54bf6ce09aa0c9827",
+      "bytes": 343371,
+      "mtimeNs": 1791558441282749204,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/prior-custom-300-seed42/prior-custom-300-seed42-summary.csv",
+      "sha256": "25dd9fbfaced0df8e615643eafe27ebfb5baf74f6bb0cf2d1fb6dbe7b088024e",
+      "bytes": 12589,
+      "mtimeNs": 1791558441283805158,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/prior-custom-300-seed42/prior-custom-300-seed42-validation.json",
+      "sha256": "6402f33aa875d84a78234ce372bc9b598ff20d8104d17bbc2af2e7bbe9580135",
+      "bytes": 138004,
+      "mtimeNs": 1791558402973872741,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/prior-custom-300-seed42/validation-scenarios.jsonl",
+      "sha256": "5ff8cfa15717c0c52380e6adb4605ffa0f094df8a5373adc1680223cf378b981",
+      "bytes": 143102,
+      "mtimeNs": 1791558389561299803,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/raw-300-seed42/candidate.cact",
+      "kind": "symlink",
+      "linkTarget": "/Users/quan/Repos/border-collie/guard/prototype/output/needle-official-ladder/sol-batch-results/raw-300-seed42/candidate.cact",
+      "bytes": 125,
+      "copied": false
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/raw-300-seed42/epochs.csv",
+      "sha256": "386485a11c145b08dc7e7b933d39d340d967173dd7ab3d90450a96e800062f50",
+      "bytes": 416,
+      "mtimeNs": 1791558285548905630,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/raw-300-seed42/experiment.json",
+      "sha256": "76e05f8ef1b82d5e6eb9b54f6b2bcc37334a635d7e7251f4e33ebbeaed7e3553",
+      "bytes": 1672,
+      "mtimeNs": 1791558441292239204,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/raw-300-seed42/held-out-scenarios.jsonl",
+      "sha256": "c5b8976840c846f032c1cf13cfd69ae4589c24263335919c3f50f741b3753382",
+      "bytes": 344423,
+      "mtimeNs": 1791558441292107996,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/raw-300-seed42/native-evaluation.log",
+      "sha256": "575b89aa6ea2aa5933dc22487adf552149f9857d7dabf1527022ed0c72f3a3fd",
+      "bytes": 4339,
+      "mtimeNs": 1791558493157023850,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/raw-300-seed42/raw-300-seed42-decisions.csv",
+      "sha256": "6c153e44274d90b8af265066bd90d8e77cde8e7aedf1fe4e19c6d0684ce3f69e",
+      "bytes": 92743,
+      "mtimeNs": 1791558493156957892,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/raw-300-seed42/raw-300-seed42-heldOut.json",
+      "sha256": "7c9b6fb69b1ea6974cf41c0f9a3272ab15a7e9621901f727ce7c4782f49e525a",
+      "bytes": 343266,
+      "mtimeNs": 1791558493155174525,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/raw-300-seed42/raw-300-seed42-summary.csv",
+      "sha256": "2a38c106c9353dd4b1f9ff9391bec2b2e768565b914f80b26bf1314b20de4cd5",
+      "bytes": 12174,
+      "mtimeNs": 1791558493156261478,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/raw-300-seed42/raw-300-seed42-validation.json",
+      "sha256": "ae84111f28c07793c99b8d8f5c0b6ffa7de1aa6f5f562da746417b441cb05288",
+      "bytes": 137994,
+      "mtimeNs": 1791558454265994905,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/raw-300-seed42/run.json",
+      "sha256": "9445432764fdf4b5c7aeb5a3cbebc7c4f288a5061f795a62b9bc5a82dc1aa120",
+      "bytes": 6563,
+      "mtimeNs": 1791558285548780214,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/raw-300-seed42/steps.csv",
+      "sha256": "4685cc3ff6437fa902c5e1d31fdd632035d5272607585007b62e2b6948c4958b",
+      "bytes": 2190,
+      "mtimeNs": 1791558285549017046,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/raw-300-seed42/validation-scenarios.jsonl",
+      "sha256": "5ff8cfa15717c0c52380e6adb4605ffa0f094df8a5373adc1680223cf378b981",
+      "bytes": 143102,
+      "mtimeNs": 1791558441291089959,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-100-seed0/candidate.cact",
+      "kind": "symlink",
+      "linkTarget": "/Users/quan/Repos/border-collie/guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-100-seed0/candidate.cact",
+      "bytes": 130,
+      "copied": false
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-100-seed0/epochs.csv",
+      "sha256": "8b27cbd1ad21e2d2023dae26b0e1a98da1e238549842df49f1e5993aba23b64f",
+      "bytes": 421,
+      "mtimeNs": 1791558285711967621,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-100-seed0/experiment.json",
+      "sha256": "942afd31d1e8330bcbf105543bff128fd48d1a881d50e4a11d50a6b6169d39ca",
+      "bytes": 1671,
+      "mtimeNs": 1791558700732114429,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-100-seed0/held-out-scenarios.jsonl",
+      "sha256": "c5b8976840c846f032c1cf13cfd69ae4589c24263335919c3f50f741b3753382",
+      "bytes": 344423,
+      "mtimeNs": 1791558700731979965,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-100-seed0/native-evaluation.log",
+      "sha256": "edb73c37d15878be7bf44980fb8d40abd706bbf0d0f3d3248468027e5c5aee07",
+      "bytes": 4592,
+      "mtimeNs": 1791558753823420012,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-100-seed0/reasoning-100-seed0-decisions.csv",
+      "sha256": "20219810da46d9664923b656081bda84d55184b616458486fdcb8dc0c35dab51",
+      "bytes": 94470,
+      "mtimeNs": 1791558753823349137,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-100-seed0/reasoning-100-seed0-heldOut.json",
+      "sha256": "fb2d114e133a51dde6e0a02fb6b891a821912ea68b2bdd18cdaf83b097f4bfac",
+      "bytes": 343172,
+      "mtimeNs": 1791558753821414423,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-100-seed0/reasoning-100-seed0-summary.csv",
+      "sha256": "e77ef56a6de4fe2488abbb2f06b49ef1f85734c22ebbde214a873eb41f809b06",
+      "bytes": 12555,
+      "mtimeNs": 1791558753822583759,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-100-seed0/reasoning-100-seed0-validation.json",
+      "sha256": "91f6b07a0cd919c52665da4eab00f2a69862f28a73edc6401c0ce46b23044878",
+      "bytes": 137849,
+      "mtimeNs": 1791558714095515039,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-100-seed0/run.json",
+      "sha256": "aa4f22c634f7840ffcd92d25ed4db456ebf6f8a0df67a91c2d4c2b46f9c84183",
+      "bytes": 4389,
+      "mtimeNs": 1791558285711848872,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-100-seed0/steps.csv",
+      "sha256": "77de4bb04d1c85da1549b14838ed7efeb3987753beba9d41acbf83d0d939cc62",
+      "bytes": 2316,
+      "mtimeNs": 1791558285712194204,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-100-seed0/validation-scenarios.jsonl",
+      "sha256": "5ff8cfa15717c0c52380e6adb4605ffa0f094df8a5373adc1680223cf378b981",
+      "bytes": 143102,
+      "mtimeNs": 1791558700731630909,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-100-seed42/candidate.cact",
+      "kind": "symlink",
+      "linkTarget": "/Users/quan/Repos/border-collie/guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-100-seed42/candidate.cact",
+      "bytes": 131,
+      "copied": false
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-100-seed42/epochs.csv",
+      "sha256": "8fb8a26be1d0380c40b5c1ea857b73bf3ce1bbc1c7e2de8f3cb000e5ff294de8",
+      "bytes": 416,
+      "mtimeNs": 1791558285581715777,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-100-seed42/experiment.json",
+      "sha256": "08c776ee46950b499fa9b123697713a8bc1f8da944fb4e80f94dd3db7c74cad8",
+      "bytes": 1672,
+      "mtimeNs": 1791558493163365905,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-100-seed42/held-out-scenarios.jsonl",
+      "sha256": "c5b8976840c846f032c1cf13cfd69ae4589c24263335919c3f50f741b3753382",
+      "bytes": 344423,
+      "mtimeNs": 1791558493163230823,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-100-seed42/native-evaluation.log",
+      "sha256": "b685358a9fcdd07793cb289e7efe0cc7ba7d673669cea2b57cd0c0f5f51325c1",
+      "bytes": 4627,
+      "mtimeNs": 1791558544949813312,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-100-seed42/reasoning-100-seed42-decisions.csv",
+      "sha256": "aa23f5712e97ac7b74e6eb4bfdae1403dd2ad285bf7cf5596a35de518b6a0e90",
+      "bytes": 94943,
+      "mtimeNs": 1791558544949749063,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-100-seed42/reasoning-100-seed42-heldOut.json",
+      "sha256": "33811490363134d484211efea2db06f2928371c5949defc2f2527f78817f8c9b",
+      "bytes": 343189,
+      "mtimeNs": 1791558544946517702,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-100-seed42/reasoning-100-seed42-summary.csv",
+      "sha256": "87581c073d9b8de06ea61abbea3017cafa7988af96f12754db9c91af4bd3aeb1",
+      "bytes": 12561,
+      "mtimeNs": 1791558544949027983,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-100-seed42/reasoning-100-seed42-validation.json",
+      "sha256": "c4220889e3f1edd62ac08eaed26bbf29210e7683249607995f046253a51402c0",
+      "bytes": 137838,
+      "mtimeNs": 1791558506206649801,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-100-seed42/run.json",
+      "sha256": "2fb9c41e10fe531e9969dfca6171cd016077db6a7007180e0686a7971b439ecc",
+      "bytes": 4394,
+      "mtimeNs": 1791558285581587736,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-100-seed42/steps.csv",
+      "sha256": "6438d9961068a3aa3db098fe520729c43e6d248ab4980e1f2dcfe3fbba6f1e0a",
+      "bytes": 2324,
+      "mtimeNs": 1791558285581853819,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-100-seed42/validation-scenarios.jsonl",
+      "sha256": "5ff8cfa15717c0c52380e6adb4605ffa0f094df8a5373adc1680223cf378b981",
+      "bytes": 143102,
+      "mtimeNs": 1791558493162662033,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-1000-seed0/candidate.cact",
+      "kind": "symlink",
+      "linkTarget": "/Users/quan/Repos/border-collie/guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-1000-seed0/candidate.cact",
+      "bytes": 131,
+      "copied": false
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-1000-seed0/epochs.csv",
+      "sha256": "cbf5db352ad561e9578391673c01cab7ec77059b73962e08d8ba6f6aec8b428f",
+      "bytes": 415,
+      "mtimeNs": 1791558285809922774,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-1000-seed0/experiment.json",
+      "sha256": "0b16543dcf49c164d0ed26233400ed7fcdcd852e6ecd9b600cea46b4b07dcbbc",
+      "bytes": 1672,
+      "mtimeNs": 1791558859483503211,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-1000-seed0/held-out-scenarios.jsonl",
+      "sha256": "c5b8976840c846f032c1cf13cfd69ae4589c24263335919c3f50f741b3753382",
+      "bytes": 344423,
+      "mtimeNs": 1791558859483352378,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-1000-seed0/native-evaluation.log",
+      "sha256": "f203fa6a82873ea20818dbe0e769d2d4909d4871b2dd23ee0629b64078cb2da1",
+      "bytes": 4608,
+      "mtimeNs": 1791558919065348209,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-1000-seed0/reasoning-1000-seed0-decisions.csv",
+      "sha256": "7f05ce8a976876f1da93fbd5fd549918b60cf3f461bc09376a36b3889df9d917",
+      "bytes": 95077,
+      "mtimeNs": 1791558919065291376,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-1000-seed0/reasoning-1000-seed0-heldOut.json",
+      "sha256": "6d2b467dd3a19162f6b1f3cac8f0befe484e168abc4d70a7d3d4b216b542a4a6",
+      "bytes": 344004,
+      "mtimeNs": 1791558919062829789,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-1000-seed0/reasoning-1000-seed0-summary.csv",
+      "sha256": "7570bf6727f21f1f591a4da2270518293028b97a6dbf9e6d0387349bcf1b94fa",
+      "bytes": 12656,
+      "mtimeNs": 1791558919064518541,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-1000-seed0/reasoning-1000-seed0-validation.json",
+      "sha256": "984bc3aa0af0396d02da843b5c08a56129bbceba84cf94bf11bd624cc3f5b09e",
+      "bytes": 138142,
+      "mtimeNs": 1791558872960777477,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-1000-seed0/run.json",
+      "sha256": "283b0655b550937822f48fc0be542be257232713c54ea9cb9d31ba2d36d05228",
+      "bytes": 14400,
+      "mtimeNs": 1791558285809811941,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-1000-seed0/steps.csv",
+      "sha256": "0b538e79fef65c0411273a93ec59f3139aa7c106997c5c65418ec5f3af43af0e",
+      "bytes": 1828,
+      "mtimeNs": 1791558285810030065,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-1000-seed0/validation-scenarios.jsonl",
+      "sha256": "5ff8cfa15717c0c52380e6adb4605ffa0f094df8a5373adc1680223cf378b981",
+      "bytes": 143102,
+      "mtimeNs": 1791558859482705919,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-1000-seed42/candidate.cact",
+      "kind": "symlink",
+      "linkTarget": "/Users/quan/Repos/border-collie/guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-1000-seed42/candidate.cact",
+      "bytes": 132,
+      "copied": false
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-1000-seed42/epochs.csv",
+      "sha256": "d2f8d55549169ff4039a4a85652f46014844d3b967256f4ab5c86d2268839b6a",
+      "bytes": 413,
+      "mtimeNs": 1791558285679491014,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-1000-seed42/experiment.json",
+      "sha256": "9cdb4101926fc42becd7388aedd54fde3d41819e19615eba3bf9d5c24e26e184",
+      "bytes": 1673,
+      "mtimeNs": 1791558647368340973,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-1000-seed42/held-out-scenarios.jsonl",
+      "sha256": "c5b8976840c846f032c1cf13cfd69ae4589c24263335919c3f50f741b3753382",
+      "bytes": 344423,
+      "mtimeNs": 1791558647368204514,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-1000-seed42/native-evaluation.log",
+      "sha256": "986eeb8bd47d4b16b07658b2c70ade20f13876d94f050345192297ae0e406f69",
+      "bytes": 4624,
+      "mtimeNs": 1791558700723847044,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-1000-seed42/reasoning-1000-seed42-decisions.csv",
+      "sha256": "125752393946a31c72efcd9cab2393c5311694e1cfe668105211fbf762f3084b",
+      "bytes": 95586,
+      "mtimeNs": 1791558700723792291,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-1000-seed42/reasoning-1000-seed42-heldOut.json",
+      "sha256": "881beea8d7cf380ef9a68383902907c286465ea31b8ab6775c3c1c6b225599ce",
+      "bytes": 343905,
+      "mtimeNs": 1791558700721999509,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-1000-seed42/reasoning-1000-seed42-summary.csv",
+      "sha256": "0ca47eb8701eb73a073a1c8976f132a44188ecdccaa910840dc2adee38ae157f",
+      "bytes": 12527,
+      "mtimeNs": 1791558700723079720,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-1000-seed42/reasoning-1000-seed42-validation.json",
+      "sha256": "05f2cf39cd13e0f2e0100a5f8b7b49c8bdf3451b1c33ab9e0d0c4423d9be1bd2",
+      "bytes": 138016,
+      "mtimeNs": 1791558661404160434,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-1000-seed42/run.json",
+      "sha256": "73a273b656ac9a557d8a1a16e685f8fff9822894d71b2205957cc5019b99d512",
+      "bytes": 14407,
+      "mtimeNs": 1791558285679363890,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-1000-seed42/steps.csv",
+      "sha256": "e5aa7df22f6ca501e213e52e3bc6e2573a7ab9c33e7c659f32456318ec6caa5c",
+      "bytes": 1824,
+      "mtimeNs": 1791558285679615972,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-1000-seed42/validation-scenarios.jsonl",
+      "sha256": "5ff8cfa15717c0c52380e6adb4605ffa0f094df8a5373adc1680223cf378b981",
+      "bytes": 143102,
+      "mtimeNs": 1791558647367490723,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-300-seed0/candidate.cact",
+      "kind": "symlink",
+      "linkTarget": "/Users/quan/Repos/border-collie/guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-300-seed0/candidate.cact",
+      "bytes": 130,
+      "copied": false
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-300-seed0/epochs.csv",
+      "sha256": "39920e797eafd20b635b946f476cf779d1b968dc790e326bb4f2b898291b1007",
+      "bytes": 417,
+      "mtimeNs": 1791558285744927185,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-300-seed0/experiment.json",
+      "sha256": "e5f8467c54aae430a976c26ca38602049925c3d2b0c7613522e76a2b4b63b125",
+      "bytes": 1671,
+      "mtimeNs": 1791558753830564449,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-300-seed0/held-out-scenarios.jsonl",
+      "sha256": "c5b8976840c846f032c1cf13cfd69ae4589c24263335919c3f50f741b3753382",
+      "bytes": 344423,
+      "mtimeNs": 1791558753830421448,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-300-seed0/native-evaluation.log",
+      "sha256": "c9dcaf66b96a9842c0353ece693c5b22d4ce6a47a0e8e8d8aeccfa6fc0204f15",
+      "bytes": 4585,
+      "mtimeNs": 1791558804343531849,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-300-seed0/reasoning-300-seed0-decisions.csv",
+      "sha256": "8a8e9f767b4808aa0f965505f90ef408bfdc29f90a1b8f5b9eecbdb9467a334b",
+      "bytes": 95054,
+      "mtimeNs": 1791558804343457974,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-300-seed0/reasoning-300-seed0-heldOut.json",
+      "sha256": "b7e6f4f53ac8c9a6f4a64dc7f84951b7c0a461d3a619ccc9a91ea0231f7c48d1",
+      "bytes": 343494,
+      "mtimeNs": 1791558804341457845,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-300-seed0/reasoning-300-seed0-summary.csv",
+      "sha256": "3b396bfaad7f4d96954da8802901ff59b70f7491fb0f58afd964028ed439576b",
+      "bytes": 12506,
+      "mtimeNs": 1791558804342647514,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-300-seed0/reasoning-300-seed0-validation.json",
+      "sha256": "632d604616e1e50182b15766fc20a77ba72cc5823f08de843ba78a4bc3d5a641",
+      "bytes": 138034,
+      "mtimeNs": 1791558766552414947,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-300-seed0/run.json",
+      "sha256": "ceda0b7ab501ff940e8395bf42637bd386b813bd130450aec331be6c71e0e085",
+      "bytes": 6591,
+      "mtimeNs": 1791558285744781019,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-300-seed0/steps.csv",
+      "sha256": "136de7f4698834506883ce162f9ba0ddc6ec01fe7dd27e5e81ca918744cbc3d9",
+      "bytes": 2198,
+      "mtimeNs": 1791558285745049643,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-300-seed0/validation-scenarios.jsonl",
+      "sha256": "5ff8cfa15717c0c52380e6adb4605ffa0f094df8a5373adc1680223cf378b981",
+      "bytes": 143102,
+      "mtimeNs": 1791558753829832947,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-300-seed42/candidate.cact",
+      "kind": "symlink",
+      "linkTarget": "/Users/quan/Repos/border-collie/guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-300-seed42/candidate.cact",
+      "bytes": 131,
+      "copied": false
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-300-seed42/epochs.csv",
+      "sha256": "090341521f308b27a09f69d06c9dc33a7674045112524a5367047badd7cfb7fb",
+      "bytes": 417,
+      "mtimeNs": 1791558285614268676,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-300-seed42/experiment.json",
+      "sha256": "76e05f8ef1b82d5e6eb9b54f6b2bcc37334a635d7e7251f4e33ebbeaed7e3553",
+      "bytes": 1672,
+      "mtimeNs": 1791558544955443163,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-300-seed42/held-out-scenarios.jsonl",
+      "sha256": "c5b8976840c846f032c1cf13cfd69ae4589c24263335919c3f50f741b3753382",
+      "bytes": 344423,
+      "mtimeNs": 1791558544955320830,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-300-seed42/native-evaluation.log",
+      "sha256": "c98275f56263d506768f5227b7c71ec3d2133e3da774aeba2d5a4e5974d52b9d",
+      "bytes": 4612,
+      "mtimeNs": 1791558595506895333,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-300-seed42/reasoning-300-seed42-decisions.csv",
+      "sha256": "cd438a4c9bd26506a6d76a78d37d2e8320117d2d2d4d80fc2a32379bd12dce8e",
+      "bytes": 95343,
+      "mtimeNs": 1791558595506824376,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-300-seed42/reasoning-300-seed42-heldOut.json",
+      "sha256": "9a8c469e31130497736386d1bb4bec2fcb7ec658aa41de656824c87b5ab1a90e",
+      "bytes": 343368,
+      "mtimeNs": 1791558595502601102,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-300-seed42/reasoning-300-seed42-summary.csv",
+      "sha256": "3f79d323e9c287ae22a7a1c6a78462c6010b672d5c0438b4d65843d2c9141177",
+      "bytes": 12470,
+      "mtimeNs": 1791558595505998254,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-300-seed42/reasoning-300-seed42-validation.json",
+      "sha256": "1ae292bcc099bf98723490e0dd5efd220c52af7dad0bb054ab7ab3057c2ffedc",
+      "bytes": 137969,
+      "mtimeNs": 1791558557841491249,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-300-seed42/run.json",
+      "sha256": "5aabdb20a30365b3ddb38474fd95697c8e0ac4113cf78b453236c31c5f5f467d",
+      "bytes": 6599,
+      "mtimeNs": 1791558285614152177,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-300-seed42/steps.csv",
+      "sha256": "4e9b473c6c03aacc67dbb1dee8dc4bd7fce5be24dedfd69a5b826851852e420a",
+      "bytes": 2197,
+      "mtimeNs": 1791558285614380717,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-300-seed42/validation-scenarios.jsonl",
+      "sha256": "5ff8cfa15717c0c52380e6adb4605ffa0f094df8a5373adc1680223cf378b981",
+      "bytes": 143102,
+      "mtimeNs": 1791558544954978290,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-600-seed0/candidate.cact",
+      "kind": "symlink",
+      "linkTarget": "/Users/quan/Repos/border-collie/guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-600-seed0/candidate.cact",
+      "bytes": 130,
+      "copied": false
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-600-seed0/epochs.csv",
+      "sha256": "58da261ab1e774b19933e56090cfca63fd7f89000817aeeada81e9db9135bc5c",
+      "bytes": 418,
+      "mtimeNs": 1791558285777430667,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-600-seed0/experiment.json",
+      "sha256": "091157435e7fecc0760ca10fe03157b8d0885287eb3e91c1893989ea9cf63d9b",
+      "bytes": 1671,
+      "mtimeNs": 1791558804348935899,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-600-seed0/held-out-scenarios.jsonl",
+      "sha256": "c5b8976840c846f032c1cf13cfd69ae4589c24263335919c3f50f741b3753382",
+      "bytes": 344423,
+      "mtimeNs": 1791558804348788649,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-600-seed0/native-evaluation.log",
+      "sha256": "c02190ba44e8ee26ecfa878f260217750bd01b8280036a84c55452d9c5cb4762",
+      "bytes": 4540,
+      "mtimeNs": 1791558859476436992,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-600-seed0/reasoning-600-seed0-decisions.csv",
+      "sha256": "9353ab781b1ff2640818e598db364bf639b83148ab2d74b3113f6d53aba4a807",
+      "bytes": 94574,
+      "mtimeNs": 1791558859476387450,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-600-seed0/reasoning-600-seed0-heldOut.json",
+      "sha256": "85ba80714d67b11a346e85e59e2eedbe6c3772bcb222780570319880178ac7ab",
+      "bytes": 343563,
+      "mtimeNs": 1791558859474210280,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-600-seed0/reasoning-600-seed0-summary.csv",
+      "sha256": "be54f69ab9ce914fecfbda531f2e6938b0a76b4a96b09270c88ccb7b5d00b7b7",
+      "bytes": 12468,
+      "mtimeNs": 1791558859475644033,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-600-seed0/reasoning-600-seed0-validation.json",
+      "sha256": "9809cb936a5f1461845cf6f5dc3161a9eceaec2572765bfd880ace85020305b6",
+      "bytes": 137958,
+      "mtimeNs": 1791558817774255094,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-600-seed0/run.json",
+      "sha256": "f32c54059183dc551a6d415cddc1591b68cb0e1b4f35d1eeb7a9e105148a37e3",
+      "bytes": 9891,
+      "mtimeNs": 1791558285777315209,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-600-seed0/steps.csv",
+      "sha256": "6a77d01ada5f120b65b7928ae8c609374d67b500fdaa21e5424ebb8a42b38043",
+      "bytes": 1889,
+      "mtimeNs": 1791558285777536125,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-600-seed0/validation-scenarios.jsonl",
+      "sha256": "5ff8cfa15717c0c52380e6adb4605ffa0f094df8a5373adc1680223cf378b981",
+      "bytes": 143102,
+      "mtimeNs": 1791558804348422940,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-600-seed42/candidate.cact",
+      "kind": "symlink",
+      "linkTarget": "/Users/quan/Repos/border-collie/guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-600-seed42/candidate.cact",
+      "bytes": 131,
+      "copied": false
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-600-seed42/epochs.csv",
+      "sha256": "b9b672e4dead38de36b89d416843554ee0bf6a0e11a23cd0544abeb0a64c06e7",
+      "bytes": 414,
+      "mtimeNs": 1791558285646868658,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-600-seed42/experiment.json",
+      "sha256": "730486ae7754e3f2bff1645ddd77dbc5e5b553cf990ff7c7fe3c927ea701180d",
+      "bytes": 1672,
+      "mtimeNs": 1791558595513014557,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-600-seed42/held-out-scenarios.jsonl",
+      "sha256": "c5b8976840c846f032c1cf13cfd69ae4589c24263335919c3f50f741b3753382",
+      "bytes": 344423,
+      "mtimeNs": 1791558595512882307,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-600-seed42/native-evaluation.log",
+      "sha256": "83dca6821c6a9b5608694f2142cdcb4e4914aea9c2212c4c7609f2d915ca0b2e",
+      "bytes": 4598,
+      "mtimeNs": 1791558647359492173,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-600-seed42/reasoning-600-seed42-decisions.csv",
+      "sha256": "3b2b745b5ceaaa96c247ad5d56aca364ce304dcd38a0726aea1f37aa6d815cab",
+      "bytes": 94991,
+      "mtimeNs": 1791558647359429304,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-600-seed42/reasoning-600-seed42-heldOut.json",
+      "sha256": "6e90d9054b008cd5c1cc28524dbc3bf069c3e4d33b9cf33ff48f2e503209fbb2",
+      "bytes": 343730,
+      "mtimeNs": 1791558647357281673,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-600-seed42/reasoning-600-seed42-summary.csv",
+      "sha256": "1789fbd00c9df452e6cd59e2bf206a8fbd41515c3943b370dba1ef84dd52f972",
+      "bytes": 12574,
+      "mtimeNs": 1791558647358667287,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-600-seed42/reasoning-600-seed42-validation.json",
+      "sha256": "627b12d34985334d1e7f71318bf781fe9b4288eb42373158b676ce111c346486",
+      "bytes": 137965,
+      "mtimeNs": 1791558608285934349,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-600-seed42/run.json",
+      "sha256": "e4064781359402187483b0182abd80547ecaf9f3a04a5d7ee0cd1b92ace213b6",
+      "bytes": 9898,
+      "mtimeNs": 1791558285646743366,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-600-seed42/steps.csv",
+      "sha256": "2e9325ef7839445e97eae85308d25be7ea19bc10c26bb51e99b056f1f959b845",
+      "bytes": 1902,
+      "mtimeNs": 1791558285646987990,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-600-seed42/validation-scenarios.jsonl",
+      "sha256": "5ff8cfa15717c0c52380e6adb4605ffa0f094df8a5373adc1680223cf378b981",
+      "bytes": 143102,
+      "mtimeNs": 1791558595512513434,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/restrictiveness-analysis.json",
+      "sha256": "219f6b382836f550ee05968d458afc16f0f2651a3406ec2df4ee9b2276975c32",
+      "bytes": 2419,
+      "mtimeNs": 1791561474988746847,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/restrictiveness-contrasts.csv",
+      "sha256": "556450c16623e8cd87e115dbf34158d245e92a70c18f60fc876b2da00d3dac0f",
+      "bytes": 552,
+      "mtimeNs": 1791561474988206884,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/restrictiveness-errors.csv",
+      "sha256": "e664c8c07222c9feb712738e87f32eb30f0e39291fa2bcece18f24b8f146e09e",
+      "bytes": 74507,
+      "mtimeNs": 1791561474988058216,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/restrictiveness-groups.csv",
+      "sha256": "d723407f30e8c80ceb143f5c59e6f0beda4e0869e89d4737449d4dd12e80fc62",
+      "bytes": 22954,
+      "mtimeNs": 1791561474987375085,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/restrictiveness-report.md",
+      "sha256": "549a5e0795461aad1d4a9c08228c827356b9a0a3f7f33fc5deba84678b18e740",
+      "bytes": 10142,
+      "mtimeNs": 1791561569658563806,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/restrictiveness-source-audit.md",
+      "sha256": "65946a9f7c794cc1d9f0f1979c7a86a3f461d338ddbd5f1e8276c86f2851e835",
+      "bytes": 6077,
+      "mtimeNs": 1791561484709369149,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/restrictiveness-training-mix.csv",
+      "sha256": "70bddb5c98ae4e0424c1d11e15e7daf70eeb9ec7d049d652e0114b0d65ddeecb",
+      "bytes": 5536,
+      "mtimeNs": 1791561474986829330,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/restrictiveness-transitions.csv",
+      "sha256": "cf318ef71c04e2b27e48d7330af28edc6f699b59de05e364d4a6b33688e966af",
+      "bytes": 836,
+      "mtimeNs": 1791561474988304218,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/result-analysis.json",
+      "sha256": "e1b2ad143984db9ff57878566400360c15e80ab764604620cd76618ff867a177",
+      "bytes": 53573,
+      "mtimeNs": 1791558965060427903,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/runtime/matplotlib-cache/fontlist-v3.11.0.json",
+      "sha256": "f7604f7173267906e0902dcb8aafd7724d8101dea23e70568b283491345f1096",
+      "bytes": 299202,
+      "mtimeNs": 1791558927214461276,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/shipped-base/experiment.json",
+      "sha256": "8bb10e552530057b3ab69dc03cdfc70baf71827cd2a75fc6d37dd7fdc72d5e2b",
+      "bytes": 1672,
+      "mtimeNs": 1791558286142559394,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/shipped-base/held-out-scenarios.jsonl",
+      "sha256": "c5b8976840c846f032c1cf13cfd69ae4589c24263335919c3f50f741b3753382",
+      "bytes": 344423,
+      "mtimeNs": 1791558286142450437,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/shipped-base/native-evaluation.log",
+      "sha256": "27cf5197a2e6720b2fbbc3c1e2a00c2ca4281bbc178b6250276a27411d6e60b8",
+      "bytes": 4246,
+      "mtimeNs": 1791558336435628118,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/shipped-base/shipped-base-decisions.csv",
+      "sha256": "595130eca5aedabd2d38570c53211a7d78a8409c3fa89f0492322368526ee038",
+      "bytes": 93820,
+      "mtimeNs": 1791558336435583327,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/shipped-base/shipped-base-heldOut.json",
+      "sha256": "f696e0d590a7448c62f9291d325988947add53621d78e9e21dca497a10988e35",
+      "bytes": 345566,
+      "mtimeNs": 1791558336433844293,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/shipped-base/shipped-base-summary.csv",
+      "sha256": "ced40886e44c4d78c9d5b78c62d92283885e5bac7da8343a453ae7309143fbcf",
+      "bytes": 12114,
+      "mtimeNs": 1791558336434963121,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/shipped-base/shipped-base-validation.json",
+      "sha256": "368f6de7dc728f0269b5fa9534b5bdd06c0393b11905b727bc8ce38c8cc8345d",
+      "bytes": 138571,
+      "mtimeNs": 1791558298841070014,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/shipped-base/validation-scenarios.jsonl",
+      "sha256": "5ff8cfa15717c0c52380e6adb4605ffa0f094df8a5373adc1680223cf378b981",
+      "bytes": 143102,
+      "mtimeNs": 1791558286142141480,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/validation-scenarios.jsonl",
+      "sha256": "5ff8cfa15717c0c52380e6adb4605ffa0f094df8a5373adc1680223cf378b981",
+      "bytes": 143102,
+      "mtimeNs": 1791558285514377157,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/mac-runtime/verification.json",
+      "sha256": "c5e35225adc06fa6c34dd7512924c30280a6f786bc2c0bfcd75838abd59897f6",
+      "bytes": 4635,
+      "mtimeNs": 1791559101207603296,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/official-plan.json",
+      "sha256": "a2de6d91fa1218d0638c0150c18f896467f5986dd9cd063bd168458bbed252df",
+      "bytes": 67682,
+      "mtimeNs": 1791495915034802373,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/batch-comparison.json",
+      "sha256": "ee793b3567ed6d45a27a574e893b3e5d2ba74558c532d7f45a2dd30c5ea7b67f",
+      "bytes": 9897,
+      "mtimeNs": 1791507763000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/batch-source-sha256.txt",
+      "sha256": "fcd79dfb201b02f98563cd61aad18ecfa8ca2dbc9b524f33e2b75364b80dec77",
+      "bytes": 1086,
+      "mtimeNs": 1791497769000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/batch-submission.json",
+      "sha256": "8c93a8a9aef8a8e93187f44df8e5ee6270c3565af0400f55c2c627c49e910626",
+      "bytes": 3004,
+      "mtimeNs": 1791497769000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/evaluation-65014532.out",
+      "sha256": "6c97a29e03d36c3cdb36e22f6c4f282d2c77c576da94f0809cfcea431608ee53",
+      "bytes": 2111,
+      "mtimeNs": 1791507782000000000,
+      "copied": false
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/evaluation-runtime.json",
+      "sha256": "545937573edc4e0e704eb943947c658e420ce6b8761c94dd693616949666facc",
+      "bytes": 410,
+      "mtimeNs": 1791497223000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/job-raw-300-seed42.json",
+      "sha256": "645da62262ae864ef87c6e599c283fc2db58d5c7c9d435a33305a23fd53e03c2",
+      "bytes": 9281,
+      "mtimeNs": 1791497936000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/job-reasoning-100-seed0.json",
+      "sha256": "e7db6fd8f6f573e7f048beb073fe94f91ae830305d194b3c40798c479db9c04d",
+      "bytes": 6312,
+      "mtimeNs": 1791499855000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/job-reasoning-100-seed42.json",
+      "sha256": "315794141cc18aee6cc486832ab9c77676b8e96f3bd59bce828c34ca292b750b",
+      "bytes": 6318,
+      "mtimeNs": 1791497915000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/job-reasoning-1000-seed0.json",
+      "sha256": "2dffc60899477f0269684b1ffec22e96aafbf1be661f5d9e7e6147c447b380c9",
+      "bytes": 19924,
+      "mtimeNs": 1791501915000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/job-reasoning-1000-seed42.json",
+      "sha256": "db295c0a0dec58f1a94bb567f10e94d53a655c835a090ae50e9c59cb43807053",
+      "bytes": 19932,
+      "mtimeNs": 1791499958000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/job-reasoning-300-seed0.json",
+      "sha256": "32539cba9470dddf21b27f27b5bba63dfeea2dbd53b13007f1220f1911f6a807",
+      "bytes": 9314,
+      "mtimeNs": 1791500829000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/job-reasoning-300-seed42.json",
+      "sha256": "ad6988e50c4751363b3a1964afbe2c8eb40f956caa70bb3d6dcc28662bf7ecc7",
+      "bytes": 9323,
+      "mtimeNs": 1791498870000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/job-reasoning-600-seed0.json",
+      "sha256": "46d791e185d6519230d45d2efe5b42fbe3890298d3b3c65e928a6cc74b19fc59",
+      "bytes": 13814,
+      "mtimeNs": 1791500972000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/job-reasoning-600-seed42.json",
+      "sha256": "2a8deba02ad64616faecc9c98f8d4b8d859d985d5ad0bdca214b0ca3b6760e38",
+      "bytes": 13822,
+      "mtimeNs": 1791498938000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/official-plan.json",
+      "sha256": "a2de6d91fa1218d0638c0150c18f896467f5986dd9cd063bd168458bbed252df",
+      "bytes": 67682,
+      "mtimeNs": 1791496149000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/prior-custom-300-seed42/candidate.cact",
+      "sha256": "58338104d3ce2ca21a34704c065082efbd6b7d516605f50a818b2a4e24416d91",
+      "bytes": 63437076,
+      "mtimeNs": 1791497634000000000,
+      "copied": false
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/prior-custom-300-seed42/experiment.json",
+      "sha256": "76e05f8ef1b82d5e6eb9b54f6b2bcc37334a635d7e7251f4e33ebbeaed7e3553",
+      "bytes": 1672,
+      "mtimeNs": 1791502673000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/prior-custom-300-seed42/held-out-scenarios.jsonl",
+      "sha256": "c5b8976840c846f032c1cf13cfd69ae4589c24263335919c3f50f741b3753382",
+      "bytes": 344423,
+      "mtimeNs": 1791502673000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/prior-custom-300-seed42/native-evaluation.log",
+      "sha256": "eadac6be02e994ba6e20976ccabd879c82f9a5704f55e6b644cc281796570c2d",
+      "bytes": 1119,
+      "mtimeNs": 1791502848000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/prior-custom-300-seed42/prior-custom-300-seed42-decisions.csv",
+      "sha256": "8d3933aaa460023f092558e3d3a0c3febfe7ae7abb679eb9e6962b6a1472e07c",
+      "bytes": 24224,
+      "mtimeNs": 1791502848000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/prior-custom-300-seed42/prior-custom-300-seed42-summary.csv",
+      "sha256": "9726440dba7ed68a4661e59fe0fc2714bb3ca4cff9c85e6fe035e440582ba10f",
+      "bytes": 5932,
+      "mtimeNs": 1791502848000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/prior-custom-300-seed42/prior-custom-300-seed42-validation.json",
+      "sha256": "dd08a45dda579c601e13267e51697e65b2d3a34d8493f2127b9c435600e857d4",
+      "bytes": 137982,
+      "mtimeNs": 1791502848000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/prior-custom-300-seed42/validation-scenarios.jsonl",
+      "sha256": "5ff8cfa15717c0c52380e6adb4605ffa0f094df8a5373adc1680223cf378b981",
+      "bytes": 143102,
+      "mtimeNs": 1791502673000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/raw-300-seed42/adapter.safetensors",
+      "sha256": "f9f277f52bc19ca1ad122b30f7506fee7124919a9e6872b012ee00d4ac65f0a0",
+      "bytes": 7906632,
+      "mtimeNs": 1791497914000000000,
+      "copied": false
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/raw-300-seed42/build.log",
+      "sha256": "b676c88b44ea5be54a0da29726ce31eddfdd14b883d9a09d8ef44b5eeef47f07",
+      "bytes": 829,
+      "mtimeNs": 1791497935000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/raw-300-seed42/candidate.cact",
+      "sha256": "9702af7c276fd07737b70bd8cc33b9634bd5a568a97df612e4ddcfae892df7f2",
+      "bytes": 63437076,
+      "mtimeNs": 1791497935000000000,
+      "copied": false
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/raw-300-seed42/epochs.csv",
+      "sha256": "386485a11c145b08dc7e7b933d39d340d967173dd7ab3d90450a96e800062f50",
+      "bytes": 416,
+      "mtimeNs": 1791497914000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/raw-300-seed42/experiment.json",
+      "sha256": "76e05f8ef1b82d5e6eb9b54f6b2bcc37334a635d7e7251f4e33ebbeaed7e3553",
+      "bytes": 1672,
+      "mtimeNs": 1791502849000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/raw-300-seed42/failed-cache-run.json",
+      "sha256": "0218a2ca48e86bc0cee769d482f89536ea9be8bcdf55f81aeae4f0e7bd6b8090",
+      "bytes": 6648,
+      "mtimeNs": 1791496280000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/raw-300-seed42/failed-cache-training.log",
+      "sha256": "ba8a4e3c8392bf189f0f72d9c41243228dbff447cdaca1d40d9e10067a20afd9",
+      "bytes": 13858,
+      "mtimeNs": 1791496280000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/raw-300-seed42/held-out-scenarios.jsonl",
+      "sha256": "c5b8976840c846f032c1cf13cfd69ae4589c24263335919c3f50f741b3753382",
+      "bytes": 344423,
+      "mtimeNs": 1791502849000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/raw-300-seed42/native-evaluation.log",
+      "sha256": "4fde3c1a6950786c30742c0cf6fd410927100b4b561c1cb5a2e2a6d89a9ca015",
+      "bytes": 1029,
+      "mtimeNs": 1791503032000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/raw-300-seed42/nvidia-smi.txt",
+      "sha256": "af0917bfb30474e40c38b46d95fffb2a53ca04761ec98646c166c80fb9e2e408",
+      "bytes": 1689,
+      "mtimeNs": 1791496967000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/raw-300-seed42/official-input.jsonl",
+      "sha256": "758f5511224bcb098872ad80e7153c4d98a0f2916fd1897840add09a9b8800a9",
+      "bytes": 386494,
+      "mtimeNs": 1791496968000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/raw-300-seed42/packages.txt",
+      "sha256": "39cc66bfb003e7fb136328665912a589360287ec157f9c874b97db20b2600ae3",
+      "bytes": 1261,
+      "mtimeNs": 1791496968000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/raw-300-seed42/raw-300-seed42-decisions.csv",
+      "sha256": "6c2badaeb619fffd12e950f2ee9fafadfa39283be47f61b095f0ac93ce83b9e6",
+      "bytes": 23319,
+      "mtimeNs": 1791503032000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/raw-300-seed42/raw-300-seed42-summary.csv",
+      "sha256": "dd81629a9e77956a89b8b3ecf0c7e4f9609a84dc2b78f123d934022e48023d7a",
+      "bytes": 5763,
+      "mtimeNs": 1791503032000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/raw-300-seed42/raw-300-seed42-validation.json",
+      "sha256": "5a0f3e8879580f0529d3997d40635d778ce98f57ca748acf11b3cc782dd0b610",
+      "bytes": 137984,
+      "mtimeNs": 1791503032000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/raw-300-seed42/run.json",
+      "sha256": "9445432764fdf4b5c7aeb5a3cbebc7c4f288a5061f795a62b9bc5a82dc1aa120",
+      "bytes": 6563,
+      "mtimeNs": 1791497936000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/raw-300-seed42/steps.csv",
+      "sha256": "4685cc3ff6437fa902c5e1d31fdd632035d5272607585007b62e2b6948c4958b",
+      "bytes": 2190,
+      "mtimeNs": 1791497914000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/raw-300-seed42/training.log",
+      "sha256": "961d087cd51d383df5bb9359e11cdcee04d8877e977c67e842def6ca66b8be34",
+      "bytes": 3357,
+      "mtimeNs": 1791497914000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/raw-300-seed42/validation-scenarios.jsonl",
+      "sha256": "5ff8cfa15717c0c52380e6adb4605ffa0f094df8a5373adc1680223cf378b981",
+      "bytes": 143102,
+      "mtimeNs": 1791502849000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-100-seed0/adapter.safetensors",
+      "sha256": "e121f708530dd69373740ece4d3ba68bec24a8a8fa2dfd4b0ad77ce5977e9986",
+      "bytes": 7906624,
+      "mtimeNs": 1791499835000000000,
+      "copied": false
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-100-seed0/build.log",
+      "sha256": "cca7c68f34317110ceb10b7e90c242f04887ef0e5051e371aa86b9eb294255cd",
+      "bytes": 844,
+      "mtimeNs": 1791499855000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-100-seed0/candidate.cact",
+      "sha256": "5327f9720b783d27bf7cfb35d03b196ff9e46eab02b2d82c09269b0adf485412",
+      "bytes": 63437076,
+      "mtimeNs": 1791499854000000000,
+      "copied": false
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-100-seed0/epochs.csv",
+      "sha256": "8b27cbd1ad21e2d2023dae26b0e1a98da1e238549842df49f1e5993aba23b64f",
+      "bytes": 421,
+      "mtimeNs": 1791499835000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-100-seed0/experiment.json",
+      "sha256": "942afd31d1e8330bcbf105543bff128fd48d1a881d50e4a11d50a6b6169d39ca",
+      "bytes": 1671,
+      "mtimeNs": 1791504858000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-100-seed0/held-out-scenarios.jsonl",
+      "sha256": "c5b8976840c846f032c1cf13cfd69ae4589c24263335919c3f50f741b3753382",
+      "bytes": 344423,
+      "mtimeNs": 1791504858000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-100-seed0/native-evaluation.log",
+      "sha256": "697bf29a53d7c723c782ac7a52f05ca9bb87b188abe68c7d2c1a4d7c6f9efd19",
+      "bytes": 3294,
+      "mtimeNs": 1791506302000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-100-seed0/nvidia-smi.txt",
+      "sha256": "e7accfc90af946d5200cc5cf138b01448314e6749bed832d6673c7b465be4bee",
+      "bytes": 1689,
+      "mtimeNs": 1791498943000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-100-seed0/official-input.jsonl",
+      "sha256": "cedbed7e0c49870aa7b8978cac2740259b0be04a6767fe5e16184d4faff27e4c",
+      "bytes": 227378,
+      "mtimeNs": 1791498944000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-100-seed0/packages.txt",
+      "sha256": "39cc66bfb003e7fb136328665912a589360287ec157f9c874b97db20b2600ae3",
+      "bytes": 1261,
+      "mtimeNs": 1791498944000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-100-seed0/reasoning-100-seed0-decisions.csv",
+      "sha256": "c02b187caa4c36b401016172bfff418f09df84f6c4fe3106cad6b00aacc81950",
+      "bytes": 95568,
+      "mtimeNs": 1791506302000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-100-seed0/reasoning-100-seed0-heldOut.json",
+      "sha256": "d3559ac1753d6a62ba6ed75849fe50b803daab4bc8552ad055fe43cf743fb677",
+      "bytes": 344143,
+      "mtimeNs": 1791506302000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-100-seed0/reasoning-100-seed0-summary.csv",
+      "sha256": "a2d15a17e2f9faf25be5917734e8f1667d80384767b0ec728a2e7ce039f668d0",
+      "bytes": 12455,
+      "mtimeNs": 1791506302000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-100-seed0/reasoning-100-seed0-validation.json",
+      "sha256": "7dde56f5b8abab19967fedf4a20a5ba3228aceb8f0ae48afb2c4fd1cabd32435",
+      "bytes": 137739,
+      "mtimeNs": 1791505037000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-100-seed0/run.json",
+      "sha256": "aa4f22c634f7840ffcd92d25ed4db456ebf6f8a0df67a91c2d4c2b46f9c84183",
+      "bytes": 4389,
+      "mtimeNs": 1791499855000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-100-seed0/steps.csv",
+      "sha256": "77de4bb04d1c85da1549b14838ed7efeb3987753beba9d41acbf83d0d939cc62",
+      "bytes": 2316,
+      "mtimeNs": 1791499835000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-100-seed0/training.log",
+      "sha256": "f503206d5adfd2729d36969cd03e82bfb572c522bf4bcffd840820470412068e",
+      "bytes": 3484,
+      "mtimeNs": 1791499838000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-100-seed0/validation-scenarios.jsonl",
+      "sha256": "5ff8cfa15717c0c52380e6adb4605ffa0f094df8a5373adc1680223cf378b981",
+      "bytes": 143102,
+      "mtimeNs": 1791504858000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-100-seed42/adapter.safetensors",
+      "sha256": "dab0c19486cd20ac074843acb1eb9eda5c6a3ec49be50dab972bf870783406cb",
+      "bytes": 7906632,
+      "mtimeNs": 1791497893000000000,
+      "copied": false
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-100-seed42/build.log",
+      "sha256": "137c8c23e61d36e9552c500debc2d0eadb50e600a9c721c971da1c26fa1ebed5",
+      "bytes": 740,
+      "mtimeNs": 1791497915000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-100-seed42/candidate.cact",
+      "sha256": "af7e113b3936262204c8cb723ae82a37db8332bb47e81e008900606d1fdb96e4",
+      "bytes": 63437076,
+      "mtimeNs": 1791497914000000000,
+      "copied": false
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-100-seed42/epochs.csv",
+      "sha256": "8fb8a26be1d0380c40b5c1ea857b73bf3ce1bbc1c7e2de8f3cb000e5ff294de8",
+      "bytes": 416,
+      "mtimeNs": 1791497893000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-100-seed42/experiment.json",
+      "sha256": "08c776ee46950b499fa9b123697713a8bc1f8da944fb4e80f94dd3db7c74cad8",
+      "bytes": 1672,
+      "mtimeNs": 1791503032000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-100-seed42/held-out-scenarios.jsonl",
+      "sha256": "c5b8976840c846f032c1cf13cfd69ae4589c24263335919c3f50f741b3753382",
+      "bytes": 344423,
+      "mtimeNs": 1791503032000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-100-seed42/native-evaluation.log",
+      "sha256": "b1e25b1333e80913bb4260de08360c8c6d807239532f021e10cce8b0091b8370",
+      "bytes": 1089,
+      "mtimeNs": 1791503228000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-100-seed42/nvidia-smi.txt",
+      "sha256": "1975be2a26532e8ce14b625f01dc1e4d3deb70286e5036f6ef8c28a122fcc5d9",
+      "bytes": 1689,
+      "mtimeNs": 1791496994000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-100-seed42/official-input.jsonl",
+      "sha256": "8045c1ac610e5802036b89c2174303ab2bd3f9d9036244b5711516e129d18c2b",
+      "bytes": 227378,
+      "mtimeNs": 1791496995000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-100-seed42/packages.txt",
+      "sha256": "39cc66bfb003e7fb136328665912a589360287ec157f9c874b97db20b2600ae3",
+      "bytes": 1261,
+      "mtimeNs": 1791496995000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-100-seed42/reasoning-100-seed42-decisions.csv",
+      "sha256": "43d765e589536d3c85c8f7339defd3ea2753f44f2b5eb21cff00d5d03878b4a3",
+      "bytes": 23864,
+      "mtimeNs": 1791503228000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-100-seed42/reasoning-100-seed42-summary.csv",
+      "sha256": "4219424e585feae9120824339370e1f1aa17bbfa1d28145dcb91856749aac231",
+      "bytes": 5912,
+      "mtimeNs": 1791503228000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-100-seed42/reasoning-100-seed42-validation.json",
+      "sha256": "32307ee35d6f71466b58837610f005e1078e1e6b695c88269bd0dff72930110c",
+      "bytes": 137913,
+      "mtimeNs": 1791503228000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-100-seed42/run.json",
+      "sha256": "2fb9c41e10fe531e9969dfca6171cd016077db6a7007180e0686a7971b439ecc",
+      "bytes": 4394,
+      "mtimeNs": 1791497915000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-100-seed42/steps.csv",
+      "sha256": "6438d9961068a3aa3db098fe520729c43e6d248ab4980e1f2dcfe3fbba6f1e0a",
+      "bytes": 2324,
+      "mtimeNs": 1791497893000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-100-seed42/training.log",
+      "sha256": "5d480dcf000a0260e48ee02701cf14419b3098719bc829e325ea8c5587f983e2",
+      "bytes": 3379,
+      "mtimeNs": 1791497893000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-100-seed42/validation-scenarios.jsonl",
+      "sha256": "5ff8cfa15717c0c52380e6adb4605ffa0f094df8a5373adc1680223cf378b981",
+      "bytes": 143102,
+      "mtimeNs": 1791503032000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-1000-seed0/adapter.safetensors",
+      "sha256": "aaa60ba21f464382c7259d11dc80bd51c436baf9de534994c83edad85b4aa76f",
+      "bytes": 7906624,
+      "mtimeNs": 1791501895000000000,
+      "copied": false
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-1000-seed0/build.log",
+      "sha256": "381c178655cb63354b03a2eac9032173c19e290b080d3a69326a7593fd378526",
+      "bytes": 847,
+      "mtimeNs": 1791501915000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-1000-seed0/candidate.cact",
+      "sha256": "d73eb0c4e90831d18266f30e2d50b72291e270a303d70f9acbad9974acfdd5ec",
+      "bytes": 63437076,
+      "mtimeNs": 1791501914000000000,
+      "copied": false
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-1000-seed0/epochs.csv",
+      "sha256": "cbf5db352ad561e9578391673c01cab7ec77059b73962e08d8ba6f6aec8b428f",
+      "bytes": 415,
+      "mtimeNs": 1791501895000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-1000-seed0/experiment.json",
+      "sha256": "0b16543dcf49c164d0ed26233400ed7fcdcd852e6ecd9b600cea46b4b07dcbbc",
+      "bytes": 1672,
+      "mtimeNs": 1791507266000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-1000-seed0/held-out-scenarios.jsonl",
+      "sha256": "c5b8976840c846f032c1cf13cfd69ae4589c24263335919c3f50f741b3753382",
+      "bytes": 344423,
+      "mtimeNs": 1791507266000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-1000-seed0/native-evaluation.log",
+      "sha256": "4691c0a7be5609df38bcfabf8b2f3a97a6e9a0397e33648a3857da9ed311fb05",
+      "bytes": 1089,
+      "mtimeNs": 1791507763000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-1000-seed0/nvidia-smi.txt",
+      "sha256": "8eeecdb9bf890370ca1a0b82b22d22f0f2e52f43e4f28df6959de29c200588a4",
+      "bytes": 1689,
+      "mtimeNs": 1791500832000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-1000-seed0/official-input.jsonl",
+      "sha256": "529c7808cce67db51553e54cfdca51d8f95c686c6605e3ac46ec88fa15983f6e",
+      "bytes": 1236529,
+      "mtimeNs": 1791500833000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-1000-seed0/packages.txt",
+      "sha256": "39cc66bfb003e7fb136328665912a589360287ec157f9c874b97db20b2600ae3",
+      "bytes": 1261,
+      "mtimeNs": 1791500832000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-1000-seed0/reasoning-1000-seed0-decisions.csv",
+      "sha256": "f0ba66e71710730cbe6fc414513053aaec8d40c8f097073c60a4b94e82a90c7c",
+      "bytes": 24450,
+      "mtimeNs": 1791507763000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-1000-seed0/reasoning-1000-seed0-summary.csv",
+      "sha256": "5d7a1511b832c3bf21d61932369ed6c81d0e64972ddd1c6f896b9dff390f9a2f",
+      "bytes": 5974,
+      "mtimeNs": 1791507763000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-1000-seed0/reasoning-1000-seed0-validation.json",
+      "sha256": "cdf4bd0e7127a798b982d916e78db8bdf7f8955dc94a9c971033baa6c0786f8e",
+      "bytes": 138611,
+      "mtimeNs": 1791507763000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-1000-seed0/run.json",
+      "sha256": "283b0655b550937822f48fc0be542be257232713c54ea9cb9d31ba2d36d05228",
+      "bytes": 14400,
+      "mtimeNs": 1791501915000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-1000-seed0/steps.csv",
+      "sha256": "0b538e79fef65c0411273a93ec59f3139aa7c106997c5c65418ec5f3af43af0e",
+      "bytes": 1828,
+      "mtimeNs": 1791501895000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-1000-seed0/training.log",
+      "sha256": "ad246d73cb8cf4da48e9266a316a9ef6384fbb03b27d0d27c73509f918dfa3e0",
+      "bytes": 3036,
+      "mtimeNs": 1791501897000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-1000-seed0/validation-scenarios.jsonl",
+      "sha256": "5ff8cfa15717c0c52380e6adb4605ffa0f094df8a5373adc1680223cf378b981",
+      "bytes": 143102,
+      "mtimeNs": 1791507266000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-1000-seed42/adapter.safetensors",
+      "sha256": "0e87e4ccf9c2cdf43d61672d8459f16e975fcb33f05a10187d5b5647ef56539d",
+      "bytes": 7906632,
+      "mtimeNs": 1791499936000000000,
+      "copied": false
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-1000-seed42/build.log",
+      "sha256": "98e18fca38421a18623c4b6570e8f0e120245062384c2dcf9e66454014f8ebb1",
+      "bytes": 743,
+      "mtimeNs": 1791499957000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-1000-seed42/candidate.cact",
+      "sha256": "65afd7ddc35cea9377df2a684edcbcafb98b10a528ce594e7814675aa1afd96b",
+      "bytes": 63437076,
+      "mtimeNs": 1791499957000000000,
+      "copied": false
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-1000-seed42/epochs.csv",
+      "sha256": "d2f8d55549169ff4039a4a85652f46014844d3b967256f4ab5c86d2268839b6a",
+      "bytes": 413,
+      "mtimeNs": 1791499937000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-1000-seed42/experiment.json",
+      "sha256": "9cdb4101926fc42becd7388aedd54fde3d41819e19615eba3bf9d5c24e26e184",
+      "bytes": 1673,
+      "mtimeNs": 1791504674000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-1000-seed42/held-out-scenarios.jsonl",
+      "sha256": "c5b8976840c846f032c1cf13cfd69ae4589c24263335919c3f50f741b3753382",
+      "bytes": 344423,
+      "mtimeNs": 1791504674000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-1000-seed42/native-evaluation.log",
+      "sha256": "8e71ff47d32c73d1f5477d2ec2e963e11d3b140caa4e16c1ee68663218f6bec7",
+      "bytes": 1016,
+      "mtimeNs": 1791504858000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-1000-seed42/nvidia-smi.txt",
+      "sha256": "f8d77fe3d62b326bc05e702b9858c847557591388440a09c2daa802c00e0d343",
+      "bytes": 1689,
+      "mtimeNs": 1791498875000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-1000-seed42/official-input.jsonl",
+      "sha256": "28cd3e867ee59d86d22ef16837d1e9eeb56fc11db4ba7439c351881ccc6867f6",
+      "bytes": 1236529,
+      "mtimeNs": 1791498875000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-1000-seed42/packages.txt",
+      "sha256": "39cc66bfb003e7fb136328665912a589360287ec157f9c874b97db20b2600ae3",
+      "bytes": 1261,
+      "mtimeNs": 1791498875000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-1000-seed42/reasoning-1000-seed42-decisions.csv",
+      "sha256": "95a937a1a7d736351006271cee9a1e3c53f9a6b691145a8de7bd445a63c422ef",
+      "bytes": 23969,
+      "mtimeNs": 1791504858000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-1000-seed42/reasoning-1000-seed42-summary.csv",
+      "sha256": "d1ae5b6b551154f76f1ef79029274a373c7ab22dfddb6ce0bddfb0fb8f7a2bd3",
+      "bytes": 5972,
+      "mtimeNs": 1791504858000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-1000-seed42/reasoning-1000-seed42-validation.json",
+      "sha256": "d5b9a180f072137a82ec0bfdcfdd865784c7e66a6585b5c49c62f0125461f2b0",
+      "bytes": 138067,
+      "mtimeNs": 1791504858000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-1000-seed42/run.json",
+      "sha256": "73a273b656ac9a557d8a1a16e685f8fff9822894d71b2205957cc5019b99d512",
+      "bytes": 14407,
+      "mtimeNs": 1791499958000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-1000-seed42/steps.csv",
+      "sha256": "e5aa7df22f6ca501e213e52e3bc6e2573a7ab9c33e7c659f32456318ec6caa5c",
+      "bytes": 1824,
+      "mtimeNs": 1791499937000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-1000-seed42/training.log",
+      "sha256": "e8a219cefb32f1f592faf93e040b6cc7d2c96d98bd0a2a7bc25b1533e988e734",
+      "bytes": 2931,
+      "mtimeNs": 1791499940000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-1000-seed42/validation-scenarios.jsonl",
+      "sha256": "5ff8cfa15717c0c52380e6adb4605ffa0f094df8a5373adc1680223cf378b981",
+      "bytes": 143102,
+      "mtimeNs": 1791504674000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-300-seed0/adapter.safetensors",
+      "sha256": "82fa5273957a531566bc639dbafb8fd99ad3ea39e93432f5a41c26a6abdc339c",
+      "bytes": 7906624,
+      "mtimeNs": 1791500808000000000,
+      "copied": false
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-300-seed0/build.log",
+      "sha256": "c704bf6307bc0977fe7193222515d2a1a7b58466256f865b52b6f495e88d15fe",
+      "bytes": 706,
+      "mtimeNs": 1791500828000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-300-seed0/candidate.cact",
+      "sha256": "c2c368bcbd005385d847f16e34d00b2eb0aa61e03e1264e09cb57f653e00b186",
+      "bytes": 63437076,
+      "mtimeNs": 1791500828000000000,
+      "copied": false
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-300-seed0/epochs.csv",
+      "sha256": "39920e797eafd20b635b946f476cf779d1b968dc790e326bb4f2b898291b1007",
+      "bytes": 417,
+      "mtimeNs": 1791500808000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-300-seed0/experiment.json",
+      "sha256": "e5f8467c54aae430a976c26ca38602049925c3d2b0c7613522e76a2b4b63b125",
+      "bytes": 1671,
+      "mtimeNs": 1791506303000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-300-seed0/held-out-scenarios.jsonl",
+      "sha256": "c5b8976840c846f032c1cf13cfd69ae4589c24263335919c3f50f741b3753382",
+      "bytes": 344423,
+      "mtimeNs": 1791506303000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-300-seed0/native-evaluation.log",
+      "sha256": "21f54359f0d6f9403754b0ddf17ce74bff88a55c93e7fc08fde0f493e55918c0",
+      "bytes": 1079,
+      "mtimeNs": 1791506670000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-300-seed0/nvidia-smi.txt",
+      "sha256": "6342ced73dedfdecc1efc20d5ef66de74f8f6e06e4c0c167649702f448854e8e",
+      "bytes": 1689,
+      "mtimeNs": 1791499859000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-300-seed0/official-input.jsonl",
+      "sha256": "05c9a16e0ac2d357df90d615b1403b1bc79da5241be90956ddbe5f522c33e357",
+      "bytes": 451697,
+      "mtimeNs": 1791499859000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-300-seed0/packages.txt",
+      "sha256": "39cc66bfb003e7fb136328665912a589360287ec157f9c874b97db20b2600ae3",
+      "bytes": 1261,
+      "mtimeNs": 1791499859000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-300-seed0/reasoning-300-seed0-decisions.csv",
+      "sha256": "327a75030a03c82c58c936d8908f4daa2cefa7b747c8ca073496cc5a24cf2074",
+      "bytes": 24262,
+      "mtimeNs": 1791506670000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-300-seed0/reasoning-300-seed0-summary.csv",
+      "sha256": "cc4d35bcabd3e94b4127a30c6ac2204eef76cc5bb0f583ea7625685131fc45ad",
+      "bytes": 5868,
+      "mtimeNs": 1791506670000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-300-seed0/reasoning-300-seed0-validation.json",
+      "sha256": "37df889afcde43dc63d13b611979dc35502d0e07d8492c8671ee8acf3ff36f40",
+      "bytes": 138350,
+      "mtimeNs": 1791506670000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-300-seed0/run.json",
+      "sha256": "ceda0b7ab501ff940e8395bf42637bd386b813bd130450aec331be6c71e0e085",
+      "bytes": 6591,
+      "mtimeNs": 1791500828000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-300-seed0/steps.csv",
+      "sha256": "136de7f4698834506883ce162f9ba0ddc6ec01fe7dd27e5e81ca918744cbc3d9",
+      "bytes": 2198,
+      "mtimeNs": 1791500808000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-300-seed0/training.log",
+      "sha256": "c21e78f7ef68f39eb48dec5395010eca14481d0ab64773048eb024f50d47f12a",
+      "bytes": 3367,
+      "mtimeNs": 1791500811000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-300-seed0/validation-scenarios.jsonl",
+      "sha256": "5ff8cfa15717c0c52380e6adb4605ffa0f094df8a5373adc1680223cf378b981",
+      "bytes": 143102,
+      "mtimeNs": 1791506303000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-300-seed42/adapter.safetensors",
+      "sha256": "d845902066d0902ad73d1579166bf2d0dd2abddff82ff8d073dda955099a1bef",
+      "bytes": 7906632,
+      "mtimeNs": 1791498848000000000,
+      "copied": false
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-300-seed42/build.log",
+      "sha256": "ea83a578c89f8656e023662e9751373beea3209563a8b6494da979c7584e0e0c",
+      "bytes": 740,
+      "mtimeNs": 1791498870000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-300-seed42/candidate.cact",
+      "sha256": "d6db64aaa6a7082e1dbf6cfec9aa0a80d35808c18023ae103cdf6b4c3c12bdaf",
+      "bytes": 63437076,
+      "mtimeNs": 1791498869000000000,
+      "copied": false
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-300-seed42/epochs.csv",
+      "sha256": "090341521f308b27a09f69d06c9dc33a7674045112524a5367047badd7cfb7fb",
+      "bytes": 417,
+      "mtimeNs": 1791498848000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-300-seed42/experiment.json",
+      "sha256": "76e05f8ef1b82d5e6eb9b54f6b2bcc37334a635d7e7251f4e33ebbeaed7e3553",
+      "bytes": 1672,
+      "mtimeNs": 1791503228000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-300-seed42/held-out-scenarios.jsonl",
+      "sha256": "c5b8976840c846f032c1cf13cfd69ae4589c24263335919c3f50f741b3753382",
+      "bytes": 344423,
+      "mtimeNs": 1791503228000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-300-seed42/native-evaluation.log",
+      "sha256": "c30359d0e6d15144d0fbdfdc6fd0bec1b23f1398bdc40406b76e17b4d0d9768c",
+      "bytes": 1089,
+      "mtimeNs": 1791503783000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-300-seed42/nvidia-smi.txt",
+      "sha256": "da3d9d47e9c020ab93b20056dd3ffa999ec62dbdcb41f21f0d35a342ff34efba",
+      "bytes": 1689,
+      "mtimeNs": 1791497919000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-300-seed42/official-input.jsonl",
+      "sha256": "d2a9145e261e6472ef2623432bf0f4565524a0e52d9a55a8a9c4a4967192c074",
+      "bytes": 451697,
+      "mtimeNs": 1791497920000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-300-seed42/packages.txt",
+      "sha256": "39cc66bfb003e7fb136328665912a589360287ec157f9c874b97db20b2600ae3",
+      "bytes": 1261,
+      "mtimeNs": 1791497920000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-300-seed42/reasoning-300-seed42-decisions.csv",
+      "sha256": "de988ac64dfe09c69b2339ecf9aed5b6aec74fbf239ffbdd2b85dbd52e749505",
+      "bytes": 24448,
+      "mtimeNs": 1791503783000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-300-seed42/reasoning-300-seed42-summary.csv",
+      "sha256": "e2945b33c994854563ca9a16bc963b1736c14005682c0cce5572ab7bfdf55a88",
+      "bytes": 5922,
+      "mtimeNs": 1791503783000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-300-seed42/reasoning-300-seed42-validation.json",
+      "sha256": "0ea15487a91f773e46832960ccde4c6525036256edf1b5f85efc1c569e7be472",
+      "bytes": 138403,
+      "mtimeNs": 1791503783000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-300-seed42/run.json",
+      "sha256": "5aabdb20a30365b3ddb38474fd95697c8e0ac4113cf78b453236c31c5f5f467d",
+      "bytes": 6599,
+      "mtimeNs": 1791498870000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-300-seed42/steps.csv",
+      "sha256": "4e9b473c6c03aacc67dbb1dee8dc4bd7fce5be24dedfd69a5b826851852e420a",
+      "bytes": 2197,
+      "mtimeNs": 1791498848000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-300-seed42/training.log",
+      "sha256": "737865a04d85e40223063e1f4c09b007815dddc5fd4f1c9730fa478dff2b8b65",
+      "bytes": 3262,
+      "mtimeNs": 1791498850000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-300-seed42/validation-scenarios.jsonl",
+      "sha256": "5ff8cfa15717c0c52380e6adb4605ffa0f094df8a5373adc1680223cf378b981",
+      "bytes": 143102,
+      "mtimeNs": 1791503228000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-600-seed0/adapter.safetensors",
+      "sha256": "42cda8cfdb1e119fd88e5cc5eecfa0b19481fb877f76124ea18eed35fccdd7d9",
+      "bytes": 7906624,
+      "mtimeNs": 1791500950000000000,
+      "copied": false
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-600-seed0/build.log",
+      "sha256": "ce2c3e66ec2ae74dd3c94348e14e88e8ca4fbdcc5df4f326fee7ac7e4c4c20a2",
+      "bytes": 737,
+      "mtimeNs": 1791500972000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-600-seed0/candidate.cact",
+      "sha256": "69b3d209cb7b99295be740e1149e68bcbf669635b77963ba7c45cdc217ea623d",
+      "bytes": 63437076,
+      "mtimeNs": 1791500971000000000,
+      "copied": false
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-600-seed0/epochs.csv",
+      "sha256": "58da261ab1e774b19933e56090cfca63fd7f89000817aeeada81e9db9135bc5c",
+      "bytes": 418,
+      "mtimeNs": 1791500950000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-600-seed0/experiment.json",
+      "sha256": "091157435e7fecc0760ca10fe03157b8d0885287eb3e91c1893989ea9cf63d9b",
+      "bytes": 1671,
+      "mtimeNs": 1791506671000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-600-seed0/held-out-scenarios.jsonl",
+      "sha256": "c5b8976840c846f032c1cf13cfd69ae4589c24263335919c3f50f741b3753382",
+      "bytes": 344423,
+      "mtimeNs": 1791506670000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-600-seed0/native-evaluation.log",
+      "sha256": "783933cba3824c85900d27e37cc73672965d13ee23c5cb7e02b749a44576d64c",
+      "bytes": 1079,
+      "mtimeNs": 1791507266000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-600-seed0/nvidia-smi.txt",
+      "sha256": "8d9184d788782389a809a4f021d050f01141813ec22cfdade7847a6fdf45355e",
+      "bytes": 1689,
+      "mtimeNs": 1791499962000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-600-seed0/official-input.jsonl",
+      "sha256": "aaf55ce3e8ed9c40d802dc71fdd531f2bd2c3aea2cb670dc4cb4b99b4e457605",
+      "bytes": 786394,
+      "mtimeNs": 1791499963000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-600-seed0/packages.txt",
+      "sha256": "39cc66bfb003e7fb136328665912a589360287ec157f9c874b97db20b2600ae3",
+      "bytes": 1261,
+      "mtimeNs": 1791499963000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-600-seed0/reasoning-600-seed0-decisions.csv",
+      "sha256": "28e0d41b0023062a6e2c46d78fb09e65729b0dfd42390715d7ab9ffd6292fd86",
+      "bytes": 24238,
+      "mtimeNs": 1791507266000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-600-seed0/reasoning-600-seed0-summary.csv",
+      "sha256": "9ee027616f0522426f8d03507f111735d1c113039c4f582d3924aa7b1a361419",
+      "bytes": 5899,
+      "mtimeNs": 1791507266000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-600-seed0/reasoning-600-seed0-validation.json",
+      "sha256": "98fee164a59d593d489aee7582c202e758743ff6963dfce00843df09997e4cf7",
+      "bytes": 138401,
+      "mtimeNs": 1791507266000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-600-seed0/run.json",
+      "sha256": "f32c54059183dc551a6d415cddc1591b68cb0e1b4f35d1eeb7a9e105148a37e3",
+      "bytes": 9891,
+      "mtimeNs": 1791500972000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-600-seed0/steps.csv",
+      "sha256": "6a77d01ada5f120b65b7928ae8c609374d67b500fdaa21e5424ebb8a42b38043",
+      "bytes": 1889,
+      "mtimeNs": 1791500950000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-600-seed0/training.log",
+      "sha256": "d01bb896ee9026324badd366cbcaae8a803ea90b2291454f5fc6757c9843bb11",
+      "bytes": 2985,
+      "mtimeNs": 1791500954000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-600-seed0/validation-scenarios.jsonl",
+      "sha256": "5ff8cfa15717c0c52380e6adb4605ffa0f094df8a5373adc1680223cf378b981",
+      "bytes": 143102,
+      "mtimeNs": 1791506670000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-600-seed42/adapter.safetensors",
+      "sha256": "1f8c4caf55b957ede27eb5301e4d78828a12d737821e5e9f8de492113578b071",
+      "bytes": 7906632,
+      "mtimeNs": 1791498918000000000,
+      "copied": false
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-600-seed42/build.log",
+      "sha256": "5173a66744c03cdf0bba28d0e934be58195f6f7411e48be91b07099e3227700e",
+      "bytes": 847,
+      "mtimeNs": 1791498938000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-600-seed42/candidate.cact",
+      "sha256": "1a6706be345cb1c2fffb9624e4d48e5bd8f5dd97fe29a875c6bd2b337ad0ee48",
+      "bytes": 63437076,
+      "mtimeNs": 1791498937000000000,
+      "copied": false
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-600-seed42/epochs.csv",
+      "sha256": "b9b672e4dead38de36b89d416843554ee0bf6a0e11a23cd0544abeb0a64c06e7",
+      "bytes": 414,
+      "mtimeNs": 1791498918000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-600-seed42/experiment.json",
+      "sha256": "730486ae7754e3f2bff1645ddd77dbc5e5b553cf990ff7c7fe3c927ea701180d",
+      "bytes": 1672,
+      "mtimeNs": 1791503783000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-600-seed42/held-out-scenarios.jsonl",
+      "sha256": "c5b8976840c846f032c1cf13cfd69ae4589c24263335919c3f50f741b3753382",
+      "bytes": 344423,
+      "mtimeNs": 1791503783000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-600-seed42/native-evaluation.log",
+      "sha256": "d46bcd916457d1a5ccf02313240befad4e6f9a49733c266d2c45e6dd67c0a35a",
+      "bytes": 1089,
+      "mtimeNs": 1791504674000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-600-seed42/nvidia-smi.txt",
+      "sha256": "85833c3c3dbe5dbaa887f36092b79b4d20d36c6fb1c258e8c60ecc31b491b155",
+      "bytes": 1689,
+      "mtimeNs": 1791497939000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-600-seed42/official-input.jsonl",
+      "sha256": "b12c0327734c94578320afd3d25a09a411e8c3b4e44bcf0dec87ee9cfb7e5ba2",
+      "bytes": 786394,
+      "mtimeNs": 1791497939000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-600-seed42/packages.txt",
+      "sha256": "39cc66bfb003e7fb136328665912a589360287ec157f9c874b97db20b2600ae3",
+      "bytes": 1261,
+      "mtimeNs": 1791497939000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-600-seed42/reasoning-600-seed42-decisions.csv",
+      "sha256": "b5819393ef024dee0561d051475a97a517d36dfc3497802cb045b55040b47ab2",
+      "bytes": 24925,
+      "mtimeNs": 1791504674000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-600-seed42/reasoning-600-seed42-summary.csv",
+      "sha256": "03205268024043c3e3b4707082ddf5cc99e6a1c1bfb1d228f33bd9da412d5c1a",
+      "bytes": 5887,
+      "mtimeNs": 1791504674000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-600-seed42/reasoning-600-seed42-validation.json",
+      "sha256": "b8def32c316191f3f54bf42fb9b07c72d6b8f63788373548e6068a72ce360a4e",
+      "bytes": 138855,
+      "mtimeNs": 1791504673000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-600-seed42/run.json",
+      "sha256": "e4064781359402187483b0182abd80547ecaf9f3a04a5d7ee0cd1b92ace213b6",
+      "bytes": 9898,
+      "mtimeNs": 1791498938000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-600-seed42/steps.csv",
+      "sha256": "2e9325ef7839445e97eae85308d25be7ea19bc10c26bb51e99b056f1f959b845",
+      "bytes": 1902,
+      "mtimeNs": 1791498918000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-600-seed42/training.log",
+      "sha256": "aeb8447d8fefa75fc8b881a153cf7f208c7dc1b005004eba49c6955f0063adce",
+      "bytes": 3094,
+      "mtimeNs": 1791498921000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-600-seed42/validation-scenarios.jsonl",
+      "sha256": "5ff8cfa15717c0c52380e6adb4605ffa0f094df8a5373adc1680223cf378b981",
+      "bytes": 143102,
+      "mtimeNs": 1791503783000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/shipped-base/experiment.json",
+      "sha256": "8bb10e552530057b3ab69dc03cdfc70baf71827cd2a75fc6d37dd7fdc72d5e2b",
+      "bytes": 1672,
+      "mtimeNs": 1791501948000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/shipped-base/held-out-scenarios.jsonl",
+      "sha256": "c5b8976840c846f032c1cf13cfd69ae4589c24263335919c3f50f741b3753382",
+      "bytes": 344423,
+      "mtimeNs": 1791501948000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/shipped-base/native-evaluation.log",
+      "sha256": "9013d2c4b246eb9fe5a87ce3aa374bfa371d04907728df9eb688e18ec9d6fad3",
+      "bytes": 1009,
+      "mtimeNs": 1791502172000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/shipped-base/shipped-base-decisions.csv",
+      "sha256": "d11863b2541839ce9d7ed599f145ca348fb501405ddb5ac36554d5539a2fe75a",
+      "bytes": 23638,
+      "mtimeNs": 1791502172000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/shipped-base/shipped-base-summary.csv",
+      "sha256": "d5c5ef392a5695fec1a4adb9e1346bcfe4bb34c24fc98d51c5f6f7eed837f2d0",
+      "bytes": 5747,
+      "mtimeNs": 1791502172000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/shipped-base/shipped-base-validation.json",
+      "sha256": "b417538d6f769f819ba27efba1384e815a4478090e548183c3ae9d749c4ac9df",
+      "bytes": 138685,
+      "mtimeNs": 1791502172000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results/shipped-base/validation-scenarios.jsonl",
+      "sha256": "5ff8cfa15717c0c52380e6adb4605ffa0f094df8a5373adc1680223cf378b981",
+      "bytes": 143102,
+      "mtimeNs": 1791501948000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-batch-results.tar.gz",
+      "sha256": "319ba43a1b6aa01f82169c507521691a6846e80ad584ecc39f6b8490b53fcd9d",
+      "bytes": 664023822,
+      "mtimeNs": 1791558230116010091,
+      "copied": false
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-training-records/base-local-export/run.json",
+      "sha256": "16202bf87f18848d510b3403e01aaeac34e79e01a7bfed8d8613a2a6de44bb40",
+      "bytes": 771,
+      "mtimeNs": 1791496223000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-training-records/interrupted-interactive-raw-300-seed42/epochs.csv",
+      "sha256": "1957299954f81fb281215851b251fbc0ae69a7672b076cd9e8bc91cefc4015c4",
+      "bytes": 417,
+      "mtimeNs": 1791496643000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-training-records/interrupted-interactive-raw-300-seed42/run.json",
+      "sha256": "1718d1cabfd9276a4be135e0dbd5091adc5101168635c926ff1e9c4a4812a817",
+      "bytes": 6131,
+      "mtimeNs": 1791496776000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-training-records/interrupted-interactive-raw-300-seed42/steps.csv",
+      "sha256": "c3845114d8a27d77508fcb58eb321f37344b27b665b5ea6250b2763fd892f4d6",
+      "bytes": 2193,
+      "mtimeNs": 1791496643000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-training-records/interrupted-interactive-raw-300-seed42/training.log",
+      "sha256": "785bb946cb06365dc2e6821bc00800adf955d4e9ecc2a4076a8add4f320572a7",
+      "bytes": 2869,
+      "mtimeNs": 1791496647000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-training-records/job-raw-300-seed42.json",
+      "sha256": "645da62262ae864ef87c6e599c283fc2db58d5c7c9d435a33305a23fd53e03c2",
+      "bytes": 9281,
+      "mtimeNs": 1791497936000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-training-records/job-reasoning-100-seed0.json",
+      "sha256": "e7db6fd8f6f573e7f048beb073fe94f91ae830305d194b3c40798c479db9c04d",
+      "bytes": 6312,
+      "mtimeNs": 1791499855000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-training-records/job-reasoning-100-seed42.json",
+      "sha256": "315794141cc18aee6cc486832ab9c77676b8e96f3bd59bce828c34ca292b750b",
+      "bytes": 6318,
+      "mtimeNs": 1791497915000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-training-records/job-reasoning-1000-seed0.json",
+      "sha256": "2dffc60899477f0269684b1ffec22e96aafbf1be661f5d9e7e6147c447b380c9",
+      "bytes": 19924,
+      "mtimeNs": 1791501915000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-training-records/job-reasoning-1000-seed42.json",
+      "sha256": "db295c0a0dec58f1a94bb567f10e94d53a655c835a090ae50e9c59cb43807053",
+      "bytes": 19932,
+      "mtimeNs": 1791499958000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-training-records/job-reasoning-300-seed0.json",
+      "sha256": "32539cba9470dddf21b27f27b5bba63dfeea2dbd53b13007f1220f1911f6a807",
+      "bytes": 9314,
+      "mtimeNs": 1791500829000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-training-records/job-reasoning-300-seed42.json",
+      "sha256": "ad6988e50c4751363b3a1964afbe2c8eb40f956caa70bb3d6dcc28662bf7ecc7",
+      "bytes": 9323,
+      "mtimeNs": 1791498870000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-training-records/job-reasoning-600-seed0.json",
+      "sha256": "46d791e185d6519230d45d2efe5b42fbe3890298d3b3c65e928a6cc74b19fc59",
+      "bytes": 13814,
+      "mtimeNs": 1791500972000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-training-records/job-reasoning-600-seed42.json",
+      "sha256": "2a8deba02ad64616faecc9c98f8d4b8d859d985d5ad0bdca214b0ca3b6760e38",
+      "bytes": 13822,
+      "mtimeNs": 1791498938000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-training-records/official-plan.json",
+      "sha256": "a2de6d91fa1218d0638c0150c18f896467f5986dd9cd063bd168458bbed252df",
+      "bytes": 67682,
+      "mtimeNs": 1791496149000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-training-records/official-training-summary.csv",
+      "sha256": "0e02e4ef812d266ecf4e316ea58a308a82256c96eedf966e66fd939f005f5dd1",
+      "bytes": 2138,
+      "mtimeNs": 1791558193030464624,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-training-records/raw-300-seed42/epochs.csv",
+      "sha256": "386485a11c145b08dc7e7b933d39d340d967173dd7ab3d90450a96e800062f50",
+      "bytes": 416,
+      "mtimeNs": 1791497914000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-training-records/raw-300-seed42/run.json",
+      "sha256": "9445432764fdf4b5c7aeb5a3cbebc7c4f288a5061f795a62b9bc5a82dc1aa120",
+      "bytes": 6563,
+      "mtimeNs": 1791497936000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-training-records/raw-300-seed42/steps.csv",
+      "sha256": "4685cc3ff6437fa902c5e1d31fdd632035d5272607585007b62e2b6948c4958b",
+      "bytes": 2190,
+      "mtimeNs": 1791497914000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-training-records/raw-300-seed42/training.log",
+      "sha256": "961d087cd51d383df5bb9359e11cdcee04d8877e977c67e842def6ca66b8be34",
+      "bytes": 3357,
+      "mtimeNs": 1791497914000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-training-records/reasoning-100-seed0/epochs.csv",
+      "sha256": "8b27cbd1ad21e2d2023dae26b0e1a98da1e238549842df49f1e5993aba23b64f",
+      "bytes": 421,
+      "mtimeNs": 1791499835000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-training-records/reasoning-100-seed0/run.json",
+      "sha256": "aa4f22c634f7840ffcd92d25ed4db456ebf6f8a0df67a91c2d4c2b46f9c84183",
+      "bytes": 4389,
+      "mtimeNs": 1791499855000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-training-records/reasoning-100-seed0/steps.csv",
+      "sha256": "77de4bb04d1c85da1549b14838ed7efeb3987753beba9d41acbf83d0d939cc62",
+      "bytes": 2316,
+      "mtimeNs": 1791499835000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-training-records/reasoning-100-seed0/training.log",
+      "sha256": "f503206d5adfd2729d36969cd03e82bfb572c522bf4bcffd840820470412068e",
+      "bytes": 3484,
+      "mtimeNs": 1791499838000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-training-records/reasoning-100-seed42/epochs.csv",
+      "sha256": "8fb8a26be1d0380c40b5c1ea857b73bf3ce1bbc1c7e2de8f3cb000e5ff294de8",
+      "bytes": 416,
+      "mtimeNs": 1791497893000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-training-records/reasoning-100-seed42/run.json",
+      "sha256": "2fb9c41e10fe531e9969dfca6171cd016077db6a7007180e0686a7971b439ecc",
+      "bytes": 4394,
+      "mtimeNs": 1791497915000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-training-records/reasoning-100-seed42/steps.csv",
+      "sha256": "6438d9961068a3aa3db098fe520729c43e6d248ab4980e1f2dcfe3fbba6f1e0a",
+      "bytes": 2324,
+      "mtimeNs": 1791497893000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-training-records/reasoning-100-seed42/training.log",
+      "sha256": "5d480dcf000a0260e48ee02701cf14419b3098719bc829e325ea8c5587f983e2",
+      "bytes": 3379,
+      "mtimeNs": 1791497893000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-training-records/reasoning-1000-seed0/epochs.csv",
+      "sha256": "cbf5db352ad561e9578391673c01cab7ec77059b73962e08d8ba6f6aec8b428f",
+      "bytes": 415,
+      "mtimeNs": 1791501895000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-training-records/reasoning-1000-seed0/run.json",
+      "sha256": "283b0655b550937822f48fc0be542be257232713c54ea9cb9d31ba2d36d05228",
+      "bytes": 14400,
+      "mtimeNs": 1791501915000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-training-records/reasoning-1000-seed0/steps.csv",
+      "sha256": "0b538e79fef65c0411273a93ec59f3139aa7c106997c5c65418ec5f3af43af0e",
+      "bytes": 1828,
+      "mtimeNs": 1791501895000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-training-records/reasoning-1000-seed0/training.log",
+      "sha256": "ad246d73cb8cf4da48e9266a316a9ef6384fbb03b27d0d27c73509f918dfa3e0",
+      "bytes": 3036,
+      "mtimeNs": 1791501897000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-training-records/reasoning-1000-seed42/epochs.csv",
+      "sha256": "d2f8d55549169ff4039a4a85652f46014844d3b967256f4ab5c86d2268839b6a",
+      "bytes": 413,
+      "mtimeNs": 1791499937000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-training-records/reasoning-1000-seed42/run.json",
+      "sha256": "73a273b656ac9a557d8a1a16e685f8fff9822894d71b2205957cc5019b99d512",
+      "bytes": 14407,
+      "mtimeNs": 1791499958000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-training-records/reasoning-1000-seed42/steps.csv",
+      "sha256": "e5aa7df22f6ca501e213e52e3bc6e2573a7ab9c33e7c659f32456318ec6caa5c",
+      "bytes": 1824,
+      "mtimeNs": 1791499937000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-training-records/reasoning-1000-seed42/training.log",
+      "sha256": "e8a219cefb32f1f592faf93e040b6cc7d2c96d98bd0a2a7bc25b1533e988e734",
+      "bytes": 2931,
+      "mtimeNs": 1791499940000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-training-records/reasoning-300-seed0/epochs.csv",
+      "sha256": "39920e797eafd20b635b946f476cf779d1b968dc790e326bb4f2b898291b1007",
+      "bytes": 417,
+      "mtimeNs": 1791500808000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-training-records/reasoning-300-seed0/run.json",
+      "sha256": "ceda0b7ab501ff940e8395bf42637bd386b813bd130450aec331be6c71e0e085",
+      "bytes": 6591,
+      "mtimeNs": 1791500828000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-training-records/reasoning-300-seed0/steps.csv",
+      "sha256": "136de7f4698834506883ce162f9ba0ddc6ec01fe7dd27e5e81ca918744cbc3d9",
+      "bytes": 2198,
+      "mtimeNs": 1791500808000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-training-records/reasoning-300-seed0/training.log",
+      "sha256": "c21e78f7ef68f39eb48dec5395010eca14481d0ab64773048eb024f50d47f12a",
+      "bytes": 3367,
+      "mtimeNs": 1791500811000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-training-records/reasoning-300-seed42/epochs.csv",
+      "sha256": "090341521f308b27a09f69d06c9dc33a7674045112524a5367047badd7cfb7fb",
+      "bytes": 417,
+      "mtimeNs": 1791498848000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-training-records/reasoning-300-seed42/run.json",
+      "sha256": "5aabdb20a30365b3ddb38474fd95697c8e0ac4113cf78b453236c31c5f5f467d",
+      "bytes": 6599,
+      "mtimeNs": 1791498870000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-training-records/reasoning-300-seed42/steps.csv",
+      "sha256": "4e9b473c6c03aacc67dbb1dee8dc4bd7fce5be24dedfd69a5b826851852e420a",
+      "bytes": 2197,
+      "mtimeNs": 1791498848000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-training-records/reasoning-300-seed42/training.log",
+      "sha256": "737865a04d85e40223063e1f4c09b007815dddc5fd4f1c9730fa478dff2b8b65",
+      "bytes": 3262,
+      "mtimeNs": 1791498850000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-training-records/reasoning-600-seed0/epochs.csv",
+      "sha256": "58da261ab1e774b19933e56090cfca63fd7f89000817aeeada81e9db9135bc5c",
+      "bytes": 418,
+      "mtimeNs": 1791500950000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-training-records/reasoning-600-seed0/run.json",
+      "sha256": "f32c54059183dc551a6d415cddc1591b68cb0e1b4f35d1eeb7a9e105148a37e3",
+      "bytes": 9891,
+      "mtimeNs": 1791500972000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-training-records/reasoning-600-seed0/steps.csv",
+      "sha256": "6a77d01ada5f120b65b7928ae8c609374d67b500fdaa21e5424ebb8a42b38043",
+      "bytes": 1889,
+      "mtimeNs": 1791500950000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-training-records/reasoning-600-seed0/training.log",
+      "sha256": "d01bb896ee9026324badd366cbcaae8a803ea90b2291454f5fc6757c9843bb11",
+      "bytes": 2985,
+      "mtimeNs": 1791500954000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-training-records/reasoning-600-seed42/epochs.csv",
+      "sha256": "b9b672e4dead38de36b89d416843554ee0bf6a0e11a23cd0544abeb0a64c06e7",
+      "bytes": 414,
+      "mtimeNs": 1791498918000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-training-records/reasoning-600-seed42/run.json",
+      "sha256": "e4064781359402187483b0182abd80547ecaf9f3a04a5d7ee0cd1b92ace213b6",
+      "bytes": 9898,
+      "mtimeNs": 1791498938000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-training-records/reasoning-600-seed42/steps.csv",
+      "sha256": "2e9325ef7839445e97eae85308d25be7ea19bc10c26bb51e99b056f1f959b845",
+      "bytes": 1902,
+      "mtimeNs": 1791498918000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/sol-training-records/reasoning-600-seed42/training.log",
+      "sha256": "aeb8447d8fefa75fc8b881a153cf7f208c7dc1b005004eba49c6955f0063adce",
+      "bytes": 3094,
+      "mtimeNs": 1791498921000000000,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/train-100-reasoning.jsonl",
+      "sha256": "ea7ae7b8a5ae428f61d01ffd1b2201240d728be4d027856652e2dac703419c66",
+      "bytes": 110314,
+      "mtimeNs": 1791495915003769810,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/train-100-scenarios.jsonl",
+      "sha256": "048e700213077efbca9bc3d17768182d470ae299491b44a84d41ca2dac90849a",
+      "bytes": 140892,
+      "mtimeNs": 1791495808315877857,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/train-100.jsonl",
+      "sha256": "5a8aaf0057ed6cbb2c0a1afcc16c2b66840bedaf48c9cde8401bc76545517834",
+      "bytes": 93825,
+      "mtimeNs": 1791495808316639228,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/train-1000-reasoning.jsonl",
+      "sha256": "42a9fbcb7d32d30920f2795b3d25c0bc6be7f186c3c5358a7881a7b4cb22d51f",
+      "bytes": 1089574,
+      "mtimeNs": 1791495915034100710,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/train-1000-scenarios.jsonl",
+      "sha256": "8d06f483837b98f81217ff319b1d805ea792349af317ee6a1fb5493e29212cfd",
+      "bytes": 1401152,
+      "mtimeNs": 1791495808327881326,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/train-1000.jsonl",
+      "sha256": "b455d5ddef4eafe3587c66bf047bf2c73532333e547a25cd0acfe74663be9330",
+      "bytes": 927926,
+      "mtimeNs": 1791495808335403739,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/train-300-reasoning.jsonl",
+      "sha256": "06f40692cc7fbae21297fe9569ca345cbda2cdf02cad3f75c997cc427d922d00",
+      "bytes": 327982,
+      "mtimeNs": 1791495915009141986,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/train-300-scenarios.jsonl",
+      "sha256": "2519910bc9a2b502a1d89c3c66426c8a5d77a28aaefe811d857e7d5f6b3f82db",
+      "bytes": 421211,
+      "mtimeNs": 1791495808317318890,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/train-300.jsonl",
+      "sha256": "23d955b258a39e85d596ed02eb6529fab05bb597c3414d32cb063fff54eaff42",
+      "bytes": 279128,
+      "mtimeNs": 1791495808319497960,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/train-600-reasoning.jsonl",
+      "sha256": "446160ef3f8dceed869ad320ba06092494052a8d18f5b8da85fc2194c5119e1d",
+      "bytes": 652752,
+      "mtimeNs": 1791495915018849094,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/train-600-scenarios.jsonl",
+      "sha256": "21d7a25deb3657b5f61b10c99c806d814b6e63c0ee013bff7032426947e83a05",
+      "bytes": 839893,
+      "mtimeNs": 1791495808320793952,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/train-600.jsonl",
+      "sha256": "2e83a6808407cc52e161ad055ef83ba24b7ec32a5154ccfab9a1c56faa0eb197",
+      "bytes": 556427,
+      "mtimeNs": 1791495808325184509,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/training-records.tar.gz",
+      "sha256": "9d97bee90f27fd8741b5ab3a4fe5bf13f4914afdf4e5310530fbd905e3fccc3d",
+      "bytes": 57864,
+      "mtimeNs": 1791558124572417484,
+      "copied": false
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/validation-reasoning.jsonl",
+      "sha256": "77ce51fd55d7fb6cd74ac4600d7822319dacfdfedada0861c78610c9a9a07f4a",
+      "bytes": 110347,
+      "mtimeNs": 1791495915001256700,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/validation-scenarios.jsonl",
+      "sha256": "5ff8cfa15717c0c52380e6adb4605ffa0f094df8a5373adc1680223cf378b981",
+      "bytes": 143102,
+      "mtimeNs": 1791495808314260408,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/needle-official-ladder/validation.jsonl",
+      "sha256": "e9dd5632758a53565a990eb1ce3ceec09a33e5b3099d81a6e7c1729932a18d30",
+      "bytes": 94798,
+      "mtimeNs": 1791495808315199653,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/sol-300-seed42/adapters/epoch-01.safetensors",
+      "sha256": "ca0382354b2b1ef5e6f9c9993ebd503dedc15e8667141f30ff1fae8acb311fd1",
+      "bytes": 7906632,
+      "mtimeNs": 1791494996395783778,
+      "copied": false
+    },
+    {
+      "path": "guard/prototype/output/sol-300-seed42/adapters/epoch-02.safetensors",
+      "sha256": "29791c7c3e9f0cdb2d65163093c27cd932185324af99666fddd7a2558da0062b",
+      "bytes": 7906632,
+      "mtimeNs": 1791494998619073202,
+      "copied": false
+    },
+    {
+      "path": "guard/prototype/output/sol-300-seed42/adapters/epoch-03.safetensors",
+      "sha256": "cb035b6cc66d65f8eaf6c29b6d837a6bedcafc19f519ef1f24810ed6194d0812",
+      "bytes": 7906632,
+      "mtimeNs": 1791495011712304162,
+      "copied": false
+    },
+    {
+      "path": "guard/prototype/output/sol-300-seed42/adapters/epoch-04.safetensors",
+      "sha256": "8a3853c067c644e1e201013289be8b93c97a2b517babd8ff9d2113cabb73355a",
+      "bytes": 7906632,
+      "mtimeNs": 1791495007251116181,
+      "copied": false
+    },
+    {
+      "path": "guard/prototype/output/sol-300-seed42/adapters/epoch-05.safetensors",
+      "sha256": "59b9a86624c24932f892ed79d358810c823437dc78c01b69fbd703521b417501",
+      "bytes": 7906632,
+      "mtimeNs": 1791495005151486276,
+      "copied": false
+    },
+    {
+      "path": "guard/prototype/output/sol-300-seed42/adapters/epoch-06.safetensors",
+      "sha256": "36f4c48294bbb6265b193688dfbbbd5a19c1df5ed25007677968e5266ac73415",
+      "bytes": 7906632,
+      "mtimeNs": 1791495002761802387,
+      "copied": false
+    },
+    {
+      "path": "guard/prototype/output/sol-300-seed42/adapters/epoch-07.safetensors",
+      "sha256": "040e49478e8ffaa199b391201ca969587d41e7dbdf3a8aa52c12dc486a235ef7",
+      "bytes": 7906632,
+      "mtimeNs": 1791495000770256285,
+      "copied": false
+    },
+    {
+      "path": "guard/prototype/output/sol-300-seed42/adapters/epoch-08.safetensors",
+      "sha256": "d2b5c67ef50536821b10722aa7112ba17b5f0f9b9b9b8288ba1055e74b9c0b25",
+      "bytes": 7906632,
+      "mtimeNs": 1791494994267062814,
+      "copied": false
+    },
+    {
+      "path": "guard/prototype/output/sol-300-seed42/adapters/epoch-09.safetensors",
+      "sha256": "a08e07de05e11e96780694096145a46d5f20ae7637bdbf234a0ab3646f69eb38",
+      "bytes": 7906632,
+      "mtimeNs": 1791494992009113716,
+      "copied": false
+    },
+    {
+      "path": "guard/prototype/output/sol-300-seed42/adapters/epoch-10.safetensors",
+      "sha256": "dcae58f3a787d0df1776d6aa4311ca969d3077a8390502c0da2e5535f0b792f6",
+      "bytes": 7906632,
+      "mtimeNs": 1791495009524252828,
+      "copied": false
+    },
+    {
+      "path": "guard/prototype/output/sol-300-seed42/base-comparison.png",
+      "sha256": "b974f348cdbd78e547d9e7b9ce2e3322079213af87421167c71f4e7470ffd0e9",
+      "bytes": 121029,
+      "mtimeNs": 1791495154797030501,
+      "copied": false
+    },
+    {
+      "path": "guard/prototype/output/sol-300-seed42/base-comparison.svg",
+      "sha256": "bb68444d4a46be736935e575a0693454ad2724b4169838fff41a4f87325fd156",
+      "bytes": 82219,
+      "mtimeNs": 1791495154820142325,
+      "copied": false
+    },
+    {
+      "path": "guard/prototype/output/sol-300-seed42/base-decisions.csv",
+      "sha256": "bb6dd98899081fbfd9aced4b75a375c933f9cb8ce5b2b81cf1b4a8b1d98c8871",
+      "bytes": 90576,
+      "mtimeNs": 1791494446496094308,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/sol-300-seed42/base-heldOut.json",
+      "sha256": "8b078dcd4fbc8bab3d006e0414279c3143d69db1dbb30e02013486a2221549a5",
+      "bytes": 345501,
+      "mtimeNs": 1791494446494437187,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/sol-300-seed42/base-summary.csv",
+      "sha256": "ebd381db6dc8637228872d5b3fe78816bf265db60c18fd8fec729ecb9943d94f",
+      "bytes": 11862,
+      "mtimeNs": 1791494446495414268,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/sol-300-seed42/base-validation.json",
+      "sha256": "55dc5e84ee724b48c97a338d8842b4d3fb167e9c81975dc1526fd2797e49d303",
+      "bytes": 138524,
+      "mtimeNs": 1791494408960196316,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/sol-300-seed42/best-decisions.csv",
+      "sha256": "643b04d5bf2484e74083c200c5e1ced6fd11ab8058797f7641fe76e3dcf25784",
+      "bytes": 88745,
+      "mtimeNs": 1791495099139677302,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/sol-300-seed42/best-heldOut.json",
+      "sha256": "0150b74b673adc1f3cfdf0781eb68541f5de311f54c3dc35b8be33e8951c382e",
+      "bytes": 343298,
+      "mtimeNs": 1791495099137996848,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/sol-300-seed42/best-summary.csv",
+      "sha256": "d0c01cbce4f25f996ab40f91f5b3f8e00ac037d90e978cd85a8f8a023e830b10",
+      "bytes": 11791,
+      "mtimeNs": 1791495099139048720,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/sol-300-seed42/best-validation.json",
+      "sha256": "3bbc18acbfb014543411f88fc9ff86b276a7999acf0a5e208329d4135dd5cf32",
+      "bytes": 137994,
+      "mtimeNs": 1791495060617805661,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/sol-300-seed42/best.cact",
+      "sha256": "58338104d3ce2ca21a34704c065082efbd6b7d516605f50a818b2a4e24416d91",
+      "bytes": 63437076,
+      "mtimeNs": 1791495028751969699,
+      "copied": false
+    },
+    {
+      "path": "guard/prototype/output/sol-300-seed42/best.safetensors",
+      "sha256": "dcae58f3a787d0df1776d6aa4311ca969d3077a8390502c0da2e5535f0b792f6",
+      "bytes": 7906632,
+      "mtimeNs": 1791494971071011831,
+      "copied": false
+    },
+    {
+      "path": "guard/prototype/output/sol-300-seed42/commands.json",
+      "sha256": "d268ad29328f7b26861936fb452e7aac17ebd5b6fc4111c25ad2685eae6fa8f2",
+      "bytes": 1477,
+      "mtimeNs": 1791494800913154857,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/sol-300-seed42/comparison.csv",
+      "sha256": "c51b769ba3abc6f9021ac2b77e4939d349c08175714d0cc41a9a57bb259d7d1b",
+      "bytes": 23334,
+      "mtimeNs": 1791495154337737224,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/sol-300-seed42/comparison.json",
+      "sha256": "bdeb44a5c56df2ea4d7d037ec5c34583ca6ed3325eee40f1b1f28135d4670b67",
+      "bytes": 11023,
+      "mtimeNs": 1791495154337477016,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/sol-300-seed42/epochs.csv",
+      "sha256": "6a14d3a528b34d7f6a9ce1b97cb7a451f4e3301cd54f469baa7ffc4e099e6b4a",
+      "bytes": 1275,
+      "mtimeNs": 1791494988460406554,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/sol-300-seed42/evaluation-cache/58338104d3ce2ca21a34704c065082efbd6b7d516605f50a818b2a4e24416d91/best.cact",
+      "kind": "symlink",
+      "linkTarget": "/Users/quan/Repos/border-collie/guard/prototype/output/sol-300-seed42/best.cact",
+      "bytes": 79,
+      "copied": false
+    },
+    {
+      "path": "guard/prototype/output/sol-300-seed42/evaluation-cache/58338104d3ce2ca21a34704c065082efbd6b7d516605f50a818b2a4e24416d91/needle",
+      "kind": "symlink",
+      "linkTarget": "/private/tmp/bc-judge-root/2ae11323dc000f5e70c49f7403efa6af12ba9e67/needle",
+      "bytes": 74,
+      "copied": false
+    },
+    {
+      "path": "guard/prototype/output/sol-300-seed42/experiment.json",
+      "sha256": "d6f603e9d451e9abd01b4fdd6f619e5724411a5c1f833e4c2032092a73459a2c",
+      "bytes": 17299,
+      "mtimeNs": 1791494971309949012,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/sol-300-seed42/final.cact",
+      "sha256": "58338104d3ce2ca21a34704c065082efbd6b7d516605f50a818b2a4e24416d91",
+      "bytes": 63437076,
+      "mtimeNs": 1791494987059932690,
+      "copied": false
+    },
+    {
+      "path": "guard/prototype/output/sol-300-seed42/final.safetensors",
+      "sha256": "dcae58f3a787d0df1776d6aa4311ca969d3077a8390502c0da2e5535f0b792f6",
+      "bytes": 7906632,
+      "mtimeNs": 1791495013850676523,
+      "copied": false
+    },
+    {
+      "path": "guard/prototype/output/sol-300-seed42/held-out-scenarios.jsonl",
+      "sha256": "c5b8976840c846f032c1cf13cfd69ae4589c24263335919c3f50f741b3753382",
+      "bytes": 344423,
+      "mtimeNs": 1791494989219584377,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/sol-300-seed42/nvidia-smi.txt",
+      "sha256": "6a8737f8f76643c54b849e7a4f645a7c8f274eed25948b336785672315da7dc7",
+      "bytes": 1689,
+      "mtimeNs": 1791494987303931609,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/sol-300-seed42/packages.txt",
+      "sha256": "39cc66bfb003e7fb136328665912a589360287ec157f9c874b97db20b2600ae3",
+      "bytes": 1261,
+      "mtimeNs": 1791494987755409195,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/sol-300-seed42/plotting-packages.txt",
+      "sha256": "afcc9a6c6143ccc107654170083bd42bc4af2c06585903f3b9a230d672d31601",
+      "bytes": 189,
+      "mtimeNs": 1791494774127352222,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/sol-300-seed42/run.json",
+      "sha256": "d1fbfd10e0e2d5ecd38158419a9c66a5e44c3b327e56c82978dcedab06eaf28f",
+      "bytes": 2865,
+      "mtimeNs": 1791494987520651630,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/sol-300-seed42/sol-finetune.py",
+      "sha256": "8858bd687cfc5086c8261bc93d18bc02dc2d041366be5c8f74c7f086baf47edc",
+      "bytes": 11110,
+      "mtimeNs": 1791494988225899031,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/sol-300-seed42/steps.csv",
+      "sha256": "a99cf8a0b63ff4ed3aa215f82ba512a1a6c09e4b32e8e38f5f3fcd1c7ae72825",
+      "bytes": 17753,
+      "mtimeNs": 1791494971527099241,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/sol-300-seed42/train-scenarios.jsonl",
+      "sha256": "2519910bc9a2b502a1d89c3c66426c8a5d77a28aaefe811d857e7d5f6b3f82db",
+      "bytes": 421211,
+      "mtimeNs": 1791495014615760958,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/sol-300-seed42/train.jsonl",
+      "sha256": "23d955b258a39e85d596ed02eb6529fab05bb597c3414d32cb063fff54eaff42",
+      "bytes": 279128,
+      "mtimeNs": 1791495029201500582,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/sol-300-seed42/training-curves.png",
+      "sha256": "f7e446534c35a2a526435476707d13170c10b24baa918ba11ff215620a6c2550",
+      "bytes": 146709,
+      "mtimeNs": 1791495154684941499,
+      "copied": false
+    },
+    {
+      "path": "guard/prototype/output/sol-300-seed42/training-curves.svg",
+      "sha256": "6eed5a6b7031c640ae894bbf9e468ac2134efa4506b75b9bf02669defae3292f",
+      "bytes": 74234,
+      "mtimeNs": 1791495154734350639,
+      "copied": false
+    },
+    {
+      "path": "guard/prototype/output/sol-300-seed42/training.log",
+      "sha256": "8f8b4a7cf624efc984707a446806a09d8d8ea67f4a0de6fd512c0c7b7547276e",
+      "bytes": 10504,
+      "mtimeNs": 1791494987986606893,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/sol-300-seed42/upstream/finetune.py",
+      "sha256": "677b2e4aba1fd9ce5ff6e6e19763d0a66b8425eccf626f7107e2e3ace5d99241",
+      "bytes": 24500,
+      "mtimeNs": 1791494112531992378,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/sol-300-seed42/validation-scenarios.jsonl",
+      "sha256": "5ff8cfa15717c0c52380e6adb4605ffa0f094df8a5373adc1680223cf378b981",
+      "bytes": 143102,
+      "mtimeNs": 1791495014194318514,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/sol-300-seed42/validation.jsonl",
+      "sha256": "e9dd5632758a53565a990eb1ce3ceec09a33e5b3099d81a6e7c1729932a18d30",
+      "bytes": 94798,
+      "mtimeNs": 1791494971847061284,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/sol-300-seed42/verification.json",
+      "sha256": "6c9c39ce016a3e85412720828352d9b8e96a5c7d8f91eed64175901c3099ade1",
+      "bytes": 1493,
+      "mtimeNs": 1791495216253332356,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/stage2/base-evaluation.json",
+      "sha256": "b18de74747faadfa32d0781be5243aaef668fd48d5c433a69142fbe94974ce8b",
+      "bytes": 334048,
+      "mtimeNs": 1791491114419826892,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/stage2/development/accepted.jsonl",
+      "sha256": "44c0b9fb239ab82a4cd55b8202e35397e13e07da0e1cbcdd227ca5baf6a4c02c",
+      "bytes": 3349307,
+      "mtimeNs": 1791571419672601270,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/stage2/development/attempts.json",
+      "sha256": "a9efc2a0de62c8a4023942aaeda038894883baced11031ce8aec0c3591487392",
+      "bytes": 12394793,
+      "mtimeNs": 1791571419665519254,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/stage2/development/build-provenance.json",
+      "sha256": "affcf90394e29e3f026586bb85e85d91f9c7f1ae48eb9e744b6580859c1a6747",
+      "bytes": 463,
+      "mtimeNs": 1791572083874376697,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/stage2/development/held-out.jsonl",
+      "sha256": "172a9bd3c7e56a6ab5c1cbaad3ff8f003efda5ce1bafc489ab40f620d03aa3a9",
+      "bytes": 424065,
+      "mtimeNs": 1791571419673371147,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/stage2/development/labels.json",
+      "sha256": "8e618b474f38983885b987728cd917fdb7c6702891bf8b578b707a62213e8939",
+      "bytes": 1174632,
+      "mtimeNs": 1791571419639989280,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/stage2/development/plan.json",
+      "sha256": "20dfe3829e406b4755a136b451034499824995b2efd20c29fc9a0967f3b3e3a8",
+      "bytes": 4119828,
+      "mtimeNs": 1791571419633030014,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/stage2/development/proposed.jsonl",
+      "sha256": "ff2a7796d369dff3a8ae40b00b18d4055f8305fc9fd84d8635c0944e301e3bb8",
+      "bytes": 2527142,
+      "mtimeNs": 1791571419637667191,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/stage2/development/provenance.json",
+      "sha256": "6413f45e9dac0fd9bbe1045d29d27ce76691f9880e7968335e9bc35b603c03bc",
+      "bytes": 333,
+      "mtimeNs": 1791571419696450574,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/stage2/development/report.json",
+      "sha256": "843e8920b3e123e40e656b0835bd1d9b284b580f30fb0c08c7ae5c79e226d2ce",
+      "bytes": 157077,
+      "mtimeNs": 1791571419678321866,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/stage2/development/train.jsonl",
+      "sha256": "e435d5c0cc1dfe9e2479763cef8bf452004d4697d70ae16e3aa58c240e099278",
+      "bytes": 2306540,
+      "mtimeNs": 1791572083870528305,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/stage2/development/validation.jsonl",
+      "sha256": "f0c5e45c18b1268a56d70ea3b88ba14e3e905ed00efe9fef1a96b4dee5dd468c",
+      "bytes": 522170,
+      "mtimeNs": 1791572083872022583,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/stage2/evaluation/accepted.jsonl",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mtimeNs": 1791491004100255906,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/stage2/evaluation/attempts.json",
+      "sha256": "4da1cd664cc66a3a6f662ab6e840e669f1d426b47756aac1d9ddb92c9e968617",
+      "bytes": 596032,
+      "mtimeNs": 1791491004099963657,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/stage2/evaluation/held-out.jsonl",
+      "sha256": "2aeec73620259b98bf74354ef1c385e14666cde5cd884776ce94c44580c6a632",
+      "bytes": 339810,
+      "mtimeNs": 1791491004100904487,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/stage2/evaluation/labels.json",
+      "sha256": "c1d62643eff9f93204b0dff4d665b6be273048c06ffa77d6660d1f4bd7cd7170",
+      "bytes": 115407,
+      "mtimeNs": 1791491004099264243,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/stage2/evaluation/plan.json",
+      "sha256": "04ad3b99af4c9e2d75e7539a9a40d87691d5c5b5e99ca454d3af5b86a74c4820",
+      "bytes": 417003,
+      "mtimeNs": 1791491004098406538,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/stage2/evaluation/proposed.jsonl",
+      "sha256": "c1badfece5b0ade13e9679f254b0fbf692ee6242dd18e01797fbd02595c604da",
+      "bytes": 254768,
+      "mtimeNs": 1791491004099056744,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/stage2/evaluation/provenance.json",
+      "sha256": "c6c9ec5038ed14549df6ac396b289008cbd83fb75a0074b3ef709e08c605c6d3",
+      "bytes": 328,
+      "mtimeNs": 1791491004103100811,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/stage2/evaluation/report.json",
+      "sha256": "f9ef5f069de4ae9272d37d7edd7eedfb5c281dd011ea7f58028f7eeddcfe0ad3",
+      "bytes": 27405,
+      "mtimeNs": 1791491004101069486,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/stage2/evaluation/train.jsonl",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mtimeNs": 1791491004100938028,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/stage2/evaluation/validation.jsonl",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mtimeNs": 1791491004100970820,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/output/stage2/scale-plan.json",
+      "sha256": "eaaab0e98bc083163f73e399dfeef70bba7624ec61583827b10c3e31950641d3",
+      "bytes": 4688673,
+      "mtimeNs": 1791487741846594441,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/plot-needle-ladder.py",
+      "sha256": "dcda3e9ad6b2ed180eb303a8a7d635053a5eec2ca4a646c092c6f1b1cc5658d8",
+      "bytes": 4510,
+      "mtimeNs": 1791559100207170992,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/plot-sol-experiments.py",
+      "sha256": "d1bf5aa4fdc2aea5bc41a125fd44a8826ea62d863624a7b4e6d30c82ee0f96c3",
+      "bytes": 5450,
+      "mtimeNs": 1791494894288309605,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/prepare-needle-4bit-study.js",
+      "sha256": "708f4f70426b2ef23aade4c4866b1e71104e166dc5a1aa84ad5513ec8b06790b",
+      "bytes": 10240,
+      "mtimeNs": 1791562359494487970,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/prepare-needle-ladder.js",
+      "sha256": "154380a29f78e3f1bc08847c3d08c6f5268222a97e246b3685d4036398c145e3",
+      "bytes": 7412,
+      "mtimeNs": 1791496322982920527,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/prepare-sol-experiment.js",
+      "sha256": "9938a4e0b123179c8c31d41e54730cd2005a4525e1a7842c83dd3a54e888582b",
+      "bytes": 7098,
+      "mtimeNs": 1791494230861783593,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/run-needle-ladder.py",
+      "sha256": "340a71ae0247e942718d8c93476144ae2dd4223183a8f822d16aeedc57445a2a",
+      "bytes": 12233,
+      "mtimeNs": 1791496766983339539,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/run_needle_batch.py",
+      "sha256": "4d9c65a12f9564413244f69321eec895f01ca67b160762b7f6d376c2fa3474d2",
+      "bytes": 364,
+      "mtimeNs": 1791496802219728180,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/scale-generation.js",
+      "sha256": "c25d1cb20b7f82a596fb8fd2a83de11f986463f306fda6cd4cd626395c4458b5",
+      "bytes": 21607,
+      "mtimeNs": 1791571820224213325,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/sol-finetune.py",
+      "sha256": "24e398cdd24228d607d394087bd4702f57e21bc8b4c50ed4a44343c66a843af5",
+      "bytes": 11340,
+      "mtimeNs": 1791495032548231316,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/submit-needle-4bit-study.py",
+      "sha256": "a6d15e3953aa5ecc25187480eea88b12cf69a992fc7c9cfb5e48fbbb6ab7eb4d",
+      "bytes": 4195,
+      "mtimeNs": 1791563310065156152,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/submit-needle-batch.py",
+      "sha256": "8ae45fe7aab07c44cb060615bbcf01e6e09df2d5e0242950aa0a3de3a687e3f5",
+      "bytes": 3038,
+      "mtimeNs": 1791497740926007620,
+      "copied": true
+    },
+    {
+      "path": "guard/prototype/summarize-needle-4bit-study.py",
+      "sha256": "94345bde06e3bff8e63c93f58cbcf15763e4d74ebcc51eec011f3e4bc077f253",
+      "bytes": 16639,
+      "mtimeNs": 1791562868004959224,
+      "copied": true
+    },
+    {
+      "path": "package.json",
+      "sha256": "17b103e826ee1239942c1a2013ca1d1cc52b00ff18e5dca57bdf682551e13f4d",
+      "bytes": 1590,
+      "mtimeNs": 1791487592507419766,
+      "copied": true
+    },
+    {
+      "path": "plugin/border-collie.js",
+      "sha256": "e06e5dda494e9ab5658e5132fc0b29f6ad5c882a7b35bbd1e384b28cfd0c43c4",
+      "bytes": 16702,
+      "mtimeNs": 1791338458669094783,
+      "copied": true
+    },
+    {
+      "path": "plugin/package.json",
+      "sha256": "3ca9d4afd21425087cf31893b8f9f63c81b0b8408db5e343ca76e5f8aa26ab9a",
+      "bytes": 23,
+      "mtimeNs": 1789193343599677781,
+      "copied": true
+    },
+    {
+      "path": "test/README.md",
+      "sha256": "d010f4f4efe04255d46162ac1c854d22cf75b14c9543ae1e3385d3edcf312ef2",
+      "bytes": 1022,
+      "mtimeNs": 1791338829522517757,
+      "copied": true
+    },
+    {
+      "path": "test/e2e/dev-harness-events.test.js",
+      "sha256": "8b2fa6d32ce0323bcf5c5ef2f4a85cbd4be2afa3950231408e53661fdb0b71e4",
+      "bytes": 1792,
+      "mtimeNs": 1790047967361270969,
+      "copied": true
+    },
+    {
+      "path": "test/e2e/pet-window-focus.test.js",
+      "sha256": "345b25655e3f485a5565955583e442371a7c7221af844d21cfd4d06fd6940bb1",
+      "bytes": 12148,
+      "mtimeNs": 1789363841658476192,
+      "copied": true
+    },
+    {
+      "path": "test/e2e/renderer-events.test.js",
+      "sha256": "1e7f202d195de2925fa89fe670d507303d9d9826df54b746ef5fd60524dfccd1",
+      "bytes": 4948,
+      "mtimeNs": 1789363841658851821,
+      "copied": true
+    },
+    {
+      "path": "test/fixtures/fake-judge.js",
+      "sha256": "9e4893eb84d0e4d6a85bf6572c5f04b82e4137e2726da513da1720bb2d39c2e4",
+      "bytes": 1197,
+      "mtimeNs": 1791338658418389784,
+      "copied": true
+    },
+    {
+      "path": "test/fixtures/focus-probe/main.js",
+      "sha256": "d49d7a61c09b5f1de2d1f00115573edd7e454b2c80d4914ff7e35b68a7c92279",
+      "bytes": 1183,
+      "mtimeNs": 1789193343602693281,
+      "copied": true
+    },
+    {
+      "path": "test/fixtures/focus-probe/package.json",
+      "sha256": "7d3c3ee9dd038dcc7de7fc2f50a3d10ffbae0b39d297c5954f79ca9cc8bb9b5c",
+      "bytes": 82,
+      "mtimeNs": 1789193343602898156,
+      "copied": true
+    },
+    {
+      "path": "test/fixtures/focus-probe/preload.js",
+      "sha256": "f7c0053880b9b8df4dc04f0e30d9a690af635e0efd96978255eff7f1aa1363f0",
+      "bytes": 190,
+      "mtimeNs": 1789193343603147114,
+      "copied": true
+    },
+    {
+      "path": "test/fixtures/macos-pointer.swift",
+      "sha256": "f1f12e6b2f508cef01767cb9fd8f5f0eaf2c25d59fcacbeb5b3151671a3f8ebc",
+      "bytes": 6619,
+      "mtimeNs": 1789193343603458447,
+      "copied": false
+    },
+    {
+      "path": "test/fixtures/renderer-probe/main.js",
+      "sha256": "f8cdf69cbb0f76e8860c406a6f775e27ebf4a0c0e66b42657e3cf49b990fdc1d",
+      "bytes": 7779,
+      "mtimeNs": 1790048298391472804,
+      "copied": true
+    },
+    {
+      "path": "test/fixtures/renderer-probe/package.json",
+      "sha256": "a577ba89fefcdee4b548562314faaa75be8074cc6fa24ee262c981d234b5537e",
+      "bytes": 85,
+      "mtimeNs": 1789193343604053947,
+      "copied": true
+    },
+    {
+      "path": "test/fixtures/renderer-probe/preload.js",
+      "sha256": "4ac49f4d5fe6d1e80137873b00cae6d44194d703f6811bfc47571519a26855d1",
+      "bytes": 595,
+      "mtimeNs": 1789193343604221364,
+      "copied": true
+    },
+    {
+      "path": "test/guard/adversarial-live-evaluation.test.js",
+      "sha256": "91f3f18db9c9ce3a8a911f724256d1f690687408adb11309ece248809613420e",
+      "bytes": 5732,
+      "mtimeNs": 1791338602495876135,
+      "copied": true
+    },
+    {
+      "path": "test/guard/gate.test.js",
+      "sha256": "afa7309e96867d8ba134e4842babae7cc80b01d824ea76cf3d214d2e46747d1b",
+      "bytes": 9280,
+      "mtimeNs": 1791338891213788756,
+      "copied": true
+    },
+    {
+      "path": "test/guard/integrity-verdict.test.js",
+      "sha256": "ad34d8f61f8696d013e89c81db4dd1d3802fb95d52b033183a926360f6462f6f",
+      "bytes": 6042,
+      "mtimeNs": 1791338595844191710,
+      "copied": true
+    },
+    {
+      "path": "test/guard/repository.test.js",
+      "sha256": "fce5e37c29a6293d0cc79bdf5437d54eae8a0bb7077572acdc428e951134da31",
+      "bytes": 5045,
+      "mtimeNs": 1791338595844474501,
+      "copied": true
+    },
+    {
+      "path": "test/guard/session.test.js",
+      "sha256": "3d40f23b200a9e759792bd9ed9ca720872eb8c97434a8d535aa4bcf9a0305388",
+      "bytes": 3748,
+      "mtimeNs": 1791338607231959499,
+      "copied": true
+    },
+    {
+      "path": "test/guard/structured-claims.test.js",
+      "sha256": "828381c86742947a3279d9d9dc22efaa3b6a61cf0a629c7162e99000675dd30f",
+      "bytes": 2970,
+      "mtimeNs": 1791338595843521213,
+      "copied": true
+    },
+    {
+      "path": "test/guard/verify.test.js",
+      "sha256": "ffeab02a2821e6e30d75bbd860ce205422e45f7f11fa4edd0f83ea1bc47a3413",
+      "bytes": 1804,
+      "mtimeNs": 1789193343605248530,
+      "copied": true
+    },
+    {
+      "path": "test/integration/atomic-install.test.js",
+      "sha256": "25a3e2a686a5a2cbc091ec828226817ca32cd124d22d55e8760ac24ea7bc30f8",
+      "bytes": 3233,
+      "mtimeNs": 1791338705064098289,
+      "copied": true
+    },
+    {
+      "path": "test/integration/cli.test.js",
+      "sha256": "4c34a9cd4842e7cb1004ccb4322f9a28532f0f21cafd15d52c5c150a9346f796",
+      "bytes": 1051,
+      "mtimeNs": 1791338790230693558,
+      "copied": true
+    },
+    {
+      "path": "test/integration/full-install.test.js",
+      "sha256": "45bb9e29a2885d4df6bbd1345fef2c3c04aadcedb41a9e97204575a4d0ae3512",
+      "bytes": 2122,
+      "mtimeNs": 1791338705064216871,
+      "copied": true
+    },
+    {
+      "path": "test/integration/install-diagnostics.test.js",
+      "sha256": "3d237e6f8689cd87991ca603bc906e6bc04b2ad21eebec9522b0e10ff2af533c",
+      "bytes": 2803,
+      "mtimeNs": 1791338695644087349,
+      "copied": true
+    },
+    {
+      "path": "test/integration/install-package.test.js",
+      "sha256": "c77cacb5f94fdbe268e5b3385edcf7069a1e732387b48e6a400faa4fb830f28d",
+      "bytes": 1219,
+      "mtimeNs": 1791338678242324839,
+      "copied": true
+    },
+    {
+      "path": "test/integration/install-plugin.test.js",
+      "sha256": "14be2d87c4404831614fcf354764d84bebcac8ff49b54b06afc66946b6512c5a",
+      "bytes": 4665,
+      "mtimeNs": 1791338674821164264,
+      "copied": true
+    },
+    {
+      "path": "test/integration/migrate.test.js",
+      "sha256": "d4cf1131cfd01473e6d122075123d38a17ee40d9bf966e3b9bd5b95e897199c7",
+      "bytes": 4673,
+      "mtimeNs": 1791338738823955917,
+      "copied": true
+    },
+    {
+      "path": "test/integration/plugin-liveness.test.js",
+      "sha256": "e6390147415ae9d7010393060aa8ef65e64a8d198e3ee243bdc139ed7de6c495",
+      "bytes": 5813,
+      "mtimeNs": 1791338718331061284,
+      "copied": true
+    },
+    {
+      "path": "test/integration/structured-claim-opencode.test.js",
+      "sha256": "0526f577e54f5873487a5bb28ea46a7b04b257b6959be6bab60926888507749b",
+      "bytes": 5689,
+      "mtimeNs": 1791338718331345283,
+      "copied": true
+    },
+    {
+      "path": "test/plugin/border-collie.test.mjs",
+      "sha256": "f87c63887bdc16e208cd88ba5bf8438aa80500cf757585479c32b14ecf200c7a",
+      "bytes": 10645,
+      "mtimeNs": 1791338645473129859,
+      "copied": false
+    },
+    {
+      "path": "test/run-all-tests.js",
+      "sha256": "3049113982f0623137933c02b7a3831f46b3d1ebd01d082fcdc6885d9e0f8496",
+      "bytes": 1231,
+      "mtimeNs": 1789363841660079083,
+      "copied": true
+    },
+    {
+      "path": "test/unit/animation-assets.test.js",
+      "sha256": "018d50b53d754d6748983d7f6450315d70be7885985b0ea40dd73784627fcc45",
+      "bytes": 7750,
+      "mtimeNs": 1789363841660497504,
+      "copied": true
+    },
+    {
+      "path": "test/unit/animation-manifest.test.js",
+      "sha256": "9fa9d6dc070002548df4896974fd27849a456c7e0a358154a9f663fff6d4d2f7",
+      "bytes": 1358,
+      "mtimeNs": 1789193343610741280,
+      "copied": true
+    },
+    {
+      "path": "test/unit/animation-player.test.js",
+      "sha256": "fe041fb42ad7e0a6ae8667ed3254c413ff27a222240fd1cd251e5c21b976cdfb",
+      "bytes": 3044,
+      "mtimeNs": 1789193343610919530,
+      "copied": true
+    },
+    {
+      "path": "test/unit/canonical-endpoints.test.js",
+      "sha256": "fde0bca7ac12062445817a39f7f3fb5b284965feb84c9fc46bc54ecf34b6ed8a",
+      "bytes": 979,
+      "mtimeNs": 1791338795028113715,
+      "copied": true
+    },
+    {
+      "path": "test/unit/finetune-gateway.test.js",
+      "sha256": "c0570d493b345a4e1547f3dc40173203fe3245465bfa5b65f381805ff3254828",
+      "bytes": 3858,
+      "mtimeNs": 1791561711655227861,
+      "copied": true
+    },
+    {
+      "path": "test/unit/finetune-prototype.test.js",
+      "sha256": "0bf09616866c447cecd0250016b059000fa541c9af915a734f0fe8e5d3fd26da",
+      "bytes": 20405,
+      "mtimeNs": 1791559190196263481,
+      "copied": true
+    },
+    {
+      "path": "test/unit/finetune-scale.test.js",
+      "sha256": "bf95f3f2e1cc922a550bc091d3e2ffe7d383b11d65cee540ff0e3ec213a65797",
+      "bytes": 23427,
+      "mtimeNs": 1791571717624451505,
+      "copied": true
+    },
+    {
+      "path": "test/unit/guard-core.test.js",
+      "sha256": "7fe4ec9abe0491563d7711e579433e4c09d267296210358de4f31a185466130b",
+      "bytes": 9741,
+      "mtimeNs": 1791338744752563192,
+      "copied": true
+    },
+    {
+      "path": "test/unit/judge-runtime.test.js",
+      "sha256": "05fe2dc5b45c556bd365b638727e87440daf2bb4af6dca724054725c7cea5ff8",
+      "bytes": 2600,
+      "mtimeNs": 1791497697427324024,
+      "copied": true
+    },
+    {
+      "path": "test/unit/needle-ladder.test.js",
+      "sha256": "1eeea327d597a1aa4a1e5c7e7fa6fd1738904ec0ec903c163176910aadd8f462",
+      "bytes": 4757,
+      "mtimeNs": 1791496323004433355,
+      "copied": true
+    },
+    {
+      "path": "test/unit/package-surface.test.js",
+      "sha256": "d3b4c19b483de5f356e7e1693886586f51885c70a8a88a13ab598bc0fc751afe",
+      "bytes": 2703,
+      "mtimeNs": 1791338767370207659,
+      "copied": true
+    },
+    {
+      "path": "test/unit/pet-dev-harness.test.js",
+      "sha256": "ac71d700e7978c010a5c95f3ed2c9b3cc335533755942e7f0ee2c6b1122cbaa8",
+      "bytes": 1511,
+      "mtimeNs": 1790047884128056235,
+      "copied": true
+    },
+    {
+      "path": "test/unit/pet-session-behavior.test.js",
+      "sha256": "84da48c1c2508e409324037dba38f836831f82c5a69dafd66c548c647cf69ea8",
+      "bytes": 3573,
+      "mtimeNs": 1791338790224937331,
+      "copied": true
+    },
+    {
+      "path": "test/unit/sol-experiment.test.js",
+      "sha256": "33488dcbde4b4a429dc78c436c1800ac6f11b9fd16e27d46015c4cffffc4476e",
+      "bytes": 4616,
+      "mtimeNs": 1791495032570485058,
+      "copied": true
+    },
+    {
+      "path": "test/unit/window-interaction.test.js",
+      "sha256": "661db49e6b7d75e7f857d654db269f49a2e227288237c2848a8be07884cac61d",
+      "bytes": 2760,
+      "mtimeNs": 1789193343612047321,
+      "copied": true
+    }
+  ]
+}

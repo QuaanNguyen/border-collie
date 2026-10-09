@@ -1,0 +1,856 @@
+{
+  "schemaVersion": 1,
+  "createdAt": "2026-10-09T19:39:04.761Z",
+  "data": {
+    "development": {
+      "file": "snapshot/guard/prototype/data/stage2/accepted.jsonl",
+      "sha256": "09bdff908a0ca6724c07d57e0477daad87e4277cb1677ab1bc8c0d347af5b077",
+      "total": 3000,
+      "families": 1530,
+      "familyNamingSignatures": 51,
+      "domains": {
+        "archives": 100,
+        "audio": 100,
+        "bookings": 100,
+        "caching": 100,
+        "calendar": 100,
+        "captions": 100,
+        "checklists": 100,
+        "chess": 100,
+        "datasets": 100,
+        "forms": 100,
+        "geometry": 100,
+        "graphs": 100,
+        "images": 100,
+        "invoices": 100,
+        "localization": 100,
+        "markdown": 100,
+        "navigation": 100,
+        "notebooks": 100,
+        "packages": 100,
+        "pagination": 100,
+        "permissions": 100,
+        "queues": 100,
+        "recipes": 100,
+        "routing": 100,
+        "schedules": 100,
+        "search": 100,
+        "sensors": 100,
+        "telemetry": 100,
+        "warehouse": 100,
+        "weather": 100
+      },
+      "verdicts": {
+        "allow": 1350,
+        "ask": 450,
+        "disallow": 1200
+      },
+      "categories": {
+        "hard-case": 150,
+        "injected-instruction": 300,
+        "network-read": 240,
+        "off-machine-send": 360,
+        "ordinary-local": 900,
+        "owner-reply": 210,
+        "remote-git": 300,
+        "requested-destructive": 240,
+        "unrequested-destructive": 300
+      },
+      "tools": {
+        "bash": 2031,
+        "edit": 509,
+        "glob": 28,
+        "grep": 56,
+        "list": 33,
+        "read": 93,
+        "webfetch": 120,
+        "write": 130
+      },
+      "splits": {
+        "train": 2447,
+        "validation": 553
+      },
+      "preferences": {
+        "ask-before-delete": 60,
+        "ask-before-network": 30,
+        "ask-before-push": 420,
+        "ask-before-write": 180,
+        "backup-allowed": 300,
+        "build-cleanup": 60,
+        "confirm-backup": 30,
+        "data-analysis": 90,
+        "default": 990,
+        "docs-only": 600,
+        "remote-allowed": 30,
+        "repair-only": 210
+      },
+      "uniquePreferenceTexts": 12,
+      "askOffered": {
+        "total": 720,
+        "verdicts": {
+          "allow": 210,
+          "ask": 450,
+          "disallow": 60
+        }
+      },
+      "askAbsent": {
+        "total": 2280,
+        "verdicts": {
+          "allow": 1140,
+          "disallow": 1140
+        }
+      },
+      "bashFirstWords": {
+        "./run_audio_rate.sh": 1,
+        "./test/geometry-zero.sh": 1,
+        "bundle": 7,
+        "cargo": 15,
+        "cat": 23,
+        "cd": 2,
+        "clang++": 1,
+        "ctest": 2,
+        "curl": 39,
+        "echo": 18,
+        "g++": 5,
+        "gcc": 1,
+        "git": 624,
+        "go": 15,
+        "gradle": 1,
+        "grep": 4,
+        "head": 1,
+        "javac": 1,
+        "ls": 61,
+        "make": 8,
+        "mkdir": 1,
+        "mvn": 8,
+        "nc": 2,
+        "node": 3,
+        "npm": 165,
+        "npx": 2,
+        "pip": 2,
+        "pytest": 1,
+        "python": 33,
+        "rm": 555,
+        "rsync": 47,
+        "ruby": 3,
+        "scp": 312,
+        "sed": 11,
+        "stat": 1,
+        "swift": 10,
+        "tar": 43,
+        "wc": 1,
+        "yarn": 1
+      },
+      "securityCommandCoverage": {
+        "credentialFilenameInBash": 0,
+        "environmentDump": 0,
+        "processOrPrivilegeCommands": 0,
+        "alternateDestructiveCommands": 0,
+        "obfuscatedExecution": 0,
+        "reconnaissanceCommands": 0,
+        "schedulerCommands": 0
+      },
+      "normalizedActions": 1393,
+      "disallowedWebfetch": 0,
+      "staleSavedQueries": []
+    },
+    "heldOut": {
+      "file": "snapshot/guard/prototype/data/stage2/held-out.jsonl",
+      "sha256": "c5b8976840c846f032c1cf13cfd69ae4589c24263335919c3f50f741b3753382",
+      "total": 300,
+      "families": 153,
+      "familyNamingSignatures": 51,
+      "domains": {
+        "batteries": 100,
+        "catalogs": 100,
+        "railways": 100
+      },
+      "verdicts": {
+        "allow": 135,
+        "ask": 45,
+        "disallow": 120
+      },
+      "categories": {
+        "hard-case": 15,
+        "injected-instruction": 30,
+        "network-read": 24,
+        "off-machine-send": 36,
+        "ordinary-local": 90,
+        "owner-reply": 21,
+        "remote-git": 30,
+        "requested-destructive": 24,
+        "unrequested-destructive": 30
+      },
+      "tools": {
+        "bash": 203,
+        "edit": 49,
+        "glob": 1,
+        "grep": 4,
+        "list": 6,
+        "read": 10,
+        "webfetch": 12,
+        "write": 15
+      },
+      "splits": {
+        "heldOut": 300
+      },
+      "preferences": {
+        "ask-before-delete": 6,
+        "ask-before-network": 3,
+        "ask-before-push": 42,
+        "ask-before-write": 18,
+        "backup-allowed": 30,
+        "build-cleanup": 6,
+        "confirm-backup": 3,
+        "data-analysis": 9,
+        "default": 99,
+        "docs-only": 60,
+        "remote-allowed": 3,
+        "repair-only": 21
+      },
+      "uniquePreferenceTexts": 12,
+      "askOffered": {
+        "total": 72,
+        "verdicts": {
+          "allow": 21,
+          "ask": 45,
+          "disallow": 6
+        }
+      },
+      "askAbsent": {
+        "total": 228,
+        "verdicts": {
+          "allow": 114,
+          "disallow": 114
+        }
+      },
+      "bashFirstWords": {
+        "ant": 1,
+        "cargo": 5,
+        "cat": 2,
+        "curl": 7,
+        "echo": 1,
+        "git": 62,
+        "gradlew": 1,
+        "javac": 2,
+        "ls": 7,
+        "mvn": 1,
+        "npm": 12,
+        "python": 5,
+        "python3": 1,
+        "rm": 57,
+        "rsync": 2,
+        "scp": 33,
+        "sed": 2,
+        "tar": 2
+      },
+      "securityCommandCoverage": {
+        "credentialFilenameInBash": 0,
+        "environmentDump": 0,
+        "processOrPrivilegeCommands": 0,
+        "alternateDestructiveCommands": 0,
+        "obfuscatedExecution": 0,
+        "reconnaissanceCommands": 0,
+        "schedulerCommands": 0
+      },
+      "normalizedActions": 155,
+      "disallowedWebfetch": 0,
+      "staleSavedQueries": []
+    }
+  },
+  "overlap": {
+    "heldOutFamiliesInDevelopment": [],
+    "heldOutVisibleInputsInDevelopment": [],
+    "trainingFamiliesInValidation": [],
+    "normalizedHeldOutActionsWithDevelopmentTwin": 60,
+    "exactDuplicateInputGroups": []
+  },
+  "findings": {
+    "total": 87,
+    "byCode": {
+      "force-push-scope": 12,
+      "named-branch-mismatch": 75
+    },
+    "byDataset": {
+      "development": 80,
+      "diagnostic-held-out": 7
+    },
+    "evidence": "audit-findings.jsonl"
+  },
+  "existingSolStudy": {
+    "file": "snapshot/guard/prototype/output/needle-4bit-balanced-updates/study-plan.json",
+    "sourceSha256": "9ececaa7504a76c8c4994c2f78b23289c25990879f9896fd8b71fb04d1e0dd28",
+    "currentSnapshotSourceSha256": "44c0b9fb239ab82a4cd55b8202e35397e13e07da0e1cbcdd227ca5baf6a4c02c",
+    "matchesCurrentSource": false,
+    "updates": 300,
+    "reasoningTargets": true,
+    "plannedConditions": 80,
+    "currentRemoteStatus": "Not queried; local submission records do not establish current state."
+  },
+  "historicalExperiments": [
+    {
+      "model": "base-local-export",
+      "evidence": "snapshot/guard/prototype/output/needle-official-ladder/mac-runtime/base-local-export/base-local-export-heldOut.json",
+      "reportSha256": "7e40b24937bbc33052baca1647f0b28953289fc67cece41426a8ee3067896b67",
+      "total": 300,
+      "correct": 159,
+      "accuracy": 0.53,
+      "harmfulAllowed": {
+        "count": 102,
+        "total": 120,
+        "rate": 0.85
+      },
+      "ordinaryRefused": {
+        "count": 26,
+        "total": 135,
+        "rate": 0.1925925925925926
+      },
+      "askRecall": {
+        "count": 34,
+        "total": 45,
+        "rate": 0.7555555555555555
+      },
+      "noVerdict": 0,
+      "infrastructureErrors": 0,
+      "allowDiscrimination": -0.042592592592592515,
+      "binaryNoAsk": {
+        "total": 228,
+        "correct": 118
+      },
+      "confidenceIntervals": {
+        "accuracy": {
+          "lower": 0.4735002333859323,
+          "upper": 0.5857411883405951,
+          "assumption": "Descriptive binomial interval; related synthetic families violate independent-case sampling."
+        },
+        "harmfulAllowed": {
+          "lower": 0.775324706432755,
+          "upper": 0.9029618770741527,
+          "assumption": "Descriptive binomial interval; related synthetic families violate independent-case sampling."
+        },
+        "ordinaryRefused": {
+          "lower": 0.13495621289223048,
+          "upper": 0.2672396390889145,
+          "assumption": "Descriptive binomial interval; related synthetic families violate independent-case sampling."
+        }
+      }
+    },
+    {
+      "model": "prior-custom-300-seed42",
+      "evidence": "snapshot/guard/prototype/output/needle-official-ladder/mac-runtime/prior-custom-300-seed42/prior-custom-300-seed42-heldOut.json",
+      "reportSha256": "1340b25fadb664c8d3aee2e4949db889de66e86daa1a54f54bf6ce09aa0c9827",
+      "total": 300,
+      "correct": 127,
+      "accuracy": 0.42333333333333334,
+      "harmfulAllowed": {
+        "count": 60,
+        "total": 120,
+        "rate": 0.5
+      },
+      "ordinaryRefused": {
+        "count": 76,
+        "total": 135,
+        "rate": 0.562962962962963
+      },
+      "askRecall": {
+        "count": 8,
+        "total": 45,
+        "rate": 0.17777777777777778
+      },
+      "noVerdict": 0,
+      "infrastructureErrors": 0,
+      "allowDiscrimination": -0.06296296296296294,
+      "binaryNoAsk": {
+        "total": 228,
+        "correct": 113
+      },
+      "confidenceIntervals": {
+        "accuracy": {
+          "lower": 0.3687385228107271,
+          "upper": 0.47986673277703656,
+          "assumption": "Descriptive binomial interval; related synthetic families violate independent-case sampling."
+        },
+        "harmfulAllowed": {
+          "lower": 0.41193870541108385,
+          "upper": 0.5880612945889161,
+          "assumption": "Descriptive binomial interval; related synthetic families violate independent-case sampling."
+        },
+        "ordinaryRefused": {
+          "lower": 0.4786961362500333,
+          "upper": 0.6437456771996116,
+          "assumption": "Descriptive binomial interval; related synthetic families violate independent-case sampling."
+        }
+      }
+    },
+    {
+      "model": "raw-300-seed42",
+      "evidence": "snapshot/guard/prototype/output/needle-official-ladder/mac-runtime/raw-300-seed42/raw-300-seed42-heldOut.json",
+      "reportSha256": "7c9b6fb69b1ea6974cf41c0f9a3272ab15a7e9621901f727ce7c4782f49e525a",
+      "total": 300,
+      "correct": 134,
+      "accuracy": 0.44666666666666666,
+      "harmfulAllowed": {
+        "count": 60,
+        "total": 120,
+        "rate": 0.5
+      },
+      "ordinaryRefused": {
+        "count": 70,
+        "total": 135,
+        "rate": 0.5185185185185185
+      },
+      "askRecall": {
+        "count": 9,
+        "total": 45,
+        "rate": 0.2
+      },
+      "noVerdict": 0,
+      "infrastructureErrors": 0,
+      "allowDiscrimination": -0.018518518518518545,
+      "binaryNoAsk": {
+        "total": 228,
+        "correct": 118
+      },
+      "confidenceIntervals": {
+        "accuracy": {
+          "lower": 0.39143715496049114,
+          "upper": 0.503244761970127,
+          "assumption": "Descriptive binomial interval; related synthetic families violate independent-case sampling."
+        },
+        "harmfulAllowed": {
+          "lower": 0.41193870541108385,
+          "upper": 0.5880612945889161,
+          "assumption": "Descriptive binomial interval; related synthetic families violate independent-case sampling."
+        },
+        "ordinaryRefused": {
+          "lower": 0.4348932005681979,
+          "upper": 0.6011190975052271,
+          "assumption": "Descriptive binomial interval; related synthetic families violate independent-case sampling."
+        }
+      }
+    },
+    {
+      "model": "reasoning-100-seed0",
+      "evidence": "snapshot/guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-100-seed0/reasoning-100-seed0-heldOut.json",
+      "reportSha256": "fb2d114e133a51dde6e0a02fb6b891a821912ea68b2bdd18cdaf83b097f4bfac",
+      "total": 300,
+      "correct": 140,
+      "accuracy": 0.4666666666666667,
+      "harmfulAllowed": {
+        "count": 92,
+        "total": 120,
+        "rate": 0.7666666666666667
+      },
+      "ordinaryRefused": {
+        "count": 45,
+        "total": 135,
+        "rate": 0.3333333333333333
+      },
+      "askRecall": {
+        "count": 23,
+        "total": 45,
+        "rate": 0.5111111111111111
+      },
+      "noVerdict": 2,
+      "infrastructureErrors": 0,
+      "allowDiscrimination": -0.10000000000000009,
+      "binaryNoAsk": {
+        "total": 228,
+        "correct": 112
+      },
+      "confidenceIntervals": {
+        "accuracy": {
+          "lower": 0.41099110566704244,
+          "upper": 0.5231850924145939,
+          "assumption": "Descriptive binomial interval; related synthetic families violate independent-case sampling."
+        },
+        "harmfulAllowed": {
+          "lower": 0.683445529241854,
+          "upper": 0.833344248668171,
+          "assumption": "Descriptive binomial interval; related synthetic families violate independent-case sampling."
+        },
+        "ordinaryRefused": {
+          "lower": 0.2593972328490745,
+          "upper": 0.4164920844901004,
+          "assumption": "Descriptive binomial interval; related synthetic families violate independent-case sampling."
+        }
+      }
+    },
+    {
+      "model": "reasoning-100-seed42",
+      "evidence": "snapshot/guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-100-seed42/reasoning-100-seed42-heldOut.json",
+      "reportSha256": "33811490363134d484211efea2db06f2928371c5949defc2f2527f78817f8c9b",
+      "total": 300,
+      "correct": 137,
+      "accuracy": 0.45666666666666667,
+      "harmfulAllowed": {
+        "count": 92,
+        "total": 120,
+        "rate": 0.7666666666666667
+      },
+      "ordinaryRefused": {
+        "count": 47,
+        "total": 135,
+        "rate": 0.34814814814814815
+      },
+      "askRecall": {
+        "count": 22,
+        "total": 45,
+        "rate": 0.4888888888888889
+      },
+      "noVerdict": 3,
+      "infrastructureErrors": 0,
+      "allowDiscrimination": -0.11481481481481481,
+      "binaryNoAsk": {
+        "total": 228,
+        "correct": 108
+      },
+      "confidenceIntervals": {
+        "accuracy": {
+          "lower": 0.40120290256178365,
+          "upper": 0.5132261549443436,
+          "assumption": "Descriptive binomial interval; related synthetic families violate independent-case sampling."
+        },
+        "harmfulAllowed": {
+          "lower": 0.683445529241854,
+          "upper": 0.833344248668171,
+          "assumption": "Descriptive binomial interval; related synthetic families violate independent-case sampling."
+        },
+        "ordinaryRefused": {
+          "lower": 0.27299817508686886,
+          "upper": 0.4317009807110461,
+          "assumption": "Descriptive binomial interval; related synthetic families violate independent-case sampling."
+        }
+      }
+    },
+    {
+      "model": "reasoning-1000-seed0",
+      "evidence": "snapshot/guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-1000-seed0/reasoning-1000-seed0-heldOut.json",
+      "reportSha256": "6d2b467dd3a19162f6b1f3cac8f0befe484e168abc4d70a7d3d4b216b542a4a6",
+      "total": 300,
+      "correct": 176,
+      "accuracy": 0.5866666666666667,
+      "harmfulAllowed": {
+        "count": 26,
+        "total": 120,
+        "rate": 0.21666666666666667
+      },
+      "ordinaryRefused": {
+        "count": 80,
+        "total": 135,
+        "rate": 0.5925925925925926
+      },
+      "askRecall": {
+        "count": 28,
+        "total": 45,
+        "rate": 0.6222222222222222
+      },
+      "noVerdict": 1,
+      "infrastructureErrors": 0,
+      "allowDiscrimination": 0.1907407407407407,
+      "binaryNoAsk": {
+        "total": 228,
+        "correct": 141
+      },
+      "confidenceIntervals": {
+        "accuracy": {
+          "lower": 0.5301906151568371,
+          "upper": 0.6409512698309082,
+          "assumption": "Descriptive binomial interval; related synthetic families violate independent-case sampling."
+        },
+        "harmfulAllowed": {
+          "lower": 0.15236723564151497,
+          "upper": 0.29854362532908374,
+          "assumption": "Descriptive binomial interval; related synthetic families violate independent-case sampling."
+        },
+        "ordinaryRefused": {
+          "lower": 0.5082606835894823,
+          "upper": 0.6718008067776426,
+          "assumption": "Descriptive binomial interval; related synthetic families violate independent-case sampling."
+        }
+      }
+    },
+    {
+      "model": "reasoning-1000-seed42",
+      "evidence": "snapshot/guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-1000-seed42/reasoning-1000-seed42-heldOut.json",
+      "reportSha256": "881beea8d7cf380ef9a68383902907c286465ea31b8ab6775c3c1c6b225599ce",
+      "total": 300,
+      "correct": 172,
+      "accuracy": 0.5733333333333334,
+      "harmfulAllowed": {
+        "count": 22,
+        "total": 120,
+        "rate": 0.18333333333333332
+      },
+      "ordinaryRefused": {
+        "count": 87,
+        "total": 135,
+        "rate": 0.6444444444444445
+      },
+      "askRecall": {
+        "count": 27,
+        "total": 45,
+        "rate": 0.6
+      },
+      "noVerdict": 2,
+      "infrastructureErrors": 0,
+      "allowDiscrimination": 0.17222222222222225,
+      "binaryNoAsk": {
+        "total": 228,
+        "correct": 135
+      },
+      "confidenceIntervals": {
+        "accuracy": {
+          "lower": 0.5167859400590311,
+          "upper": 0.6280264241613689,
+          "assumption": "Descriptive binomial interval; related synthetic families violate independent-case sampling."
+        },
+        "harmfulAllowed": {
+          "lower": 0.12430300356014223,
+          "upper": 0.2620091351717033,
+          "assumption": "Descriptive binomial interval; related synthetic families violate independent-case sampling."
+        },
+        "ordinaryRefused": {
+          "lower": 0.5607253793856174,
+          "upper": 0.7201705455870978,
+          "assumption": "Descriptive binomial interval; related synthetic families violate independent-case sampling."
+        }
+      }
+    },
+    {
+      "model": "reasoning-300-seed0",
+      "evidence": "snapshot/guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-300-seed0/reasoning-300-seed0-heldOut.json",
+      "reportSha256": "b7e6f4f53ac8c9a6f4a64dc7f84951b7c0a461d3a619ccc9a91ea0231f7c48d1",
+      "total": 300,
+      "correct": 140,
+      "accuracy": 0.4666666666666667,
+      "harmfulAllowed": {
+        "count": 52,
+        "total": 120,
+        "rate": 0.43333333333333335
+      },
+      "ordinaryRefused": {
+        "count": 71,
+        "total": 135,
+        "rate": 0.5259259259259259
+      },
+      "askRecall": {
+        "count": 11,
+        "total": 45,
+        "rate": 0.24444444444444444
+      },
+      "noVerdict": 5,
+      "infrastructureErrors": 0,
+      "allowDiscrimination": 0.040740740740740744,
+      "binaryNoAsk": {
+        "total": 228,
+        "correct": 124
+      },
+      "confidenceIntervals": {
+        "accuracy": {
+          "lower": 0.41099110566704244,
+          "upper": 0.5231850924145939,
+          "assumption": "Descriptive binomial interval; related synthetic families violate independent-case sampling."
+        },
+        "harmfulAllowed": {
+          "lower": 0.34810176437788437,
+          "upper": 0.5227007911446095,
+          "assumption": "Descriptive binomial interval; related synthetic families violate independent-case sampling."
+        },
+        "ordinaryRefused": {
+          "lower": 0.4421489587970383,
+          "upper": 0.6082682585057567,
+          "assumption": "Descriptive binomial interval; related synthetic families violate independent-case sampling."
+        }
+      }
+    },
+    {
+      "model": "reasoning-300-seed42",
+      "evidence": "snapshot/guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-300-seed42/reasoning-300-seed42-heldOut.json",
+      "reportSha256": "9a8c469e31130497736386d1bb4bec2fcb7ec658aa41de656824c87b5ab1a90e",
+      "total": 300,
+      "correct": 137,
+      "accuracy": 0.45666666666666667,
+      "harmfulAllowed": {
+        "count": 57,
+        "total": 120,
+        "rate": 0.475
+      },
+      "ordinaryRefused": {
+        "count": 74,
+        "total": 135,
+        "rate": 0.5481481481481482
+      },
+      "askRecall": {
+        "count": 17,
+        "total": 45,
+        "rate": 0.37777777777777777
+      },
+      "noVerdict": 5,
+      "infrastructureErrors": 0,
+      "allowDiscrimination": -0.02314814814814814,
+      "binaryNoAsk": {
+        "total": 228,
+        "correct": 115
+      },
+      "confidenceIntervals": {
+        "accuracy": {
+          "lower": 0.40120290256178365,
+          "upper": 0.5132261549443436,
+          "assumption": "Descriptive binomial interval; related synthetic families violate independent-case sampling."
+        },
+        "harmfulAllowed": {
+          "lower": 0.3878209113791835,
+          "upper": 0.5637300469417518,
+          "assumption": "Descriptive binomial interval; related synthetic families violate independent-case sampling."
+        },
+        "ordinaryRefused": {
+          "lower": 0.46402334538322926,
+          "upper": 0.6296086296076759,
+          "assumption": "Descriptive binomial interval; related synthetic families violate independent-case sampling."
+        }
+      }
+    },
+    {
+      "model": "reasoning-600-seed0",
+      "evidence": "snapshot/guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-600-seed0/reasoning-600-seed0-heldOut.json",
+      "reportSha256": "85ba80714d67b11a346e85e59e2eedbe6c3772bcb222780570319880178ac7ab",
+      "total": 300,
+      "correct": 135,
+      "accuracy": 0.45,
+      "harmfulAllowed": {
+        "count": 63,
+        "total": 120,
+        "rate": 0.525
+      },
+      "ordinaryRefused": {
+        "count": 64,
+        "total": 135,
+        "rate": 0.4740740740740741
+      },
+      "askRecall": {
+        "count": 7,
+        "total": 45,
+        "rate": 0.15555555555555556
+      },
+      "noVerdict": 0,
+      "infrastructureErrors": 0,
+      "allowDiscrimination": 0.0009259259259258856,
+      "binaryNoAsk": {
+        "total": 228,
+        "correct": 117
+      },
+      "confidenceIntervals": {
+        "accuracy": {
+          "lower": 0.394689901646408,
+          "upper": 0.5065743954760465,
+          "assumption": "Descriptive binomial interval; related synthetic families violate independent-case sampling."
+        },
+        "harmfulAllowed": {
+          "lower": 0.43626995305824834,
+          "upper": 0.6121790886208165,
+          "assumption": "Descriptive binomial interval; related synthetic families violate independent-case sampling."
+        },
+        "ordinaryRefused": {
+          "lower": 0.3917317414942433,
+          "upper": 0.5578510412029617,
+          "assumption": "Descriptive binomial interval; related synthetic families violate independent-case sampling."
+        }
+      }
+    },
+    {
+      "model": "reasoning-600-seed42",
+      "evidence": "snapshot/guard/prototype/output/needle-official-ladder/mac-runtime/reasoning-600-seed42/reasoning-600-seed42-heldOut.json",
+      "reportSha256": "6e90d9054b008cd5c1cc28524dbc3bf069c3e4d33b9cf33ff48f2e503209fbb2",
+      "total": 300,
+      "correct": 144,
+      "accuracy": 0.48,
+      "harmfulAllowed": {
+        "count": 56,
+        "total": 120,
+        "rate": 0.4666666666666667
+      },
+      "ordinaryRefused": {
+        "count": 67,
+        "total": 135,
+        "rate": 0.4962962962962963
+      },
+      "askRecall": {
+        "count": 12,
+        "total": 45,
+        "rate": 0.26666666666666666
+      },
+      "noVerdict": 0,
+      "infrastructureErrors": 0,
+      "allowDiscrimination": 0.03703703703703698,
+      "binaryNoAsk": {
+        "total": 228,
+        "correct": 123
+      },
+      "confidenceIntervals": {
+        "accuracy": {
+          "lower": 0.42407680086272237,
+          "upper": 0.5364289179862594,
+          "assumption": "Descriptive binomial interval; related synthetic families violate independent-case sampling."
+        },
+        "harmfulAllowed": {
+          "lower": 0.37982917045799003,
+          "upper": 0.555572107303257,
+          "assumption": "Descriptive binomial interval; related synthetic families violate independent-case sampling."
+        },
+        "ordinaryRefused": {
+          "lower": 0.41323255726738856,
+          "upper": 0.5795649831179266,
+          "assumption": "Descriptive binomial interval; related synthetic families violate independent-case sampling."
+        }
+      }
+    },
+    {
+      "model": "shipped-base",
+      "evidence": "snapshot/guard/prototype/output/needle-official-ladder/mac-runtime/shipped-base/shipped-base-heldOut.json",
+      "reportSha256": "f696e0d590a7448c62f9291d325988947add53621d78e9e21dca497a10988e35",
+      "total": 300,
+      "correct": 141,
+      "accuracy": 0.47,
+      "harmfulAllowed": {
+        "count": 42,
+        "total": 120,
+        "rate": 0.35
+      },
+      "ordinaryRefused": {
+        "count": 72,
+        "total": 135,
+        "rate": 0.5333333333333333
+      },
+      "askRecall": {
+        "count": 15,
+        "total": 45,
+        "rate": 0.3333333333333333
+      },
+      "noVerdict": 44,
+      "infrastructureErrors": 0,
+      "allowDiscrimination": 0.1166666666666667,
+      "binaryNoAsk": {
+        "total": 228,
+        "correct": 116
+      },
+      "confidenceIntervals": {
+        "accuracy": {
+          "lower": 0.4142588116594049,
+          "upper": 0.5264997666140677,
+          "assumption": "Descriptive binomial interval; related synthetic families violate independent-case sampling."
+        },
+        "harmfulAllowed": {
+          "lower": 0.2705189959028541,
+          "upper": 0.438786754022757,
+          "assumption": "Descriptive binomial interval; related synthetic families violate independent-case sampling."
+        },
+        "ordinaryRefused": {
+          "lower": 0.44942253647808705,
+          "upper": 0.615399600054078,
+          "assumption": "Descriptive binomial interval; related synthetic families violate independent-case sampling."
+        }
+      }
+    }
+  ]
+}

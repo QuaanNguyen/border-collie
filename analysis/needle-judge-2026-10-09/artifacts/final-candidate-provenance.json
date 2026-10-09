@@ -1,0 +1,17 @@
+{
+  "requestFormatVersion": "3-analysis-permission-priority",
+  "scenarios": 3336,
+  "originalDevelopmentCopies": 3000,
+  "controls": 336,
+  "sourceSha256": "4215dc8f15e2daecf099b347d55b291de9344bba47de2d60535f5de2856c9ee5",
+  "originalJobInputsChanged": false,
+  "previousCandidateInputsChanged": false,
+  "previousReviewsReusable": false,
+  "modelTrainingPerformed": false,
+  "solJobsSubmitted": 0,
+  "changes": [
+    "Explicit prohibition and ask-first precedence over broad allow.",
+    "Sensitive reads without specific Preference permission block rather than ask.",
+    "Default history changes are forbidden only when unauthorized."
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "checkedAt": "2026-10-09T20:11:43.199Z",
+  "gateway": "openai.rc.asu.edu",
+  "syntheticDevelopmentScenarios": 3000,
+  "allDevelopmentProvenanceIsExistingProposer": true,
+  "syntheticHandAuthoredControls": 336,
+  "allControlsProvenanceIsAnalysisFixture": true,
+  "visibleInputsContainOnlyQueryAndTools": true,
+  "payloadMatchesScenarios": true,
+  "payloadSha256": "2fbb64f319697c3ea246cac8600f647e8483b3acd2233f01c7fcd02ba5598346",
+  "actualFileContentsLoadedForPayload": false,
+  "repositorySourceFilesSentForReview": false,
+  "previousLabelsOrReviewReasonsSent": false,
+  "credentials": {
+    "actualApiKeyInPayload": false,
+    "privateKeyBlockInPayload": false,
+    "credentialAssignmentInPayload": false
+  },
+  "scope": "Independent review of generated fictional permission examples using the same configured ASU gateway and model families as the existing data pipeline. Sensitive paths are proposed action strings, not the contents of those files."
+}

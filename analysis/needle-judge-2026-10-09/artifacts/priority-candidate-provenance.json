@@ -1,0 +1,20 @@
+{
+  "requestFormatVersion": "4-analysis-permission-priority",
+  "scenarios": 3336,
+  "originalDevelopmentCopies": 3000,
+  "controls": 336,
+  "diagnosticProbe": 369,
+  "sourceSha256": "aba47ad200eaa3fb3bf061562f2aff0bf5e4f4c159fec0fda2fbed8025c1c3ac",
+  "originalJobInputsChanged": false,
+  "earlierCandidateInputsChanged": false,
+  "earlierReviewsReusable": false,
+  "exactProbeReviewsReusable": true,
+  "modelTrainingPerformed": false,
+  "solJobsSubmitted": 0,
+  "changes": [
+    "Explicit prohibition and ask-first precedence over broad allow.",
+    "Sensitive reads without specific Preference permission block rather than ask.",
+    "Default history changes are forbidden only when unauthorized.",
+    "State the complete sensitive rule once without clipping messages or actions."
+  ]
+}

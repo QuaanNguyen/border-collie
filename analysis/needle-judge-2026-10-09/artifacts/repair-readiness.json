@@ -1,0 +1,571 @@
+{
+  "schemaVersion": 1,
+  "status": "review-complete-readiness-assessment",
+  "consensusStatusSha256": "14ca516767406519765c8ff02486be87ca87046e469e620e52ac0e789cc1634b",
+  "requestFormatVersion": "4-analysis-permission-priority",
+  "reviewSet": "priority-single-resolved",
+  "reviewComplete": true,
+  "frozenDevelopmentFiles": true,
+  "accepted": 2453,
+  "quarantined": 883,
+  "trainingCases": 1979,
+  "validationCases": 460,
+  "acceptedSourceTrainingCases": 1992,
+  "acceptedSourceValidationCases": 461,
+  "duplicatedAcceptedInputs": 14,
+  "trainingFamilies": 1033,
+  "validationFamilies": 255,
+  "fittingSampleCountAvailable": true,
+  "fullSampleComparisonCountAvailable": false,
+  "addedTopicsWithNoAcceptedCases": [
+    "delegation",
+    "environment-disclosure",
+    "outside-deletion",
+    "remote-scope",
+    "shared-private-read",
+    "shared-service",
+    "unrelated-network"
+  ],
+  "addedTopicsWithNoAcceptedTraining": [
+    "delegation",
+    "environment-disclosure",
+    "obfuscated-deletion",
+    "outside-deletion",
+    "permission-change",
+    "remote-scope",
+    "shared-private-read",
+    "shared-service",
+    "unrelated-network"
+  ],
+  "addedTopicsWithNoAcceptedValidation": [
+    "delegation",
+    "download-and-execute",
+    "environment-disclosure",
+    "outside-deletion",
+    "outside-read",
+    "persistent-scheduling",
+    "process-management",
+    "protected-write",
+    "remote-history",
+    "remote-scope",
+    "scope-expansion",
+    "shared-private-read",
+    "shared-scheduler",
+    "shared-service",
+    "source-edit",
+    "unrelated-network",
+    "upload",
+    "web-search"
+  ],
+  "modelAgreementIsHumanGold": false,
+  "newlyTrainedModel": false,
+  "productionDeploymentPerformed": false,
+  "solSubmissionReady": false,
+  "submittedJobs": 0,
+  "blockers": [
+    "Fewer than 2,000 distinct eligible training inputs remain for the proposed five-size comparison.",
+    "At least one added permission topic has no accepted controls; inspect or repair coverage before claiming it is taught.",
+    "Some added permission topics have no distinct training or validation controls; report these gaps and do not infer measured coverage from the combined count.",
+    "The exact future installed official trainer and answers-only native format compatibility still need verification.",
+    "Version four narrows the accepted other-users-on-Sol directory rule to private directories on shared systems; final scope and production-aligned input reviews remain unresolved.",
+    "A fresh blind set with unseen Preference wording and action families has not been produced.",
+    "The owner has not approved any new Sol jobs."
+  ],
+  "coverage": [
+    {
+      "dataset": "development",
+      "category": "hard-case",
+      "proposed": 150,
+      "accepted": 112,
+      "training": 89,
+      "validation": 23,
+      "verdicts": {
+        "allow": 34,
+        "ask": 44,
+        "disallow": 34
+      },
+      "distinctTraining": 89,
+      "distinctValidation": 23
+    },
+    {
+      "dataset": "development",
+      "category": "injected-instruction",
+      "proposed": 300,
+      "accepted": 280,
+      "training": 240,
+      "validation": 40,
+      "verdicts": {
+        "allow": 0,
+        "ask": 0,
+        "disallow": 280
+      },
+      "distinctTraining": 240,
+      "distinctValidation": 40
+    },
+    {
+      "dataset": "development",
+      "category": "network-read",
+      "proposed": 240,
+      "accepted": 175,
+      "training": 138,
+      "validation": 37,
+      "verdicts": {
+        "allow": 161,
+        "ask": 14,
+        "disallow": 0
+      },
+      "distinctTraining": 138,
+      "distinctValidation": 37
+    },
+    {
+      "dataset": "development",
+      "category": "off-machine-send",
+      "proposed": 360,
+      "accepted": 268,
+      "training": 223,
+      "validation": 45,
+      "verdicts": {
+        "allow": 54,
+        "ask": 30,
+        "disallow": 184
+      },
+      "distinctTraining": 223,
+      "distinctValidation": 45
+    },
+    {
+      "dataset": "development",
+      "category": "ordinary-local",
+      "proposed": 900,
+      "accepted": 703,
+      "training": 554,
+      "validation": 149,
+      "verdicts": {
+        "allow": 598,
+        "ask": 43,
+        "disallow": 62
+      },
+      "distinctTraining": 554,
+      "distinctValidation": 149
+    },
+    {
+      "dataset": "development",
+      "category": "owner-reply",
+      "proposed": 210,
+      "accepted": 103,
+      "training": 83,
+      "validation": 20,
+      "verdicts": {
+        "allow": 40,
+        "ask": 34,
+        "disallow": 29
+      },
+      "distinctTraining": 83,
+      "distinctValidation": 20
+    },
+    {
+      "dataset": "development",
+      "category": "remote-git",
+      "proposed": 300,
+      "accepted": 153,
+      "training": 121,
+      "validation": 32,
+      "verdicts": {
+        "allow": 16,
+        "ask": 58,
+        "disallow": 79
+      },
+      "distinctTraining": 121,
+      "distinctValidation": 32
+    },
+    {
+      "dataset": "development",
+      "category": "requested-destructive",
+      "proposed": 240,
+      "accepted": 153,
+      "training": 123,
+      "validation": 30,
+      "verdicts": {
+        "allow": 119,
+        "ask": 33,
+        "disallow": 1
+      },
+      "distinctTraining": 123,
+      "distinctValidation": 30
+    },
+    {
+      "dataset": "development",
+      "category": "unrequested-destructive",
+      "proposed": 300,
+      "accepted": 220,
+      "training": 185,
+      "validation": 35,
+      "verdicts": {
+        "allow": 0,
+        "ask": 0,
+        "disallow": 220
+      },
+      "distinctTraining": 185,
+      "distinctValidation": 35
+    },
+    {
+      "dataset": "security-development",
+      "category": "delegation",
+      "proposed": 6,
+      "accepted": 0,
+      "training": 0,
+      "validation": 0,
+      "verdicts": {
+        "allow": 0,
+        "ask": 0,
+        "disallow": 0
+      },
+      "distinctTraining": 0,
+      "distinctValidation": 0
+    },
+    {
+      "dataset": "security-development",
+      "category": "deletion",
+      "proposed": 36,
+      "accepted": 30,
+      "training": 12,
+      "validation": 18,
+      "verdicts": {
+        "allow": 5,
+        "ask": 10,
+        "disallow": 15
+      },
+      "distinctTraining": 12,
+      "distinctValidation": 18
+    },
+    {
+      "dataset": "security-development",
+      "category": "download-and-execute",
+      "proposed": 6,
+      "accepted": 6,
+      "training": 6,
+      "validation": 0,
+      "verdicts": {
+        "allow": 0,
+        "ask": 2,
+        "disallow": 4
+      },
+      "distinctTraining": 6,
+      "distinctValidation": 0
+    },
+    {
+      "dataset": "security-development",
+      "category": "environment-disclosure",
+      "proposed": 6,
+      "accepted": 0,
+      "training": 0,
+      "validation": 0,
+      "verdicts": {
+        "allow": 0,
+        "ask": 0,
+        "disallow": 0
+      },
+      "distinctTraining": 0,
+      "distinctValidation": 0
+    },
+    {
+      "dataset": "security-development",
+      "category": "file-overwrite",
+      "proposed": 12,
+      "accepted": 12,
+      "training": 6,
+      "validation": 6,
+      "verdicts": {
+        "allow": 2,
+        "ask": 4,
+        "disallow": 6
+      },
+      "distinctTraining": 6,
+      "distinctValidation": 6
+    },
+    {
+      "dataset": "security-development",
+      "category": "obfuscated-deletion",
+      "proposed": 6,
+      "accepted": 6,
+      "training": 0,
+      "validation": 6,
+      "verdicts": {
+        "allow": 1,
+        "ask": 2,
+        "disallow": 3
+      },
+      "distinctTraining": 0,
+      "distinctValidation": 6
+    },
+    {
+      "dataset": "security-development",
+      "category": "ordinary-work",
+      "proposed": 30,
+      "accepted": 30,
+      "training": 24,
+      "validation": 6,
+      "verdicts": {
+        "allow": 6,
+        "ask": 10,
+        "disallow": 14
+      },
+      "distinctTraining": 24,
+      "distinctValidation": 6
+    },
+    {
+      "dataset": "security-development",
+      "category": "outside-deletion",
+      "proposed": 6,
+      "accepted": 0,
+      "training": 0,
+      "validation": 0,
+      "verdicts": {
+        "allow": 0,
+        "ask": 0,
+        "disallow": 0
+      },
+      "distinctTraining": 0,
+      "distinctValidation": 0
+    },
+    {
+      "dataset": "security-development",
+      "category": "outside-read",
+      "proposed": 6,
+      "accepted": 6,
+      "training": 6,
+      "validation": 0,
+      "verdicts": {
+        "allow": 1,
+        "ask": 2,
+        "disallow": 3
+      },
+      "distinctTraining": 6,
+      "distinctValidation": 0
+    },
+    {
+      "dataset": "security-development",
+      "category": "permission-change",
+      "proposed": 6,
+      "accepted": 6,
+      "training": 0,
+      "validation": 6,
+      "verdicts": {
+        "allow": 1,
+        "ask": 2,
+        "disallow": 3
+      },
+      "distinctTraining": 0,
+      "distinctValidation": 6
+    },
+    {
+      "dataset": "security-development",
+      "category": "persistent-scheduling",
+      "proposed": 6,
+      "accepted": 6,
+      "training": 6,
+      "validation": 0,
+      "verdicts": {
+        "allow": 1,
+        "ask": 2,
+        "disallow": 3
+      },
+      "distinctTraining": 6,
+      "distinctValidation": 0
+    },
+    {
+      "dataset": "security-development",
+      "category": "process-management",
+      "proposed": 6,
+      "accepted": 6,
+      "training": 6,
+      "validation": 0,
+      "verdicts": {
+        "allow": 1,
+        "ask": 2,
+        "disallow": 3
+      },
+      "distinctTraining": 6,
+      "distinctValidation": 0
+    },
+    {
+      "dataset": "security-development",
+      "category": "protected-write",
+      "proposed": 6,
+      "accepted": 6,
+      "training": 6,
+      "validation": 0,
+      "verdicts": {
+        "allow": 0,
+        "ask": 1,
+        "disallow": 5
+      },
+      "distinctTraining": 6,
+      "distinctValidation": 0
+    },
+    {
+      "dataset": "security-development",
+      "category": "remote-history",
+      "proposed": 6,
+      "accepted": 6,
+      "training": 6,
+      "validation": 0,
+      "verdicts": {
+        "allow": 0,
+        "ask": 1,
+        "disallow": 5
+      },
+      "distinctTraining": 6,
+      "distinctValidation": 0
+    },
+    {
+      "dataset": "security-development",
+      "category": "remote-scope",
+      "proposed": 6,
+      "accepted": 0,
+      "training": 0,
+      "validation": 0,
+      "verdicts": {
+        "allow": 0,
+        "ask": 0,
+        "disallow": 0
+      },
+      "distinctTraining": 0,
+      "distinctValidation": 0
+    },
+    {
+      "dataset": "security-development",
+      "category": "scope-expansion",
+      "proposed": 6,
+      "accepted": 6,
+      "training": 6,
+      "validation": 0,
+      "verdicts": {
+        "allow": 0,
+        "ask": 1,
+        "disallow": 5
+      },
+      "distinctTraining": 6,
+      "distinctValidation": 0
+    },
+    {
+      "dataset": "security-development",
+      "category": "sensitive-read",
+      "proposed": 112,
+      "accepted": 112,
+      "training": 104,
+      "validation": 8,
+      "verdicts": {
+        "allow": 14,
+        "ask": 14,
+        "disallow": 84
+      },
+      "distinctTraining": 91,
+      "distinctValidation": 7
+    },
+    {
+      "dataset": "security-development",
+      "category": "shared-private-read",
+      "proposed": 8,
+      "accepted": 0,
+      "training": 0,
+      "validation": 0,
+      "verdicts": {
+        "allow": 0,
+        "ask": 0,
+        "disallow": 0
+      },
+      "distinctTraining": 0,
+      "distinctValidation": 0
+    },
+    {
+      "dataset": "security-development",
+      "category": "shared-scheduler",
+      "proposed": 24,
+      "accepted": 24,
+      "training": 24,
+      "validation": 0,
+      "verdicts": {
+        "allow": 2,
+        "ask": 6,
+        "disallow": 16
+      },
+      "distinctTraining": 24,
+      "distinctValidation": 0
+    },
+    {
+      "dataset": "security-development",
+      "category": "shared-service",
+      "proposed": 6,
+      "accepted": 0,
+      "training": 0,
+      "validation": 0,
+      "verdicts": {
+        "allow": 0,
+        "ask": 0,
+        "disallow": 0
+      },
+      "distinctTraining": 0,
+      "distinctValidation": 0
+    },
+    {
+      "dataset": "security-development",
+      "category": "source-edit",
+      "proposed": 6,
+      "accepted": 6,
+      "training": 6,
+      "validation": 0,
+      "verdicts": {
+        "allow": 1,
+        "ask": 2,
+        "disallow": 3
+      },
+      "distinctTraining": 6,
+      "distinctValidation": 0
+    },
+    {
+      "dataset": "security-development",
+      "category": "unrelated-network",
+      "proposed": 6,
+      "accepted": 0,
+      "training": 0,
+      "validation": 0,
+      "verdicts": {
+        "allow": 0,
+        "ask": 0,
+        "disallow": 0
+      },
+      "distinctTraining": 0,
+      "distinctValidation": 0
+    },
+    {
+      "dataset": "security-development",
+      "category": "upload",
+      "proposed": 12,
+      "accepted": 12,
+      "training": 12,
+      "validation": 0,
+      "verdicts": {
+        "allow": 2,
+        "ask": 4,
+        "disallow": 6
+      },
+      "distinctTraining": 12,
+      "distinctValidation": 0
+    },
+    {
+      "dataset": "security-development",
+      "category": "web-search",
+      "proposed": 6,
+      "accepted": 6,
+      "training": 6,
+      "validation": 0,
+      "verdicts": {
+        "allow": 1,
+        "ask": 2,
+        "disallow": 3
+      },
+      "distinctTraining": 6,
+      "distinctValidation": 0
+    }
+  ]
+}

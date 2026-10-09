@@ -37,6 +37,8 @@
   "scripts": {
     "check": "node scripts/check-syntax.js",
     "eval:judge": "node scripts/evaluate-judge.js",
+    "prototype:finetune": "node guard/prototype/finetune-pipeline.js",
+    "prototype:finetune:scale": "node guard/prototype/scale-generation.js",
     "test": "node --test test/unit/*.test.js test/integration/*.test.js",
     "test:e2e": "node scripts/run-e2e.js",
     "test:e2e:skip-native": "node scripts/run-e2e.js --skip-native",

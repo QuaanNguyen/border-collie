@@ -7,6 +7,7 @@ const path = require('node:path');
 const { spawn } = require('node:child_process');
 const { defaultJudgeRoot, judgeManifest, verifyInstalledJudge } = require('./judge-artifacts');
 
+const JUDGE_REQUEST_VERSION = '1';
 const VERDICT_BY_TOOL = Object.freeze({ allow_call: 'allow', block_call: 'disallow', ask_owner: 'ask' });
 const NO_ARGUMENTS = Object.freeze({ type: 'object', properties: {}, required: [] });
 const JUDGE_TIMEOUT_MS = 15000;
@@ -61,6 +62,14 @@ function effects(call) {
 function judgePrompt({ userMessage, call }) {
   const action = clip(`${call.tool} ${JSON.stringify(visibleArguments(call.args))}`, ACTION_LIMIT);
   return `User request: ${clip(userMessage, MESSAGE_LIMIT) || '(none)'}. Agent action: ${action}. Effects: ${effects(call)}.`;
+}
+
+function judgeRequest({ userMessage, preference, call }) {
+  return {
+    version: JUDGE_REQUEST_VERSION,
+    query: judgePrompt({ userMessage, call }),
+    tools: judgeTools(preference),
+  };
 }
 
 function verdictFrom(response) {
@@ -119,8 +128,8 @@ function createNeedleJudge(opts = {}) {
     return installed;
   }
 
-  function toolsFile(preference) {
-    const contents = JSON.stringify(judgeTools(preference));
+  function toolsFile(tools) {
+    const contents = JSON.stringify(tools);
     toolDir ||= fs.mkdtempSync(path.join(os.tmpdir(), 'border-collie-judge-'));
     const file = path.join(toolDir, crypto.createHash('sha256').update(contents).digest('hex') + '.json');
     if (!fs.existsSync(file)) fs.writeFileSync(file, contents);
@@ -130,13 +139,18 @@ function createNeedleJudge(opts = {}) {
   async function decide(input) {
     const ready = ensureInstalled();
     if (!ready.ready) return { verdict: null, unavailable: true, reason: `${ready.reason}. Run bdc install` };
+    const request = judgeRequest(input);
     const args = [
       '--model', ready.weights,
-      '--tools', toolsFile(input.preference),
-      '--prompt', judgePrompt(input),
+      '--tools', toolsFile(request.tools),
+      '--prompt', request.query,
       '--max', '128',
       '--fail-input-overflow',
     ];
+    if (opts.threads !== undefined) {
+      if (!Number.isInteger(opts.threads) || opts.threads < 1) throw new Error('Judge thread count must be a positive integer');
+      args.push('--threads', String(opts.threads));
+    }
     const result = await runNeedle(ready.runner, args);
     if (result.error) return { verdict: null, reason: result.error };
     return {
@@ -159,4 +173,4 @@ function createNeedleJudge(opts = {}) {
   return judge;
 }
 
-module.exports = { createNeedleJudge };
+module.exports = { createNeedleJudge, judgeRequest, JUDGE_REQUEST_VERSION };

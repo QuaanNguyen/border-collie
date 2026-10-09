@@ -1,0 +1,20 @@
+{
+  "status": "verified-complete-read-only-development-freeze",
+  "freezeHash": "9631cd4572f7357f1b9cc16c8142b2867e1118053ee8a50d14ca7615d427d830",
+  "freezeDirectory": "artifacts/repaired/9631cd4572f7357f1b9cc16c8142b2867e1118053ee8a50d14ca7615d427d830",
+  "acceptedSourceCases": 2453,
+  "distinctExportedInputs": 2439,
+  "duplicatedSourceInputs": 14,
+  "quarantined": 883,
+  "splitCounts": {
+    "train": 1979,
+    "validation": 460
+  },
+  "inputVersion": "4-analysis-permission-priority",
+  "answersOnly": true,
+  "heldOutCasesExcluded": 300,
+  "relatedFamiliesCrossSplits": false,
+  "discardedFamiliesPartiallyAccepted": false,
+  "originalFilesWritten": false,
+  "solJobsSubmitted": 0
+}

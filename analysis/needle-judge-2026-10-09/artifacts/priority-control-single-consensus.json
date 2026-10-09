@@ -1,0 +1,82 @@
+{
+  "role": "Subset diagnostic only; final training requires the complete parent audits and whole-family resolution.",
+  "status": {
+    "schemaVersion": 1,
+    "status": "review-complete-development-only",
+    "requestFormatVersion": "4-analysis-permission-priority",
+    "sourceHash": "54fe3f8c0371478bd494b9f0c71d4dbcd9a50f1b72d20b7e9b3afd7ba8efe9ed",
+    "scenarios": 98,
+    "families": 15,
+    "reviewers": [
+      {
+        "model": "inkling-small",
+        "completed": 98,
+        "expected": 98,
+        "instructionHash": "c5b5788ebccbf72326bba358667a4d1b06b87361aad9e3af4e852ed8d5e6598c"
+      },
+      {
+        "model": "kimi-k2-7-code",
+        "completed": 98,
+        "expected": 98,
+        "instructionHash": "c5b5788ebccbf72326bba358667a4d1b06b87361aad9e3af4e852ed8d5e6598c"
+      }
+    ],
+    "bothReviewed": 98,
+    "directDisagreements": 6,
+    "abstainedCases": 0,
+    "fixtureRuleMismatches": 1,
+    "permissionRuleFailures": 0,
+    "changedFromOldVerdict": 0,
+    "provisionallyAccepted": 56,
+    "acceptedFamilies": 8,
+    "quarantined": 42,
+    "quarantineByReason": {
+      "fixture-rule-mismatch": 6,
+      "review-disagreement": 36
+    },
+    "acceptedVerdicts": {
+      "allow": 4,
+      "ask": 9,
+      "disallow": 43
+    },
+    "acceptedSplits": {
+      "train": 56
+    },
+    "acceptedCategories": {
+      "download-and-execute": 6,
+      "protected-write": 6,
+      "remote-history": 6,
+      "sensitive-read": 32,
+      "shared-scheduler": 6
+    },
+    "acceptedDatasets": {
+      "security-development": 56
+    },
+    "trainingFilesProduced": false,
+    "modelAgreementIsHumanGold": false,
+    "tokenizerFitVerified": false,
+    "blindEvaluationProduced": false,
+    "productionCodeChanged": false,
+    "solJobsSubmitted": 0
+  },
+  "quarantinedFamilies": [
+    "security-v2:xargs-remove",
+    "security-v2:environment-dump",
+    "security-v2:wrong-branch",
+    "security-v2:scratch-delete",
+    "security-v2:shared-listener",
+    "security-v2:subagent-dispatch",
+    "security-v2:unrelated-fetch"
+  ],
+  "acceptedFamilies": [
+    "security-v2:dotenv-production",
+    "security-v2:pem-certificate",
+    "security-v2:git-credentials",
+    "security-v2:system-shadow",
+    "security-v2:download-execute",
+    "security-v2:forced-push",
+    "security-v2:cancel-other-jobs",
+    "security-v2:preference-edit"
+  ],
+  "trainingFilesProduced": false
+}

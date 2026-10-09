@@ -1,0 +1,85 @@
+{
+  "schemaVersion": 1,
+  "status": "review-incomplete-preview-only",
+  "requestFormatVersion": "4-analysis-permission-priority",
+  "sourceHash": "b4ba0daada362c75f628280292e253f4455dbb39c5a7b27628b19cb055f4304c",
+  "scenarios": 3336,
+  "families": 1581,
+  "reviewers": [
+    {
+      "model": "inkling-small",
+      "completed": 2088,
+      "expected": 3336,
+      "instructionHash": "c5b5788ebccbf72326bba358667a4d1b06b87361aad9e3af4e852ed8d5e6598c"
+    },
+    {
+      "model": "kimi-k2-7-code",
+      "completed": 2877,
+      "expected": 3336,
+      "instructionHash": "c5b5788ebccbf72326bba358667a4d1b06b87361aad9e3af4e852ed8d5e6598c"
+    }
+  ],
+  "bothReviewed": 2088,
+  "directDisagreements": 173,
+  "abstainedCases": 1,
+  "fixtureRuleMismatches": 0,
+  "permissionRuleFailures": 3,
+  "changedFromOldVerdict": 31,
+  "provisionallyAccepted": 1495,
+  "acceptedFamilies": 793,
+  "quarantined": 1841,
+  "quarantineByReason": {
+    "explicit-ask-rule-ignored": 3,
+    "review-abstained": 8,
+    "review-disagreement": 528,
+    "review-pending": 1343,
+    "third-party-sharing-authority-unresolved": 8
+  },
+  "acceptedVerdicts": {
+    "allow": 653,
+    "ask": 201,
+    "disallow": 641
+  },
+  "acceptedSplits": {
+    "train": 1218,
+    "validation": 277
+  },
+  "acceptedCategories": {
+    "deletion": 30,
+    "file-overwrite": 12,
+    "hard-case": 68,
+    "injected-instruction": 139,
+    "network-read": 85,
+    "obfuscated-deletion": 6,
+    "off-machine-send": 165,
+    "ordinary-local": 470,
+    "ordinary-work": 30,
+    "outside-read": 6,
+    "owner-reply": 42,
+    "permission-change": 6,
+    "persistent-scheduling": 6,
+    "process-management": 6,
+    "remote-git": 65,
+    "requested-destructive": 91,
+    "scope-expansion": 6,
+    "sensitive-read": 80,
+    "shared-scheduler": 18,
+    "source-edit": 6,
+    "unrequested-destructive": 140,
+    "upload": 12,
+    "web-search": 6
+  },
+  "acceptedDatasets": {
+    "development": 1265,
+    "security-development": 230
+  },
+  "trainingFilesProduced": false,
+  "modelAgreementIsHumanGold": false,
+  "tokenizerFitVerified": true,
+  "blindEvaluationProduced": false,
+  "productionCodeChanged": false,
+  "solJobsSubmitted": 0,
+  "tokenizerEvidenceSha256": "c9e996071921c9e8e4e92d3b42e104c4553dbcd8076e5993f4cfe39c59352733",
+  "futureInstalledTrainerRecheckRequired": true,
+  "reviewSet": "priority-candidate"
+}

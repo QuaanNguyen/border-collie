@@ -1,0 +1,189 @@
+{
+  "status": "complete-pinned-training-tokenizer-check",
+  "tokenizerModelSha256": "97dfd5666620b19875deba9e55953d312364e7763bd08bee428b94f1b9491b25",
+  "tokenizerBlobSha256": "9f839cd44027ea9203738897da2bac572a5cc77aec7fceacd4391fc412a3249f",
+  "source": "https://huggingface.co/Cactus-Compute/needle3/resolve/2ae11323dc000f5e70c49f7403efa6af12ba9e67/tokenizer/tokenizer.model",
+  "sentencepieceVersion": "0.2.1",
+  "officialRendererSourceRevision": "ef3cf7543204d99878c0dd913a05f6a506da4be8",
+  "vocabularyAndScoresMatchRuntimeArchive": true,
+  "referenceEncoderParity": {
+    "sampleCount": 28,
+    "allMatched": true,
+    "cases": [
+      {
+        "set": "original",
+        "id": "invoices-task-1-1",
+        "matchedTokenIds": true
+      },
+      {
+        "set": "original",
+        "id": "warehouse-task-19-3",
+        "matchedTokenIds": true
+      },
+      {
+        "set": "original",
+        "id": "captions-task-5-2",
+        "matchedTokenIds": true
+      },
+      {
+        "set": "original",
+        "id": "recipes-task-28-1",
+        "matchedTokenIds": true
+      },
+      {
+        "set": "original",
+        "id": "forms-task-9-2",
+        "matchedTokenIds": true
+      },
+      {
+        "set": "original",
+        "id": "audio-task-32-1",
+        "matchedTokenIds": true
+      },
+      {
+        "set": "original",
+        "id": "archives-task-14-5",
+        "matchedTokenIds": true
+      },
+      {
+        "set": "original",
+        "id": "queues-task-39-2",
+        "matchedTokenIds": true
+      },
+      {
+        "set": "original",
+        "id": "permissions-task-19-2",
+        "matchedTokenIds": true
+      },
+      {
+        "set": "original",
+        "id": "navigation-task-5-1",
+        "matchedTokenIds": true
+      },
+      {
+        "set": "original",
+        "id": "geometry-task-27-2",
+        "matchedTokenIds": true
+      },
+      {
+        "set": "original",
+        "id": "checklists-task-9-1",
+        "matchedTokenIds": true
+      },
+      {
+        "set": "original",
+        "id": "batteries-task-31-3",
+        "matchedTokenIds": true
+      },
+      {
+        "set": "original",
+        "id": "catalogs-task-39-2",
+        "matchedTokenIds": true
+      },
+      {
+        "set": "candidate-all",
+        "id": "invoices-task-1-1",
+        "matchedTokenIds": true
+      },
+      {
+        "set": "candidate-all",
+        "id": "warehouse-task-19-3",
+        "matchedTokenIds": true
+      },
+      {
+        "set": "candidate-all",
+        "id": "captions-task-5-2",
+        "matchedTokenIds": true
+      },
+      {
+        "set": "candidate-all",
+        "id": "recipes-task-28-1",
+        "matchedTokenIds": true
+      },
+      {
+        "set": "candidate-all",
+        "id": "forms-task-9-2",
+        "matchedTokenIds": true
+      },
+      {
+        "set": "candidate-all",
+        "id": "audio-task-32-1",
+        "matchedTokenIds": true
+      },
+      {
+        "set": "candidate-all",
+        "id": "archives-task-14-5",
+        "matchedTokenIds": true
+      },
+      {
+        "set": "candidate-all",
+        "id": "queues-task-39-2",
+        "matchedTokenIds": true
+      },
+      {
+        "set": "candidate-all",
+        "id": "permissions-task-19-2",
+        "matchedTokenIds": true
+      },
+      {
+        "set": "candidate-all",
+        "id": "navigation-task-5-1",
+        "matchedTokenIds": true
+      },
+      {
+        "set": "candidate-all",
+        "id": "geometry-task-27-2",
+        "matchedTokenIds": true
+      },
+      {
+        "set": "candidate-all",
+        "id": "checklists-task-9-1",
+        "matchedTokenIds": true
+      },
+      {
+        "set": "candidate-all",
+        "id": "security-v2:git-credentials:unrelated-request",
+        "matchedTokenIds": true
+      },
+      {
+        "set": "candidate-all",
+        "id": "security-v2:ordinary-tests:unclear-reply",
+        "matchedTokenIds": true
+      }
+    ]
+  },
+  "allThreeVerdictTargetsChecked": true,
+  "maximumLength": 1024,
+  "completeCandidateInputsFit": true,
+  "recheckAgainstFutureInstalledTrainerRequired": true,
+  "modelTrainingPerformed": false,
+  "solContacted": false,
+  "results": [
+    {
+      "set": "original",
+      "sourceSha256": "697bf44bfdddac4a364ae030574b1bf4b575dff516a6db47815ea0c1b5c98fea",
+      "count": 3300,
+      "minimum": 197,
+      "median": 267,
+      "p95": 337,
+      "maximum": 401,
+      "over512": 0,
+      "over1024": 0,
+      "over2048": 0,
+      "over4096": 0
+    },
+    {
+      "set": "candidate-all",
+      "sourceSha256": "cef5c300b94dec5537c418291f8833c382e3e32f977935db50bc7af8446e58b9",
+      "count": 3336,
+      "minimum": 640,
+      "median": 774,
+      "p95": 853,
+      "maximum": 919,
+      "over512": 3336,
+      "over1024": 0,
+      "over2048": 0,
+      "over4096": 0
+    }
+  ]
+}

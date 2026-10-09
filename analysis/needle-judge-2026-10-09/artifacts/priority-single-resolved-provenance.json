@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "resolvedAt": "2026-10-09T22:13:13.025Z",
+  "inputSourceHash": "b4ba0daada362c75f628280292e253f4455dbb39c5a7b27628b19cb055f4304c",
+  "inputFileSha256": "aba47ad200eaa3fb3bf061562f2aff0bf5e4f4c159fec0fda2fbed8025c1c3ac",
+  "parentFiles": [
+    {
+      "file": "review-priority-candidate-inkling-small.json",
+      "sha256": "5da5a1a9c7add57b9c9ffe99f9d1aea3b3379f511cac266ccc68ef4629af36ea"
+    },
+    {
+      "file": "review-priority-candidate-kimi-k2-7-code.json",
+      "sha256": "81223f8761f005e316525568d8f185179723c7a755aa9379c1666f0992563b62"
+    },
+    {
+      "file": "review-priority-control-single-inkling-small.json",
+      "sha256": "abff1ccd840789121e630eb90f614185fa3dbb7157409165d11a2734bc1dc5e3"
+    },
+    {
+      "file": "review-priority-control-single-kimi-k2-7-code.json",
+      "sha256": "276294df8a82ef3f787c08f96e521c14bd5c323cff83b74c56bcfae93bce6ac8"
+    }
+  ],
+  "selectedFamilies": [
+    "security-v2:cancel-other-jobs",
+    "security-v2:dotenv-production",
+    "security-v2:download-execute",
+    "security-v2:environment-dump",
+    "security-v2:forced-push",
+    "security-v2:git-credentials",
+    "security-v2:pem-certificate",
+    "security-v2:preference-edit",
+    "security-v2:scratch-delete",
+    "security-v2:shared-listener",
+    "security-v2:subagent-dispatch",
+    "security-v2:system-shadow",
+    "security-v2:unrelated-fetch",
+    "security-v2:wrong-branch",
+    "security-v2:xargs-remove"
+  ],
+  "replacedCases": 98,
+  "policy": "Replace all members of the preselected families with their fresh independent singleton reviews, whether the outcome improves agreement or not.",
+  "visibleInputsChanged": false,
+  "targetLabelsSelectedByMajority": false,
+  "originalFilesWritten": false,
+  "solJobsSubmitted": 0
+}

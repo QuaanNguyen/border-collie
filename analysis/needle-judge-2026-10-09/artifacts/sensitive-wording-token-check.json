@@ -1,0 +1,16 @@
+{
+  "purpose": "Separate stricter sensitive-wording diagnostic input fit, not a replacement for complete candidate token evidence.",
+  "sourceSha256": "c74bd30f1eb4e17a253b3e7d1988794de3b71f8a48e0dd1aa178f9984219f6f2",
+  "officialRendererSourceRevision": "ef3cf7543204d99878c0dd913a05f6a506da4be8",
+  "allThreeVerdictTargetsChecked": true,
+  "solContacted": false,
+  "count": 112,
+  "minimum": 820,
+  "median": 866,
+  "p95": 915,
+  "maximum": 924,
+  "over512": 112,
+  "over1024": 0,
+  "over2048": 0,
+  "over4096": 0
+}

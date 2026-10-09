@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "status": "review-incomplete-preview-only",
+  "requestFormatVersion": "2-analysis-confirmed-read",
+  "sourceHash": "5cde98bcae39b3092006a657ad234d31b80dcc8b91ff91c9221361c73c5409ad",
+  "scenarios": 3336,
+  "families": 1581,
+  "reviewers": [
+    {
+      "model": "inkling-small",
+      "completed": 1836,
+      "expected": 3336,
+      "instructionHash": "c5b5788ebccbf72326bba358667a4d1b06b87361aad9e3af4e852ed8d5e6598c"
+    },
+    {
+      "model": "kimi-k2-7-code",
+      "completed": 987,
+      "expected": 3336,
+      "instructionHash": "c5b5788ebccbf72326bba358667a4d1b06b87361aad9e3af4e852ed8d5e6598c"
+    }
+  ],
+  "bothReviewed": 987,
+  "directDisagreements": 86,
+  "abstainedCases": 0,
+  "fixtureRuleMismatches": 42,
+  "permissionRuleFailures": 18,
+  "changedFromOldVerdict": 37,
+  "provisionallyAccepted": 579,
+  "acceptedFamilies": 293,
+  "quarantined": 2757,
+  "quarantineByReason": {
+    "explicit-ask-rule-ignored": 60,
+    "fixture-rule-mismatch": 130,
+    "review-disagreement": 319,
+    "review-pending": 2352,
+    "third-party-sharing-authority-unresolved": 8
+  },
+  "acceptedVerdicts": {
+    "allow": 228,
+    "ask": 94,
+    "disallow": 257
+  },
+  "acceptedSplits": {
+    "train": 451,
+    "validation": 128
+  },
+  "acceptedCategories": {
+    "deletion": 30,
+    "file-overwrite": 6,
+    "hard-case": 22,
+    "injected-instruction": 46,
+    "network-read": 38,
+    "obfuscated-deletion": 6,
+    "off-machine-send": 59,
+    "ordinary-local": 131,
+    "ordinary-work": 24,
+    "outside-deletion": 6,
+    "outside-read": 6,
+    "owner-reply": 16,
+    "permission-change": 6,
+    "persistent-scheduling": 6,
+    "process-management": 6,
+    "protected-write": 6,
+    "remote-git": 24,
+    "remote-history": 6,
+    "requested-destructive": 37,
+    "scope-expansion": 6,
+    "shared-scheduler": 12,
+    "source-edit": 6,
+    "unrequested-destructive": 56,
+    "upload": 12,
+    "web-search": 6
+  },
+  "acceptedDatasets": {
+    "development": 429,
+    "security-development": 150
+  },
+  "trainingFilesProduced": false,
+  "modelAgreementIsHumanGold": false,
+  "tokenizerFitVerified": true,
+  "blindEvaluationProduced": false,
+  "productionCodeChanged": false,
+  "solJobsSubmitted": 0,
+  "tokenizerEvidenceSha256": "46927f744255c2bc73355c9d6f99c9e5b4a7add17e7befde22067d6e421736b0",
+  "futureInstalledTrainerRecheckRequired": true
+}

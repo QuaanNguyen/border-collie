@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "requestFormatVersion": "2-analysis",
+  "source": "snapshot/guard/prototype/data/stage2/accepted.jsonl",
+  "sourceSha256": "09bdff908a0ca6724c07d57e0477daad87e4277cb1677ab1bc8c0d347af5b077",
+  "candidateSha256": "39ffa2da36e8b2c1a2e6b9704199ada13d9af31a56c853d231f1c5dbae184b57",
+  "requestsSha256": "c314cfa50195e5296be2a3b5243e26a75c5814d778ab927b45df0ab25622de03",
+  "count": 3000,
+  "allReviewsInvalidated": true,
+  "heldOutUsedForTraining": false,
+  "trainingLinesBuilt": false,
+  "sourceFilesChanged": false,
+  "confirmationForSensitiveReads": "Pending owner decision; no post-confirmation sensitive-read examples included."
+}
