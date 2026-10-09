@@ -53,6 +53,8 @@ try {
   const packageDir = path.join(installDir, 'node_modules', ...packageName.split('/'));
   assert.ok(fs.existsSync(path.join(packageDir, 'scripts', 'border-collie.js')));
   assert.ok(fs.existsSync(path.join(packageDir, 'plugin', 'border-collie.js')));
+  const installedManifest = JSON.parse(fs.readFileSync(path.join(packageDir, 'package.json'), 'utf8'));
+  assert.deepEqual(installedManifest.bin, { bdc: 'scripts/border-collie.js' });
   process.stdout.write(`ok - ${client} installs the packed Border Collie package\n`);
 } finally {
   fs.rmSync(workspace, { recursive: true, force: true });

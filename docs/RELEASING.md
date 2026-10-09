@@ -47,10 +47,10 @@ The tag-triggered publish job requires the `npm` environment, refuses to publish
 ## Test layers
 
 1. **Unit tests** call deterministic Guard, Event stream, installer, and Pet helpers with fake inputs using Node's built-in `node:test` runner.
-2. **Integration tests** compose Border Collie modules across the OpenCode adapter, installer, owner policy, project policy, and package CLI boundaries.
+2. **Integration tests** compose Border Collie modules across the OpenCode adapter, installer, Judge retrieval, `bdc migrate`, and package CLI boundaries.
 3. **Package tests** run `npm pack` and inspect the exact tarball file list.
 4. **E2E tests** run OpenCode, external processes, the Pet host, native macOS behavior, renderer startup, and desktop window behavior.
-5. **Release smoke tests** install the exact published version into a clean environment and exercise `border-collie install`.
+5. **Release smoke tests** install the exact published version into a clean environment and exercise `bdc install`.
 
 Package/plugin code is tested the same way as other code: keep most logic in ordinary exported functions, unit-test those functions, then use a small number of boundary tests for OpenCode and the desktop host.
 

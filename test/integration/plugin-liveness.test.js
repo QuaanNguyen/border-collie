@@ -8,7 +8,7 @@ const ROOT = path.resolve(__dirname, '..', '..')
 
 async function main() {
   const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'border-collie-liveness-'))
-  const envKeys = ['BORDER_COLLIE_NO_PET', 'BORDER_COLLIE_OWNER_CONFIG', 'BORDER_COLLIE_EVENTS']
+  const envKeys = ['BORDER_COLLIE_NO_PET', 'BORDER_COLLIE_EVENTS']
   const previousEnv = new Map(envKeys.map((key) => [key, process.env[key]]))
   try {
     await runScenario(tempDir)
@@ -24,15 +24,8 @@ async function main() {
 }
 
 async function runDefaultCompletionScenario(tempDir) {
-  const ownerConfigDir = path.join(tempDir, 'owner')
-  fs.mkdirSync(ownerConfigDir, { recursive: true })
-  fs.writeFileSync(path.join(ownerConfigDir, 'policy.json'), JSON.stringify({
-    schema_version: 1,
-    setup_package: 'research-safe',
-    trusted_workspace_roots: [],
-  }))
+  fs.mkdirSync(tempDir, { recursive: true })
   process.env.BORDER_COLLIE_NO_PET = '1'
-  process.env.BORDER_COLLIE_OWNER_CONFIG = ownerConfigDir
 
   const client = {
     session: {
@@ -55,12 +48,8 @@ async function runDefaultCompletionScenario(tempDir) {
 }
 
 async function runScenario(tempDir) {
-  const ownerConfigDir = path.join(tempDir, 'owner')
-  fs.mkdirSync(ownerConfigDir, { recursive: true })
-  fs.writeFileSync(path.join(ownerConfigDir, 'policy.json'), JSON.stringify({
-    schema_version: 1,
-    setup_package: 'research-safe',
-    trusted_workspace_roots: [],
+  fs.mkdirSync(path.join(tempDir, '.border-collie'), { recursive: true })
+  fs.writeFileSync(path.join(tempDir, '.border-collie', 'preference.json'), JSON.stringify({
     done_criteria: [{
       id: 'output',
       describe: 'output exists',
@@ -70,7 +59,6 @@ async function runScenario(tempDir) {
     }],
   }))
   process.env.BORDER_COLLIE_NO_PET = '1'
-  process.env.BORDER_COLLIE_OWNER_CONFIG = ownerConfigDir
 
   let messageReads = 0
   let promptCalls = 0

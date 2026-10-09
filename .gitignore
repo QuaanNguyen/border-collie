@@ -31,3 +31,11 @@ lerna-debug.log*
 .opencode/
 .DS_Store
 opencode.json
+/guard/prototype/output/
+
+__pycache__/
+*.pyc
+/analysis/*/snapshot/
+/analysis/*/artifacts/local-probe-models/
+/analysis/*/artifacts/python-dependencies/
+/analysis/*/artifacts/public-source/

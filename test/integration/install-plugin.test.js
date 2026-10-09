@@ -1,133 +1,100 @@
 'use strict';
-const assert = require('node:assert');
+
+const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
+const test = require('node:test');
 const { pathToFileURL } = require('node:url');
 const { spawnSync } = require('node:child_process');
 
 const ROOT = path.resolve(__dirname, '..', '..');
 const { installPlugin } = require(path.join(ROOT, 'scripts/install-plugin'));
-const temporaryDirectories = [];
+const { fakeJudgeManifest } = require('../fixtures/fake-judge');
 
-function temporaryDirectory() {
-  const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'border-collie-install-'));
-  temporaryDirectories.push(directory);
-  return directory;
-}
-
-function runTest(name, fn) {
+async function withRoot(run) {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'border-collie-install-'));
   try {
-    fn();
-    console.log(`  \x1b[32m✓\x1b[0m ${name}`);
-  } catch (error) {
-    console.log(`  \x1b[31m✗\x1b[0m ${name}\n      ${error.message}`);
-    process.exitCode = 1;
+    return await run(root);
+  } finally {
+    fs.rmSync(root, { recursive: true, force: true });
   }
 }
 
-console.log('install plugin');
-
-runTest('first install creates canonical Border Collie configuration outside the package', () => {
-  const root = temporaryDirectory();
-  const pluginsDir = path.join(root, 'plugins');
-  const ownerConfigDir = path.join(root, 'owner-config');
-  const result = installPlugin({ repoRoot: ROOT, destDir: pluginsDir, ownerConfigDir, skipRuntimeSetup: true });
-  const policyPath = path.join(ownerConfigDir, 'config.json');
-
-  assert.ok(fs.existsSync(result.dest));
-  assert.ok(fs.existsSync(policyPath));
-  assert.equal(fs.existsSync(path.join(result.packageDir, 'policy.json')), false);
-  assert.deepEqual(JSON.parse(fs.readFileSync(policyPath, 'utf8')), {
-    schema_version: 2,
-    pet: { scale: 1 },
-    profiles: {},
-    adapters: { opencode: { default_profile: 'research', allowed_project_profiles: ['research', 'governed'] } },
-  });
-});
-
-runTest('first install accepts Custom only with supported owner settings', () => {
-  const root = temporaryDirectory();
-  const ownerConfigDir = path.join(root, 'owner-config');
-  installPlugin({ repoRoot: ROOT, destDir: path.join(root, 'plugins'), ownerConfigDir, skipRuntimeSetup: true, setupPackage: 'custom', customPolicy: { read_paths: ['src/**'], allow_ordinary_bash: false, high_containment: true } });
-  assert.deepEqual(JSON.parse(fs.readFileSync(path.join(ownerConfigDir, 'config.json'), 'utf8')).profiles.custom, { extends: 'research', policy: { read_paths: ['src/**'], allow_ordinary_bash: false } });
-});
-
-runTest('install includes the desktop runtime source and remains importable', () => {
-  const root = temporaryDirectory();
-  const result = installPlugin({
+function options(root, extra = {}) {
+  return {
     repoRoot: ROOT,
     destDir: path.join(root, 'plugins'),
-    ownerConfigDir: path.join(root, 'owner-config'),
+    judgeRoot: path.join(root, 'judge'),
+    judgeManifest: fakeJudgeManifest(path.join(root, 'source')).manifest,
     skipRuntimeSetup: true,
-  });
-
-  assert.equal(result.petDir, path.join(result.packageDir, 'pet'));
-  assert.equal(fs.existsSync(path.join(result.packageDir, 'pet', 'package.json')), true);
-  const check = spawnSync(process.execPath, [
-    '--input-type=module',
-    '-e',
-    `process.env.BORDER_COLLIE_NO_PET = '1'; import { BorderCollie } from ${JSON.stringify(pathToFileURL(result.dest).href)}; const hooks = await BorderCollie({ client: {}, directory: ${JSON.stringify(root)} }); if (typeof hooks['tool.execute.before'] !== 'function') process.exit(2); process.emit('beforeExit');`,
-  ], { encoding: 'utf8' });
-  assert.strictEqual(check.status, 0, check.stderr);
-});
-
-runTest('reinstall preserves the owner policy across package replacement', () => {
-  const root = temporaryDirectory();
-  const pluginsDir = path.join(root, 'plugins');
-  const ownerConfigDir = path.join(root, 'owner-config');
-  const policyPath = path.join(ownerConfigDir, 'policy.json');
-  const ownerPolicy = '{\n  "schema_version": 1,\n  "setup_package": "custom",\n  "trusted_workspace_roots": ["/shared/research"]\n}\n';
-
-  installPlugin({ repoRoot: ROOT, destDir: pluginsDir, ownerConfigDir, skipRuntimeSetup: true });
-  fs.writeFileSync(policyPath, ownerPolicy);
-  const result = installPlugin({ repoRoot: ROOT, destDir: pluginsDir, ownerConfigDir, skipRuntimeSetup: true });
-
-  assert.equal(fs.readFileSync(policyPath, 'utf8'), ownerPolicy);
-  assert.ok(fs.existsSync(result.dest));
-});
-
-runTest('upgrade previews missing policy fields without changing owner choices', () => {
-  const root = temporaryDirectory();
-  const pluginsDir = path.join(root, 'plugins');
-  const ownerConfigDir = path.join(root, 'owner-config');
-  const policyPath = path.join(ownerConfigDir, 'policy.json');
-  const ownerPolicy = '{\n  "schema_version": 0,\n  "setup_package": "custom"\n}\n';
-
-  fs.mkdirSync(ownerConfigDir, { recursive: true });
-  fs.writeFileSync(policyPath, ownerPolicy);
-  const result = installPlugin({ repoRoot: ROOT, destDir: pluginsDir, ownerConfigDir, skipRuntimeSetup: true });
-
-  assert.deepEqual(result.migrationPreview, {
-    currentSchemaVersion: 0,
-    targetSchemaVersion: 1,
-    missingFields: ['trusted_workspace_roots'],
-    recommendedPolicy: {
-      schema_version: 1,
-      setup_package: 'research-safe',
-      trusted_workspace_roots: [],
-    },
-  });
-  assert.equal(fs.readFileSync(policyPath, 'utf8'), ownerPolicy);
-});
-
-runTest('reinstall preserves malformed owner policy and reports it for repair', () => {
-  const root = temporaryDirectory();
-  const pluginsDir = path.join(root, 'plugins');
-  const ownerConfigDir = path.join(root, 'owner-config');
-  const policyPath = path.join(ownerConfigDir, 'policy.json');
-  const ownerPolicy = '{ not valid json\n';
-
-  fs.mkdirSync(ownerConfigDir, { recursive: true });
-  fs.writeFileSync(policyPath, ownerPolicy);
-  const result = installPlugin({ repoRoot: ROOT, destDir: pluginsDir, ownerConfigDir, skipRuntimeSetup: true });
-
-  assert.equal(result.migrationPreview.problem, 'invalid-policy');
-  assert.equal(result.migrationPreview.policyPath, policyPath);
-  assert.equal(fs.readFileSync(policyPath, 'utf8'), ownerPolicy);
-  assert.ok(fs.existsSync(result.dest));
-});
-
-for (const directory of temporaryDirectories) {
-  fs.rmSync(directory, { recursive: true, force: true });
+    ...extra,
+  };
 }
+
+test('install retrieves and verifies the Judge, then reuses it', async () => {
+  await withRoot(async (root) => {
+    const first = await installPlugin(options(root));
+    assert.equal(first.judgeReused, false);
+    assert.equal(fs.readFileSync(path.join(first.judgeDir, 'needle3.cact'), 'utf8'), 'fake weights\n');
+    if (process.platform !== 'win32') assert.ok(fs.statSync(path.join(first.judgeDir, 'needle')).mode & 0o100);
+
+    const second = await installPlugin(options(root));
+    assert.equal(second.judgeReused, true);
+    assert.equal(second.judgeDir, first.judgeDir);
+  });
+});
+
+test('a Judge that fails verification leaves the previous plugin bound', async () => {
+  await withRoot(async (root) => {
+    const pluginsDir = path.join(root, 'plugins');
+    fs.mkdirSync(path.join(pluginsDir, 'border-collie'), { recursive: true });
+    fs.writeFileSync(path.join(pluginsDir, 'border-collie.js'), 'old entry\n');
+    fs.writeFileSync(path.join(pluginsDir, 'border-collie', 'old-marker'), 'old package\n');
+
+    const tampered = fakeJudgeManifest(path.join(root, 'tampered'), { tamper: true }).manifest;
+    await assert.rejects(installPlugin(options(root, { judgeManifest: tampered })), /does not match its pinned SHA-256/);
+
+    const unsupported = fakeJudgeManifest(path.join(root, 'unsupported'), { platform: 'plan9-mips' }).manifest;
+    await assert.rejects(installPlugin(options(root, { judgeManifest: unsupported })), /no runner for/);
+
+    assert.equal(fs.readFileSync(path.join(pluginsDir, 'border-collie.js'), 'utf8'), 'old entry\n');
+    assert.equal(fs.readFileSync(path.join(pluginsDir, 'border-collie', 'old-marker'), 'utf8'), 'old package\n');
+    assert.equal(fs.existsSync(path.join(root, 'judge', 'test-revision')), false);
+  });
+});
+
+test('install binds an importable plugin and leaves retired policy files alone', async () => {
+  await withRoot(async (root) => {
+    const project = path.join(root, 'project');
+    fs.mkdirSync(path.join(project, '.border-collie'), { recursive: true });
+    fs.writeFileSync(path.join(project, '.border-collie', 'protocol.json'), '{"done_criteria":[]}\n');
+    const configRoot = path.join(root, 'config');
+    fs.mkdirSync(configRoot);
+    fs.writeFileSync(path.join(configRoot, 'config.json'), '{"schema_version":2,"pet":{"scale":1.15},"profiles":{},"adapters":{}}\n');
+
+    const previousCwd = process.cwd();
+    const previousConfig = process.env.BORDER_COLLIE_CONFIG_ROOT;
+    process.chdir(project);
+    process.env.BORDER_COLLIE_CONFIG_ROOT = configRoot;
+    let result;
+    try {
+      result = await installPlugin(options(root));
+    } finally {
+      process.chdir(previousCwd);
+      if (previousConfig === undefined) delete process.env.BORDER_COLLIE_CONFIG_ROOT;
+      else process.env.BORDER_COLLIE_CONFIG_ROOT = previousConfig;
+    }
+
+    assert.ok(fs.existsSync(path.join(project, '.border-collie', 'protocol.json')));
+    assert.match(fs.readFileSync(path.join(configRoot, 'config.json'), 'utf8'), /"profiles"/);
+    assert.equal(fs.existsSync(path.join(result.packageDir, 'guard', 'lib', 'judge.js')), true);
+    assert.equal(fs.existsSync(path.join(result.packageDir, 'pet', 'package.json')), true);
+    const check = spawnSync(process.execPath, [
+      '--input-type=module',
+      '-e',
+      `process.env.BORDER_COLLIE_NO_PET = '1'; import { BorderCollie } from ${JSON.stringify(pathToFileURL(result.dest).href)}; const hooks = await BorderCollie({ client: {}, directory: ${JSON.stringify(project)} }); if (typeof hooks['tool.execute.before'] !== 'function') process.exit(2); process.emit('beforeExit');`,
+    ], { encoding: 'utf8' });
+    assert.equal(check.status, 0, check.stderr);
+  });
+});

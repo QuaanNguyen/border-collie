@@ -27,7 +27,7 @@ function withRepository(run) {
 function sessionFor(workdir) {
   return createSession({
     workdir,
-    protocol: {
+    preference: {
       task: 'verify the answer implementation',
       done_criteria: [{
         id: 'answer-verified',

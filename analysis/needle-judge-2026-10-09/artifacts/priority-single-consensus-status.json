@@ -1,0 +1,122 @@
+{
+  "schemaVersion": 1,
+  "status": "review-complete-development-only",
+  "requestFormatVersion": "4-analysis-permission-priority",
+  "sourceHash": "b4ba0daada362c75f628280292e253f4455dbb39c5a7b27628b19cb055f4304c",
+  "scenarios": 3336,
+  "families": 1581,
+  "reviewers": [
+    {
+      "model": "inkling-small",
+      "completed": 3336,
+      "expected": 3336,
+      "instructionHash": "c5b5788ebccbf72326bba358667a4d1b06b87361aad9e3af4e852ed8d5e6598c"
+    },
+    {
+      "model": "kimi-k2-7-code",
+      "completed": 3336,
+      "expected": 3336,
+      "instructionHash": "c5b5788ebccbf72326bba358667a4d1b06b87361aad9e3af4e852ed8d5e6598c"
+    }
+  ],
+  "bothReviewed": 3336,
+  "directDisagreements": 311,
+  "abstainedCases": 0,
+  "fixtureRuleMismatches": 1,
+  "permissionRuleFailures": 5,
+  "changedFromOldVerdict": 43,
+  "provisionallyAccepted": 2453,
+  "acceptedFamilies": 1288,
+  "quarantined": 883,
+  "quarantineByReason": {
+    "explicit-ask-rule-ignored": 12,
+    "fixture-rule-mismatch": 6,
+    "review-disagreement": 871,
+    "third-party-sharing-authority-unresolved": 8
+  },
+  "acceptedVerdicts": {
+    "allow": 1060,
+    "ask": 323,
+    "disallow": 1070
+  },
+  "acceptedSplits": {
+    "train": 1992,
+    "validation": 461
+  },
+  "acceptedCategories": {
+    "deletion": 30,
+    "download-and-execute": 6,
+    "file-overwrite": 12,
+    "hard-case": 112,
+    "injected-instruction": 280,
+    "network-read": 175,
+    "obfuscated-deletion": 6,
+    "off-machine-send": 268,
+    "ordinary-local": 703,
+    "ordinary-work": 30,
+    "outside-read": 6,
+    "owner-reply": 103,
+    "permission-change": 6,
+    "persistent-scheduling": 6,
+    "process-management": 6,
+    "protected-write": 6,
+    "remote-git": 153,
+    "remote-history": 6,
+    "requested-destructive": 153,
+    "scope-expansion": 6,
+    "sensitive-read": 112,
+    "shared-scheduler": 24,
+    "source-edit": 6,
+    "unrequested-destructive": 220,
+    "upload": 12,
+    "web-search": 6
+  },
+  "acceptedDatasets": {
+    "development": 2167,
+    "security-development": 286
+  },
+  "trainingFilesProduced": true,
+  "modelAgreementIsHumanGold": false,
+  "tokenizerFitVerified": true,
+  "blindEvaluationProduced": false,
+  "productionCodeChanged": false,
+  "solJobsSubmitted": 0,
+  "tokenizerEvidenceSha256": "c9e996071921c9e8e4e92d3b42e104c4553dbcd8076e5993f4cfe39c59352733",
+  "futureInstalledTrainerRecheckRequired": true,
+  "reviewSet": "priority-single-resolved",
+  "exportedSplits": {
+    "train": 1979,
+    "validation": 460
+  },
+  "distinctAcceptedInputs": 2439,
+  "duplicatedAcceptedInputs": 14,
+  "freezeHash": "9631cd4572f7357f1b9cc16c8142b2867e1118053ee8a50d14ca7615d427d830",
+  "freezeDirectory": "artifacts/repaired/9631cd4572f7357f1b9cc16c8142b2867e1118053ee8a50d14ca7615d427d830",
+  "frozenFiles": [
+    {
+      "file": "accepted.jsonl",
+      "sha256": "19d026959ea7d2fd1d2145ac0654bb58cfbb57b30d4d71168c6d641dc0aa192b",
+      "bytes": 7401069
+    },
+    {
+      "file": "quarantine.jsonl",
+      "sha256": "3b126d8fa4b4534714c4134dff07538b720347bfe27bd200a8729ac22048e388",
+      "bytes": 1432833
+    },
+    {
+      "file": "train.jsonl",
+      "sha256": "9b4da9080d79d78e3ca010c08862c15754edeaa7c8d532dee8319fa5f08eea19",
+      "bytes": 5472451
+    },
+    {
+      "file": "validation.jsonl",
+      "sha256": "ef2fe6e71471e424ac382375490c1fd8891c8e3c4e17c5ef17fda2c198e75c99",
+      "bytes": 1264578
+    },
+    {
+      "file": "export-map.jsonl",
+      "sha256": "03c646a5e5f744cf7c05d5123301e8ad0005ba7a57d691d1a097266975ca6721",
+      "bytes": 515228
+    }
+  ]
+}

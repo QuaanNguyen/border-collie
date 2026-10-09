@@ -28,7 +28,7 @@ test('a terminal Guard verdict separates unavailable environment evidence from c
   try {
     const session = createSession({
       workdir,
-      protocol: {
+      preference: {
         task: 'verify an environment-dependent result',
         done_criteria: [{
           id: 'environment-proof',
@@ -51,7 +51,7 @@ test('a terminal Guard verdict treats an unavailable repository as inconclusive 
   try {
     const session = createSession({
       workdir,
-      protocol: {
+      preference: {
         task: 'verify repository state',
         done_criteria: [{
           id: 'repository-proof',
@@ -74,7 +74,7 @@ test('a terminal Guard verdict reports each verified integrity dimension separat
     const command = [process.execPath, '-e', 'process.stdout.write("proof\\n")'];
     const session = createSession({
       workdir,
-      protocol: {
+      preference: {
         task: 'verify a scoped implementation',
         done_criteria: [{
           id: 'complete-proof',
@@ -102,7 +102,7 @@ test('a zero-test command cannot verify test integrity', () => {
   try {
     const session = createSession({
       workdir,
-      protocol: {
+      preference: {
         task: 'verify a test run',
         done_criteria: [{
           id: 'test-proof',
@@ -128,7 +128,7 @@ test('a passing command cannot overwrite a failed integrity dimension', () => {
   try {
     const session = createSession({
       workdir,
-      protocol: {
+      preference: {
         task: 'verify a test run',
         done_criteria: [{
           id: 'test-proof',

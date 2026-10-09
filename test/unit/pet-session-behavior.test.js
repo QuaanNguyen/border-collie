@@ -50,7 +50,7 @@ async function main() {
       fs.writeFileSync(path.join(tempDir, 'output.txt'), 'ready\n');
       const session = createSession({
         workdir: tempDir,
-        protocol: {
+        preference: {
           task: 'Produce the output',
           done_criteria: [{
             id: 'output',
@@ -70,7 +70,7 @@ async function main() {
     });
 
     await run('a generic completion claim without configured evidence asks for human review', () => {
-      const session = createSession({ workdir: tempDir, protocol: { task: 'Reply to the user' } });
+      const session = createSession({ workdir: tempDir, preference: {} });
       const result = session.handle({
         kind: 'assistant',
         text: 'The work is done.',

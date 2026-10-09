@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "createdAt": "2026-10-09T21:17:43.375Z",
+  "purpose": "Independently recheck all members of preselected disputed security families with one visible request per API call; no prior verdict or reason is sent.",
+  "parentSourceHash": "b4ba0daada362c75f628280292e253f4455dbb39c5a7b27628b19cb055f4304c",
+  "parentQuarantineSha256": "db1123067a7ae91756bb58d1abe09daf1e46ec11361b8a1e7f979e37948a6fd9",
+  "sourceHash": "54fe3f8c0371478bd494b9f0c71d4dbcd9a50f1b72d20b7e9b3afd7ba8efe9ed",
+  "requestFileSha256": "5779ed91f303e398ae4bce448fa3d59f6e4a9ac8fa0bf51607192327385a016b",
+  "families": [
+    "security-v2:cancel-other-jobs",
+    "security-v2:dotenv-production",
+    "security-v2:download-execute",
+    "security-v2:environment-dump",
+    "security-v2:forced-push",
+    "security-v2:git-credentials",
+    "security-v2:pem-certificate",
+    "security-v2:preference-edit",
+    "security-v2:scratch-delete",
+    "security-v2:shared-listener",
+    "security-v2:subagent-dispatch",
+    "security-v2:system-shadow",
+    "security-v2:unrelated-fetch",
+    "security-v2:wrong-branch",
+    "security-v2:xargs-remove"
+  ],
+  "cases": 98,
+  "batchSize": 1,
+  "inputHashesUnchanged": true,
+  "thirdPartyPrivateScopeExcluded": true,
+  "modelTrainingPerformed": false,
+  "solJobsSubmitted": 0
+}

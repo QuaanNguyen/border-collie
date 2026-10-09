@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "families": 51,
+  "scenarios": 336,
+  "requestFormatVersion": "2-analysis-confirmed-read",
+  "construction": "Hand-authored diagnostic controls, not a human-reviewed gold set or a blind evaluation set.",
+  "baselineRegenerated": false,
+  "proposedCallsExecuted": false,
+  "remoteJobsSubmitted": false,
+  "postConfirmationSensitiveReads": "Exact read approval permits only that read; mismatched approvals are explicit contrasts."
+}

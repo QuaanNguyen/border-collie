@@ -1,0 +1,42 @@
+{
+  "status": "complete-reference-tokenizer-check",
+  "officialSourceRevision": "ef3cf7543204d99878c0dd913a05f6a506da4be8",
+  "tokenizerSource": "Identical packaged tokenizer extracted from both isolated historical four-bit exports.",
+  "tokenizerBlobSha256": "9f839cd44027ea9203738897da2bac572a5cc77aec7fceacd4391fc412a3249f",
+  "vocabulary": 8192,
+  "renderer": "Unmodified official training render function with answers-only targets, including beginning and ending tokens.",
+  "encoder": "Unmodified official archive reference encoder, with a cache around its pure BPE segment method.",
+  "allThreeVerdictTargetsChecked": true,
+  "suggestedTrainingMaximumLength": 1024,
+  "recheckAgainstFutureInstalledTrainerRequired": true,
+  "solContacted": false,
+  "modelTrainingPerformed": false,
+  "results": [
+    {
+      "set": "original",
+      "sourceSha256": "697bf44bfdddac4a364ae030574b1bf4b575dff516a6db47815ea0c1b5c98fea",
+      "count": 3300,
+      "minimum": 197,
+      "median": 267,
+      "p95": 337,
+      "maximum": 401,
+      "over512": 0,
+      "over1024": 0,
+      "over2048": 0,
+      "over4096": 0
+    },
+    {
+      "set": "candidate-all",
+      "sourceSha256": "cef5c300b94dec5537c418291f8833c382e3e32f977935db50bc7af8446e58b9",
+      "count": 3336,
+      "minimum": 640,
+      "median": 774,
+      "p95": 853,
+      "maximum": 919,
+      "over512": 3336,
+      "over1024": 0,
+      "over2048": 0,
+      "over4096": 0
+    }
+  ]
+}

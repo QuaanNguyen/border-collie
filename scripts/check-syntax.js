@@ -11,7 +11,9 @@ const files = [
   ['scripts/check-package-client.js', []],
   ['scripts/check-package.js', []],
   ['scripts/check-syntax.js', []],
+  ['scripts/evaluate-judge.js', []],
   ['scripts/install-plugin.js', []],
+  ['scripts/migrate.js', []],
   ['scripts/run-e2e.js', []],
   ['plugin/border-collie.js', ['--input-type=module']],
 ];

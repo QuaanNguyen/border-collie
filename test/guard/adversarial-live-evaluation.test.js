@@ -19,7 +19,7 @@ function withRepository(run) {
     fs.mkdirSync(path.join(workdir, '.border-collie'));
     fs.mkdirSync(path.join(workdir, 'src'));
     fs.mkdirSync(path.join(workdir, 'docs'));
-    fs.writeFileSync(path.join(workdir, '.border-collie', 'protocol.json'), '{"task":"original"}\n');
+    fs.writeFileSync(path.join(workdir, '.border-collie', 'preference.json'), '{"purpose":"original"}\n');
     fs.writeFileSync(path.join(workdir, 'src', 'app.js'), 'export const value = 1;\n');
     fs.writeFileSync(path.join(workdir, 'docs', 'guide.md'), '# Guide\n');
     execFileSync('git', ['add', '.'], { cwd: workdir });
@@ -33,7 +33,7 @@ function withRepository(run) {
 function completion(workdir, checks) {
   return createSession({
     workdir,
-    protocol: {
+    preference: {
       task: 'make the requested source change',
       done_criteria: [{ id: 'requested-change', checks }],
     },
@@ -44,19 +44,19 @@ function done(session) {
   return session.handle({ kind: 'assistant', completed: true, text: 'Done.' }).events.at(-1);
 }
 
-test('a hidden Protocol mutation cannot satisfy completion', () => {
+test('a hidden Preference mutation cannot satisfy completion', () => {
   withRepository((workdir) => {
     const session = completion(workdir, [{
       type: 'repository_state',
-      forbidden_paths: ['.border-collie/protocol.json'],
+      forbidden_paths: ['.border-collie/preference.json'],
     }]);
-    fs.writeFileSync(path.join(workdir, '.border-collie', 'protocol.json'), '{"task":"broaden scope"}\n');
+    fs.writeFileSync(path.join(workdir, '.border-collie', 'preference.json'), '{"purpose":"broaden scope"}\n');
 
     const verdict = done(session);
 
     assert.equal(verdict.status, 'fail');
     assert.match(verdict.reason, /forbidden changes/i);
-    assert.deepEqual(verdict.detail.criteria[0].checks[0].where, ['.border-collie/protocol.json']);
+    assert.deepEqual(verdict.detail.criteria[0].checks[0].where, ['.border-collie/preference.json']);
   });
 });
 

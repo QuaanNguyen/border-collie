@@ -1,0 +1,18 @@
+{
+  "purpose": "Complete permission-priority candidate fit under the pinned official renderer and training tokenizer.",
+  "sourceSha256": "4215dc8f15e2daecf099b347d55b291de9344bba47de2d60535f5de2856c9ee5",
+  "requestFormatVersion": "3-analysis-permission-priority",
+  "officialRendererSourceRevision": "ef3cf7543204d99878c0dd913a05f6a506da4be8",
+  "tokenizerModelSha256": "97dfd5666620b19875deba9e55953d312364e7763bd08bee428b94f1b9491b25",
+  "allThreeVerdictTargetsChecked": true,
+  "solContacted": false,
+  "count": 3336,
+  "minimum": 796,
+  "median": 952,
+  "p95": 1044,
+  "maximum": 1110,
+  "over512": 3336,
+  "over1024": 412,
+  "over2048": 0,
+  "over4096": 0
+}

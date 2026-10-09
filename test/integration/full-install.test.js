@@ -5,43 +5,56 @@ const path = require('path')
 
 const ROOT = path.resolve(__dirname, '..', '..')
 const { electronReady, installPlugin, nativePetReady } = require('../../scripts/install-plugin')
+const { fakeJudgeManifest } = require('../fixtures/fake-judge')
 
 const root = fs.mkdtempSync(path.join(os.tmpdir(), 'border-collie-full-install-'))
-const originalNodeEnv = process.env.NODE_ENV
-let result
-try {
-  process.env.NODE_ENV = 'production'
-  result = installPlugin({
-    repoRoot: ROOT,
-    destDir: path.join(root, 'plugins'),
-    ownerConfigDir: path.join(root, 'owner'),
-  })
-} finally {
-  if (originalNodeEnv === undefined) delete process.env.NODE_ENV
-  else process.env.NODE_ENV = originalNodeEnv
+const judge = {
+  judgeRoot: path.join(root, 'judge'),
+  judgeManifest: fakeJudgeManifest(path.join(root, 'judge-source')).manifest,
 }
 
-assert.strictEqual(process.platform === 'darwin' ? nativePetReady(result.petDir) : electronReady(result.petDir), true)
-assert.ok(fs.existsSync(result.dest))
-assert.ok(fs.existsSync(path.join(result.packageDir, 'guard', 'lib', 'session.js')))
-assert.ok(fs.existsSync(path.join(result.packageDir, 'events', 'index.js')))
-assert.ok(fs.existsSync(path.join(result.packageDir, 'pet', 'package.json')))
+async function main() {
+  const originalNodeEnv = process.env.NODE_ENV
+  let result
+  try {
+    process.env.NODE_ENV = 'production'
+    result = await installPlugin({
+      repoRoot: ROOT,
+      destDir: path.join(root, 'plugins'),
+      ...judge,
+    })
+  } finally {
+    if (originalNodeEnv === undefined) delete process.env.NODE_ENV
+    else process.env.NODE_ENV = originalNodeEnv
+  }
 
-const emptyBin = path.join(root, 'empty-bin')
-const originalPath = process.env.PATH
-fs.mkdirSync(emptyBin)
-let repeated
-try {
-  process.env.PATH = emptyBin
-  repeated = installPlugin({
-    repoRoot: ROOT,
-    destDir: path.join(root, 'plugins'),
-    ownerConfigDir: path.join(root, 'owner'),
-  })
-} finally {
-  process.env.PATH = originalPath
+  assert.strictEqual(process.platform === 'darwin' ? nativePetReady(result.petDir) : electronReady(result.petDir), true)
+  assert.ok(fs.existsSync(result.dest))
+  assert.ok(fs.existsSync(path.join(result.packageDir, 'guard', 'lib', 'session.js')))
+  assert.ok(fs.existsSync(path.join(result.packageDir, 'events', 'index.js')))
+  assert.ok(fs.existsSync(path.join(result.packageDir, 'pet', 'package.json')))
+
+  const emptyBin = path.join(root, 'empty-bin')
+  const originalPath = process.env.PATH
+  fs.mkdirSync(emptyBin)
+  let repeated
+  try {
+    process.env.PATH = emptyBin
+    repeated = await installPlugin({
+      repoRoot: ROOT,
+      destDir: path.join(root, 'plugins'),
+      ...judge,
+    })
+  } finally {
+    process.env.PATH = originalPath
+  }
+  assert.strictEqual(repeated.petRuntimeReused, true)
+  assert.strictEqual(process.platform === 'darwin' ? nativePetReady(repeated.petDir) : electronReady(repeated.petDir), true)
+  fs.rmSync(root, { recursive: true, force: true })
+  process.stdout.write('ok - full install works in production and reuses a ready Pet runtime\n')
 }
-assert.strictEqual(repeated.petRuntimeReused, true)
-assert.strictEqual(process.platform === 'darwin' ? nativePetReady(repeated.petDir) : electronReady(repeated.petDir), true)
-fs.rmSync(root, { recursive: true, force: true })
-process.stdout.write('ok - full install works in production and reuses a ready Pet runtime\n')
+
+main().catch((error) => {
+  process.stderr.write(`${error.stack || error}\n`)
+  process.exitCode = 1
+})

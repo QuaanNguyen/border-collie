@@ -7,15 +7,22 @@ const path = require('node:path');
 
 const cli = path.resolve(__dirname, '..', '..', 'scripts', 'border-collie.js');
 
-test('CLI documents the install command', () => {
-  const result = spawnSync(process.execPath, [cli, '--help'], { encoding: 'utf8' });
+function bdc(args) {
+  return spawnSync(process.execPath, [cli, ...args], { encoding: 'utf8' });
+}
+
+test('bdc documents install, migrate, and pet size', () => {
+  const result = bdc(['--help']);
   assert.equal(result.status, 0);
-  assert.match(result.stdout, /border-collie <command>/);
-  assert.match(result.stdout, /install/);
+  assert.match(result.stdout, /Usage: bdc <command>/);
+  for (const command of ['install', 'migrate', 'pet size']) assert.match(result.stdout, new RegExp(command));
+  assert.doesNotMatch(result.stdout, /profile (list|show|create|assign)|project setup/);
 });
 
-test('CLI rejects an unknown command', () => {
-  const result = spawnSync(process.execPath, [cli, 'unknown'], { encoding: 'utf8' });
-  assert.equal(result.status, 2);
-  assert.match(result.stderr, /Usage:/);
+test('bdc rejects unknown and retired commands', () => {
+  for (const args of [['unknown'], ['profile', 'list'], ['project', 'setup'], ['migrate', 'extra']]) {
+    const result = bdc(args);
+    assert.equal(result.status, 2, args.join(' '));
+    assert.match(result.stderr, /Usage: bdc/);
+  }
 });
