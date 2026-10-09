@@ -253,12 +253,13 @@ test('without a retrieved Judge every call is refused with the install remedy', 
   });
 });
 
-test('OpenCode V2 applies policy to the live tool input', async () => {
+test('OpenCode V2 applies the Guard to live tool input', async () => {
   await withWorkdir(async (workdir) => {
     const previous = process.env.BORDER_COLLIE_NO_PET;
     process.env.BORDER_COLLIE_NO_PET = '1';
     try {
-      writeProtocol(workdir, protocol(['**']));
+      writePreference(workdir, { purpose: 'Documentation work.' });
+      process.env.BORDER_COLLIE_JUDGE_ROOT = path.join(workdir, 'no-judge');
       const registered = {};
       assert.equal(pluginModule.default.id, 'border-collie');
       const cleanup = await pluginModule.default.setup({
@@ -285,16 +286,20 @@ test('OpenCode V2 applies policy to the live tool input', async () => {
           id: 'call-1',
           input: { path: '.opencode/protocol.json', update: true },
         }),
-        /protected path/i,
+        /Decided by: folder boundary/i,
       );
-      await registered['execute.before']({
-        tool: 'read',
-        sessionID: 'session-v2',
-        callID: 'call-2',
-        input: { path: 'README.md' },
-      });
+      await assert.rejects(
+        registered['execute.before']({
+          tool: 'read',
+          sessionID: 'session-v2',
+          callID: 'call-2',
+          input: { path: 'README.md' },
+        }),
+        /judge_unavailable/i,
+      );
       cleanup();
     } finally {
+      delete process.env.BORDER_COLLIE_JUDGE_ROOT;
       if (previous === undefined) delete process.env.BORDER_COLLIE_NO_PET;
       else process.env.BORDER_COLLIE_NO_PET = previous;
     }
