@@ -6,7 +6,7 @@ const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
 const test = require('node:test');
-const { createNeedleJudge } = require('../../guard/lib/judge');
+const childProcess = require('node:child_process');
 const { platformKey } = require('../../guard/lib/judge-artifacts');
 const { DEFAULT_PREFERENCE } = require('../../guard/lib/preference');
 const { proposedCall } = require('../../guard/lib/toolcalls');
@@ -19,8 +19,13 @@ test('native evaluation can pin workers without changing default runtime argumen
   const recorded = path.join(root, 'arguments.json');
   const runner = path.join(directory, 'needle');
   const weights = path.join(directory, 'needle3.cact');
-  fs.writeFileSync(runner, '#!/usr/bin/env node\n' + `require('node:fs').writeFileSync(${JSON.stringify(recorded)}, JSON.stringify(process.argv.slice(2))); process.stdout.write(JSON.stringify({ success: true, function_calls: [{ name: 'allow_call', arguments: {} }] }));\n`);
-  fs.chmodSync(runner, 0o755);
+  fs.writeFileSync(runner, `require('node:fs').writeFileSync(${JSON.stringify(recorded)}, JSON.stringify(process.argv.slice(2))); process.stdout.write(JSON.stringify({ success: true, function_calls: [{ name: 'allow_call', arguments: {} }] }));\n`);
+  const spawn = childProcess.spawn;
+  t.mock.method(childProcess, 'spawn', (executable, args, options) => {
+    assert.equal(executable, runner);
+    return spawn(process.execPath, [executable, ...args], options);
+  });
+  const { createNeedleJudge } = require('../../guard/lib/judge');
   fs.writeFileSync(weights, 'test weights');
   const artifact = (file) => ({ path: path.basename(file), size: fs.statSync(file).size, sha256: crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex') });
   const manifest = { revision: 'test-workers', weights: artifact(weights), runners: { [platformKey()]: artifact(runner) } };
