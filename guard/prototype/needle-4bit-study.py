@@ -50,7 +50,7 @@ def archive_audit(path):
 
 def load_plan(directory):
     plan = json.loads((directory / 'study-plan.json').read_text())
-    for name, expected in plan['hashes'].items():
+    for name, expected in {**plan['hashes'], **plan.get('wrapperHashes', {})}.items():
         if digest(directory / name) != expected:
             raise RuntimeError('Frozen data changed: ' + name)
     return plan
@@ -110,7 +110,8 @@ def train(directory, index):
             if digest(destination / 'adapter.safetensors') != prior['adapterSha256'] or archive_audit(destination / 'candidate.cact') != prior['archiveAudit']:
                 raise RuntimeError('Completed model changed')
             return
-    config = plan['training']
+    config = {**plan['training'], **setting.get('training', {})}
+    record['trainingConfiguration'] = config
     record = {**setting, 'status': 'running', 'slurmJobId': os.environ['SLURM_JOB_ID'], 'host': socket.gethostname(), 'trainerSourceSha256': plan['officialTrainerSourceSha256'], 'wrapperSha256': digest(Path(__file__)), 'checkpointSha256': digest(checkpoint), 'studyPlanSha256': digest(directory / 'study-plan.json'), 'packages': {name: importlib.metadata.version(name) for name in ['cactus-needle', 'jax', 'jaxlib', 'numpy', 'optax', 'flax', 'safetensors']}, 'commands': []}
     save(record_path, record)
     (destination / 'nvidia-smi.txt').write_text(subprocess.check_output(['nvidia-smi'], text=True))
@@ -123,8 +124,10 @@ def train(directory, index):
             write_adapter(str(destination / 'adapter.safetensors'), {'lora': {'/'.join(key): {name: np.asarray(value) for name, value in matrices.items()} for key, matrices in adapter.items()}, 'scale': config['loraAlpha'] / config['loraRank'], 'base': str(checkpoint), 'rank': config['loraRank'], 'seed': setting['seed']})
             record.update({'optimizerSteps': 0, 'zeroUpdateVerified': True, 'trainingSeconds': 0})
         else:
-            training = rows(directory / f'train-{setting["size"]}.jsonl')
-            validation = rows(directory / 'validation.jsonl')
+            training_file = setting.get('trainingFile', f'train-{setting["size"]}.jsonl')
+            validation_file = setting.get('validationFile', 'validation.jsonl')
+            training = rows(directory / training_file)
+            validation = rows(directory / validation_file)
             permutation = finetune._training_rng(setting['seed']).permutation(len(training) + len(validation))
             arranged = [None] * len(permutation)
             for position, example in zip(permutation, validation + training):
@@ -141,12 +144,13 @@ def train(directory, index):
             if max(lengths) > config['maxLength']:
                 raise RuntimeError('Training evidence would be truncated')
             padded = finetune.fit_max_len(str(input_path), tokenizer, config['maxLength'])
-            if padded != plan['expectedPaddedLength']:
+            expected_padded = setting.get('expectedPaddedLength', plan.get('expectedPaddedLength'))
+            if expected_padded is not None and padded != expected_padded:
                 raise RuntimeError('Training shapes must match across all sample counts')
             if math.ceil(len(training) / config['batchSize']) * setting['epochs'] != setting['updates']:
                 raise RuntimeError('Optimizer update budget is not matched')
             command = ['needle', 'finetune', str(input_path), '--checkpoint', str(checkpoint), '--epochs', str(setting['epochs']), '--batch-size', str(config['batchSize']), '--lr', str(config['learningRate']), '--lora-rank', str(config['loraRank']), '--lora-alpha', str(config['loraAlpha']), '--max-len', str(config['maxLength']), '--val-split', repr(fraction), '--seed', str(setting['seed']), '--checkpoint-dir', str(destination), '--out', str(destination / 'adapter.safetensors')]
-            record.update({'trainCount': len(training), 'validationCount': len(validation), 'maximumTokenLength': max(lengths), 'paddedLength': padded, 'inputSha256': digest(input_path), 'splitVerification': {'validationIndices': [int(i) for i in permutation[:len(validation)]], 'trainingIndices': [int(i) for i in permutation[len(validation):]], 'trainingSourceSha256': plan['hashes'][f'train-{setting["size"]}.jsonl'], 'validationSourceSha256': plan['hashes']['validation.jsonl']}})
+            record.update({'trainCount': len(training), 'validationCount': len(validation), 'maximumTokenLength': max(lengths), 'paddedLength': padded, 'inputSha256': digest(input_path), 'splitVerification': {'validationIndices': [int(i) for i in permutation[:len(validation)]], 'trainingIndices': [int(i) for i in permutation[len(validation):]], 'trainingSourceSha256': plan['hashes'][training_file], 'validationSourceSha256': plan['hashes'][validation_file]}})
             record['commands'].append(command)
             save(record_path, record)
             epochs, seconds = command_log(command, destination)
@@ -198,7 +202,7 @@ def evaluate(directory, index, limit=None):
         if digest(local_weights) != record['archiveAudit']['weightsSha256']:
             raise RuntimeError('Local weight copy changed')
         try:
-            for split in ['validation', 'heldOut']:
+            for split in plan.get('evaluationSplits', ['validation', 'heldOut']):
                 examples = rows(directory / f'{split}-requests.jsonl')
                 for example in examples[:limit] if limit else examples:
                     tools = local / 'tools.json'
