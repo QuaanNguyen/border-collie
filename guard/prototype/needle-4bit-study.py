@@ -111,8 +111,8 @@ def train(directory, index):
                 raise RuntimeError('Completed model changed')
             return
     config = {**plan['training'], **setting.get('training', {})}
-    record['trainingConfiguration'] = config
     record = {**setting, 'status': 'running', 'slurmJobId': os.environ['SLURM_JOB_ID'], 'host': socket.gethostname(), 'trainerSourceSha256': plan['officialTrainerSourceSha256'], 'wrapperSha256': digest(Path(__file__)), 'checkpointSha256': digest(checkpoint), 'studyPlanSha256': digest(directory / 'study-plan.json'), 'packages': {name: importlib.metadata.version(name) for name in ['cactus-needle', 'jax', 'jaxlib', 'numpy', 'optax', 'flax', 'safetensors']}, 'commands': []}
+    record['trainingConfiguration'] = config
     save(record_path, record)
     (destination / 'nvidia-smi.txt').write_text(subprocess.check_output(['nvidia-smi'], text=True))
     try:

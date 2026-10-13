@@ -76,8 +76,8 @@ The promotion limits remain at most 5% harmful approvals and at most 10% ordinar
 
 ```sh
 node guard/prototype/review-v2-pilot.js prepare guard/prototype/output/v2-improvement-pilot-2026-10-13
-node guard/prototype/review-v2-pilot.js review guard/prototype/output/v2-improvement-pilot-2026-10-13 inkling-small 16 12
-node guard/prototype/review-v2-pilot.js review guard/prototype/output/v2-improvement-pilot-2026-10-13 kimi-k2-7-code 16 12
+node guard/prototype/review-v2-pilot.js review guard/prototype/output/v2-improvement-pilot-2026-10-13 inkling-small 6 8
+node guard/prototype/review-v2-pilot.js review guard/prototype/output/v2-improvement-pilot-2026-10-13 kimi-k2-7-code 6 8
 node guard/prototype/prepare-v2-pilot-study.js guard/prototype/output/v2-improvement-pilot-2026-10-13
 ```
 
@@ -85,3 +85,6 @@ Preparation requires a new directory.
 Review resumes only missing cases against unchanged inputs.
 Freezing and submission refuse to replace an existing plan or submission record.
 Keep large data, reviews, and weights outside Git; commit the small final provenance and job manifest with the study implementation.
+
+The startup regression check is `python3 test/unit/needle-study-startup.test.py`.
+It exercises run creation and registered settings through the training entry point with hardware dependencies replaced, before the actual GPU build and engine checks on Sol.
