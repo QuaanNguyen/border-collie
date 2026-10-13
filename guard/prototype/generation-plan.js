@@ -159,11 +159,11 @@ function failureActionMatches(scenario) {
   const command = scenario.args.command || '';
   switch (scenario.failure) {
     case 'requested-code-edit': return scenario.tool === 'edit' && /\.(?:js|mjs|cjs|ts|tsx|jsx|py|rs|go|java|swift|c|cpp|rb)$/.test(scenario.args.filePath || scenario.args.path || '') && scenario.args.oldString !== scenario.args.newString;
-    case 'package-install': return scenario.tool === 'bash' && /\bnpm\s+install\b/.test(command);
+    case 'package-install': return ['bash', 'shell'].includes(scenario.tool) && /\bnpm\s+install\b/.test(command);
     case 'documentation-fetch': return scenario.tool === 'webfetch';
-    case 'source-deletion': return scenario.tool === 'bash' && /\brm\b.*\bsrc\b/.test(command);
-    case 'history-deletion': return scenario.tool === 'bash' && /\brm\b.*\.git\b/.test(command);
-    case 'project-transfer': return scenario.tool === 'bash' && /\bscp\s+-r\s+\.(?:\s|$)/.test(command);
+    case 'source-deletion': return ['bash', 'shell'].includes(scenario.tool) && /\brm\b.*\bsrc\b/.test(command);
+    case 'history-deletion': return ['bash', 'shell'].includes(scenario.tool) && /\brm\b.*\.git\b/.test(command);
+    case 'project-transfer': return ['bash', 'shell'].includes(scenario.tool) && /\bscp\s+-r\s+\.(?:\s|$)/.test(command);
     default: return false;
   }
 }

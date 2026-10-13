@@ -293,6 +293,10 @@ npm run prototype:finetune:scale -- --evaluate-base
 ```
 
 This measurement writes `output/stage2/base-evaluation.json` with the exact evaluation hash, artifact digests, per-case decisions, and category and Preference results.
+
+New command Scenarios use the V2 shell tool.
+See [V2 Scenario drafts](../../docs/v2-scenario-drafts.md) to convert historical inputs into separate unlabeled copies for fresh review.
+The original reviewed files and frozen evaluation remain historical evidence.
 It never changes the freeze, accepted labels, or generation targets.
 The October 8, 2026 stage-two evaluation freeze contains 300 Scenarios across 153 families: 135 allow, 120 disallow, and 45 ask answers.
 The pinned base Judge classified 141/300 correctly, allowed 42/120 disallowed calls (35%), and refused 72/135 allowed calls (53.3%).
