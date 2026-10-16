@@ -96,7 +96,7 @@ async function review(directory, model, concurrency = 4, batchSize = 8, options 
           break;
         } catch (error) {
           record.errors.push({ ids: batch.map((row) => row.id), error: safeError(error, conn), attempt });
-          if (/ENOTFOUND|ETIMEDOUT|ECONNREFUSED|ECONNRESET|aborted|^429\b|^5\d\d\b/i.test(safeError(error, conn))) {
+          if (/ENOTFOUND|ETIMEDOUT|ECONNREFUSED|ECONNRESET|aborted|^[45]\d\d\b/i.test(safeError(error, conn))) {
             connectionFailure = safeError(error, conn);
             break;
           }
