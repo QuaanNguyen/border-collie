@@ -5,7 +5,7 @@ const os = require('node:os');
 const path = require('node:path');
 const { PassThrough } = require('node:stream');
 const { EventBus } = require('../../events');
-const { createSession } = require('../../guard/lib/session');
+const { createSession } = require('../../bordercollie/lib/session');
 const { readLiveEvents } = require('../../pet/live-events');
 
 const ROOT = path.resolve(__dirname, '..', '..');
@@ -21,7 +21,7 @@ async function run(name, test) {
 }
 
 async function main() {
-  const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'border-collie-session-'));
+  const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'bordercollie-session-'));
   try {
     await run('a new Pet cannot receive events from an ended plugin session', async () => {
       const previousPipe = new PassThrough();
@@ -50,7 +50,7 @@ async function main() {
       fs.writeFileSync(path.join(tempDir, 'output.txt'), 'ready\n');
       const session = createSession({
         workdir: tempDir,
-        protocol: {
+        preference: {
           task: 'Produce the output',
           done_criteria: [{
             id: 'output',
@@ -70,7 +70,7 @@ async function main() {
     });
 
     await run('a generic completion claim without configured evidence asks for human review', () => {
-      const session = createSession({ workdir: tempDir, protocol: { task: 'Reply to the user' } });
+      const session = createSession({ workdir: tempDir, preference: {} });
       const result = session.handle({
         kind: 'assistant',
         text: 'The work is done.',

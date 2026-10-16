@@ -6,8 +6,8 @@ Accepted.
 
 ## Context
 
-Pet needs a transparent cross-platform window, visible-pixel hit testing, pointer interaction, a global shortcut, and a shared lifecycle across OpenCode sessions.
-Guard does not need a desktop runtime.
+Pet needs a transparent cross-platform window, visible-pixel hit testing, pointer interaction, a global shortcut, and a lifecycle tied to its OpenCode plugin input.
+bordercollie does not need a desktop runtime.
 Electron 44.3.0 documents a macOS `panel` window type that applies the non-activating panel mask.
 Repeated operating-system input tests still showed intermittent activation and focus loss with Electron's panel implementation.
 The upstream reports describe the same limitation and do not identify a supported Electron configuration that provides a keyboard-capable, non-activating macOS panel.
@@ -16,7 +16,7 @@ The upstream reports describe the same limitation and do not identify a supporte
 
 The production macOS Pet uses a small AppKit host built around a true non-activating `NSPanel` and the system `WKWebView`.
 It retains the shared HTML, CSS, JavaScript, animation assets, event contract, and visible-pixel hit regions.
-The host handles window dragging, global shortcuts, transient layout, and shared live-session ownership at the native boundary.
+The host handles window dragging, global shortcuts, transient layout, and live input at the native boundary.
 The plugin owns the Pet process and sends events through its private input pipe.
 Position, size, events, and active sessions remain in memory and are discarded when their processes exit.
 Electron remains locked for Windows, Linux, and development mode.
@@ -27,7 +27,7 @@ The default macOS installation compiles the native host and does not download El
 Production clicks and drags on macOS preserve the previously active application.
 The macOS install is smaller and uses the WebKit framework already provided by the operating system.
 The project maintains a thin platform host while continuing to share the Pet renderer and behavior.
-Native macOS acceptance tests exercise launch, transparent pass-through, visible-pixel clicks, dragging, controls, shortcuts, and shared ownership with real operating-system input.
+Native macOS acceptance tests exercise launch, transparent pass-through, visible-pixel clicks, dragging, controls, shortcuts, and independent session lifecycle with real operating-system input.
 Windows and Linux retain Electron until equivalent platform acceptance tests justify another host.
 
 ## References

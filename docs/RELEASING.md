@@ -1,10 +1,10 @@
-# Releasing Border Collie
+# Releasing bordercollie
 
-Border Collie's first supported public distribution should be one npm package and one matching GitHub Release.
+bordercollie's first supported public distribution should be one npm package and one matching GitHub Release.
 The npm registry also serves npm, pnpm, Yarn, and Bun, so those clients do not need separate packages.
 OpenCode is the only supported adapter for the first release; other agent and editor integrations should be designed and tested as adapters before they are advertised as supported.
 
-The root package is configured for the public scoped `@quaannguyen/border-collie@0.1.2` package.
+The root package is configured for the public scoped `@quaannguyen/bordercollie@0.1.2` package.
 The npm package name and repository metadata are recorded in `package.json`.
 The remaining public-release gates are npm ownership and trusted-publisher configuration, protected-branch controls, release-candidate validation, and clean installation checks.
 
@@ -46,11 +46,11 @@ The tag-triggered publish job requires the `npm` environment, refuses to publish
 
 ## Test layers
 
-1. **Unit tests** call deterministic Guard, Event stream, installer, and Pet helpers with fake inputs using Node's built-in `node:test` runner.
-2. **Integration tests** compose Border Collie modules across the OpenCode adapter, installer, owner policy, project policy, and package CLI boundaries.
+1. **Unit tests** call deterministic bordercollie, Event stream, installer, and Pet helpers with fake inputs using Node's built-in `node:test` runner.
+2. **Integration tests** compose bordercollie modules across the OpenCode adapter, installer, Judge retrieval, `bordercollie migrate`, and package CLI boundaries.
 3. **Package tests** run `npm pack` and inspect the exact tarball file list.
 4. **E2E tests** run OpenCode, external processes, the Pet host, native macOS behavior, renderer startup, and desktop window behavior.
-5. **Release smoke tests** install the exact published version into a clean environment and exercise `border-collie install`.
+5. **Release smoke tests** install the exact published version into a clean environment and exercise `bordercollie install`.
 
 Package/plugin code is tested the same way as other code: keep most logic in ordinary exported functions, unit-test those functions, then use a small number of boundary tests for OpenCode and the desktop host.
 

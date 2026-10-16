@@ -20,9 +20,9 @@ function run(command, args, cwd = ROOT) {
 }
 
 run(npm, ['test'])
-run(process.execPath, ['--test', 'test/guard/*.test.js', 'test/plugin/*.test.mjs'])
+run(process.execPath, ['--test', 'test/bordercollie/*.test.js', 'test/plugin/*.test.mjs'])
 
-if (process.env.BORDER_COLLIE_SKIP_NATIVE_TESTS !== '1') {
+if (process.env.BORDERCOLLIE_SKIP_NATIVE_TESTS !== '1') {
   if (!electronMatchesLock()) {
     run(npm, ['ci'], PET_DIR)
   }
@@ -31,4 +31,4 @@ if (process.env.BORDER_COLLIE_SKIP_NATIVE_TESTS !== '1') {
   run(npm, ['run', 'test:e2e:skip-native'])
 }
 
-process.stdout.write('complete Border Collie test suite verified\n')
+process.stdout.write('complete bordercollie test suite verified\n')

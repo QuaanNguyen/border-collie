@@ -10,7 +10,7 @@ function buildNativePet(petDir, output = path.join(petDir, 'native', 'pet-host')
   const source = path.join(petDir, 'native', 'PetHost.swift')
   if (!fs.existsSync(source)) throw new Error('missing native Pet source at ' + source)
   fs.mkdirSync(path.dirname(output), { recursive: true })
-  const moduleCache = fs.mkdtempSync(path.join(os.tmpdir(), 'border-collie-swift-module-cache-'))
+  const moduleCache = fs.mkdtempSync(path.join(os.tmpdir(), 'bordercollie-swift-module-cache-'))
   let result
   try {
     result = spawnSync('/usr/bin/xcrun', [

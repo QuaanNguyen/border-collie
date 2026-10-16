@@ -7,7 +7,7 @@ const bubble = document.getElementById("bubble");
 const bubbleText = document.getElementById("bubble-text");
 const bubbleSub = document.getElementById("bubble-sub");
 const motionPreference = window.matchMedia?.("(prefers-reduced-motion: reduce)");
-const animationPlayer = window.BorderCollieAnimation.createAnimationPlayer({
+const animationPlayer = window.BordercollieAnimation.createAnimationPlayer({
   target: animation,
   reducedMotion: motionPreference?.matches,
 });
@@ -22,9 +22,9 @@ function reportHitRegions() {
       return { x: rect.x, y: rect.y, width: rect.width, height: rect.height };
     }),
   );
-  const dragRegions = window.BorderCollieHitRegions.imageHitRegions(animation);
+  const dragRegions = window.BordercollieHitRegions.imageHitRegions(animation);
   regions.push(...dragRegions);
-  window.borderCollie.setHitRegions(regions, dragRegions);
+  window.bordercollie.setHitRegions(regions, dragRegions);
 }
 
 let hitRegionFrame = null;
@@ -217,7 +217,7 @@ function say(line, sub, ms = 5200, denial = false) {
   }, ms);
 }
 
-const scheduler = window.BorderCollieScheduler.createReactionScheduler({
+const scheduler = window.BordercollieScheduler.createReactionScheduler({
   onShow(e) {
     setState(e.petState);
     const words = speech(e);
@@ -233,7 +233,7 @@ const scheduler = window.BorderCollieScheduler.createReactionScheduler({
 
 function handle(e) {
   if (e.type === "control" && e.detail?.action === "size") {
-    window.borderCollie.setScale(e.detail.scale);
+    window.bordercollie.setScale(e.detail.scale);
     return;
   }
   nudgeAwake();
@@ -266,30 +266,30 @@ pet.addEventListener("mouseleave", () => {
 });
 
 let pointerDrag = null;
-if (window.borderCollie.startDrag && window.borderCollie.dragTo && window.borderCollie.endDrag) {
+if (window.bordercollie.startDrag && window.bordercollie.dragTo && window.bordercollie.endDrag) {
   const endPointerDrag = (event) => {
     if (!pointerDrag || pointerDrag.id !== event.pointerId) return;
     pointerDrag = null;
-    window.borderCollie.endDrag();
+    window.bordercollie.endDrag();
     if (pet.hasPointerCapture(event.pointerId)) pet.releasePointerCapture(event.pointerId);
   };
   pet.addEventListener("pointerdown", (event) => {
     if (event.button !== 0) return;
     pointerDrag = { id: event.pointerId };
-    window.borderCollie.startDrag(event.screenX, event.screenY);
+    window.bordercollie.startDrag(event.screenX, event.screenY);
     pet.setPointerCapture(event.pointerId);
   });
   pet.addEventListener("pointermove", (event) => {
     if (!pointerDrag || pointerDrag.id !== event.pointerId) return;
     if (!(event.buttons & 1)) return endPointerDrag(event);
-    window.borderCollie.dragTo(event.screenX, event.screenY);
+    window.bordercollie.dragTo(event.screenX, event.screenY);
   });
   pet.addEventListener("pointerup", endPointerDrag);
   pet.addEventListener("pointercancel", endPointerDrag);
 }
 
-if (window.borderCollie.onDrag) {
-  window.borderCollie.onDrag((drag) => {
+if (window.bordercollie.onDrag) {
+  window.bordercollie.onDrag((drag) => {
     if (!drag || typeof drag !== "object") return;
     if (drag.phase === "end") {
       if (interaction === "drag") setInteraction(null);
@@ -327,26 +327,26 @@ function runDev() {
     });
   }
   const events = document.getElementById("dev-events");
-  if (events && window.borderCollie.devScenarios && window.borderCollie.triggerDevEvent) {
-    window.borderCollie.devScenarios().then((scenarios) => {
+  if (events && window.bordercollie.devScenarios && window.bordercollie.triggerDevEvent) {
+    window.bordercollie.devScenarios().then((scenarios) => {
       for (const scenario of scenarios) {
         const button = document.createElement("button");
         button.type = "button";
         button.textContent = scenario.label;
-        button.addEventListener("click", () => window.borderCollie.triggerDevEvent(scenario.id));
+        button.addEventListener("click", () => window.bordercollie.triggerDevEvent(scenario.id));
         events.append(button);
       }
     });
   }
 }
 
-if (window.borderCollie.onScaled) {
-  window.borderCollie.onScaled((pct) => {
+if (window.bordercollie.onScaled) {
+  window.bordercollie.onScaled((pct) => {
     say(`${pct}%`, `${toggleKey} to hide`, 1600);
   });
 }
 
-window.__borderCollie = {
+window.__bordercollie = {
   setState,
   setInteraction,
   say,
@@ -366,18 +366,18 @@ window.__borderCollie = {
 
 setState("offline");
 
-window.borderCollie.config().then((cfg) => {
+window.bordercollie.config().then((cfg) => {
   animationPlayer.replaceTracks(cfg.animations).then(paint).catch((error) => {
-    console.error(`[border-collie] ${error.message}`);
+    console.error(`[bordercollie] ${error.message}`);
   });
   if (cfg.toggleKey) toggleKey = cfg.toggleKey;
   if (cfg.dev) {
-    window.borderCollie.onEvent((e) => handle(e));
+    window.bordercollie.onEvent((e) => handle(e));
     return runDev();
   }
   if (cfg.live) {
     connected = true;
-    window.borderCollie.onEvent((e) => handle(e));
+    window.bordercollie.onEvent((e) => handle(e));
     return;
   }
   connected = false;

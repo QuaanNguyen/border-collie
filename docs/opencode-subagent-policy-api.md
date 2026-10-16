@@ -20,9 +20,9 @@ OpenCode itself does propagate a limited native permission subset when it create
 
 The current implementation carries the parent's deny rules and `external_directory` rules into the child session, but intentionally leaves the child agent's own permissions to determine its capabilities.
 
-Consequently, a plugin cannot safely implement issue #15 by attaching a per-child Border Collie policy envelope through a documented dispatch API.
+Consequently, a plugin cannot safely implement issue #15 by attaching a per-child bordercollie policy envelope through a documented dispatch API.
 
-A plugin can still enforce a policy independently by throwing from `tool.execute.before` for every relevant tool call, including calls from child sessions, but that is a plugin-owned guard rather than inherited child-session authority.
+A plugin can still enforce a policy independently by throwing from `tool.execute.before` for every relevant tool call, including calls from child sessions, but that is a plugin-owned bordercollie rather than inherited child-session authority.
 
 ## Official evidence
 
@@ -68,13 +68,13 @@ Its source explicitly states that parent-agent restrictions govern only that par
 
 Finally, the generic built-in and MCP tool wrappers trigger the same before hook with the executing session ID before invoking each tool.
 
-This is the supported interception point for a plugin-owned, fail-closed guard that applies to both parent and child tool calls.
+This is the supported interception point for a plugin-owned, fail-closed bordercollie that applies to both parent and child tool calls.
 
 [Built-in and MCP tool hook invocation](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/session/tools.ts#L1559-L1577)
 
 ## Implementation implication
 
-Keep Border Collie's current fail-closed denial of subagent dispatch unless the project deliberately adopts a design that guards every child tool call using the same resolved Border Collie policy.
+Keep bordercollie's current fail-closed denial of subagent dispatch unless the project deliberately adopts a design that checks every child tool call using the same resolved bordercollie policy.
 
 Do not treat prompt injection as policy inheritance, and do not rely on a fabricated `policy` argument or an undocumented child-session mutation API.
 

@@ -15,7 +15,7 @@ if (!['npm', 'pnpm', 'yarn', 'bun'].includes(client)) {
   process.exit(2);
 }
 
-const workspace = fs.mkdtempSync(path.join(os.tmpdir(), 'border-collie-client-'));
+const workspace = fs.mkdtempSync(path.join(os.tmpdir(), 'bordercollie-client-'));
 const packDir = path.join(workspace, 'pack');
 const installDir = path.join(workspace, 'install');
 
@@ -51,9 +51,11 @@ try {
   if (client === 'bun') run('bun', ['add', tarball], installDir);
 
   const packageDir = path.join(installDir, 'node_modules', ...packageName.split('/'));
-  assert.ok(fs.existsSync(path.join(packageDir, 'scripts', 'border-collie.js')));
-  assert.ok(fs.existsSync(path.join(packageDir, 'plugin', 'border-collie.js')));
-  process.stdout.write(`ok - ${client} installs the packed Border Collie package\n`);
+  assert.ok(fs.existsSync(path.join(packageDir, 'scripts', 'bordercollie.js')));
+  assert.ok(fs.existsSync(path.join(packageDir, 'plugin', 'bordercollie.js')));
+  const installedManifest = JSON.parse(fs.readFileSync(path.join(packageDir, 'package.json'), 'utf8'));
+  assert.deepEqual(installedManifest.bin, { bordercollie: 'scripts/bordercollie.js' });
+  process.stdout.write(`ok - ${client} installs the packed bordercollie package\n`);
 } finally {
   fs.rmSync(workspace, { recursive: true, force: true });
 }
