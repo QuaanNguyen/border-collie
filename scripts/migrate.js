@@ -3,23 +3,24 @@
 const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
-const { CONFIG_SCHEMA_VERSION, PET_SCALES, configPath, defaultConfigRoot, writeConfig } = require('../guard/lib/config');
+const { CONFIG_SCHEMA_VERSION, PET_SCALES, configPath, defaultConfigRoot, writeConfig } = require('../bordercollie/lib/config');
 const {
   DEFAULT_PREFERENCE,
+  LEGACY_PREFERENCE_RELATIVE_PATH,
   preferencePath,
   readJsonObject,
   retiredProtocolPaths,
   validatePreference,
-} = require('../guard/lib/preference');
+} = require('../bordercollie/lib/preference');
 
 function retiredOwnerPolicyPath() {
-  const dir = process.env.BORDER_COLLIE_OWNER_CONFIG || path.join(os.homedir(), '.config', 'opencode', 'border-collie');
+  const dir = process.env.BORDERCOLLIE_OWNER_CONFIG || path.join(os.homedir(), '.config', 'opencode', 'bordercollie');
   return path.join(dir, 'policy.json');
 }
 
 function readOrThrow(file, label) {
   const source = readJsonObject(file);
-  if (source.error) throw new Error(`${label} at ${file} is unreadable (${source.error.message}). Fix or remove it, then run bdc migrate again. Nothing was changed.`);
+  if (source.error) throw new Error(`${label} at ${file} is unreadable (${source.error.message}). Fix or remove it, then run bordercollie migrate again. Nothing was changed.`);
   return source;
 }
 
@@ -46,20 +47,24 @@ function migrate(opts = {}) {
 
   const preferenceFile = preferencePath(workdir);
   const preference = readOrThrow(preferenceFile, 'The Preference');
-  if (preference.exists) {
+  const legacyPreferenceFile = path.join(workdir, LEGACY_PREFERENCE_RELATIVE_PATH);
+  const legacyPreference = readOrThrow(legacyPreferenceFile, 'The previous Preference');
+  if (preference.exists && legacyPreference.exists && JSON.stringify(preference.value) !== JSON.stringify(legacyPreference.value)) throw new Error('Both Preference locations exist with different instructions. Resolve them before migration. Nothing was changed.');
+  const sourcePreference = preference.exists ? preference : legacyPreference;
+  if (sourcePreference.exists) {
     try {
-      validatePreference(preference.value);
+      validatePreference(sourcePreference.value);
     } catch (error) {
       throw new Error(`The Preference at ${preferenceFile} is invalid (${error.message}). Nothing was changed.`);
     }
   }
   const protocols = retiredProtocolPaths(workdir).map((file) => ({ file, source: readOrThrow(file, 'The retired Protocol') }));
   const doneCriteria = retiredDoneCriteria(protocols);
-  const config = readOrThrow(configPath(configRoot), 'The Border Collie configuration');
+  const config = readOrThrow(configPath(configRoot), 'The bordercollie configuration');
 
   const report = { preferenceFile, wrotePreference: false, carriedDoneCriteria: 0, removed: [], configFile: null };
 
-  const current = preference.exists ? preference.value : { ...DEFAULT_PREFERENCE };
+  const current = sourcePreference.exists ? sourcePreference.value : { ...DEFAULT_PREFERENCE };
   const next = { ...current };
   if (!next.done_criteria?.length && doneCriteria.length) {
     next.done_criteria = doneCriteria;
@@ -68,6 +73,10 @@ function migrate(opts = {}) {
   if (!preference.exists || report.carriedDoneCriteria) {
     writeJson(preferenceFile, next);
     report.wrotePreference = true;
+  }
+  if (legacyPreference.exists) {
+    fs.rmSync(legacyPreferenceFile);
+    report.removed.push(legacyPreferenceFile);
   }
 
   for (const { file, source } of protocols) {

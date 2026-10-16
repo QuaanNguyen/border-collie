@@ -3,15 +3,15 @@
 const crypto = require('node:crypto');
 const fs = require('node:fs');
 const path = require('node:path');
-const { runtimeRequest } = require('../snapshot/guard/prototype/finetune-pipeline');
-const { proposedCall } = require('../snapshot/guard/lib/toolcalls');
+const { runtimeRequest } = require('../snapshot/bordercollie/prototype/finetune-pipeline');
+const { proposedCall } = require('../snapshot/bordercollie/lib/toolcalls');
 
 const workspace = path.resolve(__dirname, '..');
 const snapshot = path.join(workspace, 'snapshot');
 const fingerprint = (text) => crypto.createHash('sha256').update(text).digest('hex');
 const readRows = (file) => fs.readFileSync(file, 'utf8').split('\n').filter(Boolean).map(JSON.parse);
-const developmentFile = path.join(snapshot, 'guard/prototype/data/stage2/accepted.jsonl');
-const heldOutFile = path.join(snapshot, 'guard/prototype/data/stage2/held-out.jsonl');
+const developmentFile = path.join(snapshot, 'bordercollie/prototype/data/stage2/accepted.jsonl');
+const heldOutFile = path.join(snapshot, 'bordercollie/prototype/data/stage2/held-out.jsonl');
 const development = readRows(developmentFile);
 const heldOut = readRows(heldOutFile);
 const domains = [...new Set([...development, ...heldOut].map((row) => row.family.split(':').at(-1)))];
@@ -85,7 +85,7 @@ function summary(rows) {
 }
 
 function originalExperiments() {
-  const base = path.join(snapshot, 'guard/prototype/output/needle-official-ladder/mac-runtime');
+  const base = path.join(snapshot, 'bordercollie/prototype/output/needle-official-ladder/mac-runtime');
   const reports = fs.readdirSync(base, { withFileTypes: true }).filter((entry) => entry.isDirectory()).map((entry) => path.join(base, entry.name, `${entry.name}-heldOut.json`)).filter(fs.existsSync);
   return reports.map((file) => {
     const report = JSON.parse(fs.readFileSync(file, 'utf8'));
@@ -131,8 +131,8 @@ function main() {
   const developmentActions = new Set(development.map(normalizedAction));
   const developmentFamilies = new Set(development.map((row) => row.family));
   const validationFamilies = new Set(development.filter((row) => row.split === 'validation').map((row) => row.family));
-  const originalPoolFile = path.join(snapshot, 'guard/prototype/output/stage2/development/accepted.jsonl');
-  const frozenStudyFile = path.join(snapshot, 'guard/prototype/output/needle-4bit-balanced-updates/study-plan.json');
+  const originalPoolFile = path.join(snapshot, 'bordercollie/prototype/output/stage2/development/accepted.jsonl');
+  const frozenStudyFile = path.join(snapshot, 'bordercollie/prototype/output/needle-4bit-balanced-updates/study-plan.json');
   const frozenStudy = JSON.parse(fs.readFileSync(frozenStudyFile, 'utf8'));
   const inputs = new Map();
   for (const row of [...development, ...heldOut]) {

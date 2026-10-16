@@ -346,10 +346,10 @@ final class PetHost: NSObject, WKNavigationDelegate {
           const config = JSON.parse(atob('\(config)'))
           const pendingEvents = []
           let eventHandler = null, scaledHandler = () => {}, dragHandler = () => {}
-          window.__borderCollieEvent = event => eventHandler ? eventHandler(event) : pendingEvents.push(event)
-          window.__borderCollieScaled = value => scaledHandler(value)
-          window.__borderCollieDragged = event => dragHandler(event)
-          window.borderCollie = {
+          window.__bordercollieEvent = event => eventHandler ? eventHandler(event) : pendingEvents.push(event)
+          window.__bordercollieScaled = value => scaledHandler(value)
+          window.__bordercollieDragged = event => dragHandler(event)
+          window.bordercollie = {
             config: () => Promise.resolve(config),
             setHitRegions: (hit, drag) => window.webkit.messageHandlers.hitRegions.postMessage({ hit, drag }),
             setScale: value => window.webkit.messageHandlers.scaleSet.postMessage(value),
@@ -442,7 +442,7 @@ final class PetHost: NSObject, WKNavigationDelegate {
 
     private func deliverEvent(_ event: [String: Any]) {
         guard let encoded = try? base64JSON(event) else { return }
-        webView.evaluateJavaScript("window.__borderCollieEvent(JSON.parse(atob('\(encoded)')))" )
+        webView.evaluateJavaScript("window.__bordercollieEvent(JSON.parse(atob('\(encoded)')))" )
     }
 
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
@@ -454,7 +454,7 @@ final class PetHost: NSObject, WKNavigationDelegate {
     private func reportDrag(phase: String, deltaX: CGFloat) {
         let event: [String: Any] = ["phase": phase, "deltaX": deltaX]
         guard let encoded = try? base64JSON(event) else { return }
-        webView.evaluateJavaScript("window.__borderCollieDragged(JSON.parse(atob('\(encoded)')))")
+        webView.evaluateJavaScript("window.__bordercollieDragged(JSON.parse(atob('\(encoded)')))")
     }
 
     private func toggleVisible() {
@@ -469,7 +469,7 @@ final class PetHost: NSObject, WKNavigationDelegate {
         if next == scale { return }
         scale = next
         applyLayout()
-        webView.evaluateJavaScript("window.__borderCollieScaled(\(Int(round(scale * 100))))")
+        webView.evaluateJavaScript("window.__bordercollieScaled(\(Int(round(scale * 100))))")
     }
 
     private func applyLayout() {
@@ -527,7 +527,7 @@ private final class PetAppDelegate: NSObject, NSApplicationDelegate {
         do {
             host = try launch()
         } catch {
-            FileHandle.standardError.write(Data("[border-collie] \(error.localizedDescription)\n".utf8))
+            FileHandle.standardError.write(Data("[bordercollie] \(error.localizedDescription)\n".utf8))
             NSApp.terminate(nil)
         }
     }
@@ -554,7 +554,7 @@ struct PetHostMain {
             app.delegate = delegate
             app.run()
         } catch {
-            FileHandle.standardError.write(Data("[border-collie] \(error.localizedDescription)\n".utf8))
+            FileHandle.standardError.write(Data("[bordercollie] \(error.localizedDescription)\n".utf8))
             exit(1)
         }
     }

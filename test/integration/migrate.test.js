@@ -7,13 +7,13 @@ const path = require('node:path');
 const test = require('node:test');
 const { spawnSync } = require('node:child_process');
 
-const cli = path.resolve(__dirname, '..', '..', 'scripts', 'border-collie.js');
-const { DEFAULT_PREFERENCE } = require('../../guard/lib/preference');
+const cli = path.resolve(__dirname, '..', '..', 'scripts', 'bordercollie.js');
+const { DEFAULT_PREFERENCE } = require('../../bordercollie/lib/preference');
 
 const CRITERION = { id: 'parser-exists', checks: [{ type: 'file_exists', path: 'src/parser.js' }] };
 
 function withLayout(run) {
-  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'border-collie-migrate-'));
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'bordercollie-migrate-'));
   const layout = {
     root,
     project: path.join(root, 'project'),
@@ -41,13 +41,13 @@ function migrate(layout) {
   return spawnSync(process.execPath, [cli, 'migrate'], {
     cwd: layout.project,
     encoding: 'utf8',
-    env: { ...process.env, BORDER_COLLIE_CONFIG_ROOT: layout.configRoot, BORDER_COLLIE_OWNER_CONFIG: layout.ownerDir },
+    env: { ...process.env, BORDERCOLLIE_CONFIG_ROOT: layout.configRoot, BORDERCOLLIE_OWNER_CONFIG: layout.ownerDir },
   });
 }
 
 test('migrate carries done criteria into a new Preference and removes the retired files', () => {
   withLayout((layout) => {
-    const canonical = path.join(layout.project, '.border-collie', 'protocol.json');
+    const canonical = path.join(layout.project, '.bordercollie', 'protocol.json');
     const legacy = path.join(layout.project, '.opencode', 'protocol.json');
     write(canonical, { task: 'fix the parser', write_paths: ['src/**'], done_criteria: [CRITERION] });
     write(legacy, { read_paths: ['**'] });
@@ -63,7 +63,7 @@ test('migrate carries done criteria into a new Preference and removes the retire
     assert.equal(result.status, 0, result.stderr);
     assert.match(result.stdout, /with 1 done criteria/);
 
-    assert.deepEqual(read(path.join(layout.project, '.border-collie', 'preference.json')), { ...DEFAULT_PREFERENCE, done_criteria: [CRITERION] });
+    assert.deepEqual(read(path.join(layout.project, '.bordercollie', 'preference.json')), { ...DEFAULT_PREFERENCE, done_criteria: [CRITERION] });
     assert.equal(fs.existsSync(canonical), false);
     assert.equal(fs.existsSync(legacy), false);
     assert.deepEqual(read(path.join(layout.configRoot, 'config.json')), { schema_version: 3, pet: { scale: 1.35 } });
@@ -73,7 +73,7 @@ test('migrate carries done criteria into a new Preference and removes the retire
 
 test('migrate keeps an existing Preference and fills done criteria only when it has none', () => {
   withLayout((layout) => {
-    const preferenceFile = path.join(layout.project, '.border-collie', 'preference.json');
+    const preferenceFile = path.join(layout.project, '.bordercollie', 'preference.json');
     write(preferenceFile, { purpose: 'Docs only.' });
     write(path.join(layout.project, '.opencode', 'protocol.json'), { done_criteria: [CRITERION] });
 
@@ -81,17 +81,17 @@ test('migrate keeps an existing Preference and fills done criteria only when it 
     assert.deepEqual(read(preferenceFile), { purpose: 'Docs only.', done_criteria: [CRITERION] });
 
     write(preferenceFile, { purpose: 'Docs only.', done_criteria: [{ id: 'owner-written', checks: [] }] });
-    write(path.join(layout.project, '.border-collie', 'protocol.json'), { done_criteria: [CRITERION] });
+    write(path.join(layout.project, '.bordercollie', 'protocol.json'), { done_criteria: [CRITERION] });
     assert.equal(migrate(layout).status, 0);
     assert.deepEqual(read(preferenceFile).done_criteria, [{ id: 'owner-written', checks: [] }]);
-    assert.equal(fs.existsSync(path.join(layout.project, '.border-collie', 'protocol.json')), false);
+    assert.equal(fs.existsSync(path.join(layout.project, '.bordercollie', 'protocol.json')), false);
   });
 });
 
 test('migrate changes nothing when a file it reads is unreadable', () => {
   withLayout((layout) => {
-    const preferenceFile = path.join(layout.project, '.border-collie', 'preference.json');
-    const protocol = path.join(layout.project, '.border-collie', 'protocol.json');
+    const preferenceFile = path.join(layout.project, '.bordercollie', 'preference.json');
+    const protocol = path.join(layout.project, '.bordercollie', 'protocol.json');
     write(preferenceFile, '{ not json');
     write(protocol, { done_criteria: [CRITERION] });
 

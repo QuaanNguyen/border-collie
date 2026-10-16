@@ -47,7 +47,7 @@ const plan = {
     'The owner explicitly approves the proposed new Sol jobs after reviewing the concrete dataset and plan.',
   ],
   evaluation: {
-    runtime: 'The pinned macOS runner used by the real Guard, with its 15-second call limit, 128-token output limit and the same Verdict parser.',
+    runtime: 'The pinned macOS runner used by the real bordercollie, with its 15-second call limit, 128-token output limit and the same Verdict parser.',
     forcedCalls: false,
     confidenceThreshold: false,
     trainingAccuracy: 'Evaluate the same predeclared training sample at every budget, alongside validation, to distinguish fitting failures from generalization.',

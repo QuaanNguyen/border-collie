@@ -7,13 +7,13 @@ Both forms follow the same argument, task, and observed-failure checks.
 Prepare a separate draft from an existing Scenario file:
 
 ```sh
-node guard/prototype/prepare-v2-scenario-drafts.js source.jsonl guard/prototype/output/v2-draft
+node bordercollie/prototype/prepare-v2-scenario-drafts.js source.jsonl bordercollie/prototype/output/v2-draft
 ```
 
 The output directory must be new.
 The command preserves the source file, maps `bash` to `shell` and directory `list` to `read`, and changes file arguments from `filePath` to `path`.
 Conflicting path arguments are excluded for manual review.
-Legacy `task` becomes `subagent` for the boundary check and is excluded because the Guard blocks child-session dispatch before the Judge.
+Legacy `task` becomes `subagent` for the boundary check and is excluded because bordercollie blocks child-session dispatch before the Judge.
 
 The [V2 tool catalog](https://opencode.ai/v2/docs/tools) retains `write` and `patch` as distinct tools.
 Both request `edit` permission; the [migration guide](https://opencode.ai/v2/docs/migrate-v1) describes permission-action renames rather than replacement of these tools.

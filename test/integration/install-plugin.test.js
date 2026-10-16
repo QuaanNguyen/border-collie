@@ -13,7 +13,7 @@ const { installPlugin } = require(path.join(ROOT, 'scripts/install-plugin'));
 const { fakeJudgeManifest } = require('../fixtures/fake-judge');
 
 async function withRoot(run) {
-  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'border-collie-install-'));
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'bordercollie-install-'));
   try {
     return await run(root);
   } finally {
@@ -48,9 +48,9 @@ test('install retrieves and verifies the Judge, then reuses it', async () => {
 test('a Judge that fails verification leaves the previous plugin bound', async () => {
   await withRoot(async (root) => {
     const pluginsDir = path.join(root, 'plugins');
-    fs.mkdirSync(path.join(pluginsDir, 'border-collie'), { recursive: true });
-    fs.writeFileSync(path.join(pluginsDir, 'border-collie.js'), 'old entry\n');
-    fs.writeFileSync(path.join(pluginsDir, 'border-collie', 'old-marker'), 'old package\n');
+    fs.mkdirSync(path.join(pluginsDir, 'bordercollie'), { recursive: true });
+    fs.writeFileSync(path.join(pluginsDir, 'bordercollie.js'), 'old entry\n');
+    fs.writeFileSync(path.join(pluginsDir, 'bordercollie', 'old-marker'), 'old package\n');
 
     const tampered = fakeJudgeManifest(path.join(root, 'tampered'), { tamper: true }).manifest;
     await assert.rejects(installPlugin(options(root, { judgeManifest: tampered })), /does not match its pinned SHA-256/);
@@ -58,8 +58,8 @@ test('a Judge that fails verification leaves the previous plugin bound', async (
     const unsupported = fakeJudgeManifest(path.join(root, 'unsupported'), { platform: 'plan9-mips' }).manifest;
     await assert.rejects(installPlugin(options(root, { judgeManifest: unsupported })), /no runner for/);
 
-    assert.equal(fs.readFileSync(path.join(pluginsDir, 'border-collie.js'), 'utf8'), 'old entry\n');
-    assert.equal(fs.readFileSync(path.join(pluginsDir, 'border-collie', 'old-marker'), 'utf8'), 'old package\n');
+    assert.equal(fs.readFileSync(path.join(pluginsDir, 'bordercollie.js'), 'utf8'), 'old entry\n');
+    assert.equal(fs.readFileSync(path.join(pluginsDir, 'bordercollie', 'old-marker'), 'utf8'), 'old package\n');
     assert.equal(fs.existsSync(path.join(root, 'judge', 'test-revision')), false);
   });
 });
@@ -67,33 +67,33 @@ test('a Judge that fails verification leaves the previous plugin bound', async (
 test('install binds an importable plugin and leaves retired policy files alone', async () => {
   await withRoot(async (root) => {
     const project = path.join(root, 'project');
-    fs.mkdirSync(path.join(project, '.border-collie'), { recursive: true });
-    fs.writeFileSync(path.join(project, '.border-collie', 'protocol.json'), '{"done_criteria":[]}\n');
+    fs.mkdirSync(path.join(project, '.bordercollie'), { recursive: true });
+    fs.writeFileSync(path.join(project, '.bordercollie', 'protocol.json'), '{"done_criteria":[]}\n');
     const configRoot = path.join(root, 'config');
     fs.mkdirSync(configRoot);
     fs.writeFileSync(path.join(configRoot, 'config.json'), '{"schema_version":2,"pet":{"scale":1.15},"profiles":{},"adapters":{}}\n');
 
     const previousCwd = process.cwd();
-    const previousConfig = process.env.BORDER_COLLIE_CONFIG_ROOT;
+    const previousConfig = process.env.BORDERCOLLIE_CONFIG_ROOT;
     process.chdir(project);
-    process.env.BORDER_COLLIE_CONFIG_ROOT = configRoot;
+    process.env.BORDERCOLLIE_CONFIG_ROOT = configRoot;
     let result;
     try {
       result = await installPlugin(options(root));
     } finally {
       process.chdir(previousCwd);
-      if (previousConfig === undefined) delete process.env.BORDER_COLLIE_CONFIG_ROOT;
-      else process.env.BORDER_COLLIE_CONFIG_ROOT = previousConfig;
+      if (previousConfig === undefined) delete process.env.BORDERCOLLIE_CONFIG_ROOT;
+      else process.env.BORDERCOLLIE_CONFIG_ROOT = previousConfig;
     }
 
-    assert.ok(fs.existsSync(path.join(project, '.border-collie', 'protocol.json')));
+    assert.ok(fs.existsSync(path.join(project, '.bordercollie', 'protocol.json')));
     assert.match(fs.readFileSync(path.join(configRoot, 'config.json'), 'utf8'), /"profiles"/);
-    assert.equal(fs.existsSync(path.join(result.packageDir, 'guard', 'lib', 'judge.js')), true);
+    assert.equal(fs.existsSync(path.join(result.packageDir, 'bordercollie', 'lib', 'judge.js')), true);
     assert.equal(fs.existsSync(path.join(result.packageDir, 'pet', 'package.json')), true);
     const check = spawnSync(process.execPath, [
       '--input-type=module',
       '-e',
-      `process.env.BORDER_COLLIE_NO_PET = '1'; import { BorderCollie } from ${JSON.stringify(pathToFileURL(result.dest).href)}; const hooks = await BorderCollie({ client: {}, directory: ${JSON.stringify(project)} }); if (typeof hooks['tool.execute.before'] !== 'function') process.exit(2); process.emit('beforeExit');`,
+      `process.env.BORDERCOLLIE_NO_PET = '1'; import { bordercollie } from ${JSON.stringify(pathToFileURL(result.dest).href)}; const hooks = await bordercollie({ client: {}, directory: ${JSON.stringify(project)} }); if (typeof hooks['tool.execute.before'] !== 'function') process.exit(2); process.emit('beforeExit');`,
     ], { encoding: 'utf8' });
     assert.equal(check.status, 0, check.stderr);
   });

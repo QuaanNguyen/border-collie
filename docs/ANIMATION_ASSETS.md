@@ -14,14 +14,14 @@ Each folder contains five transparent PNG frames.
 
 ```text
 pet/assets/default-animations/
-|-- border-collie-normal/
-|-- border-collie-dragging/
-|-- border-collie-hovering/
-|-- border-collie-thinking/
-|-- border-collie-suspicious/
-|-- border-collie-refused/
-|-- border-collie-denied/
-`-- border-collie-celebrating/
+|-- bordercollie-normal/
+|-- bordercollie-dragging/
+|-- bordercollie-hovering/
+|-- bordercollie-thinking/
+|-- bordercollie-suspicious/
+|-- bordercollie-refused/
+|-- bordercollie-denied/
+`-- bordercollie-celebrating/
 ```
 
 Semantic Pet states map onto named animation tracks in `events/pet-config.json`.

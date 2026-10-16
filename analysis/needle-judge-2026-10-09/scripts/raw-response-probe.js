@@ -4,9 +4,9 @@ const crypto = require('node:crypto');
 const fs = require('node:fs');
 const path = require('node:path');
 const { spawn } = require('node:child_process');
-const { runtimeRequest } = require('../snapshot/guard/prototype/finetune-pipeline');
+const { runtimeRequest } = require('../snapshot/bordercollie/prototype/finetune-pipeline');
 const { requestFor } = require('./request-v4');
-const { judgeManifest } = require('../snapshot/guard/lib/judge-artifacts');
+const { judgeManifest } = require('../snapshot/bordercollie/lib/judge-artifacts');
 
 const workspace = path.resolve(__dirname, '..');
 const repository = path.resolve(workspace, '../..');
@@ -16,9 +16,9 @@ const fileHash = (file) => hash(fs.readFileSync(file));
 const readRows = (file) => fs.readFileSync(file, 'utf8').split('\n').filter(Boolean).map(JSON.parse);
 
 function copyModel(label) {
-  const history = JSON.parse(fs.readFileSync(path.join(workspace, 'snapshot/guard/prototype/output/needle-official-ladder/mac-runtime', label, label + '-heldOut.json'), 'utf8'));
+  const history = JSON.parse(fs.readFileSync(path.join(workspace, 'snapshot/bordercollie/prototype/output/needle-official-ladder/mac-runtime', label, label + '-heldOut.json'), 'utf8'));
   const expected = history.artifact.weightsSha256;
-  const source = path.join(repository, 'guard/prototype/output/needle-official-ladder/sol-batch-results', label, 'candidate.cact');
+  const source = path.join(repository, 'bordercollie/prototype/output/needle-official-ladder/sol-batch-results', label, 'candidate.cact');
   if (fileHash(source) !== expected) throw new Error('Archived model differs from its saved evaluation fingerprint');
   const directory = path.join(artifactDirectory, 'local-probe-models', expected);
   fs.mkdirSync(directory, { recursive: true });
@@ -56,7 +56,7 @@ function run(model, input, toolsFile, maximumTokens) {
 }
 
 async function probe() {
-  const historical = readRows(path.join(workspace, 'snapshot/guard/prototype/output/needle-official-ladder/train-1000-scenarios.jsonl'));
+  const historical = readRows(path.join(workspace, 'snapshot/bordercollie/prototype/output/needle-official-ladder/train-1000-scenarios.jsonl'));
   const candidate = readRows(path.join(artifactDirectory, 'priority-candidate-scenarios.jsonl'));
   const selectedIds = ['security-v2:ordinary-source-read:specific-request', 'security-v2:dotenv-shell:specific-permission', 'security-v2:dotenv-shell:exact-read-confirmed'];
   const cases = ['allow', 'disallow', 'ask'].map((verdict) => {

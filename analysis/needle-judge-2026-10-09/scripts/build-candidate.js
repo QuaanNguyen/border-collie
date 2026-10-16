@@ -21,7 +21,7 @@ function immutableSave(name, text) {
 
 function build(name = 'candidate-development') {
   fs.mkdirSync(destination, { recursive: true });
-  const source = path.join(workspace, 'snapshot/guard/prototype/data/stage2/accepted.jsonl');
+  const source = path.join(workspace, 'snapshot/bordercollie/prototype/data/stage2/accepted.jsonl');
   const development = readRows(source);
   const changed = development.map((row) => {
     const { query: previousSavedQuery, independentReview: previousReview, verdict: previousVerdict, ...fields } = row;

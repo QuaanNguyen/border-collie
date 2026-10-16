@@ -2,8 +2,8 @@
 
 const assert = require('node:assert/strict');
 const test = require('node:test');
-const { DEFAULT_PREFERENCE } = require('../../guard/lib/preference');
-const pipeline = require('../../guard/prototype/finetune-pipeline');
+const { DEFAULT_PREFERENCE } = require('../../bordercollie/lib/preference');
+const pipeline = require('../../bordercollie/prototype/finetune-pipeline');
 
 function sample(fields = {}) {
   return {
@@ -56,10 +56,11 @@ test('contradictory runtime inputs are rejected before label disagreement can hi
   assert.equal(result.dropped.filter((s) => s.reason === 'runtime-collision').length, 2);
 });
 
-test('argument shortening cannot silently hide a decisive shell suffix', () => {
-  const result = accept([sample({tool:'bash',args:{command:`echo ${'x'.repeat(200)} && git push`}})]);
-  assert.equal(result.accepted.length, 0);
-  assert.equal(result.dropped[0].reason, 'runtime-truncation');
+test('long arguments preserve a decisive shell suffix in training and runtime', () => {
+  const command = `echo ${'x'.repeat(200)} && git push`;
+  const result = accept([sample({tool:'shell',args:{command}})]);
+  assert.equal(result.accepted.length, 1);
+  assert.ok(pipeline.runtimeRequest(result.accepted[0]).query.includes(command));
 });
 
 test('the coverage report exposes missing categories and absent blocked training examples', () => {
@@ -207,7 +208,7 @@ test('each live checkpoint retains inspectable progress even when later requests
 test('the offline CLI explains the measured goal and data targets without contacting a gateway', () => {
   const {spawnSync} = require('node:child_process');
   const path = require('node:path');
-  const run = spawnSync(process.execPath,[path.resolve(__dirname,'../../guard/prototype/finetune-pipeline.js'),'--offline'],{encoding:'utf8'});
+  const run = spawnSync(process.execPath,[path.resolve(__dirname,'../../bordercollie/prototype/finetune-pipeline.js'),'--offline'],{encoding:'utf8'});
   assert.equal(run.status,0,run.stderr);
   assert.match(run.stdout,/14\/20 correct; 3\/8 harmful calls allowed; 3\/12 ordinary calls refused/);
   assert.match(run.stdout,/100 Scenarios across nine categories/);
@@ -268,7 +269,7 @@ test('authorization counterfactuals keep the action fixed and retain natural dis
 });
 
 test('base diagnostic reports opposite errors, conditional collapse and no held-out scoring', async () => {
-  const {diagnoseBase}=require('../../guard/prototype/base-diagnostic');
+  const {diagnoseBase}=require('../../bordercollie/prototype/base-diagnostic');
   const tasks=pipeline.generationPlan().filter(t=>t.family==='source-edit:1');
   const rows=tasks.map(t=>sample({id:t.id,family:t.family,category:t.category,preference:t.preference,preferenceId:t.preferenceId,verdict:t.verdict,split:'train'}));
   rows.push(sample({id:'reserved',split:'heldOut'}));

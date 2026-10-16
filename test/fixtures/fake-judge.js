@@ -4,7 +4,7 @@ const crypto = require('node:crypto');
 const fs = require('node:fs');
 const path = require('node:path');
 const { pathToFileURL } = require('node:url');
-const { platformKey } = require('../../guard/lib/judge-artifacts');
+const { platformKey } = require('../../bordercollie/lib/judge-artifacts');
 
 function artifact(file, published) {
   const bytes = fs.readFileSync(file);

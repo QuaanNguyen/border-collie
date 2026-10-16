@@ -2,9 +2,9 @@
 
 const fs = require('node:fs');
 const path = require('node:path');
-const { runtimeRequest } = require('../snapshot/guard/prototype/finetune-pipeline');
-const { DEFAULT_PREFERENCE } = require('../snapshot/guard/lib/preference');
-const { proposedCall } = require('../snapshot/guard/lib/toolcalls');
+const { runtimeRequest } = require('../snapshot/bordercollie/prototype/finetune-pipeline');
+const { DEFAULT_PREFERENCE } = require('../snapshot/bordercollie/lib/preference');
+const { proposedCall } = require('../snapshot/bordercollie/lib/toolcalls');
 const { requestFor } = require('./request-v2');
 
 const commands = [

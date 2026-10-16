@@ -14,7 +14,7 @@ const html = fs.readFileSync(path.join(ROOT, 'pet', 'src', 'index.html'), 'utf8'
 const animationPlayer = fs.readFileSync(path.join(ROOT, 'pet', 'src', 'animation-player.js'), 'utf8')
 
 assert.strictEqual(petPackage.scripts['start:demo'], undefined)
-assert.strictEqual(rootPackage.name, '@quaannguyen/border-collie')
+assert.strictEqual(rootPackage.name, '@quaannguyen/bordercollie')
 assert.strictEqual(rootPackage.version, '0.1.2')
 assert.strictEqual(rootPackage.private, undefined)
 assert.deepStrictEqual(rootPackage.repository, {
@@ -25,10 +25,10 @@ assert.deepStrictEqual(rootPackage.bugs, {
   url: 'https://github.com/QuaanNguyen/border-collie/issues',
 })
 assert.strictEqual(rootPackage.homepage, 'https://github.com/QuaanNguyen/border-collie#readme')
-assert.match(readme, /npm install --global @quaannguyen\/border-collie/)
-assert.match(readme, /bdc install/)
-assert.doesNotMatch(readme, /border-collie install|\bbc (profile|project|pet)\b/)
-assert.deepStrictEqual(rootPackage.bin, { bdc: 'scripts/border-collie.js' })
+assert.match(readme, /npm install --global \./)
+assert.match(readme, /bordercollie install/)
+assert.doesNotMatch(readme, /\b(?:bdc|bcollie|bc) (?:install|profile|project|pet)\b/)
+assert.deepStrictEqual(rootPackage.bin, { bordercollie: 'scripts/bordercollie.js' })
 assert.doesNotMatch(readme, /start:demo/)
 assert.doesNotMatch(main, /--demo/)
 assert.doesNotMatch(renderer, /DEMO_SCRIPT/)

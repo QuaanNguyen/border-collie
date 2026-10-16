@@ -3,7 +3,7 @@
 const crypto = require('node:crypto');
 const fs = require('node:fs');
 const path = require('node:path');
-const { runtimeRequest } = require('../snapshot/guard/prototype/finetune-pipeline');
+const { runtimeRequest } = require('../snapshot/bordercollie/prototype/finetune-pipeline');
 const { connection, chat, safeError } = require('./gateway');
 
 const workspace = path.resolve(__dirname, '..');
@@ -24,7 +24,7 @@ const instructions = [
 
 function loadSet(name) {
   if (name === 'original') {
-    const source = path.join(workspace, 'snapshot/guard/prototype/data/stage2');
+    const source = path.join(workspace, 'snapshot/bordercollie/prototype/data/stage2');
     return ['accepted.jsonl', 'held-out.jsonl'].flatMap((file) => fs.readFileSync(path.join(source, file), 'utf8').split('\n').filter(Boolean).map((line) => {
       const row = JSON.parse(line);
       const { query, tools } = runtimeRequest(row);

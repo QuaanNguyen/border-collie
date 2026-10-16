@@ -7,7 +7,7 @@ const ROOT = path.resolve(__dirname, '..', '..')
 const { electronReady, installPlugin, nativePetReady } = require('../../scripts/install-plugin')
 const { fakeJudgeManifest } = require('../fixtures/fake-judge')
 
-const root = fs.mkdtempSync(path.join(os.tmpdir(), 'border-collie-full-install-'))
+const root = fs.mkdtempSync(path.join(os.tmpdir(), 'bordercollie-full-install-'))
 const judge = {
   judgeRoot: path.join(root, 'judge'),
   judgeManifest: fakeJudgeManifest(path.join(root, 'judge-source')).manifest,
@@ -30,7 +30,7 @@ async function main() {
 
   assert.strictEqual(process.platform === 'darwin' ? nativePetReady(result.petDir) : electronReady(result.petDir), true)
   assert.ok(fs.existsSync(result.dest))
-  assert.ok(fs.existsSync(path.join(result.packageDir, 'guard', 'lib', 'session.js')))
+  assert.ok(fs.existsSync(path.join(result.packageDir, 'bordercollie', 'lib', 'session.js')))
   assert.ok(fs.existsSync(path.join(result.packageDir, 'events', 'index.js')))
   assert.ok(fs.existsSync(path.join(result.packageDir, 'pet', 'package.json')))
 

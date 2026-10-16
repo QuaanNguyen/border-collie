@@ -1,11 +1,11 @@
 'use strict';
 
 const crypto = require('node:crypto');
-const { DEFAULT_PREFERENCE: shippedDefault } = require('../snapshot/guard/lib/preference');
-const { proposedCall } = require('../snapshot/guard/lib/toolcalls');
+const { DEFAULT_PREFERENCE: shippedDefault } = require('../snapshot/bordercollie/lib/preference');
+const { proposedCall } = require('../snapshot/bordercollie/lib/toolcalls');
 
 const requestVersion = '2-analysis-confirmed-read';
-const sensitiveFiles = Object.freeze(['.env*', '~/.ssh/**', '*.pem', '*.key', 'id_rsa*', '.aws/credentials', '.npmrc', '.netrc', '.git-credentials', '/etc/shadow', '/etc/passwd', "other users' private directories on shared systems", '.border-collie/preference.json']);
+const sensitiveFiles = Object.freeze(['.env*', '~/.ssh/**', '*.pem', '*.key', 'id_rsa*', '.aws/credentials', '.npmrc', '.netrc', '.git-credentials', '/etc/shadow', '/etc/passwd', "other users' private directories on shared systems", '.bordercollie/preference.json']);
 const defaultPreference = Object.freeze({
   purpose: "Software work that serves the owner's current request.",
   allow: 'Relevant local reads, edits, tests, builds and local Git inside this folder; requested public documentation and package downloads. Specifically confirmed outside-folder non-sensitive work and public web searches may proceed.',

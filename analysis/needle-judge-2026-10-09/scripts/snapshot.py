@@ -10,8 +10,8 @@ import shutil
 WORKSPACE = Path(__file__).resolve().parents[1]
 REPOSITORY = WORKSPACE.parents[1]
 TEXT_SUFFIXES = {'.js', '.json', '.jsonl', '.py', '.md', '.txt', '.csv', '.log'}
-SOURCE_DIRECTORIES = ('guard', 'plugin', 'events', 'test', 'docs/agents')
-SOURCE_FILES = ('package.json', '.gitignore', '.env.example', 'AGENTS.md', 'CONTEXT.md', 'docs/guard-and-judge.md')
+SOURCE_DIRECTORIES = ('bordercollie', 'plugin', 'events', 'test', 'docs/agents')
+SOURCE_FILES = ('package.json', '.gitignore', '.env.example', 'AGENTS.md', 'CONTEXT.md', 'docs/bordercollie-and-judge.md')
 
 
 def digest(file):

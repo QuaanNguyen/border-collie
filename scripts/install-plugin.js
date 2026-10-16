@@ -4,7 +4,8 @@ const os = require('node:os');
 const path = require('node:path');
 const { spawnSync } = require('node:child_process');
 const { buildNativePet } = require('./build-native-pet');
-const { retrieveJudge } = require('../guard/lib/judge-artifacts');
+const { retrieveJudge } = require('../bordercollie/lib/judge-artifacts');
+const { LEGACY_PLUGIN_DIRECTORY, LEGACY_PLUGIN_ENTRY } = require('../bordercollie/lib/legacy-paths');
 
 function defaultPluginsDir() {
   return path.join(os.homedir(), '.config', 'opencode', 'plugins');
@@ -140,7 +141,7 @@ function ensureElectron(petDir, donorPetDirs = []) {
 
   if (!electronReady(petDir)) {
     throw new Error(
-      'Electron binary did not install. From the border-collie clone run: cd pet && npm install\n' +
+      'Electron binary did not install. From the bordercollie clone run: cd pet && npm install\n' +
       'Then re-run scripts/install-plugin.',
     );
   }
@@ -148,13 +149,13 @@ function ensureElectron(petDir, donorPetDirs = []) {
 
 function verifyStagedPlugin(entry, cwd) {
   const href = require('node:url').pathToFileURL(entry).href;
-  const script = `const plugin = await import(${JSON.stringify(href)}); if (typeof plugin.BorderCollie !== 'function') process.exit(2); if (plugin.default != null && (plugin.default.id !== 'border-collie' || typeof plugin.default.setup !== 'function')) process.exit(3)`;
+  const script = `const plugin = await import(${JSON.stringify(href)}); if (typeof plugin.bordercollie !== 'function') process.exit(2); if (plugin.default != null && (plugin.default.id !== 'bordercollie' || typeof plugin.default.setup !== 'function')) process.exit(3)`;
   runCommand(process.execPath, ['--input-type=module', '-e', script], cwd, { capture: true });
 }
 
 function verifyOpenCode(cwd, command = process.platform === 'win32' ? 'opencode.exe' : 'opencode') {
   const env = installEnv();
-  env.BORDER_COLLIE_NO_PET = '1';
+  env.BORDERCOLLIE_NO_PET = '1';
   runCommand(command, ['debug', 'config'], cwd, {
     capture: true,
     env,
@@ -164,14 +165,22 @@ function verifyOpenCode(cwd, command = process.platform === 'win32' ? 'opencode.
 
 function replaceInstallation({ stagePackage, stageEntry, packageDir, entry, pluginsDir, verify }) {
   const suffix = `${process.pid}-${Date.now()}`;
-  const packageBackup = path.join(pluginsDir, `.border-collie-package-backup-${suffix}`);
-  const entryBackup = path.join(pluginsDir, `.border-collie-entry-backup-${suffix}.js`);
+  const packageBackup = path.join(pluginsDir, `.bordercollie-package-backup-${suffix}`);
+  const entryBackup = path.join(pluginsDir, `.bordercollie-entry-backup-${suffix}.js`);
   const hadPackage = fs.existsSync(packageDir);
   const hadEntry = fs.existsSync(entry);
   let installedPackage = false;
   let installedEntry = false;
+  const previousEntries = [];
 
   try {
+    for (const name of [LEGACY_PLUGIN_DIRECTORY, LEGACY_PLUGIN_ENTRY]) {
+      const original = path.join(pluginsDir, name);
+      if (original === packageDir || original === entry || !fs.existsSync(original)) continue;
+      const backup = path.join(pluginsDir, `.bordercollie-previous-${previousEntries.length}-${suffix}`);
+      fs.renameSync(original, backup);
+      previousEntries.push({ original, backup });
+    }
     if (hadPackage) fs.renameSync(packageDir, packageBackup);
     fs.renameSync(stagePackage, packageDir);
     installedPackage = true;
@@ -188,11 +197,13 @@ function replaceInstallation({ stagePackage, stageEntry, packageDir, entry, plug
       fs.rmSync(packageDir, { recursive: true, force: true });
     }
     if (hadPackage && fs.existsSync(packageBackup)) fs.renameSync(packageBackup, packageDir);
+    for (const { original, backup } of previousEntries.reverse()) if (fs.existsSync(backup)) fs.renameSync(backup, original);
     throw error;
   }
   try {
     if (hadPackage) fs.rmSync(packageBackup, { recursive: true, force: true });
     if (hadEntry) fs.rmSync(entryBackup, { force: true });
+    for (const { backup } of previousEntries) fs.rmSync(backup, { recursive: true, force: true });
   } catch {
   }
 }
@@ -200,18 +211,18 @@ function replaceInstallation({ stagePackage, stageEntry, packageDir, entry, plug
 async function installPlugin(opts = {}) {
   const repoRoot = path.resolve(opts.repoRoot || path.join(__dirname, '..'));
   const pluginsDir = opts.destDir || defaultPluginsDir();
-  const packageDir = path.join(pluginsDir, 'border-collie');
-  const entry = path.join(pluginsDir, 'border-collie.js');
+  const packageDir = path.join(pluginsDir, 'bordercollie');
+  const entry = path.join(pluginsDir, 'bordercollie.js');
   const skipRuntimeSetup = opts.skipRuntimeSetup === true || opts.skipNpm === true;
 
-  const srcPlugin = path.join(repoRoot, 'plugin', 'border-collie.js');
-  const srcGuard = path.join(repoRoot, 'guard');
+  const srcPlugin = path.join(repoRoot, 'plugin', 'bordercollie.js');
+  const srcBordercollie = path.join(repoRoot, 'bordercollie');
   const srcEvents = path.join(repoRoot, 'events');
   const srcPet = path.join(repoRoot, 'pet');
 
   if (!fs.existsSync(srcPlugin)) throw new Error('missing ' + srcPlugin);
-  if (!fs.existsSync(path.join(srcGuard, 'lib', 'session.js'))) {
-    throw new Error('missing guard/lib/session.js under ' + srcGuard);
+  if (!fs.existsSync(path.join(srcBordercollie, 'lib', 'session.js'))) {
+    throw new Error('missing bordercollie/lib/session.js under ' + srcBordercollie);
   }
   if (!fs.existsSync(path.join(srcEvents, 'index.js'))) {
     throw new Error('missing events/index.js under ' + srcEvents);
@@ -224,8 +235,8 @@ async function installPlugin(opts = {}) {
   const judge = await retrieveJudge({ manifest: opts.judgeManifest, root: opts.judgeRoot });
 
   fs.mkdirSync(pluginsDir, { recursive: true });
-  const stageRoot = fs.mkdtempSync(path.join(pluginsDir, '.border-collie-stage-'));
-  const stagePackage = path.join(stageRoot, 'border-collie');
+  const stageRoot = fs.mkdtempSync(path.join(pluginsDir, '.bordercollie-stage-'));
+  const stagePackage = path.join(stageRoot, 'bordercollie');
   const stageIndex = path.join(stagePackage, 'index.mjs');
   const stagedPetDir = path.join(stagePackage, 'pet');
   let petRuntimeReused = false;
@@ -234,10 +245,12 @@ async function installPlugin(opts = {}) {
     fs.mkdirSync(stagePackage, { recursive: true });
     fs.copyFileSync(srcPlugin, stageIndex);
     fs.writeFileSync(path.join(stagePackage, 'package.json'), JSON.stringify({
-      name: 'border-collie',
+      name: 'bordercollie',
       exports: { '.': './index.mjs' },
     }, null, 2) + '\n');
-    copyTree(srcGuard, path.join(stagePackage, 'guard'));
+    copyTree(srcBordercollie, path.join(stagePackage, 'bordercollie'), {
+      skip: new Set(['prototype']),
+    });
     copyTree(srcEvents, path.join(stagePackage, 'events'));
     copyTree(srcPet, stagedPetDir, {
       skip: new Set(['node_modules']),
@@ -309,7 +322,7 @@ if (require.main === module) {
     console.error('Usage: node scripts/install-plugin.js');
     process.exit(2);
   }
-  require('./border-collie').main(['install']).catch((error) => {
+  require('./bordercollie').main(['install']).catch((error) => {
     console.error(error.message);
     process.exitCode = 2;
   });

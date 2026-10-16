@@ -17,9 +17,9 @@ Therefore poor native accuracy on training examples establishes that the deploye
 
 | Artifact | Identifier | Evidence |
 | --- | --- | --- |
-| Historical official trainer | `cactus-needle==3.1.2`; SHA-256 `677b2e4aba1fd9ce5ff6e6e19763d0a66b8425eccf626f7107e2e3ace5d99241` | [Copied historical trainer](/Users/quan/Repos/border-collie/analysis/needle-judge-2026-10-09/snapshot/guard/prototype/output/sol-300-seed42/upstream/finetune.py:201), [saved seed 0 job record](/Users/quan/Repos/border-collie/analysis/needle-judge-2026-10-09/snapshot/guard/prototype/output/needle-official-ladder/sol-batch-results/job-reasoning-1000-seed0.json:6) |
+| Historical official trainer | `cactus-needle==3.1.2`; SHA-256 `677b2e4aba1fd9ce5ff6e6e19763d0a66b8425eccf626f7107e2e3ace5d99241` | [Copied historical trainer](/Users/quan/Repos/border-collie/analysis/needle-judge-2026-10-09/snapshot/bordercollie/prototype/output/sol-300-seed42/upstream/finetune.py:201), [saved seed 0 job record](/Users/quan/Repos/border-collie/analysis/needle-judge-2026-10-09/snapshot/bordercollie/prototype/output/needle-official-ladder/sol-batch-results/job-reasoning-1000-seed0.json:6) |
 | Captured public trainer | Git revision `ef3cf7543204d99878c0dd913a05f6a506da4be8`; SHA-256 `1b3eb3006c32804a47f5e9f603dbee8e4104ea3c6179199807dd3690d31fc832` | [Official source at that revision](https://github.com/cactus-compute/needle/blob/ef3cf7543204d99878c0dd913a05f6a506da4be8/needle/model/finetune.py#L201), [capture provenance](/Users/quan/Repos/border-collie/analysis/needle-judge-2026-10-09/artifacts/public-source/ef3cf7543204d99878c0dd913a05f6a506da4be8/provenance.json) |
-| Mac runner | Hugging Face revision `2ae11323dc000f5e70c49f7403efa6af12ba9e67`; path `macos-arm64/needle`; SHA-256 `342fa2c6f140e702354a99c4201c9057535ec908eed35c7382e911a19d1d2724`; 1,089,896 bytes | [Copied manifest](/Users/quan/Repos/border-collie/analysis/needle-judge-2026-10-09/snapshot/guard/lib/judge-artifacts.js:11), [official artifact revision](https://huggingface.co/Cactus-Compute/needle3/commit/2ae11323dc000f5e70c49f7403efa6af12ba9e67) |
+| Mac runner | Hugging Face revision `2ae11323dc000f5e70c49f7403efa6af12ba9e67`; path `macos-arm64/needle`; SHA-256 `342fa2c6f140e702354a99c4201c9057535ec908eed35c7382e911a19d1d2724`; 1,089,896 bytes | [Copied manifest](/Users/quan/Repos/border-collie/analysis/needle-judge-2026-10-09/snapshot/bordercollie/lib/judge-artifacts.js:11), [official artifact revision](https://huggingface.co/Cactus-Compute/needle3/commit/2ae11323dc000f5e70c49f7403efa6af12ba9e67) |
 | Training tokenizer capture | SHA-256 `97dfd5666620b19875deba9e55953d312364e7763bd08bee428b94f1b9491b25` | [Official pinned tokenizer URL](https://huggingface.co/Cactus-Compute/needle3/resolve/2ae11323dc000f5e70c49f7403efa6af12ba9e67/tokenizer/tokenizer.model), [capture provenance](/Users/quan/Repos/border-collie/analysis/needle-judge-2026-10-09/artifacts/public-tokenizer/provenance.json) |
 
 Both isolated copied Mac runners were hashed during this check and match the manifest digest above.
@@ -46,7 +46,7 @@ The Hugging Face revision identifies the published artifacts, not a recovered na
 The application comparison reconstructed requests from copied scenarios using only the copied request builder and effect extractor.
 It executed no proposed scenario action.
 It found zero query mismatches and zero tool-object mismatches against the copied 1,000-example reasoning-training file.
-Both paths therefore share the same clipping and effect representation at this application boundary. [Copied pipeline](/Users/quan/Repos/border-collie/analysis/needle-judge-2026-10-09/snapshot/guard/prototype/finetune-pipeline.js:37), [training row builder](/Users/quan/Repos/border-collie/analysis/needle-judge-2026-10-09/snapshot/guard/prototype/finetune-pipeline.js:262)
+Both paths therefore share the same clipping and effect representation at this application boundary. [Copied pipeline](/Users/quan/Repos/border-collie/analysis/needle-judge-2026-10-09/snapshot/bordercollie/prototype/finetune-pipeline.js:37), [training row builder](/Users/quan/Repos/border-collie/analysis/needle-judge-2026-10-09/snapshot/bordercollie/prototype/finetune-pipeline.js:262)
 
 ## Training format
 
@@ -59,7 +59,7 @@ Encoding adds BOS ID 2 and EOS ID 1, masks the prompt from loss, and supervises 
 The copied 1,000-example reasoning file has reasoning on every row and no system field.
 Its saved official input contains 1,100 rows including validation, with reasoning on every row and no system field.
 The historical seed 0 and seed 42 run records report a maximum complete training sequence of 430 tokens, below their configured 1,024-token cap.
-Their low native accuracy cannot be attributed to training-input truncation on that evidence. [Seed 0 run record](/Users/quan/Repos/border-collie/analysis/needle-judge-2026-10-09/snapshot/guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-1000-seed0/run.json), [seed 42 run record](/Users/quan/Repos/border-collie/analysis/needle-judge-2026-10-09/snapshot/guard/prototype/output/needle-official-ladder/sol-batch-results/reasoning-1000-seed42/run.json)
+Their low native accuracy cannot be attributed to training-input truncation on that evidence. [Seed 0 run record](/Users/quan/Repos/border-collie/analysis/needle-judge-2026-10-09/snapshot/bordercollie/prototype/output/needle-official-ladder/sol-batch-results/reasoning-1000-seed0/run.json), [seed 42 run record](/Users/quan/Repos/border-collie/analysis/needle-judge-2026-10-09/snapshot/bordercollie/prototype/output/needle-official-ladder/sol-batch-results/reasoning-1000-seed42/run.json)
 
 ## Documented native differences
 
@@ -77,13 +77,13 @@ The owner's choice remains official training with answers-only targets.
 The next study needs an explicit compatibility check, without silently adding prose reasoning or modifying a custom trainer.
 
 The Python wrapper's automatic date fact is a separate behavior.
-This repository invokes the native CLI directly and supplies no system flag, so Python's automatic date behavior is not evidence that these historical requests received an extra system turn. [Copied CLI invocation](/Users/quan/Repos/border-collie/analysis/needle-judge-2026-10-09/snapshot/guard/lib/judge.js:154), [official Python wrapper](https://github.com/cactus-compute/needle/blob/ef3cf7543204d99878c0dd913a05f6a506da4be8/needle/__init__.py#L430)
+This repository invokes the native CLI directly and supplies no system flag, so Python's automatic date behavior is not evidence that these historical requests received an extra system turn. [Copied CLI invocation](/Users/quan/Repos/border-collie/analysis/needle-judge-2026-10-09/snapshot/bordercollie/lib/judge.js:154), [official Python wrapper](https://github.com/cactus-compute/needle/blob/ef3cf7543204d99878c0dd913a05f6a506da4be8/needle/__init__.py#L430)
 
 ## Answer and decoding behavior
 
 The supervised answer is an array containing a verdict-tool name and an empty argument object.
 The native CLI returns a response envelope containing function calls, suppressed calls, confidence, and other metadata.
-The application accepts the first recognized verdict in function calls or suppressed calls and ignores confidence when choosing it. [Copied verdict parser](/Users/quan/Repos/border-collie/analysis/needle-judge-2026-10-09/snapshot/guard/lib/judge.js:83)
+The application accepts the first recognized verdict in function calls or suppressed calls and ignores confidence when choosing it. [Copied verdict parser](/Users/quan/Repos/border-collie/analysis/needle-judge-2026-10-09/snapshot/bordercollie/lib/judge.js:83)
 
 Cactus describes schema-constrained decoding and postprocessing in native inference. [Official Python response contract](https://www.cactuscompute.com/blog/needle-python-docs#the-response)
 Those operations differ from supervised teacher-forced loss even if the input tokens match.

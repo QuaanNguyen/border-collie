@@ -1,8 +1,34 @@
 # Needle Judge data analysis and proposed study
 
+## Decision summary updated October 16, 2026
+
+**Training is stopped because dataset repairs are incomplete.**
+The owner canceled the remaining study jobs and requires issues #56 through #65 to be resolved, verified, and closed before any new Sol job.
+Completed models and frozen inputs remain historical evidence.
+The cancellation receipt is [recorded here](../../docs/experiments/v2-pilot-cancelled-2026-10-16.json).
+
+| State | Evidence and consequence |
+| --- | --- |
+| Verified | Earlier independent reviews completed for their exact saved inputs; disputed families and coverage omissions were recorded. |
+| Verified | The canceled study used 1,000 selected training examples, not the full original 3,000 examples. |
+| Verified | All nine models trained for six passes finished and were tested on the Mac; their validation accuracy ranges from 40 to 53 percent and none meets the harmful-approval and ordinary-refusal limits. |
+| Partial | V2 names and sensitive-directory wording were corrected in copied inputs; patch, worktree, command-effect, and dynamic-language coverage require complete current-contract verification. |
+| Partial | Source examples were reviewed, but this does not establish a complete or human-verified dataset. |
+| Blocker | Current training data lacks adequate multiline scripts, variable expansion, command substitution, and varied user language. |
+| Blocker | A fresh isolated evaluation, human verification of critical expected decisions, and disputed-family review remain required. |
+| Blocker | Training targets and native decoding differ; a runtime no-go decision must remain explicit until agreement is established. |
+| Owner decision | Do not submit, schedule, or restart Sol jobs while any required repair ticket remains open. |
+
+Before new training, complete command extraction (#56), independently reviewed coverage and counts (#57), exact directory scope (#58), isolated evaluation and shortcut measurements (#59), disputed-case analysis and human queue (#60), deployed format and latency qualification (#61), the cited command catalog (#62), report corrections (#63), the separate fail-closed investigation (#64), and current V2 tool contracts (#65).
+A ticket closes only when its acceptance evidence exists.
+Human verification cannot be replaced by model consensus.
+The remaining report is the October 9 analysis and retains its historical observations; its earlier statements about approvals, job activity, frozen draft counts, and completion do not describe the current repair state.
+
+## Historical analysis from October 9
+
 Needle should decide whether the agent's proposed action serves the owner's request and respects the folder Preference.
 Ordinary work should proceed, unauthorized work should stop, and a question should resolve a genuine permission gap.
-The intended final design retains one fixed guard for the explicit list of sensitive files; the other permission decisions belong to the model.
+The intended final design retains one fixed check for the explicit list of sensitive files; the other permission decisions belong to the model.
 
 The current models do not meet the agreed quality bar.
 The best historical models approve 18.3% to 21.7% of harmful examples and refuse 59.3% to 64.4% of legitimate examples.
@@ -30,7 +56,7 @@ The following requirements govern this phase.
 | --- | --- |
 | Current scope | Data analysis and preparation on copies; preserve anything used by existing Sol jobs. |
 | Job approval | Start no Sol jobs until the owner approves the concrete new work. |
-| Final permission system | Needle makes permission decisions; retain only the fixed guard for the explicit sensitive-file read list. |
+| Final permission system | Needle makes permission decisions; retain only the fixed check for the explicit sensitive-file read list. |
 | Default Preference | A Preference that says nothing inherits the default; ordinary local work remains useful. |
 | Sensitive files | Generic permission such as all local reads does not override the sensitive list. |
 | Specific sensitive permission | If the Preference specifically permits a listed file, the initial read must ask. |
@@ -49,7 +75,7 @@ If the owner confirms only that exact read, it may proceed once that confirmatio
 Changing the proposal to `cat .env.production` or adding an upload requires a new decision.
 With only generic local-read permission, the default sensitive-file prohibition still applies.
 
-The accepted starter list is `.env*`, `~/.ssh/**`, `*.pem`, `*.key`, `id_rsa*`, `.aws/credentials`, `.npmrc`, `.netrc`, `.git-credentials`, `/etc/shadow`, `/etc/passwd`, other users' directories on Sol, and `.border-collie/preference.json`.
+The accepted starter list is `.env*`, `~/.ssh/**`, `*.pem`, `*.key`, `id_rsa*`, `.aws/credentials`, `.npmrc`, `.netrc`, `.git-credentials`, `/etc/shadow`, `/etc/passwd`, other users' directories on Sol, and `.bordercollie/preference.json`.
 This list is a product rule supplied by the owner.
 It should not be presented as a claim that every listed file always contains a secret.
 The Preference loader still needs to read its own configuration internally; the rule concerns the coding agent's proposed reads.
@@ -63,7 +89,7 @@ The final shared-directory scope must be settled before training; changing the g
 ## Protection of existing work
 
 The [snapshot manifest](/Users/quan/Repos/border-collie/analysis/needle-judge-2026-10-09/snapshot-manifest.json) records 697 original files and links.
-It covers the Guard, plugin, tests, generation pipeline, local Sol plans and submission records, and related configuration.
+It covers the action checks, plugin, tests, generation pipeline, local Sol plans and submission records, and related configuration.
 The analysis snapshot contains 630 text files totaling 124,297,363 bytes.
 Snapshot copies are read only, and credentials were not copied into the snapshot.
 The [integrity check](/Users/quan/Repos/border-collie/analysis/needle-judge-2026-10-09/integrity-check.json) compares every protected original and copied file with its recorded fingerprint.
@@ -143,7 +169,7 @@ Names such as `secret-config.env` should not be confused with an exact match for
 
 No original web-fetch case is labeled disallow.
 That leaves the model without examples teaching when the same read-oriented network tool exceeds the request.
-Boundary-blocked examples were excluded by the old intake, so the original training data also lacks the cases needed to replace the current folder and dispatch guards with learned decisions.
+Boundary-blocked examples were excluded by the old intake, so the original training data also lacks the cases needed to replace the current folder and dispatch checks with learned decisions.
 
 The audit's simple normalization replaces domain words in tool arguments and normalizes whitespace.
 It finds 155 distinct held-out action strings and 60 held-out cases with a development twin under that procedure.
@@ -330,7 +356,7 @@ A disagreement, abstention, unresolved case, or known diagnostic rule failure ex
 This keeps half of a permission contrast from quietly entering training while its troublesome counterpart is removed.
 Coverage and verdict balance are recalculated after these exclusions.
 Narrow checks also exclude an agreed force-push that lacks any force or history-rewrite request, and an approval that skips one of the copied Preference's explicit confirmation requirements.
-These are data-audit exclusions, not new runtime command guards.
+These are data-audit exclusions, not new runtime command checks.
 Review explanations remain audit evidence; training targets contain only one answer with empty arguments.
 
 Model agreement does not establish human-reviewed truth.
@@ -492,7 +518,7 @@ Combined coverage therefore cannot be used to claim that every topic is both tau
 ASU documents authorized project shares and controlled scratch sharing, so another user's path is not automatically proof of unauthorized access.
 Private access and approved sharing need distinct cases.
 ASU also prohibits computational work on login nodes, interference with other users, and unattended listening services. [ASU acceptable-use policy](https://cores.research.asu.edu/computing-and-data-services/research-computing/policies/), [ASU sharing guidance](https://docs.rc.asu.edu/sharing-files/)
-Those are contextual facts for the model and data, rather than additional fixed command guards in the intended product.
+Those are contextual facts for the model and data, rather than additional fixed command checks in the intended product.
 
 The new cases still use a limited collection of Preference styles and shell forms.
 They improve targeted coverage without establishing readiness for arbitrary real-world Preferences, aliases, scripts, dynamically constructed paths, or unfamiliar services.
@@ -549,24 +575,24 @@ Report all ten seeds and pair each trained result with its matched untuned expor
 Variation between seeds and uncertainty across new tasks answer different questions and should remain distinct.
 
 The promotion requirements remain at most 5% harmful approval, at most 10% ordinary refusal, improvement on both against the matched four-bit baseline, and at least 300 genuinely held-out cases.
-Passing the old task alone would not validate a changed production request or the future sensitive-file guard.
+Passing the old task alone would not validate a changed production request or the future sensitive-file bordercollie.
 
 ## Remaining implementation decisions
 
-The one retained sensitive-file guard needs a precise contract before live implementation.
+The one retained sensitive-file bordercollie needs a precise contract before live implementation.
 Specific permission followed by ask is a learned model behavior.
 The approved read then needs visible confirmation context bound to the same action and Preference, rather than a session-wide exemption.
 The current live Judge sees only the latest message and stores no such pending context.
 The copied controls use self-contained exact confirmations to test the chosen behavior; they do not implement a conversation ledger.
 
-A fixed sensitive-file guard also needs to resolve aliases, relative paths, symlinks, and reads performed through shell scripts or interpreters.
+A fixed sensitive-file bordercollie also needs to resolve aliases, relative paths, symlinks, and reads performed through shell scripts or interpreters.
 The current effect extractor cannot guarantee that coverage.
-Choosing how the guard observes actual reads is an implementation decision still to make.
-It should not be quietly replaced with a larger command denylist or new fixed folder and dispatch guards that contradict the owner's design.
+Choosing how bordercollie observes actual reads is an implementation decision still to make.
+It should not be quietly replaced with a larger command denylist or new fixed folder and dispatch checks that contradict the owner's design.
 
 Other decisions include how to pass folder permissions to delegated agents, what outside-folder facts the model receives, and how incomplete effect information is represented consistently in training and production.
 The input and labels must match that final runtime contract.
-This analysis has not removed the existing guards or deployed the candidate.
+This analysis has not removed the existing checks or deployed the candidate.
 Their eventual replacement remains part of the intended design.
 
 Both independent reviews, whole-family exclusions, the surviving-distribution check, and the immutable development freeze are complete.

@@ -48,16 +48,14 @@ function launchElectron(args, options = {}) {
 }
 
 function launchNative(executable, args) {
-  return spawn(executable, args, {
+  const child = spawn(executable, args, {
     cwd: PET_DIR,
-    stdio: 'ignore',
+    stdio: ['pipe', 'ignore', 'pipe'],
   })
-}
-
-function launchOwner() {
-  return spawn(process.execPath, ['-e', 'setInterval(() => {}, 1000)'], {
-    stdio: 'ignore',
-  })
+  child.diagnostic = ''
+  child.stderr.on('data', (chunk) => { child.diagnostic += chunk })
+  child.on('error', (error) => { child.diagnostic += error.message })
+  return child
 }
 
 async function waitForExit(child, timeoutMs = 7000) {
@@ -139,9 +137,13 @@ async function probeReceivedPointer(statusPath, previousCount, timeoutMs = 400) 
   }
 }
 
-async function findVisiblePetPoint(pointerHelper, statusPath, bounds) {
+async function findVisiblePetPoint(pointerHelper, statusPath, bounds, expected, diagnostic = () => '') {
   const point = await waitFor(
-    () => findControl(pointerHelper, bounds.pid, 'Border Collie sprite'),
+    () => {
+      const point = findControl(pointerHelper, bounds.pid, 'bordercollie sprite')
+      if (!point || (expected && Math.hypot(point.x - expected.x, point.y - expected.y) > 2)) return null
+      return point
+    },
     4000,
     'the visible Pet sprite accessibility frame',
   )
@@ -150,7 +152,7 @@ async function findVisiblePetPoint(pointerHelper, statusPath, bounds) {
   assert.strictEqual(
     await probeReceivedPointer(statusPath, previousCount),
     false,
-    'the visible Pet center must receive pointer input',
+    `the visible Pet center must receive pointer input at ${JSON.stringify(point)} inside ${JSON.stringify(bounds)} ${diagnostic()}`,
   )
   return point
 }
@@ -161,18 +163,15 @@ async function main() {
     return
   }
 
-  const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'border-collie-focus-'))
+  const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'bordercollie-focus-'))
   const statusPath = path.join(tempDir, 'focus.json')
   const eventPath = path.join(tempDir, 'events.jsonl')
-  const userDataPath = path.join(tempDir, 'user-data')
   const pointerHelper = compilePointerHelper(tempDir)
   const nativePet = buildNativePet(PET_DIR, path.join(tempDir, 'pet-host'))
   let probe
   let pet
   let secondPet
   let devPet
-  let firstOwner
-  let secondOwner
 
   try {
     probe = launchElectron([`--user-data-dir=${path.join(tempDir, 'focus-user-data')}`, FOCUS_FIXTURE_DIR, statusPath])
@@ -181,19 +180,15 @@ async function main() {
       return status?.ready === true && status.focused === true ? status : null
     }, 10000, 'the focus probe to become ready')
 
-    firstOwner = launchOwner()
     pet = launchNative(nativePet, [
       `--pet-dir=${PET_DIR}`,
-      `--data-dir=${userDataPath}`,
-      `--events=${eventPath}`,
-      `--owner-pid=${firstOwner.pid}`,
       '--shortcut=Control+Alt+Shift+9',
     ])
 
     const initialBounds = await waitFor(
       () => findWindow(pointerHelper, pet.pid),
       10000,
-      'the Pet window to become visible',
+      () => `the Pet window to become visible; exit=${pet.exitCode} signal=${pet.signalCode} ${pet.diagnostic}`,
     )
     assert.strictEqual(pet.exitCode, null, 'Pet should stay running')
     assert.strictEqual(readStatus(statusPath).focused, true, 'opening the Pet must not take focus from the active app')
@@ -207,14 +202,14 @@ async function main() {
     )
     assert.strictEqual(readStatus(statusPath).focused, true, 'clicking transparent Pet space must preserve focus')
 
-    await findVisiblePetPoint(pointerHelper, statusPath, { ...initialBounds, pid: pet.pid })
+    const initialVisiblePoint = await findVisiblePetPoint(pointerHelper, statusPath, { ...initialBounds, pid: pet.pid }, null, () => pet.diagnostic.slice(-6000))
     assert.strictEqual(
       readStatus(statusPath).focused,
       true,
       `clicking visible Pet pixels must preserve focus; frontmost=${frontmostProcess(pointerHelper)} probe=${probe.pid} pet=${pet.pid}`,
     )
 
-    const sizeBus = new EventBus({ inboxPath: eventPath, runId: 'native-size-command' })
+    const sizeBus = new EventBus({ sink: (event) => pet.stdin.write(JSON.stringify(event) + '\n'), runId: 'native-size-command' })
     sizeBus.emit({
       type: 'control',
       status: 'ok',
@@ -235,13 +230,11 @@ async function main() {
       2000,
       'scaled transparent Pet space to pass the click through',
     )
-    const scaledVisiblePoint = await findVisiblePetPoint(pointerHelper, statusPath, { ...scaledBounds, pid: pet.pid })
+    const scaledVisiblePoint = await findVisiblePetPoint(pointerHelper, statusPath, { ...scaledBounds, pid: pet.pid }, {
+      x: scaledBounds.x + (initialVisiblePoint.x - initialBounds.x) * scaledBounds.width / initialBounds.width,
+      y: scaledBounds.y + (initialVisiblePoint.y - initialBounds.y) * scaledBounds.height / initialBounds.height,
+    }, () => pet.diagnostic.slice(-6000))
     assert.strictEqual(readStatus(statusPath).focused, true, 'clicking scaled visible Pet pixels must preserve focus')
-    const scaledClosePoint = await waitFor(
-      () => findControl(pointerHelper, pet.pid, 'Hide Border Collie'),
-      4000,
-      'the scaled Pet hide control',
-    )
     sendNativeInput(pointerHelper, 'drag', [
       scaledVisiblePoint.x,
       scaledVisiblePoint.y,
@@ -253,24 +246,6 @@ async function main() {
       return bounds && bounds.x <= scaledBounds.x - 14 ? bounds : null
     }, 4000, () => `the scaled visible Pet pixels at ${scaledVisiblePoint.x},${scaledVisiblePoint.y} to drag the window from ${JSON.stringify(scaledBounds)} to ${JSON.stringify(findWindow(pointerHelper, pet.pid))}`)
     assert.strictEqual(readStatus(statusPath).focused, true, 'dragging the scaled Pet must preserve focus')
-
-    const closePoint = {
-      x: scaledClosePoint.x + draggedBounds.x - scaledBounds.x,
-      y: scaledClosePoint.y + draggedBounds.y - scaledBounds.y,
-    }
-    sendNativeInput(pointerHelper, 'click', [closePoint.x, closePoint.y])
-    await waitFor(
-      () => findWindow(pointerHelper, pet.pid) === null,
-      3000,
-      'the Pet hide control to hide the window',
-    )
-    assert.strictEqual(readStatus(statusPath).focused, true, 'clicking a Pet control must preserve focus')
-    sendNativeInput(pointerHelper, 'shortcut', [25])
-    await waitFor(
-      () => findWindow(pointerHelper, pet.pid),
-      3000,
-      'the Pet to reappear after using its hide control',
-    )
 
     sendNativeInput(pointerHelper, 'shortcut', [25])
     await waitFor(
@@ -287,31 +262,26 @@ async function main() {
     )
     assert.strictEqual(readStatus(statusPath).focused, true, 'restoring the Pet must preserve focus')
 
-    secondOwner = launchOwner()
     secondPet = launchNative(nativePet, [
       `--pet-dir=${PET_DIR}`,
-      `--data-dir=${userDataPath}`,
-      `--events=${eventPath}`,
-      `--owner-pid=${secondOwner.pid}`,
-      '--shortcut=Control+Alt+Shift+9',
+      '--shortcut=Control+Alt+Shift+R',
     ])
-    await waitForExit(secondPet)
-    assert.strictEqual(secondPet.exitCode, 0, 'a concurrent session must reuse the shared Pet')
-    assert.ok(findWindow(pointerHelper, pet.pid), 'the shared Pet must remain visible')
-
-    firstOwner.kill('SIGTERM')
-    await waitForExit(firstOwner)
-    await delay(2300)
-    assert.strictEqual(pet.exitCode, null, 'the shared Pet must remain while another session owns it')
-    secondOwner.kill('SIGTERM')
-    await waitForExit(secondOwner)
+    await waitFor(() => findWindow(pointerHelper, secondPet.pid), 10000, 'the second session Pet to become visible')
+    assert.strictEqual(secondPet.exitCode, null, 'a concurrent session must own its live Pet input')
+    pet.stdin.end()
     await waitForExit(pet)
+    assert.strictEqual(pet.exitCode, 0, 'closing the plugin input must end its Pet')
+    assert.strictEqual(secondPet.exitCode, null, 'closing one session must not end another session Pet')
+    assert.ok(findWindow(pointerHelper, secondPet.pid), 'the other session Pet must remain visible')
+    secondPet.stdin.end()
+    await waitForExit(secondPet)
+    assert.strictEqual(secondPet.exitCode, 0, 'the second Pet must exit after its own input closes')
 
     devPet = launchElectron(['.', '--dev'], {
       cwd: PET_DIR,
       env: {
-        BORDER_COLLIE_EVENTS: eventPath,
-        BORDER_COLLIE_USER_DATA_DIR: path.join(tempDir, 'dev-user-data'),
+        BORDERCOLLIE_EVENTS: eventPath,
+        BORDERCOLLIE_USER_DATA_DIR: path.join(tempDir, 'dev-user-data'),
       },
     })
     await waitFor(
@@ -322,10 +292,8 @@ async function main() {
     assert.strictEqual(devPet.exitCode, null, 'development Pet should stay running')
     assert.ok(draggedBounds.x < initialBounds.x)
 
-    process.stdout.write('ok - native Pet pointer, focus, controls, visibility, drag, and singleton behavior verified\n')
+    process.stdout.write('ok - native Pet pointer, focus, controls, visibility, drag, and independent session lifecycle verified\n')
   } finally {
-    await stopChild(firstOwner)
-    await stopChild(secondOwner)
     await stopChild(secondPet)
     await stopChild(pet)
     await stopChild(devPet)

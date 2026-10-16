@@ -1,7 +1,7 @@
 {
-  "name": "@quaannguyen/border-collie",
+  "name": "@quaannguyen/bordercollie",
   "version": "0.1.2",
-  "description": "A guard and desktop companion for OpenCode coding agents.",
+  "description": "Permission decisions and a desktop companion for coding agents.",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -12,15 +12,16 @@
   },
   "homepage": "https://github.com/QuaanNguyen/border-collie#readme",
   "bin": {
-    "bdc": "scripts/border-collie.js"
+    "bordercollie": "scripts/bordercollie.js"
   },
   "files": [
     "events/",
-    "guard/",
+    "bordercollie/",
+    "!bordercollie/prototype/",
     "pet/",
     "!pet/node_modules/",
     "plugin/",
-    "scripts/border-collie.js",
+    "scripts/bordercollie.js",
     "scripts/build-native-pet.js",
     "scripts/check-package-client.js",
     "scripts/check-package.js",
@@ -37,8 +38,8 @@
   "scripts": {
     "check": "node scripts/check-syntax.js",
     "eval:judge": "node scripts/evaluate-judge.js",
-    "prototype:finetune": "node guard/prototype/finetune-pipeline.js",
-    "prototype:finetune:scale": "node guard/prototype/scale-generation.js",
+    "prototype:finetune": "node bordercollie/prototype/finetune-pipeline.js",
+    "prototype:finetune:scale": "node bordercollie/prototype/scale-generation.js",
     "test": "node --test test/unit/*.test.js test/integration/*.test.js",
     "test:e2e": "node scripts/run-e2e.js",
     "test:e2e:skip-native": "node scripts/run-e2e.js --skip-native",

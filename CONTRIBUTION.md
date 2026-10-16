@@ -1,8 +1,8 @@
-# Contributing to Border Collie
+# Contributing to bordercollie
 
-Border Collie is an OpenCode plugin, deterministic Guard, transient event stream, and optional desktop Pet.
-The plugin in `plugin/` adapts OpenCode hooks to Guard decisions and publishes events to the Pet over a private input pipe.
-Guard owns policy enforcement and completion evidence, while the Pet only expresses events and never changes Guard outcomes.
+bordercollie is an OpenCode plugin, deterministic bordercollie, transient event stream, and optional desktop Pet.
+The plugin in `plugin/` adapts OpenCode hooks to bordercollie decisions and publishes events to the Pet over a private input pipe.
+bordercollie owns policy enforcement and completion evidence, while the Pet only expresses events and never changes bordercollie outcomes.
 The production macOS Pet uses the native AppKit and WebKit host in `pet/native/`, while Windows, Linux, and development mode use the locked Electron runtime in `pet/`.
 The root package is public metadata for the upcoming `0.1.0` release, so contributions must not publish it or change release metadata unless the release task explicitly calls for that change.
 
@@ -20,7 +20,7 @@ Clone the repository and enter its root directory.
 
 ```sh
 git clone <repository-url>
-cd border-collie
+cd bordercollie
 ```
 
 Install the locked Pet dependencies before running any renderer, Electron, or full-suite checks.
@@ -55,10 +55,10 @@ Run the fast unit and non-UI integration suite.
 npm test
 ```
 
-Run the focused Guard and plugin suites when changing those boundaries.
+Run the focused bordercollie and plugin suites when changing those boundaries.
 
 ```sh
-node --test test/guard/*.test.js test/plugin/*.test.mjs
+node --test test/bordercollie/*.test.js test/plugin/*.test.mjs
 ```
 
 Run the package surface check to verify required files and ensure `node_modules/` is absent from the tarball.
@@ -75,7 +75,7 @@ node test/run-all-tests.js
 ```
 
 The full orchestrator runs the selected unit and integration suites plus the renderer and window tests when the locked Electron runtime is available.
-Use `BORDER_COLLIE_SKIP_NATIVE_TESTS=1 node test/run-all-tests.js` when native or Electron acceptance is unavailable, but report that reduced coverage in the pull request.
+Use `BORDERCOLLIE_SKIP_NATIVE_TESTS=1 node test/run-all-tests.js` when native or Electron acceptance is unavailable, but report that reduced coverage in the pull request.
 
 Run the E2E lane directly when changing external processes, OpenCode integration, the renderer, or the Pet host.
 
@@ -109,13 +109,13 @@ Open a disposable project with OpenCode from a separate directory.
 opencode <path-to-disposable-project>
 ```
 
-Exercise `bdc pet size` with `75`, `115`, and `reset`, and confirm that the Pet changes size without installing keyboard shortcuts.
+Exercise `bordercollie pet size` with `75`, `115`, and `reset`, and confirm that the Pet changes size without installing keyboard shortcuts.
 Exercise an ordinary read or edit inside the project and confirm that the Pet shows the allowed or refused reaction that matches the Judge's Verdict.
-Exercise a path outside the project folder and an edit to `.border-collie/preference.json`, and confirm that Guard refuses both without consulting the Judge.
-Create or modify `.border-collie/preference.json` only as a human during this test, and run `npm run eval:judge` when a change could affect the Judge's input.
+Exercise a path outside the project folder and an edit to `.bordercollie/preference.json`, and confirm that bordercollie refuses both without consulting the Judge.
+Create or modify `.bordercollie/preference.json` only as a human during this test, and run `npm run eval:judge` when a change could affect the Judge's input.
 Ask OpenCode to make a completion claim that is missing required evidence, then satisfy the criterion and continue the session to verify failed and accepted completion verdicts.
 Confirm that an OpenCode restart starts a fresh event stream and that events are not replayed from a previous session.
-Use a disposable Border Collie configuration and disposable project when testing installer or `bdc migrate` behavior.
+Use a disposable bordercollie configuration and disposable project when testing installer or `bordercollie migrate` behavior.
 Do not put real API keys, private data, or production workspaces in test fixtures or issue reports.
 
 ## Windows testing

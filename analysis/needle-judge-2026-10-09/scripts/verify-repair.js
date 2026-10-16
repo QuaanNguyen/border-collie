@@ -27,7 +27,7 @@ const accepted = readRows(path.join(directory, 'accepted.jsonl'));
 const quarantine = readRows(path.join(directory, 'quarantine.jsonl'));
 if (accepted.length !== provenance.provisionallyAccepted || quarantine.length !== provenance.quarantined) throw new Error('The frozen case counts differ');
 const expectedTools = { allow: 'allow_call', ask: 'ask_owner', disallow: 'block_call' };
-const heldOut = readRows(path.join(workspace, 'snapshot/guard/prototype/data/stage2/held-out.jsonl'));
+const heldOut = readRows(path.join(workspace, 'snapshot/bordercollie/prototype/data/stage2/held-out.jsonl'));
 const heldOutIds = new Set(heldOut.map((row) => row.id));
 const heldOutFamilies = new Set(heldOut.map((row) => row.family));
 const quarantinedFamilies = new Set(quarantine.map((row) => row.family));

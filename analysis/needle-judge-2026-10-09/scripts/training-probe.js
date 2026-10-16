@@ -3,9 +3,9 @@
 const crypto = require('node:crypto');
 const fs = require('node:fs');
 const path = require('node:path');
-const { diagnoseBase } = require('../snapshot/guard/prototype/base-diagnostic');
-const { createNeedleJudge } = require('../snapshot/guard/lib/judge');
-const { judgeManifest, verifyInstalledJudge, platformKey } = require('../snapshot/guard/lib/judge-artifacts');
+const { diagnoseBase } = require('../snapshot/bordercollie/prototype/base-diagnostic');
+const { createNeedleJudge } = require('../snapshot/bordercollie/lib/judge');
+const { judgeManifest, verifyInstalledJudge, platformKey } = require('../snapshot/bordercollie/lib/judge-artifacts');
 
 const workspace = path.resolve(__dirname, '..');
 const repository = path.resolve(workspace, '../..');
@@ -14,10 +14,10 @@ const fingerprint = (file) => crypto.createHash('sha256').update(fs.readFileSync
 async function evaluate(seed) {
   if (![0, 42].includes(seed)) throw new Error('This probe measures only the two saved historical 1000-example models');
   const label = 'reasoning-1000-seed' + seed;
-  const source = path.join(workspace, 'snapshot/guard/prototype/output/needle-official-ladder/train-1000-scenarios.jsonl');
+  const source = path.join(workspace, 'snapshot/bordercollie/prototype/output/needle-official-ladder/train-1000-scenarios.jsonl');
   const scenarios = fs.readFileSync(source, 'utf8').split('\n').filter(Boolean).map(JSON.parse);
-  const history = JSON.parse(fs.readFileSync(path.join(workspace, 'snapshot/guard/prototype/output/needle-official-ladder/mac-runtime', label, label + '-heldOut.json'), 'utf8'));
-  const weightsSource = path.join(repository, 'guard/prototype/output/needle-official-ladder/sol-batch-results', label, 'candidate.cact');
+  const history = JSON.parse(fs.readFileSync(path.join(workspace, 'snapshot/bordercollie/prototype/output/needle-official-ladder/mac-runtime', label, label + '-heldOut.json'), 'utf8'));
+  const weightsSource = path.join(repository, 'bordercollie/prototype/output/needle-official-ladder/sol-batch-results', label, 'candidate.cact');
   if (fingerprint(weightsSource) !== history.artifact.weightsSha256) throw new Error('Historical weights do not match their evaluation record');
   const shipped = judgeManifest();
   let installed = verifyInstalledJudge(shipped);

@@ -2,11 +2,11 @@ const fs = require('fs')
 const path = require('path')
 const { app, BrowserWindow, ipcMain } = require('electron')
 
-const root = process.env.BORDER_COLLIE_ROOT || process.argv.at(-3)
-const statusPath = process.env.BORDER_COLLIE_STATUS_PATH || process.argv.at(-2)
-const eventPath = process.env.BORDER_COLLIE_EVENT_PATH || process.argv.at(-1)
-const frame = process.env.BORDER_COLLIE_TEST_FRAME
-const devHarness = process.env.BORDER_COLLIE_DEV_HARNESS === '1'
+const root = process.env.BORDERCOLLIE_ROOT || process.argv.at(-3)
+const statusPath = process.env.BORDERCOLLIE_STATUS_PATH || process.argv.at(-2)
+const eventPath = process.env.BORDERCOLLIE_EVENT_PATH || process.argv.at(-1)
+const frame = process.env.BORDERCOLLIE_TEST_FRAME
+const devHarness = process.env.BORDERCOLLIE_DEV_HARNESS === '1'
 let watcher
 
 function watchEventFile(filePath, onEvent, interval = 25) {
@@ -49,7 +49,7 @@ async function rendererStatus(win) {
       const read = () => {
         const image = document.getElementById('animation')
         if (!image.hidden && image.complete && image.naturalWidth) {
-          const regions = window.BorderCollieHitRegions.imageHitRegions(image)
+          const regions = window.BordercollieHitRegions.imageHitRegions(image)
           const rect = image.getBoundingClientRect()
           const transform = getComputedStyle(image).transform
           const contains = (point) => regions.some((region) =>
@@ -57,13 +57,13 @@ async function rendererStatus(win) {
             point.y >= region.y && point.y < region.y + region.height
           )
           resolve({
-            state: window.__borderCollie.rendered(),
+            state: window.__bordercollie.rendered(),
             regionCount: regions.length,
             horizontalScale: transform === 'none' ? 1 : new DOMMatrix(transform).a,
             horizontalCenterOffset: rect.x + rect.width / 2 - window.innerWidth / 2,
             cornerReceivesInput: contains({ x: rect.x + 1, y: rect.y + 1 }),
             centerReceivesInput: contains({ x: rect.x + rect.width / 2, y: rect.y + rect.height / 2 }),
-            imageDraggable: typeof window.borderCollie.startDrag === 'function',
+            imageDraggable: typeof window.bordercollie.startDrag === 'function',
             hasPersistentChrome: Boolean(document.querySelector('.tray, .counts, .log')),
             bubbleVisible: !document.getElementById('bubble').hidden,
             bubbleColor: getComputedStyle(document.getElementById('bubble-text')).color,
@@ -78,7 +78,7 @@ async function rendererStatus(win) {
           return
         }
         if (Date.now() >= deadline) {
-          resolve({ state: window.__borderCollie.rendered(), regionCount: 0 })
+          resolve({ state: window.__bordercollie.rendered(), regionCount: 0 })
           return
         }
         setTimeout(read, 25)
@@ -122,7 +122,7 @@ async function clickDevScenario(win, label) {
 process.on('SIGTERM', () => app.quit())
 
 app.whenReady().then(async () => {
-  ipcMain.handle('borderCollie:config', () => ({
+  ipcMain.handle('bordercollie:config', () => ({
     animations: {
       calm: {
         frames: [frame, frame, frame, frame, frame],
@@ -141,14 +141,14 @@ app.whenReady().then(async () => {
     live: !devHarness,
     eventsFile: eventPath,
   }))
-  ipcMain.handle('borderCollie:dev-scenarios', () => devHarness ? [{ id: 'refused', label: 'Refused' }] : [])
-  ipcMain.handle('borderCollie:dev-event', (_event, id) => {
+  ipcMain.handle('bordercollie:dev-scenarios', () => devHarness ? [{ id: 'refused', label: 'Refused' }] : [])
+  ipcMain.handle('bordercollie:dev-event', (_event, id) => {
     if (!devHarness || id !== 'refused') return null
     const entry = { type: 'excursion', status: 'block', petState: 'denied', summary: 'Outside the task', reason: 'The path is not allowed' }
-    win.webContents.send('borderCollie:event', entry)
+    win.webContents.send('bordercollie:event', entry)
     return entry
   })
-  for (const channel of ['borderCollie:hit-regions', 'borderCollie:scale-set']) {
+  for (const channel of ['bordercollie:hit-regions', 'bordercollie:scale-set']) {
     ipcMain.on(channel, () => {})
   }
 
@@ -171,19 +171,19 @@ app.whenReady().then(async () => {
       app.quit()
       return
     }
-    win.webContents.send('borderCollie:dragging', { phase: 'start', deltaX: 0 })
-    win.webContents.send('borderCollie:dragging', { phase: 'move', deltaX: -24 })
+    win.webContents.send('bordercollie:dragging', { phase: 'start', deltaX: 0 })
+    win.webContents.send('bordercollie:dragging', { phase: 'move', deltaX: -24 })
     const leftDrag = await waitForState(win, 'drag')
     await delay(600)
     const heldDrag = await rendererStatus(win)
-    win.webContents.send('borderCollie:dragging', { phase: 'move', deltaX: 24 })
+    win.webContents.send('bordercollie:dragging', { phase: 'move', deltaX: 24 })
     const rightDrag = await waitForState(win, 'drag')
-    win.webContents.send('borderCollie:dragging', { phase: 'end', deltaX: 0 })
+    win.webContents.send('bordercollie:dragging', { phase: 'end', deltaX: 0 })
     await delay(50)
     const endedDrag = await rendererStatus(win)
     watcher = watchEventFile(eventPath, async (event) => {
       try {
-        win.webContents.send('borderCollie:event', event)
+        win.webContents.send('bordercollie:event', event)
         const status = await waitForState(win, event.petState)
         writeStatus({
           ...status,

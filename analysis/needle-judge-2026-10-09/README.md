@@ -2,15 +2,17 @@
 
 This folder contains the copied evidence, data audit, candidate permission examples, local model diagnostics, independent review records, and proposed future study.
 Read [the detailed report](/Users/quan/Repos/border-collie/analysis/needle-judge-2026-10-09/REPORT.md) for the findings and their limits.
-The owner requires existing Sol work to remain untouched and explicit approval before any new Sol job.
+The owner canceled the incomplete study on October 16 and now requires issues #56 through #65 to be resolved, verified, and closed before any new Sol job.
+Completed artifacts and original inputs remain preserved.
+The table below describes the historical analysis, not a completed dataset repair.
 
 | Work item | State | Plain-language result |
 | --- | --- | --- |
 | Protect current job inputs | Complete | A fingerprinted snapshot protects 697 original files and links. |
 | Audit original examples | Complete | The complete 3,300-case audit exposes narrow coverage, the ask-option shortcut, and potential permission-scope errors. |
 | Confirm product rule | Complete | Specifically permitted sensitive files ask first; exact approval permits only that exact read. |
-| Prepare candidate inputs | Complete | All copied development cases have complete action text and all three verdict choices; old labels cannot be reused automatically. |
-| Add diagnostic controls | Complete | 336 fictional cases cover sensitive files, varied commands, shared computing, and ordinary authorized work. |
+| Prepare candidate inputs | Partial, historical input contract | All copied development cases have complete action text and all three verdict choices; old labels cannot be reused automatically. |
+| Add diagnostic controls | Partial coverage | 336 fictional cases cover sensitive files, varied commands, shared computing, and ordinary authorized work. |
 | Review diagnostic controls | Complete | The first wording gives 42 shared rule failures, showing that agreement alone is insufficient. |
 | Test clearer sensitive wording | Complete | A separate 112-case check distinguishes default blocks, specific-permission asks, and exact confirmed reads. |
 | Verify public claims | Complete | Source notes correct overstated benchmark and trainer claims. |
@@ -23,11 +25,11 @@ The owner requires existing Sol work to remain untouched and explicit approval b
 | Review refined candidate labels | Complete | Inkling and Kimi each finish all 3,336 cases; whole-family exclusions retain 2,453 source cases and remove 883. |
 | Recheck mixed-case review errors | Complete | Both models finish all 98 repeated controls; 56 qualify and 42 remain excluded by whole family. |
 | Prevent duplicate training inputs | Complete | Equivalent cases retain their audit identities but appear once in the exported files. |
-| Freeze repaired development files | Complete | The verified read-only draft has 1,979 distinct training inputs and 460 validation inputs with answers-only targets. |
+| Freeze repaired development files | Historical development draft only | The verified read-only draft has 1,979 distinct training inputs and 460 validation inputs with answers-only targets. |
 | Assess surviving coverage | Complete | The 2,000-case comparison is 21 inputs short; seven added topics have no accepted controls, and others lack training or validation coverage. |
-| Align final directory scope | Unresolved final contract | The accepted rule covers other users' directories on Sol; the private-directory wording in the copied draft is not approved. |
+| Align final directory scope | Corrected in later copied inputs | The October 13 copies restore other users' directories on Sol and have fresh reviews; subsequent request changes require new review. |
 | Propose future training | Complete proposal | Separate official four-bit comparisons use ten seeds and matched training updates. |
-| Start Sol jobs | Awaiting owner approval | No job has been submitted, scheduled, restarted, or canceled. |
+| Start Sol jobs | Prohibited until repair tickets close | The owner canceled the remaining incomplete-study jobs on October 16. |
 
 Both full independent reviews and the preselected 98-case singleton rechecks are complete.
 The final reconciliation excludes whole families and exports only distinct, agreed inputs.
@@ -70,6 +72,7 @@ The [payload evidence](/Users/quan/Repos/border-collie/analysis/needle-judge-202
 
 The proposed study is a data file, not a submission script.
 The completed development review, surviving coverage, distinct sample counts, and immutable draft freeze are recorded.
-Before future training, align the final permission wording, address missing coverage and the 2,000-case shortage, and verify the exact approved trainer version, tokenizer, and answers-only runtime compatibility.
+Before future training, complete and verify every requirement in issues #56 through #65.
+This includes current-contract reviews, missing dynamic cases, at least 2,000 distinct training examples, isolated evaluation, human review of critical cases, and a recorded runtime go/no-go result.
 The owner must approve new Sol work before any submission or scheduling.
 Approval to read one file does not approve a training job.

@@ -23,14 +23,14 @@ lerna-debug.log*
 .temp
 .tmp
 
-# border-collie
+# bordercollie
 /pet/node_modules
 
 # opencode
 .opencode/
 .DS_Store
 opencode.json
-/guard/prototype/output/
+/bordercollie/prototype/output/
 /.worktrees/
 *.bin
 *.cact

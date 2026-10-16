@@ -6,9 +6,9 @@ const test = require('node:test');
 const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
-const { reconcile, prepareStudy } = require('../../guard/prototype/prepare-v2-pilot-study');
-const { runtimeRequest } = require('../../guard/prototype/finetune-pipeline');
-const { DEFAULT_PREFERENCE } = require('../../guard/lib/preference');
+const { reconcile, prepareStudy } = require('../../bordercollie/prototype/prepare-v2-pilot-study');
+const { runtimeRequest } = require('../../bordercollie/prototype/finetune-pipeline');
+const { DEFAULT_PREFERENCE } = require('../../bordercollie/lib/preference');
 
 const hash = (value) => crypto.createHash('sha256').update(value).digest('hex');
 const row = (id, family = id) => ({ id, family, topic: 'ordinary', dataset: 'development', split: 'train', userMessage: `Read ${id}.txt`, tool: 'read', args: { path: `${id}.txt` }, preference: DEFAULT_PREFERENCE });
@@ -75,6 +75,9 @@ test('pilot freezing uses reviewed disjoint data, answers-only targets, and regi
   assert.equal(plan.data.diagnosticCases, 12);
   assert.deepEqual(new Set(plan.runs.filter((run) => run.experiment === 'answers-only-fitting').map((run) => run.updates)), new Set([300, 1500, 3000]));
   assert.equal(plan.runs.filter((run) => run.experiment === 'target-format-control').length, 3);
+  assert(plan.executionWaves[0].every((index) => plan.runs[index].updates <= 300));
+  assert(plan.executionWaves[1].every((index) => plan.runs[index].updates > 300));
+  assert.deepEqual(plan.executionWaves.flat().sort((left, right) => left - right), plan.runs.map((_, index) => index));
   const training = fs.readFileSync(path.join(directory, 'train-answers.jsonl'), 'utf8').trim().split('\n').map(JSON.parse);
   assert(training.every((line) => line.answers.length === 1 && !Object.hasOwn(line, 'reasoning')));
   const selected = fs.readFileSync(path.join(directory, 'train-scenarios.jsonl'), 'utf8').trim().split('\n').map(JSON.parse);

@@ -177,8 +177,8 @@ They are analysis recommendations, with no live implementation or Sol job change
 The sensitive-file ask behavior is a user requirement rather than a conclusion supplied by these public sources.
 Show refusal, ask, and permitted work under similar wording so the model must learn intent and scope.
 Always include the ask option in the proposed future input contract so its mere presence cannot predict the label.
-Keep explicit test coverage for the single retained read guard and for commands whose effects cannot be fully determined from static inspection.
-Decisions about how an owner reply satisfies that guard remain a separate implementation design item.
+Keep explicit test coverage for the single retained read bordercollie and for commands whose effects cannot be fully determined from static inspection.
+Decisions about how an owner reply satisfies that bordercollie remain a separate implementation design item.
 
 Future revisions should preserve source provenance and avoid treating benchmark labels, filesystem accessibility, or model agreement as proof of authorization.
 Sol training and scheduling remain pending the user's approval.

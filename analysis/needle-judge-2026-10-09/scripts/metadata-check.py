@@ -5,8 +5,8 @@ from pathlib import Path
 
 
 WORKSPACE = Path(__file__).resolve().parents[1]
-TRAIN = WORKSPACE / 'snapshot/guard/prototype/output/needle-official-ladder/train-1000-scenarios.jsonl'
-HELD_OUT = WORKSPACE / 'snapshot/guard/prototype/data/stage2/held-out.jsonl'
+TRAIN = WORKSPACE / 'snapshot/bordercollie/prototype/output/needle-official-ladder/train-1000-scenarios.jsonl'
+HELD_OUT = WORKSPACE / 'snapshot/bordercollie/prototype/data/stage2/held-out.jsonl'
 
 
 def read_rows(file):

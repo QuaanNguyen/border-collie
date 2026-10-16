@@ -1,0 +1,144 @@
+{
+  "studyId": "v2-improvement-pilot-2026-10-16-offline-recovery",
+  "capturedAtUtc": "2026-10-16T15:27:04.558218+00:00",
+  "status": "baseline-fixed-engine-preflight-failed",
+  "relatedIssues": [
+    54,
+    61
+  ],
+  "originalStudy": "docs/experiments/v2-pilot-2026-10-13.json",
+  "originalStudyPlanSha256": "31d603b61a6531c66fd835a1eaf37f007dffcc0bed90f08213b5b9e3a4731c63",
+  "studyPlanSha256": "db303c109e9212c0ca68730e927318ebfe597071415fc2b6e921412a67573c66",
+  "recovery": {
+    "originalDirectory": "/scratch/qnguye19/needle/experiments/v2-improvement-pilot-2026-10-13",
+    "originalStudyPlanSha256": "31d603b61a6531c66fd835a1eaf37f007dffcc0bed90f08213b5b9e3a4731c63",
+    "failedBaselineJob": "65695585",
+    "completedTokenPreflightJob": "65695482",
+    "reason": "Official build forces a Hub download even with a cached base archive; offline mode rejects force_download. Route only base-archive lookup to the SHA-256-pinned local file and retain the unchanged official exporter and trainer.",
+    "unchanged": [
+      "all frozen data hashes",
+      "independent reviews",
+      "24 model conditions",
+      "training configuration",
+      "checkpoint",
+      "tokenizer",
+      "export format",
+      "evaluation engine",
+      "selection rule",
+      "promotion prohibition"
+    ]
+  },
+  "solDirectory": "/scratch/qnguye19/needle/experiments/v2-improvement-pilot-2026-10-16-offline-recovery",
+  "localEvidenceDirectory": "guard/prototype/output/v2-improvement-pilot-2026-10-16-offline-recovery",
+  "baseArchive": {
+    "path": "/scratch/qnguye19/needle/needle3.cact",
+    "sha256": "c9d915eca282ed42d1a09b143b592adb4cc6744ffe2d294adf5cfc5548170c38"
+  },
+  "wrapperHashes": {
+    "needle-4bit-study.py": "4556fe5cabf6c2ff7ad3c598d4286379c549f5e30d5f836176a9a1a2d89a4789",
+    "preflight-v2-pilot.py": "8dcc766e3ae98a60d18cb967318ae98f67c580829ad6dd7d62a6c4d07cf24cd2",
+    "summarize-v2-pilot.py": "df211e7488e87196809d3ce0090a8fbad908f4d58951c87fd48d88f32e4fbc2f",
+    "submit-v2-pilot.py": "0421aba872610020a5cf8755aa039f47ff2e6f40a8b5b33ff38a1d38f64bd669"
+  },
+  "unchangedFrozenDataHashes": {
+    "train-scenarios.jsonl": "7581ac23eeb0d0451b0dca3437a6aa0d6a9172d93a4ba41185788f2e8097dc07",
+    "train-answers.jsonl": "b53f60fab5c1a284b897dd0224978b40812cf31df09383868c5fbc10173b182a",
+    "train-reasoning.jsonl": "f93ebf1fd5fe1f3205bb45a4ebfd098f3d0c50c66efc75fdeea5174bdfd26d2e",
+    "validation-scenarios.jsonl": "46f0544a219dda8c627c339db4d6e1a37695a947077c8aeb6ef36669525205bd",
+    "validation-answers.jsonl": "28023381c5648890693ff30e0096aaa9091af43c063f9ef9be3db347aed43096",
+    "validation-reasoning.jsonl": "1c31a3c37bea7567db37e66b5ef5e052d9a482ed721f468a91b8f57771be0c58",
+    "fit-requests.jsonl": "2643bf64aa62840cfbd487cd086002b0dd3d107663f385c69d5a06188c688f00",
+    "validation-requests.jsonl": "9d26cb85166fb041ce55cbd23d5c4fd7865378ef2248efc7e3a0f45bab1eb326",
+    "diagnostic-requests.jsonl": "8fccec0acf72f0b50b489b4dfbb60abb018b351eecaa3421660eb5387a74f54b",
+    "quarantine.jsonl": "239d54c3ea272298497bf29a7ca0baa4456ec680fe9a913ba57269de45ca03a5"
+  },
+  "submittedJobs": {
+    "tokenPreflight": "65785439",
+    "v2-pilot-baseline-build": "65785440",
+    "v2-pilot-engine-preflight": "65785441",
+    "v2-pilot-fit": "65785442",
+    "v2-pilot-evaluate": "65785443",
+    "v2-pilot-summary": "65785444"
+  },
+  "observedJobOutcomes": {
+    "65785439": "COMPLETED",
+    "65785440": "COMPLETED",
+    "65785441": "FAILED",
+    "65785442": "CANCELLED",
+    "65785443": "CANCELLED",
+    "65785444": "FAILED"
+  },
+  "baselineArchiveAudit": {
+    "quantizedWeightBits": 4,
+    "quantizedTensors": 119,
+    "layers": 20,
+    "confidenceHeadPresent": false,
+    "tokenizerSha256": "9f839cd44027ea9203738897da2bac572a5cc77aec7fceacd4391fc412a3249f",
+    "weightsSha256": "3bde318ede183eb06eb65524c9139f83d749e929f46feadfe516cefa3c8e8863"
+  },
+  "enginePreflight": {
+    "case": "bookings-task-28-1",
+    "completedCases": 3,
+    "failedCaseSeconds": 15.019064791034907,
+    "deadlineSeconds": 15,
+    "infrastructureFailure": "Timed out in the pinned Linux runner through Apptainer; no successful engine gate or fitting result."
+  },
+  "diagnostics": {
+    "linux": {
+      "jobId": "65785681",
+      "status": "COMPLETED",
+      "host": "sc009",
+      "observationTimeoutSeconds": 60,
+      "fourThreadWallSeconds": {
+        "minimum": 1.7516078309854493,
+        "maximum": 33.12061212997651
+      },
+      "allRunsCompleted": true
+    },
+    "container": {
+      "jobId": "65785782",
+      "status": "COMPLETED",
+      "host": "sc048",
+      "startupSeconds": {
+        "minimum": 0.28276836598524824,
+        "maximum": 0.32371699099894613
+      },
+      "localImageInferenceSeconds": {
+        "minimum": 1.6085680720279925,
+        "maximum": 1.9670704629970714
+      },
+      "limitation": "Different compute node; this does not establish a shared-storage root cause."
+    },
+    "mac": {
+      "cases": 6,
+      "runnerSha256": "342fa2c6f140e702354a99c4201c9057535ec908eed35c7382e911a19d1d2724",
+      "weightsSha256": "3bde318ede183eb06eb65524c9139f83d749e929f46feadfe516cefa3c8e8863",
+      "wallSeconds": {
+        "minimum": 0.168724292,
+        "maximum": 0.2603908749999999
+      },
+      "allRunsCompleted": true,
+      "limitation": "Untuned model, four distinct inputs and two repeats; trained compatibility remains unverified."
+    },
+    "syscalls": {
+      "jobId": "65786008",
+      "status": "COMPLETED",
+      "cases": 4,
+      "wallSeconds": {
+        "minimum": 2.234711341036018,
+        "maximum": 2.7657549619907513
+      },
+      "slowNonFutexSyscalls": 0,
+      "limitation": "All traced cases completed quickly; the intermittent long wall time did not reproduce under tracing, so its cause remains unresolved."
+    }
+  },
+  "verification": {
+    "repositoryTestsPassed": 78,
+    "pythonChecksPassed": 6,
+    "syntax": "passed",
+    "npmPackageVerification": "passed",
+    "npmPackageClientInstallation": "passed"
+  },
+  "promotionAllowed": false,
+  "nextRequiredAction": "Identify and correct the variable Linux process wall time, then rerun the unchanged engine preflight before resubmitting fitting and evaluation. Preserve the 15-second production deadline and all failed evidence."
+}

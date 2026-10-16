@@ -7,9 +7,9 @@ const os = require('node:os');
 const path = require('node:path');
 const test = require('node:test');
 const { spawnSync } = require('node:child_process');
-const { prepare, selectFamilies } = require('../../guard/prototype/prepare-sol-experiment');
-const { runtimeRequest } = require('../../guard/prototype/finetune-pipeline');
-const { DEFAULT_PREFERENCE } = require('../../guard/lib/preference');
+const { prepare, selectFamilies } = require('../../bordercollie/prototype/prepare-sol-experiment');
+const { runtimeRequest } = require('../../bordercollie/prototype/finetune-pipeline');
+const { DEFAULT_PREFERENCE } = require('../../bordercollie/lib/preference');
 
 test('pilot selection is reproducible, independent of source ordering, and keeps complete families', () => {
   const rows = Array.from({ length: 20 }, (_, index) => ({ id: `case-${index}`, family: `family-${Math.floor(index / 2)}` }));
@@ -25,7 +25,7 @@ test('repeating a completed training command preserves the original run record',
   t.after(() => fs.rmSync(directory, { recursive: true, force: true }));
   const record = JSON.stringify({ status: 'complete', slurmJobId: 'previous' });
   fs.writeFileSync(path.join(directory, 'run.json'), record);
-  const result = spawnSync('python3', [path.resolve(__dirname, '../../guard/prototype/sol-finetune.py'), directory], { encoding: 'utf8' });
+  const result = spawnSync('python3', [path.resolve(__dirname, '../../bordercollie/prototype/sol-finetune.py'), directory], { encoding: 'utf8' });
   assert.equal(result.status, 2);
   assert.match(result.stderr, /Run already started/);
   assert.equal(fs.readFileSync(path.join(directory, 'run.json'), 'utf8'), record);

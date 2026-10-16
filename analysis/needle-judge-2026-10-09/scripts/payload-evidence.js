@@ -9,7 +9,7 @@ const { requestFor, inputHash } = require('./request-v2');
 const workspace = path.resolve(__dirname, '..');
 const artifacts = path.join(workspace, 'artifacts');
 const readRows = (file) => fs.readFileSync(file, 'utf8').split('\n').filter(Boolean).map(JSON.parse);
-const original = readRows(path.join(workspace, 'snapshot/guard/prototype/data/stage2/accepted.jsonl'));
+const original = readRows(path.join(workspace, 'snapshot/bordercollie/prototype/data/stage2/accepted.jsonl'));
 const scenarios = ['candidate-development-scenarios.jsonl', 'security-scenarios.jsonl'].flatMap((file) => readRows(path.join(artifacts, file)));
 const requests = readRows(path.join(artifacts, 'candidate-all-requests.jsonl'));
 const conn = connection();

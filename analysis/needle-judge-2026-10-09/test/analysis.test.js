@@ -4,8 +4,8 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const test = require('node:test');
-const { runtimeRequest } = require('../snapshot/guard/prototype/finetune-pipeline');
-const { DEFAULT_PREFERENCE } = require('../snapshot/guard/lib/preference');
+const { runtimeRequest } = require('../snapshot/bordercollie/prototype/finetune-pipeline');
+const { DEFAULT_PREFERENCE } = require('../snapshot/bordercollie/lib/preference');
 const { defaultPreference, preferenceWithDefaults, requestFor, inputHash } = require('../scripts/request-v2');
 const priorityFormat = require('../scripts/request-v4');
 
@@ -48,7 +48,7 @@ test('the exposed Judge input contains no intended label or source metadata', ()
 });
 
 test('diagnostic held-out families remain excluded from candidate training and validation', () => {
-  const heldOut = fs.readFileSync(path.join(workspace, 'snapshot/guard/prototype/data/stage2/held-out.jsonl'), 'utf8').split('\n').filter(Boolean).map(JSON.parse);
+  const heldOut = fs.readFileSync(path.join(workspace, 'snapshot/bordercollie/prototype/data/stage2/held-out.jsonl'), 'utf8').split('\n').filter(Boolean).map(JSON.parse);
   const excluded = new Set(heldOut.map((row) => row.family));
   const candidate = readRows('candidate-development-scenarios.jsonl');
   assert.ok(candidate.every((row) => !excluded.has(row.family)));

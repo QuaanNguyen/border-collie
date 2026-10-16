@@ -1,6 +1,6 @@
 'use strict';
 const assert = require('node:assert');
-const { createSession } = require('../../guard/lib/session');
+const { createSession } = require('../../bordercollie/lib/session');
 
 async function main() {
   const session = createSession({ workdir: '/work/project', judge: async () => ({ verdict: 'allow' }) });

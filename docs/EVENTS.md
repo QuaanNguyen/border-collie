@@ -1,7 +1,7 @@
-# Event schema (v1) - the contract between Guard and Pet Border Collie
+# Event schema (v1) - the contract between bordercollie and Pet bordercollie
 
-Guard decides.
-Border Collie expresses.
+bordercollie decides.
+bordercollie expresses.
 They communicate through the Pet process's private input pipe.
 
 ## Transport
@@ -9,7 +9,7 @@ They communicate through the Pet process's private input pipe.
 The OpenCode plugin sends each event directly to the running Pet process.
 The pipe belongs to the running plugin instance, so the Pet exits when that plugin disconnects.
 The Pet queues events only in memory while its renderer starts.
-Nothing is replayed after OpenCode exits, and the runtime does not create `~/.border-collie`.
+Nothing is replayed after OpenCode exits, and the runtime does not create `~/.bordercollie`.
 
 ## Event object
 
@@ -32,7 +32,7 @@ Nothing is replayed after OpenCode exits, and the runtime does not create `~/.bo
 
 `seq` is monotonic within a run.
 `summary` is short and human-readable.
-Border Collie shows it in a speech bubble, so keep it under ~60 chars.
+bordercollie shows it in a speech bubble, so keep it under ~60 chars.
 
 ## `type` values
 
@@ -51,35 +51,35 @@ Border Collie shows it in a speech bubble, so keep it under ~60 chars.
 
 ## `petState` values
 
-Guard sets `petState` on each event.
+bordercollie sets `petState` on each event.
 
 The shared Pet animation contract in `events/pet-config.json` maps these states to named animation tracks.
 
 | petState | Animation folder |
 |----------|------------------|
-| `calm` | `border-collie-normal` |
-| `allowed` | `border-collie-normal` |
-| `asking` | `border-collie-thinking` |
-| `celebrating` | `border-collie-celebrating` |
-| `checking` | `border-collie-thinking` |
-| `denied` | `border-collie-denied` |
-| `drag` | `border-collie-dragging` |
-| `error` | `border-collie-thinking` |
-| `hover` | `border-collie-hovering` |
-| `offline` | `border-collie-normal` |
-| `proving` | `border-collie-thinking` |
-| `refused` | `border-collie-refused` |
-| `rejecting` | `border-collie-refused` |
-| `sleeping` | `border-collie-denied` |
-| `suspicious` | `border-collie-suspicious` |
-| `thinking` | `border-collie-thinking` |
-| `watching` | `border-collie-normal` |
+| `calm` | `bordercollie-normal` |
+| `allowed` | `bordercollie-normal` |
+| `asking` | `bordercollie-thinking` |
+| `celebrating` | `bordercollie-celebrating` |
+| `checking` | `bordercollie-thinking` |
+| `denied` | `bordercollie-denied` |
+| `drag` | `bordercollie-dragging` |
+| `error` | `bordercollie-thinking` |
+| `hover` | `bordercollie-hovering` |
+| `offline` | `bordercollie-normal` |
+| `proving` | `bordercollie-thinking` |
+| `refused` | `bordercollie-refused` |
+| `rejecting` | `bordercollie-refused` |
+| `sleeping` | `bordercollie-denied` |
+| `suspicious` | `bordercollie-suspicious` |
+| `thinking` | `bordercollie-thinking` |
+| `watching` | `bordercollie-normal` |
 
 ## Rules
 
-1. Guard never imports Pet code. The OpenCode adapter connects Guard output to the Pet process, and Pet never imports Guard code.
-2. Guard always sets `petState`, so the pet never has to infer it from `type`.
-3. Border Collie **never blocks anything**. It reports what already happened.
+1. bordercollie never imports Pet code. The OpenCode adapter connects bordercollie output to the Pet process, and Pet never imports bordercollie code.
+2. bordercollie always sets `petState`, so the pet never has to infer it from `type`.
+3. bordercollie **never blocks anything**. It reports what already happened.
 4. Silence is the resting state.
    No event means no reaction, and routine allowed actions tick a counter and say nothing apart from a quick nod.
 5. `detail` is free-form and may grow; consumers must ignore unknown keys.

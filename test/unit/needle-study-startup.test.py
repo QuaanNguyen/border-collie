@@ -9,7 +9,7 @@ import unittest
 from unittest.mock import patch
 
 
-source = Path(__file__).resolve().parents[2] / 'guard/prototype/needle-4bit-study.py'
+source = Path(__file__).resolve().parents[2] / 'bordercollie/prototype/needle-4bit-study.py'
 spec = importlib.util.spec_from_file_location('needle_study', source)
 study = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(study)
