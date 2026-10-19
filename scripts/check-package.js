@@ -7,7 +7,7 @@ const path = require('node:path');
 const { spawnSync } = require('node:child_process');
 
 const root = path.resolve(__dirname, '..');
-const output = fs.mkdtempSync(path.join(os.tmpdir(), 'border-collie-pack-'));
+const output = fs.mkdtempSync(path.join(os.tmpdir(), 'bordercollie-pack-'));
 
 try {
   const packed = spawnSync('npm', ['pack', '--json', '--pack-destination', output], {
@@ -23,15 +23,15 @@ try {
   const files = new Set(report[0].files.map(({ path: file }) => file));
   for (const required of [
     'package.json',
-    'scripts/border-collie.js',
+    'scripts/bordercollie.js',
     'scripts/check-package-client.js',
     'scripts/check-package.js',
     'scripts/check-syntax.js',
     'scripts/install-plugin.js',
     'scripts/run-e2e.js',
-    'plugin/border-collie.js',
+    'plugin/bordercollie.js',
     'plugin/package.json',
-    'guard/lib/session.js',
+    'bordercollie/lib/session.js',
     'events/index.js',
     'pet/package.json',
   ]) {

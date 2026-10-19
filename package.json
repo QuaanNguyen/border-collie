@@ -1,5 +1,5 @@
 {
-  "name": "@quaannguyen/border-collie",
+  "name": "@quaannguyen/bordercollie",
   "version": "0.1.2",
   "description": "A guard and desktop companion for OpenCode coding agents.",
   "license": "MIT",
@@ -12,16 +12,16 @@
   },
   "homepage": "https://github.com/QuaanNguyen/border-collie#readme",
   "bin": {
-    "border-collie": "scripts/border-collie.js",
-    "bc": "scripts/border-collie.js"
+    "bordercollie": "scripts/bordercollie.js",
+    "bc": "scripts/bordercollie.js"
   },
   "files": [
     "events/",
-    "guard/",
+    "bordercollie/",
     "pet/",
     "!pet/node_modules/",
     "plugin/",
-    "scripts/border-collie.js",
+    "scripts/bordercollie.js",
     "scripts/build-native-pet.js",
     "scripts/check-package-client.js",
     "scripts/check-package.js",
@@ -29,7 +29,8 @@
     "scripts/install-plugin.js",
     "scripts/run-e2e.js",
     "LICENSE",
-    "README.md"
+    "README.md",
+    "scripts/migrate.js"
   ],
   "engines": {
     "node": ">=22.12"

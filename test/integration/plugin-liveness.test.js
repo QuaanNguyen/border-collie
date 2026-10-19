@@ -7,8 +7,8 @@ const { pathToFileURL } = require('url')
 const ROOT = path.resolve(__dirname, '..', '..')
 
 async function main() {
-  const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'border-collie-liveness-'))
-  const envKeys = ['BORDER_COLLIE_NO_PET', 'BORDER_COLLIE_OWNER_CONFIG', 'BORDER_COLLIE_EVENTS']
+  const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'bordercollie-liveness-'))
+  const envKeys = ['BORDERCOLLIE_NO_PET', 'BORDERCOLLIE_OWNER_CONFIG', 'BORDERCOLLIE_EVENTS']
   const previousEnv = new Map(envKeys.map((key) => [key, process.env[key]]))
   try {
     await runScenario(tempDir)
@@ -31,8 +31,8 @@ async function runDefaultCompletionScenario(tempDir) {
     setup_package: 'research-safe',
     trusted_workspace_roots: [],
   }))
-  process.env.BORDER_COLLIE_NO_PET = '1'
-  process.env.BORDER_COLLIE_OWNER_CONFIG = ownerConfigDir
+  process.env.BORDERCOLLIE_NO_PET = '1'
+  process.env.BORDERCOLLIE_OWNER_CONFIG = ownerConfigDir
 
   const client = {
     session: {
@@ -47,8 +47,8 @@ async function runDefaultCompletionScenario(tempDir) {
       }],
     },
   }
-  const { BorderCollie } = await import(pathToFileURL(path.join(ROOT, 'plugin', 'border-collie.js')).href)
-  const hooks = await BorderCollie({ client, directory: tempDir })
+  const { Bordercollie } = await import(pathToFileURL(path.join(ROOT, 'plugin', 'bordercollie.js')).href)
+  const hooks = await Bordercollie({ client, directory: tempDir })
   await hooks.event({ event: { type: 'session.idle', properties: { sessionID: 'finished-session' } } })
   await new Promise((resolve) => setTimeout(resolve, 25))
   process.stdout.write('ok - a normally completed OpenCode turn settles without injected feedback\n')
@@ -69,8 +69,8 @@ async function runScenario(tempDir) {
       checks: [{ type: 'file_exists', path: 'missing-output.txt' }],
     }],
   }))
-  process.env.BORDER_COLLIE_NO_PET = '1'
-  process.env.BORDER_COLLIE_OWNER_CONFIG = ownerConfigDir
+  process.env.BORDERCOLLIE_NO_PET = '1'
+  process.env.BORDERCOLLIE_OWNER_CONFIG = ownerConfigDir
 
   let messageReads = 0
   let promptCalls = 0
@@ -91,8 +91,8 @@ async function runScenario(tempDir) {
       },
     },
   }
-  const { BorderCollie } = await import(pathToFileURL(path.join(ROOT, 'plugin', 'border-collie.js')).href)
-  const hooks = await BorderCollie({ client, directory: tempDir })
+  const { Bordercollie } = await import(pathToFileURL(path.join(ROOT, 'plugin', 'bordercollie.js')).href)
+  const hooks = await Bordercollie({ client, directory: tempDir })
   await hooks.event({
     event: {
       type: 'message.updated',
@@ -158,7 +158,7 @@ async function runScenario(tempDir) {
   fs.mkdirSync(path.join(invalidWorkspace, '.opencode'), { recursive: true })
   fs.writeFileSync(path.join(invalidWorkspace, '.opencode', 'protocol.json'), '{ invalid json\n')
 
-  const hooksWithoutPetDelivery = await BorderCollie({ client: {}, directory: invalidWorkspace })
+  const hooksWithoutPetDelivery = await Bordercollie({ client: {}, directory: invalidWorkspace })
   await assert.rejects(
     hooksWithoutPetDelivery['tool.execute.before'](
       { tool: 'read', sessionID: 'transport-failure' },

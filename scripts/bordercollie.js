@@ -6,21 +6,22 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { parseSizeArgument } = require('../events/size-command');
 const { sendControl } = require('../pet/control');
-const { BUILTIN_PROFILES, readConfig, writeConfig, profile } = require('../guard/lib/config');
-const { resolveProjectOwnerPolicy } = require('../guard/lib/owner-policy');
-const { policyConflicts } = require('../guard/lib/policy-resolution');
+const { BUILTIN_PROFILES, readConfig, writeConfig, profile } = require('../bordercollie/lib/config');
+const { resolveProjectOwnerPolicy } = require('../bordercollie/lib/owner-policy');
+const { policyConflicts } = require('../bordercollie/lib/policy-resolution');
 
 function usage() {
-  return `Usage: border-collie <command>
+  return `Usage: bordercollie <command>
 
 Commands:
-  install                                  Install the Border Collie package for OpenCode
+  migrate                                  Move existing folders without changing owner settings
+  install                                  Install the bordercollie package for OpenCode
   profile list                              List built-in and named profiles
   profile show <name>                       Inspect a resolved profile
   profile create <name> --from <preset>     Copy a built-in preset into a named profile
   profile assign <adapter> <profile>        Set an adapter default profile
   project setup [--profile <name>] [--write-path <path>]
-  project migrate                           Copy the legacy OpenCode Protocol to Border Collie
+  project migrate                           Copy the legacy OpenCode Protocol to bordercollie
   pet size <percent|reset>                  Persist and apply the Pet size
   help                                     Show this help
 `;
@@ -28,7 +29,7 @@ Commands:
 
 function configOrThrow() {
   const loaded = readConfig();
-  if (loaded.error) throw new Error(`Border Collie configuration is invalid: ${loaded.error.message}`);
+  if (loaded.error) throw new Error(`bordercollie configuration is invalid: ${loaded.error.message}`);
   return loaded;
 }
 
@@ -40,7 +41,7 @@ function optionalValue(args, name) {
 }
 
 function projectProtocolPath(workdir = process.cwd()) {
-  return path.join(workdir, '.border-collie', 'protocol.json');
+  return path.join(workdir, '.bordercollie', 'protocol.json');
 }
 
 function writeProjectProtocol(protocol, workdir = process.cwd()) {
@@ -151,6 +152,10 @@ async function handlePet(args) {
 
 async function main(args = process.argv.slice(2)) {
   const command = args[0];
+  if (command === 'migrate' && args.length === 1) {
+    process.stdout.write(JSON.stringify(require('./migrate').migrate()) + '\n');
+    return;
+  }
   if (command === 'help' || command === '--help' || command === '-h') {
     process.stdout.write(usage());
     return;
@@ -160,7 +165,7 @@ async function main(args = process.argv.slice(2)) {
   if (command === 'pet') return handlePet(args.slice(1));
   if (command !== 'install' || args.length !== 1) throw new Error(usage());
 
-  console.log('Installing Border Collie into OpenCode global plugins…');
+  console.log('Installing bordercollie into OpenCode global plugins…');
   const result = installPlugin({ verifyOpenCode: true });
   console.log('Plugin entry:  ' + result.dest);
   console.log('Package:       ' + result.packageDir + '  (guard + pet)');

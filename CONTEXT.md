@@ -9,15 +9,15 @@ Production macOS uses AppKit and system WebKit, while Windows, Linux, and develo
 
 **Pet animation contract** - validated shared configuration that maps semantic Pet states to named animation tracks, ordered frames, and per-frame durations before either Pet host activates the renderer.
 
-**Event stream** - transient contract sent over the Pet process's private input pipe through which the Border Collie plugin publishes events and Pet consumes them.
+**Event stream** - transient contract sent over the Pet process's private input pipe through which the bordercollie plugin publishes events and Pet consumes them.
 The Pet keeps only a bounded in-memory queue while its renderer starts, and no events survive an OpenCode restart.
 
-**Border Collie plugin** - OpenCode adapter whose source is `plugin/border-collie.js` in this clone.
+**bordercollie plugin** - OpenCode adapter whose source is `plugin/bordercollie.js` in this clone.
 
-**Border Collie package** - self-contained installation containing the Border Collie plugin, Guard, Event stream contract, and Pet.
+**bordercollie package** - self-contained installation containing the bordercollie plugin, Guard, Event stream contract, and Pet.
 
-**Global bind** - installation operation that materializes a verified Border Collie package under OpenCode's global plugin directory while preserving the prior working package if verification fails.
+**Global bind** - installation operation that materializes a verified bordercollie package under OpenCode's global plugin directory while preserving the prior working package if verification fails.
 
-**Protocol** - task envelope at `.border-collie/protocol.json` in the opened directory, containing allowed reads, writes, commands, egress, and done criteria.
+**Protocol** - task envelope at `.bordercollie/protocol.json` in the opened directory, containing allowed reads, writes, commands, egress, and done criteria.
 The legacy `.opencode/protocol.json` remains read-compatible during migration.
 A missing Protocol selects the conservative default.

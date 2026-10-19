@@ -3,11 +3,12 @@
 const crypto = require('node:crypto');
 const fs = require('node:fs');
 const path = require('node:path');
+const { existingDirectory, LEGACY_DIRECTORY } = require('./legacy-paths');
 const { Protocol, deriveDefault } = require('./policy');
 const { policyConflicts, resolvePolicy } = require('./policy-resolution');
 
 function protocolPath(workdir) {
-  return path.join(workdir, '.border-collie', 'protocol.json');
+  return path.join(existingDirectory(path.join(workdir, '.bordercollie'), path.join(workdir, LEGACY_DIRECTORY)), 'protocol.json');
 }
 
 function legacyProtocolPath(workdir) {

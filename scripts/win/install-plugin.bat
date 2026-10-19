@@ -1,6 +1,6 @@
 @echo off
 cd /d "%~dp0..\.."
-echo Installing Border Collie…
+echo Installing bordercollie…
 node scripts\install-plugin.js %*
 if errorlevel 1 (
   echo Install failed.

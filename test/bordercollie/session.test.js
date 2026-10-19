@@ -6,10 +6,10 @@ const os = require('node:os');
 const path = require('node:path');
 const test = require('node:test');
 
-const { createSession } = require('../../guard/lib/session');
+const { createSession } = require('../../bordercollie/lib/session');
 
 function withWorkdir(run) {
-  const workdir = fs.mkdtempSync(path.join(os.tmpdir(), 'border-collie-session-'));
+  const workdir = fs.mkdtempSync(path.join(os.tmpdir(), 'bordercollie-session-'));
   try {
     return run(workdir);
   } finally {

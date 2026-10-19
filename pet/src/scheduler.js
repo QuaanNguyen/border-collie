@@ -163,6 +163,6 @@ function createReactionScheduler(opts = {}) {
 
 const api = { createReactionScheduler, HIGH, MIN_DWELL, HOLD };
 
-if (typeof window !== 'undefined') window.BorderCollieScheduler = api;
+if (typeof window !== 'undefined') window.BordercollieScheduler = api;
 if (typeof module !== 'undefined') module.exports = api;
 })();

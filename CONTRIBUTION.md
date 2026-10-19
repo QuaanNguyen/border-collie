@@ -1,6 +1,6 @@
-# Contributing to Border Collie
+# Contributing to bordercollie
 
-Border Collie is an OpenCode plugin, deterministic Guard, transient event stream, and optional desktop Pet.
+bordercollie is an OpenCode plugin, deterministic Guard, transient event stream, and optional desktop Pet.
 The plugin in `plugin/` adapts OpenCode hooks to Guard decisions and publishes events to the Pet over a private input pipe.
 Guard owns policy enforcement and completion evidence, while the Pet only expresses events and never changes Guard outcomes.
 The production macOS Pet uses the native AppKit and WebKit host in `pet/native/`, while Windows, Linux, and development mode use the locked Electron runtime in `pet/`.
@@ -20,7 +20,7 @@ Clone the repository and enter its root directory.
 
 ```sh
 git clone <repository-url>
-cd border-collie
+cd bordercollie
 ```
 
 Install the locked Pet dependencies before running any renderer, Electron, or full-suite checks.
@@ -58,7 +58,7 @@ npm test
 Run the focused Guard and plugin suites when changing those boundaries.
 
 ```sh
-node --test test/guard/*.test.js test/plugin/*.test.mjs
+node --test test/bordercollie/*.test.js test/plugin/*.test.mjs
 ```
 
 Run the package surface check to verify required files and ensure `node_modules/` is absent from the tarball.
@@ -75,7 +75,7 @@ node test/run-all-tests.js
 ```
 
 The full orchestrator runs the selected unit and integration suites plus the renderer and window tests when the locked Electron runtime is available.
-Use `BORDER_COLLIE_SKIP_NATIVE_TESTS=1 node test/run-all-tests.js` when native or Electron acceptance is unavailable, but report that reduced coverage in the pull request.
+Use `BORDERCOLLIE_SKIP_NATIVE_TESTS=1 node test/run-all-tests.js` when native or Electron acceptance is unavailable, but report that reduced coverage in the pull request.
 
 Run the E2E lane directly when changing external processes, OpenCode integration, the renderer, or the Pet host.
 
@@ -112,7 +112,7 @@ opencode <path-to-disposable-project>
 Exercise `bc pet size` with `75`, `115`, and `reset`, and confirm that the Pet changes size without installing keyboard shortcuts.
 Exercise an allowed read or edit inside the project and confirm that the Pet remains quiet or shows the expected allowed activity.
 Exercise a path, command, or egress action outside the active Protocol and confirm that Guard refuses it with a remediation message.
-Create or modify `.border-collie/protocol.json` only as a human during this test, because project policy may narrow the owner policy but cannot broaden it.
+Create or modify `.bordercollie/protocol.json` only as a human during this test, because project policy may narrow the owner policy but cannot broaden it.
 Ask OpenCode to make a completion claim that is missing required evidence, then satisfy the criterion and continue the session to verify failed and accepted completion verdicts.
 Confirm that an OpenCode restart starts a fresh event stream and that events are not replayed from a previous session.
 Use a disposable owner configuration and disposable project when testing installer or policy migration behavior.

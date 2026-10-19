@@ -10,7 +10,7 @@ const here = path.dirname(fileURLToPath(import.meta.url));
 function findRepo(start) {
   let dir = start;
   for (let i = 0; i < 12; i++) {
-    if (fs.existsSync(path.join(dir, "guard/lib/session.js"))) return dir;
+    if (fs.existsSync(path.join(dir, "bordercollie/lib/session.js"))) return dir;
     const parent = path.dirname(dir);
     if (parent === dir) break;
     dir = parent;
@@ -19,26 +19,26 @@ function findRepo(start) {
 }
 
 function resolveRoot(start) {
-  if (process.env.BORDER_COLLIE_ROOT) return process.env.BORDER_COLLIE_ROOT;
-  const bundled = path.join(start, "border-collie");
-  if (fs.existsSync(path.join(bundled, "guard/lib/session.js"))) return bundled;
+  if (process.env.BORDERCOLLIE_ROOT) return process.env.BORDERCOLLIE_ROOT;
+  const bundled = path.join(start, "bordercollie");
+  if (fs.existsSync(path.join(bundled, "bordercollie/lib/session.js"))) return bundled;
   return findRepo(start);
 }
 
 const repoRoot = resolveRoot(here);
 if (!repoRoot) {
   throw new Error(
-    "Border Collie cannot find guard/lib/session.js. Run scripts/install-plugin (copies guard + pet next to the plugin), or set BORDER_COLLIE_ROOT.",
+    "bordercollie cannot find bordercollie/lib/session.js. Run scripts/install-plugin (copies guard + pet next to the plugin), or set BORDERCOLLIE_ROOT.",
   );
 }
 
-const { createGuardAdapter } = require(path.join(repoRoot, "guard/lib/adapter.js"));
+const { createGuardAdapter } = require(path.join(repoRoot, "bordercollie/lib/adapter.js"));
 const { EventBus } = require(path.join(repoRoot, "events/index.js"));
 const { startControlServer } = require(path.join(repoRoot, "pet/control.js"));
-const { readConfig } = require(path.join(repoRoot, "guard/lib/config.js"));
-const { resolveOwnerPolicy, resolveProjectOwnerPolicy } = require(path.join(repoRoot, "guard/lib/owner-policy.js"));
-const { createLiveProtocol } = require(path.join(repoRoot, "guard/lib/live-protocol.js"));
-const { protectedPathDecision } = require(path.join(repoRoot, "guard/lib/protected-paths.js"));
+const { readConfig } = require(path.join(repoRoot, "bordercollie/lib/config.js"));
+const { resolveOwnerPolicy, resolveProjectOwnerPolicy } = require(path.join(repoRoot, "bordercollie/lib/owner-policy.js"));
+const { createLiveProtocol } = require(path.join(repoRoot, "bordercollie/lib/live-protocol.js"));
+const { protectedPathDecision } = require(path.join(repoRoot, "bordercollie/lib/protected-paths.js"));
 
 const TOOL_ACTION = {
   read: "read",
@@ -86,12 +86,12 @@ function ordinaryDenialMessage(tool, args, event, workdir) {
   const rule = event?.rule || 'resolved_policy';
   const alternative = rule === 'read_paths' || rule === 'write_paths'
     ? 'Use a path within the active project: ' + workdir
-    : 'Choose an action allowed by the resolved Border Collie policy.';
+    : 'Choose an action allowed by the resolved bordercollie policy.';
   return denialMessage({
     action: tool,
     target,
     rule,
-    layer: 'resolved Border Collie policy',
+    layer: 'resolved bordercollie policy',
     reason: event?.reason || 'the action is not permitted',
     alternative,
     retry: 'do not retry this target; use the permitted alternative or ask the owner to change policy.',
@@ -173,20 +173,20 @@ function electronBinary(petDir) {
 }
 
 function launchPet() {
-  if (process.env.BORDER_COLLIE_NO_PET === "1") return;
+  if (process.env.BORDERCOLLIE_NO_PET === "1") return;
   const petDir = path.join(repoRoot, "pet");
   const native = path.join(petDir, "native", "pet-host");
   const bin = process.platform === "darwin" ? native : electronBinary(petDir);
   if (!bin) {
     console.error(
-      "[border-collie] Pet Border Collie not launched: Electron binary missing under " + petDir +
+      "[bordercollie] Pet bordercollie not launched: Electron binary missing under " + petDir +
       ". Re-run: bash scripts/install-plugin.sh",
     );
     return;
   }
   if (!fs.existsSync(bin)) {
     console.error(
-      "[border-collie] Pet Border Collie not launched: native macOS host missing under " + petDir +
+      "[bordercollie] Pet bordercollie not launched: native macOS host missing under " + petDir +
       ". Re-run: bash scripts/install-plugin.sh",
     );
     return;
@@ -204,7 +204,7 @@ function launchPet() {
     env,
   });
   child.on("error", (err) => {
-    console.error("[border-collie] failed to launch Pet Border Collie:", err.message);
+    console.error("[bordercollie] failed to launch Pet bordercollie:", err.message);
   });
   child.stdin.on("error", () => {});
   child.unref();
@@ -212,7 +212,7 @@ function launchPet() {
   return child;
 }
 
-export const BorderCollie = async ({ client, directory }) => {
+export const Bordercollie = async ({ client, directory }) => {
   const workdir = directory || process.cwd();
   const ownerState = resolveOwnerPolicy('opencode');
   const liveProtocol = createLiveProtocol({
@@ -247,7 +247,7 @@ export const BorderCollie = async ({ client, directory }) => {
     const action = state.conflicts?.length
       ? 'Remove or narrow the project policy'
       : 'Fix or remove the project policy';
-    return "Border Collie blocked this session because " + state.reason + ". " + action + " at " + state.file + ".";
+    return "bordercollie blocked this session because " + state.reason + ". " + action + " at " + state.file + ".";
   }
 
   function refreshPolicy() {
@@ -466,7 +466,7 @@ export const BorderCollie = async ({ client, directory }) => {
       }
       const protectedPolicy = {
         ...nextPolicy.protocol.raw,
-        protected_paths: [...(nextPolicy.protocol.raw.protected_paths || []), '.border-collie/protocol.json', '.opencode/protocol.json'],
+        protected_paths: [...(nextPolicy.protocol.raw.protected_paths || []), '.bordercollie/protocol.json', '.opencode/protocol.json'],
       };
       const protection = protectedPathDecision(tool, args, protectedPolicy, workdir);
       if (protection) {
@@ -483,7 +483,7 @@ export const BorderCollie = async ({ client, directory }) => {
           action: tool,
           target,
           rule: protection.rule,
-          layer: 'resolved Border Collie policy',
+          layer: 'resolved bordercollie policy',
           reason: protection.reason,
           alternative: protection.rule === 'protected_paths' ? 'Read the path without modifying it, or ask the owner to change protection.' : 'Ask the owner to change read protection.',
           retry: 'do not retry this action until policy changes.',
@@ -610,10 +610,10 @@ function toolInput(event) {
 }
 
 export default {
-  id: "border-collie",
+  id: "bordercollie",
   async setup(ctx) {
     const directory = ctx.location?.directory || ctx.location?.project?.directory || process.cwd();
-    const hooks = await BorderCollie({ client: v2Client(ctx), directory });
+    const hooks = await Bordercollie({ client: v2Client(ctx), directory });
     await ctx.tool.hook("execute.before", async (event) => {
       await hooks["tool.execute.before"](
         { tool: event.tool, sessionID: event.sessionID, callID: event.callID },

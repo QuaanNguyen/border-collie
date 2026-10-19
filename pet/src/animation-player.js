@@ -133,6 +133,6 @@
   }
 
   const interfaceValue = { createAnimationPlayer }
-  if (typeof window !== 'undefined') window.BorderCollieAnimation = interfaceValue
+  if (typeof window !== 'undefined') window.BordercollieAnimation = interfaceValue
   if (typeof module !== 'undefined') module.exports = interfaceValue
 })()

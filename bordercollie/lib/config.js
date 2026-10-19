@@ -3,6 +3,7 @@
 const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
+const { existingDirectory } = require('./legacy-paths');
 const { policyConflicts, resolvePolicy } = require('./policy-resolution');
 
 const BUILTIN_PROFILES = Object.freeze({
@@ -21,7 +22,7 @@ const BUILTIN_PROFILES = Object.freeze({
 });
 
 function defaultConfigRoot() {
-  return process.env.BORDER_COLLIE_CONFIG_ROOT || path.join(os.homedir(), '.config', 'border-collie');
+  return process.env.BORDERCOLLIE_CONFIG_ROOT || process.env.BORDER_COLLIE_CONFIG_ROOT || existingDirectory(path.join(os.homedir(), '.config', 'bordercollie'), path.join(os.homedir(), '.config', 'border-collie'));
 }
 
 function configPath(root = defaultConfigRoot()) {

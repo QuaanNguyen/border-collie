@@ -36,7 +36,7 @@ app.whenReady().then(() => {
     pointerDowns += 1
     writeStatus()
   })
-  win.loadURL('data:text/html,<title>border-collie focus probe</title><body></body>')
+  win.loadURL('data:text/html,<title>bordercollie focus probe</title><body></body>')
   win.on('focus', writeStatus)
   win.on('blur', writeStatus)
   win.once('ready-to-show', () => {

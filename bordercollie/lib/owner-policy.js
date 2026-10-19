@@ -2,13 +2,14 @@
 const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
+const { existingDirectory } = require('./legacy-paths');
 const { readConfig, resolveAdapter } = require('./config');
 
 function defaultOwnerConfigDir() {
-  return path.join(os.homedir(), '.config', 'opencode', 'border-collie');
+  return existingDirectory(path.join(os.homedir(), '.config', 'opencode', 'bordercollie'), path.join(os.homedir(), '.config', 'opencode', 'border-collie'));
 }
 
-function loadOwnerPolicy(configDir = process.env.BORDER_COLLIE_OWNER_CONFIG || defaultOwnerConfigDir()) {
+function loadOwnerPolicy(configDir = process.env.BORDERCOLLIE_OWNER_CONFIG || process.env.BORDER_COLLIE_OWNER_CONFIG || defaultOwnerConfigDir()) {
   const policyPath = path.join(configDir, 'policy.json');
   if (!fs.existsSync(policyPath)) return null;
   try {
@@ -50,27 +51,27 @@ function ownerProtocol(policy) {
 
 function resolveOwnerPolicy(adapter = 'opencode') {
   const canonical = readConfig();
-  if (canonical.error) return { active: false, reason: `Border Collie configuration is invalid: ${canonical.error.message}`, file: canonical.file };
-  if ((canonical.exists || process.env.BORDER_COLLIE_CONFIG_ROOT) && !process.env.BORDER_COLLIE_OWNER_CONFIG) {
+  if (canonical.error) return { active: false, reason: `bordercollie configuration is invalid: ${canonical.error.message}`, file: canonical.file };
+  if ((canonical.exists || process.env.BORDERCOLLIE_CONFIG_ROOT) && !process.env.BORDERCOLLIE_OWNER_CONFIG) {
     const resolved = resolveAdapter(canonical.config, adapter);
     if (!resolved.active) return { ...resolved, file: canonical.file };
     return { ...resolved, active: true, protocol: resolved.profile.policy, file: canonical.file, canonical: true };
   }
   const legacy = loadOwnerPolicy();
-  return { active: true, protocol: ownerProtocol(legacy), legacy: true, file: legacy ? path.join(process.env.BORDER_COLLIE_OWNER_CONFIG || defaultOwnerConfigDir(), 'policy.json') : null };
+  return { active: true, protocol: ownerProtocol(legacy), legacy: true, file: legacy ? path.join(process.env.BORDERCOLLIE_OWNER_CONFIG || process.env.BORDER_COLLIE_OWNER_CONFIG || defaultOwnerConfigDir(), 'policy.json') : null };
 }
 
 function resolveProjectOwnerPolicy(adapter, projectProfile) {
   const canonical = readConfig();
-  if (canonical.error) return { active: false, reason: `Border Collie configuration is invalid: ${canonical.error.message}`, file: canonical.file };
-  if ((canonical.exists || process.env.BORDER_COLLIE_CONFIG_ROOT) && !process.env.BORDER_COLLIE_OWNER_CONFIG) {
+  if (canonical.error) return { active: false, reason: `bordercollie configuration is invalid: ${canonical.error.message}`, file: canonical.file };
+  if ((canonical.exists || process.env.BORDERCOLLIE_CONFIG_ROOT) && !process.env.BORDERCOLLIE_OWNER_CONFIG) {
     const resolved = resolveAdapter(canonical.config, adapter, projectProfile);
     if (!resolved.active) return { ...resolved, file: canonical.file };
     return { ...resolved, active: true, protocol: resolved.profile.policy, file: canonical.file, canonical: true };
   }
-  if (projectProfile) return { active: false, reason: 'project profile selection requires canonical Border Collie configuration' };
+  if (projectProfile) return { active: false, reason: 'project profile selection requires canonical bordercollie configuration' };
   const legacy = loadOwnerPolicy();
-  return { active: true, protocol: ownerProtocol(legacy), legacy: true, file: legacy ? path.join(process.env.BORDER_COLLIE_OWNER_CONFIG || defaultOwnerConfigDir(), 'policy.json') : null };
+  return { active: true, protocol: ownerProtocol(legacy), legacy: true, file: legacy ? path.join(process.env.BORDERCOLLIE_OWNER_CONFIG || process.env.BORDER_COLLIE_OWNER_CONFIG || defaultOwnerConfigDir(), 'policy.json') : null };
 }
 
 module.exports = { defaultOwnerConfigDir, loadOwnerPolicy, ownerProtocol, resolveOwnerPolicy, resolveProjectOwnerPolicy };

@@ -6,35 +6,35 @@
   "defaultScale": 1,
   "animationTracks": {
     "normal": {
-      "folder": "border-collie-normal",
+      "folder": "bordercollie-normal",
       "frameDurationsMs": [900, 180, 180, 240, 1200]
     },
     "dragging": {
-      "folder": "border-collie-dragging",
+      "folder": "bordercollie-dragging",
       "frameDurationsMs": [120, 120, 120, 120, 220]
     },
     "hovering": {
-      "folder": "border-collie-hovering",
+      "folder": "bordercollie-hovering",
       "frameDurationsMs": [180, 180, 180, 180, 360]
     },
     "thinking": {
-      "folder": "border-collie-thinking",
+      "folder": "bordercollie-thinking",
       "frameDurationsMs": [140, 140, 140, 140, 260]
     },
     "suspicious": {
-      "folder": "border-collie-suspicious",
+      "folder": "bordercollie-suspicious",
       "frameDurationsMs": [180, 180, 180, 180, 420]
     },
     "refused": {
-      "folder": "border-collie-refused",
+      "folder": "bordercollie-refused",
       "frameDurationsMs": [160, 160, 160, 160, 360]
     },
     "denied": {
-      "folder": "border-collie-denied",
+      "folder": "bordercollie-denied",
       "frameDurationsMs": [160, 160, 160, 160, 400]
     },
     "celebrating": {
-      "folder": "border-collie-celebrating",
+      "folder": "bordercollie-celebrating",
       "frameDurationsMs": [140, 140, 140, 140, 280]
     }
   },

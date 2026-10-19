@@ -6,12 +6,12 @@ import test from 'node:test';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
-const pluginUrl = pathToFileURL(path.join(here, '../../plugin/border-collie.js')).href;
+const pluginUrl = pathToFileURL(path.join(here, '../../plugin/bordercollie.js')).href;
 const pluginModule = await import(pluginUrl);
-const { BorderCollie } = pluginModule;
+const { Bordercollie } = pluginModule;
 
 async function withWorkdir(run) {
-  const workdir = fs.mkdtempSync(path.join(os.tmpdir(), 'border-collie-plugin-'));
+  const workdir = fs.mkdtempSync(path.join(os.tmpdir(), 'bordercollie-plugin-'));
   fs.mkdirSync(path.join(workdir, '.opencode'));
   try {
     return await run(workdir);
@@ -35,11 +35,11 @@ function protocol(writePaths) {
 
 test('the plugin protects and hot-reloads the Protocol during one session', async () => {
   await withWorkdir(async (workdir) => {
-    const previous = process.env.BORDER_COLLIE_NO_PET;
-    process.env.BORDER_COLLIE_NO_PET = '1';
+    const previous = process.env.BORDERCOLLIE_NO_PET;
+    process.env.BORDERCOLLIE_NO_PET = '1';
     try {
       writeProtocol(workdir, protocol(['**']));
-      const hooks = await BorderCollie({ directory: workdir, client: {} });
+      const hooks = await Bordercollie({ directory: workdir, client: {} });
       const before = hooks['tool.execute.before'];
 
       await assert.rejects(
@@ -64,16 +64,16 @@ test('the plugin protects and hot-reloads the Protocol during one session', asyn
         /malformed/i,
       );
     } finally {
-      if (previous === undefined) delete process.env.BORDER_COLLIE_NO_PET;
-      else process.env.BORDER_COLLIE_NO_PET = previous;
+      if (previous === undefined) delete process.env.BORDERCOLLIE_NO_PET;
+      else process.env.BORDERCOLLIE_NO_PET = previous;
     }
   });
 });
 
 test('the plugin remediates completion claims and waits for a Protocol correction', async () => {
   await withWorkdir(async (workdir) => {
-    const previous = process.env.BORDER_COLLIE_NO_PET;
-    process.env.BORDER_COLLIE_NO_PET = '1';
+    const previous = process.env.BORDERCOLLIE_NO_PET;
+    process.env.BORDERCOLLIE_NO_PET = '1';
     try {
       writeProtocol(workdir, {
         ...protocol(['src/**']),
@@ -86,7 +86,7 @@ test('the plugin remediates completion claims and waits for a Protocol correctio
       });
       const prompts = [];
       let completion = 0;
-      const hooks = await BorderCollie({
+      const hooks = await Bordercollie({
         directory: workdir,
         client: {
           session: {
@@ -135,19 +135,19 @@ test('the plugin remediates completion claims and waits for a Protocol correctio
 
       await hooks['tool.execute.before']({ tool: 'edit', sessionID: 'session-2', args: { path: 'src/parser.js' } }, {});
     } finally {
-      if (previous === undefined) delete process.env.BORDER_COLLIE_NO_PET;
-      else process.env.BORDER_COLLIE_NO_PET = previous;
+      if (previous === undefined) delete process.env.BORDERCOLLIE_NO_PET;
+      else process.env.BORDERCOLLIE_NO_PET = previous;
     }
   });
 });
 
 test('a Protocol change made during an agent tool run is quarantined', async () => {
   await withWorkdir(async (workdir) => {
-    const previous = process.env.BORDER_COLLIE_NO_PET;
-    process.env.BORDER_COLLIE_NO_PET = '1';
+    const previous = process.env.BORDERCOLLIE_NO_PET;
+    process.env.BORDERCOLLIE_NO_PET = '1';
     try {
       writeProtocol(workdir, { ...protocol(['src/**']), allow_ordinary_bash: true });
-      const hooks = await BorderCollie({ directory: workdir, client: {} });
+      const hooks = await Bordercollie({ directory: workdir, client: {} });
       const before = hooks['tool.execute.before'];
       const after = hooks['tool.execute.after'];
 
@@ -169,20 +169,20 @@ test('a Protocol change made during an agent tool run is quarantined', async () 
 
       await before({ tool: 'edit', sessionID: 'session-3', args: { path: 'lib/allowed.js' } }, {});
     } finally {
-      if (previous === undefined) delete process.env.BORDER_COLLIE_NO_PET;
-      else process.env.BORDER_COLLIE_NO_PET = previous;
+      if (previous === undefined) delete process.env.BORDERCOLLIE_NO_PET;
+      else process.env.BORDERCOLLIE_NO_PET = previous;
     }
   });
 });
 
 test('OpenCode V2 applies policy to the live tool input', async () => {
   await withWorkdir(async (workdir) => {
-    const previous = process.env.BORDER_COLLIE_NO_PET;
-    process.env.BORDER_COLLIE_NO_PET = '1';
+    const previous = process.env.BORDERCOLLIE_NO_PET;
+    process.env.BORDERCOLLIE_NO_PET = '1';
     try {
       writeProtocol(workdir, protocol(['**']));
       const registered = {};
-      assert.equal(pluginModule.default.id, 'border-collie');
+      assert.equal(pluginModule.default.id, 'bordercollie');
       const cleanup = await pluginModule.default.setup({
         location: { directory: workdir },
         session: { context: async () => [] },
@@ -217,8 +217,8 @@ test('OpenCode V2 applies policy to the live tool input', async () => {
       });
       cleanup();
     } finally {
-      if (previous === undefined) delete process.env.BORDER_COLLIE_NO_PET;
-      else process.env.BORDER_COLLIE_NO_PET = previous;
+      if (previous === undefined) delete process.env.BORDERCOLLIE_NO_PET;
+      else process.env.BORDERCOLLIE_NO_PET = previous;
     }
   });
 });
