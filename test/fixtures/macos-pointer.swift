@@ -19,6 +19,7 @@ func eventSource() -> CGEventSource {
 }
 
 func postMouse(_ source: CGEventSource, _ type: CGEventType, _ point: CGPoint) {
+    guard CGWarpMouseCursorPosition(point) == .success else { fail("could not position the native pointer") }
     guard let event = CGEvent(
         mouseEventSource: source,
         mouseType: type,
