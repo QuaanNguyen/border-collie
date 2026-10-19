@@ -6,14 +6,14 @@ const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
 const test = require('node:test');
-const { createSession } = require('../../guard/lib/session');
+const { createSession } = require('../../bordercollie/lib/session');
 
 function withRepository(run) {
-  const workdir = fs.mkdtempSync(path.join(os.tmpdir(), 'border-collie-structured-claim-'));
+  const workdir = fs.mkdtempSync(path.join(os.tmpdir(), 'bordercollie-structured-claim-'));
   try {
     execFileSync('git', ['init', '--quiet'], { cwd: workdir });
     execFileSync('git', ['config', 'user.email', 'test@example.com'], { cwd: workdir });
-    execFileSync('git', ['config', 'user.name', 'Border Collie Test'], { cwd: workdir });
+    execFileSync('git', ['config', 'user.name', 'bordercollie Test'], { cwd: workdir });
     fs.mkdirSync(path.join(workdir, 'src'));
     fs.writeFileSync(path.join(workdir, 'src', 'answer.js'), 'export const answer = 42;\n');
     execFileSync('git', ['add', '.'], { cwd: workdir });

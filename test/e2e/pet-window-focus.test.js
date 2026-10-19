@@ -140,7 +140,7 @@ async function probeReceivedPointer(statusPath, previousCount, timeoutMs = 400) 
 async function findVisiblePetPoint(pointerHelper, statusPath, bounds, expected, diagnostic = () => '') {
   const point = await waitFor(
     () => {
-      const point = findControl(pointerHelper, bounds.pid, 'Border Collie sprite')
+      const point = findControl(pointerHelper, bounds.pid, 'bordercollie sprite')
       if (!point || (expected && Math.hypot(point.x - expected.x, point.y - expected.y) > 2)) return null
       return point
     },
@@ -163,7 +163,7 @@ async function main() {
     return
   }
 
-  const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'border-collie-focus-'))
+  const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'bordercollie-focus-'))
   const statusPath = path.join(tempDir, 'focus.json')
   const eventPath = path.join(tempDir, 'events.jsonl')
   const pointerHelper = compilePointerHelper(tempDir)
@@ -280,8 +280,8 @@ async function main() {
     devPet = launchElectron(['.', '--dev'], {
       cwd: PET_DIR,
       env: {
-        BORDER_COLLIE_EVENTS: eventPath,
-        BORDER_COLLIE_USER_DATA_DIR: path.join(tempDir, 'dev-user-data'),
+        BORDERCOLLIE_EVENTS: eventPath,
+        BORDERCOLLIE_USER_DATA_DIR: path.join(tempDir, 'dev-user-data'),
       },
     })
     await waitFor(

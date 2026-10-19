@@ -6,14 +6,14 @@ const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
 const test = require('node:test');
-const { createSession } = require('../../guard/lib/session');
+const { createSession } = require('../../bordercollie/lib/session');
 
 function withRepository(run) {
-  const workdir = fs.mkdtempSync(path.join(os.tmpdir(), 'border-collie-integrity-'));
+  const workdir = fs.mkdtempSync(path.join(os.tmpdir(), 'bordercollie-integrity-'));
   try {
     execFileSync('git', ['init', '--quiet'], { cwd: workdir });
     execFileSync('git', ['config', 'user.email', 'test@example.com'], { cwd: workdir });
-    execFileSync('git', ['config', 'user.name', 'Border Collie Test'], { cwd: workdir });
+    execFileSync('git', ['config', 'user.name', 'bordercollie Test'], { cwd: workdir });
     fs.writeFileSync(path.join(workdir, 'proof.txt'), 'proof\n');
     execFileSync('git', ['add', '.'], { cwd: workdir });
     execFileSync('git', ['commit', '--quiet', '-m', 'initial'], { cwd: workdir });
@@ -24,7 +24,7 @@ function withRepository(run) {
 }
 
 test('a terminal Guard verdict separates unavailable environment evidence from completion state', () => {
-  const workdir = fs.mkdtempSync(path.join(os.tmpdir(), 'border-collie-integrity-'));
+  const workdir = fs.mkdtempSync(path.join(os.tmpdir(), 'bordercollie-integrity-'));
   try {
     const session = createSession({
       workdir,
@@ -32,7 +32,7 @@ test('a terminal Guard verdict separates unavailable environment evidence from c
         task: 'verify an environment-dependent result',
         done_criteria: [{
           id: 'environment-proof',
-          checks: [{ type: 'command', dimension: 'environment', argv: ['border-collie-missing-command'] }],
+          checks: [{ type: 'command', dimension: 'environment', argv: ['bordercollie-missing-command'] }],
         }],
       },
     });
@@ -47,7 +47,7 @@ test('a terminal Guard verdict separates unavailable environment evidence from c
 });
 
 test('a terminal Guard verdict treats an unavailable repository as inconclusive evidence', () => {
-  const workdir = fs.mkdtempSync(path.join(os.tmpdir(), 'border-collie-integrity-'));
+  const workdir = fs.mkdtempSync(path.join(os.tmpdir(), 'bordercollie-integrity-'));
   try {
     const session = createSession({
       workdir,
@@ -98,7 +98,7 @@ test('a terminal Guard verdict reports each verified integrity dimension separat
 });
 
 test('a zero-test command cannot verify test integrity', () => {
-  const workdir = fs.mkdtempSync(path.join(os.tmpdir(), 'border-collie-integrity-'));
+  const workdir = fs.mkdtempSync(path.join(os.tmpdir(), 'bordercollie-integrity-'));
   try {
     const session = createSession({
       workdir,
@@ -124,7 +124,7 @@ test('a zero-test command cannot verify test integrity', () => {
 });
 
 test('a passing command cannot overwrite a failed integrity dimension', () => {
-  const workdir = fs.mkdtempSync(path.join(os.tmpdir(), 'border-collie-integrity-'));
+  const workdir = fs.mkdtempSync(path.join(os.tmpdir(), 'bordercollie-integrity-'));
   try {
     const session = createSession({
       workdir,

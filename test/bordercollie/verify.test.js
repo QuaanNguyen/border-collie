@@ -4,18 +4,18 @@ const assert = require('node:assert/strict');
 const os = require('node:os');
 const test = require('node:test');
 
-const { runCheck } = require('../../guard/lib/verify');
+const { runCheck } = require('../../bordercollie/lib/verify');
 
 test('command evidence uses explicit argv and a sanitized environment', () => {
-  const previous = process.env.BORDER_COLLIE_TEST_SECRET;
-  process.env.BORDER_COLLIE_TEST_SECRET = 'must-not-leak';
+  const previous = process.env.BORDERCOLLIE_TEST_SECRET;
+  process.env.BORDERCOLLIE_TEST_SECRET = 'must-not-leak';
   try {
     const passed = runCheck({
       type: 'command',
       argv: [
         process.execPath,
         '-e',
-        "process.stdout.write(`${process.env.DECLARED}:${String(process.env.BORDER_COLLIE_TEST_SECRET)}`)",
+        "process.stdout.write(`${process.env.DECLARED}:${String(process.env.BORDERCOLLIE_TEST_SECRET)}`)",
       ],
       env: { DECLARED: 'declared' },
       stdout_matches: 'declared:undefined',
@@ -55,7 +55,7 @@ test('command evidence uses explicit argv and a sanitized environment', () => {
     assert.equal(invalid.pass, false);
     assert.match(invalid.evidence, /argv/i);
   } finally {
-    if (previous === undefined) delete process.env.BORDER_COLLIE_TEST_SECRET;
-    else process.env.BORDER_COLLIE_TEST_SECRET = previous;
+    if (previous === undefined) delete process.env.BORDERCOLLIE_TEST_SECRET;
+    else process.env.BORDERCOLLIE_TEST_SECRET = previous;
   }
 });

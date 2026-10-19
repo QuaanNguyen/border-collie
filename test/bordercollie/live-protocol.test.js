@@ -6,10 +6,10 @@ const os = require('node:os');
 const path = require('node:path');
 const test = require('node:test');
 
-const { createLiveProtocol } = require('../../guard/lib/live-protocol');
+const { createLiveProtocol } = require('../../bordercollie/lib/live-protocol');
 
 function withWorkdir(run) {
-  const workdir = fs.mkdtempSync(path.join(os.tmpdir(), 'border-collie-live-protocol-'));
+  const workdir = fs.mkdtempSync(path.join(os.tmpdir(), 'bordercollie-live-protocol-'));
   fs.mkdirSync(path.join(workdir, '.opencode'));
   try {
     return run(workdir);

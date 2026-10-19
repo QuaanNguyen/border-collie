@@ -24,7 +24,7 @@ lerna-debug.log*
 .temp
 .tmp
 
-# border-collie
+# bordercollie
 /pet/node_modules
 
 # opencode

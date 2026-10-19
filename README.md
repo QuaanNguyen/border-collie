@@ -1,12 +1,12 @@
-# Border Collie
+# bordercollie
 
 A desktop border collie that watches your AI coding agent and reacts when something needs attention.
 
-![Border Collie watching agents](docs/border-collie.gif)
+![bordercollie watching agents](docs/bordercollie.gif)
 
 ## What It Does
 
-Border Collie is a small desktop companion for OpenCode.
+bordercollie is a small desktop companion for OpenCode.
 In plain terms, it sits beside your coding agent, watches what the agent tries to do, and reacts when the agent is working, blocked, refused, failed, or claiming it is done.
 
 The guard checks actions before they run, blocks work outside the task, and verifies important finish claims against the files in the project.
@@ -19,8 +19,8 @@ Codex CLI and Claude Code are not yet advertised as Guard-enforcing because thei
 For the public npm package, install the CLI globally and then install the plugin:
 
 ```sh
-npm install --global @quaannguyen/border-collie
-border-collie install
+npm install --global @quaannguyen/bordercollie
+bordercollie install
 ```
 
 The npm installation includes Guard and the desktop Pet.
@@ -29,7 +29,7 @@ To install from a source clone for development:
 
 ```sh
 git clone https://github.com/QuaanNguyen/border-collie.git
-cd border-collie
+cd bordercollie
 node scripts/install-plugin.js
 ```
 
@@ -40,7 +40,7 @@ bash scripts/install-plugin.sh
 ```
 
 The installation includes Guard and the desktop Pet.
-OpenCode v2 loads the package directory `~/.config/opencode/plugins/border-collie`. A configured path must point at that directory; a bare `border-collie.js` file is not a v2 plugin.
+OpenCode v2 loads the package directory `~/.config/opencode/plugins/bordercollie`. A configured path must point at that directory; a bare `bordercollie.js` file is not a v2 plugin.
 On macOS, the installer builds a small native host that uses the system WebKit framework and does not download Electron.
 Windows and Linux use the locked Electron runtime.
 
@@ -62,7 +62,7 @@ Open any project with OpenCode:
 opencode <path>
 ```
 
-Inspect and select Border Collie profiles from the CLI:
+Inspect and select bordercollie profiles from the CLI:
 
 ```sh
 bc profile list
@@ -112,9 +112,17 @@ Pet UI, native window, renderer, and real OpenCode process coverage live in the 
 Run the focused Guard and plugin behavior tests:
 
 ```sh
-node --test test/guard/*.test.js test/plugin/*.test.mjs
+node --test test/bordercollie/*.test.js test/plugin/*.test.mjs
 ```
 
 Guard events and active sessions exist only while OpenCode and the Pet are running.
 The plugin sends Guard events over the Pet process's private input pipe.
-Profiles and Pet size are persistent Border Collie owner preferences in the canonical Border Collie configuration.
+Profiles and Pet size are persistent bordercollie owner preferences in the canonical bordercollie configuration.
+
+Existing installations can move their project and owner settings without changing their contents:
+
+```sh
+bordercollie migrate
+```
+
+Migration stops before changing files when both folder names already exist.

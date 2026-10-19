@@ -8,15 +8,15 @@ const { pathToFileURL } = require('node:url');
 const ROOT = path.resolve(__dirname, '..', '..');
 
 function temporaryDirectory() {
-  return fs.mkdtempSync(path.join(os.tmpdir(), 'border-collie-protected-paths-'));
+  return fs.mkdtempSync(path.join(os.tmpdir(), 'bordercollie-protected-paths-'));
 }
 
 async function hooksFor(projectDir, ownerConfigDir, runDir) {
-  process.env.BORDER_COLLIE_NO_PET = '1';
-  process.env.BORDER_COLLIE_EVENTS = path.join(runDir, 'events.jsonl');
-  process.env.BORDER_COLLIE_OWNER_CONFIG = ownerConfigDir;
-  const { BorderCollie } = await import(pathToFileURL(path.join(ROOT, 'plugin/border-collie.js')).href);
-  return BorderCollie({ client: {}, directory: projectDir });
+  process.env.BORDERCOLLIE_NO_PET = '1';
+  process.env.BORDERCOLLIE_EVENTS = path.join(runDir, 'events.jsonl');
+  process.env.BORDERCOLLIE_OWNER_CONFIG = ownerConfigDir;
+  const { Bordercollie } = await import(pathToFileURL(path.join(ROOT, 'plugin/bordercollie.js')).href);
+  return Bordercollie({ client: {}, directory: projectDir });
 }
 
 async function runTest(name, fn) {
@@ -32,7 +32,7 @@ async function runTest(name, fn) {
 async function main() {
   console.log('protected paths');
 
-  await runTest('the Border Collie hook protects writes while allowing reads unless read protection is configured', async () => {
+  await runTest('the bordercollie hook protects writes while allowing reads unless read protection is configured', async () => {
     const root = temporaryDirectory();
     const projectDir = path.join(root, 'project');
     const ownerConfigDir = path.join(root, 'owner-config');

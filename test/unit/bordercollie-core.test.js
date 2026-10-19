@@ -6,11 +6,11 @@ const { execFileSync } = require('node:child_process');
 const { pathToFileURL } = require('node:url');
 
 const ROOT = path.resolve(__dirname, '..', '..');
-const { Protocol, check } = require(path.join(ROOT, 'guard/lib/policy'));
-const { createSession } = require(path.join(ROOT, 'guard/lib/session'));
-const { scan } = require(path.join(ROOT, 'guard/lib/injection'));
-const { detectClaims, runCheck, verify } = require(path.join(ROOT, 'guard/lib/verify'));
-const { normalise } = require(path.join(ROOT, 'guard/lib/toolcalls'));
+const { Protocol, check } = require(path.join(ROOT, 'bordercollie/lib/policy'));
+const { createSession } = require(path.join(ROOT, 'bordercollie/lib/session'));
+const { scan } = require(path.join(ROOT, 'bordercollie/lib/injection'));
+const { detectClaims, runCheck, verify } = require(path.join(ROOT, 'bordercollie/lib/verify'));
+const { normalise } = require(path.join(ROOT, 'bordercollie/lib/toolcalls'));
 const { EventBus } = require(path.join(ROOT, 'events'));
 
 let pass = 0, fail = 0;
@@ -285,7 +285,7 @@ t('scaling up stops at what the display can hold', () => {
 
 console.log('\ntool failures');
 
-const { toolFailed } = require(path.join(ROOT, 'guard/lib/toolerror'));
+const { toolFailed } = require(path.join(ROOT, 'bordercollie/lib/toolerror'));
 
 const FAILURES = [
   'error: ENOENT: no such file or directory',
@@ -384,10 +384,10 @@ t('the OpenCode adapter blocks a shell escape hidden in interpreter code', () =>
     import fs from 'node:fs';
     import os from 'node:os';
     import path from 'node:path';
-    process.env.BORDER_COLLIE_NO_PET = '1';
-    const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'border-collie-shell-boundary-'));
-    const ownerDir = fs.mkdtempSync(path.join(os.tmpdir(), 'border-collie-owner-'));
-    process.env.BORDER_COLLIE_OWNER_CONFIG = ownerDir;
+    process.env.BORDERCOLLIE_NO_PET = '1';
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'bordercollie-shell-boundary-'));
+    const ownerDir = fs.mkdtempSync(path.join(os.tmpdir(), 'bordercollie-owner-'));
+    process.env.BORDERCOLLIE_OWNER_CONFIG = ownerDir;
     fs.writeFileSync(path.join(ownerDir, 'policy.json'), JSON.stringify({
       setup_package: 'research-safe',
     }));
@@ -398,8 +398,8 @@ t('the OpenCode adapter blocks a shell escape hidden in interpreter code', () =>
       allow_commands: ['python'],
       egress: [],
     }));
-    const { BorderCollie } = await import(${JSON.stringify(pathToFileURL(path.join(ROOT, 'plugin/border-collie.js')).href)});
-    const hooks = await BorderCollie({ client: {}, directory: dir });
+    const { Bordercollie } = await import(${JSON.stringify(pathToFileURL(path.join(ROOT, 'plugin/bordercollie.js')).href)});
+    const hooks = await Bordercollie({ client: {}, directory: dir });
     let denied = false;
     try {
       await hooks['tool.execute.before'](

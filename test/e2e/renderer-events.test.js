@@ -34,20 +34,20 @@ async function waitFor(read, timeoutMs = 10000) {
 }
 
 async function main() {
-  const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'border-collie-renderer-'))
+  const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'bordercollie-renderer-'))
   const statusPath = path.join(tempDir, 'status.json')
   const eventPath = path.join(tempDir, 'events.jsonl')
   const env = { ...process.env }
   delete env.ELECTRON_RUN_AS_NODE
-  env.BORDER_COLLIE_ROOT = ROOT
-  env.BORDER_COLLIE_STATUS_PATH = statusPath
-  env.BORDER_COLLIE_EVENT_PATH = eventPath
-  env.BORDER_COLLIE_TEST_FRAME = pathToFileURL(path.join(
+  env.BORDERCOLLIE_ROOT = ROOT
+  env.BORDERCOLLIE_STATUS_PATH = statusPath
+  env.BORDERCOLLIE_EVENT_PATH = eventPath
+  env.BORDERCOLLIE_TEST_FRAME = pathToFileURL(path.join(
     PET_DIR,
     'assets',
     'default-animations',
-    'border-collie-normal',
-    'border-collie-normal-1.png',
+    'bordercollie-normal',
+    'bordercollie-normal-1.png',
   )).href
 
   let diagnostic = ''

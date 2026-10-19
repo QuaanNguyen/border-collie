@@ -11,7 +11,7 @@ const { installPlugin } = require(path.join(ROOT, 'scripts/install-plugin'));
 const temporaryDirectories = [];
 
 function temporaryDirectory() {
-  const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'border-collie-install-'));
+  const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'bordercollie-install-'));
   temporaryDirectories.push(directory);
   return directory;
 }
@@ -28,7 +28,7 @@ function runTest(name, fn) {
 
 console.log('install plugin');
 
-runTest('first install creates canonical Border Collie configuration outside the package', () => {
+runTest('first install creates canonical bordercollie configuration outside the package', () => {
   const root = temporaryDirectory();
   const pluginsDir = path.join(root, 'plugins');
   const ownerConfigDir = path.join(root, 'owner-config');
@@ -67,7 +67,7 @@ runTest('install includes the desktop runtime source and remains importable', ()
   const check = spawnSync(process.execPath, [
     '--input-type=module',
     '-e',
-    `process.env.BORDER_COLLIE_NO_PET = '1'; import { BorderCollie } from ${JSON.stringify(pathToFileURL(result.dest).href)}; const hooks = await BorderCollie({ client: {}, directory: ${JSON.stringify(root)} }); if (typeof hooks['tool.execute.before'] !== 'function') process.exit(2); process.emit('beforeExit');`,
+    `process.env.BORDERCOLLIE_NO_PET = '1'; import { Bordercollie } from ${JSON.stringify(pathToFileURL(result.dest).href)}; const hooks = await Bordercollie({ client: {}, directory: ${JSON.stringify(root)} }); if (typeof hooks['tool.execute.before'] !== 'function') process.exit(2); process.emit('beforeExit');`,
   ], { encoding: 'utf8' });
   assert.strictEqual(check.status, 0, check.stderr);
 });

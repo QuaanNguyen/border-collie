@@ -8,18 +8,18 @@ const test = require('node:test');
 const { installPlugin } = require('../../scripts/install-plugin');
 
 test('Global bind stages a complete package without downloading a runtime', () => {
-  const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'border-collie-install-'));
+  const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'bordercollie-install-'));
   const destDir = path.join(temp, 'plugins');
   const ownerConfigDir = path.join(temp, 'owner');
 
   try {
     fs.mkdirSync(destDir, { recursive: true });
-    fs.writeFileSync(path.join(destDir, 'border-collie.js'), 'legacy\n');
+    fs.writeFileSync(path.join(destDir, 'bordercollie.js'), 'legacy\n');
     const result = installPlugin({ destDir, ownerConfigDir, skipRuntimeSetup: true });
     assert.equal(result.dest, path.join(result.packageDir, 'index.mjs'));
-    assert.equal(fs.existsSync(path.join(destDir, 'border-collie.js')), false);
+    assert.equal(fs.existsSync(path.join(destDir, 'bordercollie.js')), false);
     assert(fs.existsSync(path.join(result.packageDir, 'index.mjs')));
-    assert(fs.existsSync(path.join(result.packageDir, 'guard', 'lib', 'session.js')));
+    assert(fs.existsSync(path.join(result.packageDir, 'bordercollie', 'lib', 'session.js')));
     assert(fs.existsSync(path.join(result.packageDir, 'events', 'index.js')));
     assert(fs.existsSync(path.join(result.petDir, 'package.json')));
 

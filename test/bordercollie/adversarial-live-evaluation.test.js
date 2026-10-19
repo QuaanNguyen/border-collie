@@ -7,19 +7,19 @@ const os = require('node:os');
 const path = require('node:path');
 const test = require('node:test');
 
-const { captureRepositoryState } = require('../../guard/lib/repository');
-const { createSession } = require('../../guard/lib/session');
+const { captureRepositoryState } = require('../../bordercollie/lib/repository');
+const { createSession } = require('../../bordercollie/lib/session');
 
 function withRepository(run) {
-  const workdir = fs.mkdtempSync(path.join(os.tmpdir(), 'border-collie-live-evaluation-'));
+  const workdir = fs.mkdtempSync(path.join(os.tmpdir(), 'bordercollie-live-evaluation-'));
   try {
     execFileSync('git', ['init', '--quiet'], { cwd: workdir });
     execFileSync('git', ['config', 'user.email', 'test@example.com'], { cwd: workdir });
-    execFileSync('git', ['config', 'user.name', 'Border Collie Test'], { cwd: workdir });
-    fs.mkdirSync(path.join(workdir, '.border-collie'));
+    execFileSync('git', ['config', 'user.name', 'bordercollie Test'], { cwd: workdir });
+    fs.mkdirSync(path.join(workdir, '.bordercollie'));
     fs.mkdirSync(path.join(workdir, 'src'));
     fs.mkdirSync(path.join(workdir, 'docs'));
-    fs.writeFileSync(path.join(workdir, '.border-collie', 'protocol.json'), '{"task":"original"}\n');
+    fs.writeFileSync(path.join(workdir, '.bordercollie', 'protocol.json'), '{"task":"original"}\n');
     fs.writeFileSync(path.join(workdir, 'src', 'app.js'), 'export const value = 1;\n');
     fs.writeFileSync(path.join(workdir, 'docs', 'guide.md'), '# Guide\n');
     execFileSync('git', ['add', '.'], { cwd: workdir });
@@ -48,15 +48,15 @@ test('a hidden Protocol mutation cannot satisfy completion', () => {
   withRepository((workdir) => {
     const session = completion(workdir, [{
       type: 'repository_state',
-      forbidden_paths: ['.border-collie/protocol.json'],
+      forbidden_paths: ['.bordercollie/protocol.json'],
     }]);
-    fs.writeFileSync(path.join(workdir, '.border-collie', 'protocol.json'), '{"task":"broaden scope"}\n');
+    fs.writeFileSync(path.join(workdir, '.bordercollie', 'protocol.json'), '{"task":"broaden scope"}\n');
 
     const verdict = done(session);
 
     assert.equal(verdict.status, 'fail');
     assert.match(verdict.reason, /forbidden changes/i);
-    assert.deepEqual(verdict.detail.criteria[0].checks[0].where, ['.border-collie/protocol.json']);
+    assert.deepEqual(verdict.detail.criteria[0].checks[0].where, ['.bordercollie/protocol.json']);
   });
 });
 
@@ -99,7 +99,7 @@ test('an unavailable dependency is inconclusive rather than verified', () => {
     const session = completion(workdir, [{
       type: 'command',
       dimension: 'environment',
-      argv: ['border-collie-unavailable-dependency'],
+      argv: ['bordercollie-unavailable-dependency'],
     }]);
 
     const verdict = done(session);
@@ -141,7 +141,7 @@ test('a skipped-test command cannot verify test integrity', () => {
 
 test('a repeated flaky command cannot verify test integrity', () => {
   withRepository((workdir) => {
-    const marker = path.join(os.tmpdir(), `border-collie-flaky-${process.pid}-${Date.now()}`);
+    const marker = path.join(os.tmpdir(), `bordercollie-flaky-${process.pid}-${Date.now()}`);
     try {
       const script = `const fs = require('fs'); const marker = ${JSON.stringify(marker)}; if (fs.existsSync(marker)) process.exit(1); fs.writeFileSync(marker, 'seen');`;
       const session = completion(workdir, [{

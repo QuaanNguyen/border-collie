@@ -8,18 +8,18 @@ const { spawnSync } = require('node:child_process');
 const test = require('node:test');
 
 const root = path.resolve(__dirname, '..', '..');
-const cli = path.join(root, 'scripts', 'border-collie.js');
+const cli = path.join(root, 'scripts', 'bordercollie.js');
 
 function run(configRoot, args, cwd = root) {
   return spawnSync(process.execPath, [cli, ...args], {
     cwd,
     encoding: 'utf8',
-    env: { ...process.env, BORDER_COLLIE_CONFIG_ROOT: configRoot },
+    env: { ...process.env, BORDERCOLLIE_CONFIG_ROOT: configRoot },
   });
 }
 
 test('profiles are inspected, copied, and assigned from canonical configuration', () => {
-  const configRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'border-collie-config-'));
+  const configRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'bordercollie-config-'));
   const listed = run(configRoot, ['profile', 'list']);
   assert.equal(listed.status, 0, listed.stderr);
   assert.match(listed.stdout, /research/);
@@ -34,11 +34,11 @@ test('profiles are inspected, copied, and assigned from canonical configuration'
 });
 
 test('project setup writes the harness-neutral Protocol and pet size persists', () => {
-  const configRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'border-collie-config-'));
-  const project = fs.mkdtempSync(path.join(os.tmpdir(), 'border-collie-project-'));
+  const configRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'bordercollie-config-'));
+  const project = fs.mkdtempSync(path.join(os.tmpdir(), 'bordercollie-project-'));
   const setup = run(configRoot, ['project', 'setup', '--profile', 'governed', '--write-path', 'src/**'], project);
   assert.equal(setup.status, 0, setup.stderr);
-  const protocol = JSON.parse(fs.readFileSync(path.join(project, '.border-collie', 'protocol.json'), 'utf8'));
+  const protocol = JSON.parse(fs.readFileSync(path.join(project, '.bordercollie', 'protocol.json'), 'utf8'));
   assert.equal(protocol.profile, 'governed');
   assert.deepEqual(protocol.write_paths, ['src/**']);
 
@@ -49,7 +49,7 @@ test('project setup writes the harness-neutral Protocol and pet size persists', 
 });
 
 test('allow_commands is rejected before canonical configuration is persisted', () => {
-  const configRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'border-collie-config-'));
+  const configRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'bordercollie-config-'));
   const invalid = run(configRoot, ['profile', 'create', 'invalid', '--from', 'research', '--policy', '{"allow_commands":["node"]}']);
   assert.equal(invalid.status, 2);
   assert.match(invalid.stderr, /allow_commands/);
@@ -57,27 +57,27 @@ test('allow_commands is rejected before canonical configuration is persisted', (
 });
 
 test('governed project scope is required and canonical Protocol takes precedence over legacy', () => {
-  const configRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'border-collie-config-'));
-  const project = fs.mkdtempSync(path.join(os.tmpdir(), 'border-collie-project-'));
+  const configRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'bordercollie-config-'));
+  const project = fs.mkdtempSync(path.join(os.tmpdir(), 'bordercollie-project-'));
   const missingScope = run(configRoot, ['project', 'setup', '--profile', 'governed'], project);
   assert.equal(missingScope.status, 2);
-  fs.mkdirSync(path.join(project, '.border-collie'), { recursive: true });
-  fs.writeFileSync(path.join(project, '.border-collie', 'protocol.json'), JSON.stringify({ profile: 'governed' }));
-  const { createLiveProtocol } = require('../../guard/lib/live-protocol');
-  const { resolveProjectOwnerPolicy } = require('../../guard/lib/owner-policy');
-  const prior = process.env.BORDER_COLLIE_CONFIG_ROOT;
-  process.env.BORDER_COLLIE_CONFIG_ROOT = configRoot;
+  fs.mkdirSync(path.join(project, '.bordercollie'), { recursive: true });
+  fs.writeFileSync(path.join(project, '.bordercollie', 'protocol.json'), JSON.stringify({ profile: 'governed' }));
+  const { createLiveProtocol } = require('../../bordercollie/lib/live-protocol');
+  const { resolveProjectOwnerPolicy } = require('../../bordercollie/lib/owner-policy');
+  const prior = process.env.BORDERCOLLIE_CONFIG_ROOT;
+  process.env.BORDERCOLLIE_CONFIG_ROOT = configRoot;
   try {
     const live = createLiveProtocol({ workdir: project, resolveOwner: (selected) => resolveProjectOwnerPolicy('opencode', selected) });
     assert.equal(live.refresh().valid, false);
     fs.mkdirSync(path.join(project, '.opencode'), { recursive: true });
     fs.writeFileSync(path.join(project, '.opencode', 'protocol.json'), JSON.stringify({ read_paths: [] }));
-    fs.writeFileSync(path.join(project, '.border-collie', 'protocol.json'), JSON.stringify({ profile: 'governed', write_paths: ['src/**'] }));
+    fs.writeFileSync(path.join(project, '.bordercollie', 'protocol.json'), JSON.stringify({ profile: 'governed', write_paths: ['src/**'] }));
     const resolved = live.refresh();
     assert.equal(resolved.valid, true);
     assert.deepEqual(resolved.protocol.writePaths, ['src/**']);
   } finally {
-    if (prior === undefined) delete process.env.BORDER_COLLIE_CONFIG_ROOT;
-    else process.env.BORDER_COLLIE_CONFIG_ROOT = prior;
+    if (prior === undefined) delete process.env.BORDERCOLLIE_CONFIG_ROOT;
+    else process.env.BORDERCOLLIE_CONFIG_ROOT = prior;
   }
 });

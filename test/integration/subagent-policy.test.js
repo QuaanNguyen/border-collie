@@ -9,7 +9,7 @@ const { pathToFileURL } = require('node:url')
 const ROOT = path.resolve(__dirname, '..', '..')
 
 async function main() {
-  const workspace = fs.mkdtempSync(path.join(os.tmpdir(), 'border-collie-subagent-policy-'))
+  const workspace = fs.mkdtempSync(path.join(os.tmpdir(), 'bordercollie-subagent-policy-'))
   const owner = path.join(workspace, 'owner')
   const project = path.join(workspace, 'project')
   const outside = path.join(workspace, 'outside.txt')
@@ -22,15 +22,15 @@ async function main() {
     trusted_workspace_roots: [],
   }))
 
-  const keys = ['BORDER_COLLIE_NO_PET', 'BORDER_COLLIE_OWNER_CONFIG', 'BORDER_COLLIE_EVENTS']
+  const keys = ['BORDERCOLLIE_NO_PET', 'BORDERCOLLIE_OWNER_CONFIG', 'BORDERCOLLIE_EVENTS']
   const previous = new Map(keys.map((key) => [key, process.env[key]]))
-  process.env.BORDER_COLLIE_NO_PET = '1'
-  process.env.BORDER_COLLIE_OWNER_CONFIG = owner
-  process.env.BORDER_COLLIE_EVENTS = path.join(workspace, 'events.jsonl')
+  process.env.BORDERCOLLIE_NO_PET = '1'
+  process.env.BORDERCOLLIE_OWNER_CONFIG = owner
+  process.env.BORDERCOLLIE_EVENTS = path.join(workspace, 'events.jsonl')
 
   try {
-    const { BorderCollie } = await import(pathToFileURL(path.join(ROOT, 'plugin', 'border-collie.js')).href)
-    const hooks = await BorderCollie({ client: {}, directory: project })
+    const { Bordercollie } = await import(pathToFileURL(path.join(ROOT, 'plugin', 'bordercollie.js')).href)
+    const hooks = await Bordercollie({ client: {}, directory: project })
     const before = hooks['tool.execute.before']
 
     await assert.rejects(
@@ -61,7 +61,7 @@ async function main() {
       (error) => {
         assert.match(error.message, /Guard refused this action/)
         assert.match(error.message, /Governing rule: read_paths/)
-        assert.match(error.message, /Policy layer: resolved Border Collie policy/)
+        assert.match(error.message, /Policy layer: resolved bordercollie policy/)
         assert.match(error.message, /Permitted alternative:/)
         assert.match(error.message, /Retry:/)
         return true

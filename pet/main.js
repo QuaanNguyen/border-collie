@@ -1,6 +1,6 @@
 "use strict";
 /**
- * Border Collie  -  the window.
+ * bordercollie  -  the window.
  *
  * A frameless, transparent, always-on-top companion that floats over whatever
  * you are working in. It has no idea what Guard is beyond one URL: it reads the
@@ -35,7 +35,7 @@ const { BASE_W, BASE_H, DEFAULT_SCALE, clampScale } = G;
 
 if (!app || typeof app.requestSingleInstanceLock !== "function") {
   console.error(
-    "[border-collie] Electron app API missing. Unset ELECTRON_RUN_AS_NODE and relaunch via the Electron binary.",
+    "[bordercollie] Electron app API missing. Unset ELECTRON_RUN_AS_NODE and relaunch via the Electron binary.",
   );
   process.exit(1);
 }
@@ -67,9 +67,9 @@ const devHarness = DEV ? createDevHarness() : null;
 const settings = { scale: DEFAULT_SCALE, x: null, y: null };
 let animations = null;
 const pendingEvents = [];
-const runtimeDirectory = path.join(os.tmpdir(), `border-collie-electron-${process.pid}`);
+const runtimeDirectory = path.join(os.tmpdir(), `bordercollie-electron-${process.pid}`);
 
-app.setName(DEV ? "pet-border-collie-dev" : "pet-border-collie");
+app.setName(DEV ? "pet-bordercollie-dev" : "pet-bordercollie");
 app.setPath("userData", runtimeDirectory);
 
 function applyLayout() {
@@ -99,7 +99,7 @@ function setScale(next) {
   settings.scale = s;
   applyLayout();
   if (win && !win.isDestroyed()) {
-    win.webContents.send("borderCollie:scaled", Math.round(s * 100));
+    win.webContents.send("bordercollie:scaled", Math.round(s * 100));
   }
 }
 
@@ -122,7 +122,7 @@ if (!gotLock) {
 
   if (!DEV) liveEventReader = readLiveEvents(process.stdin, (event) => {
     if (win && !win.isDestroyed()) {
-      win.webContents.send("borderCollie:event", event);
+      win.webContents.send("bordercollie:event", event);
     } else {
       pendingEvents.push(event);
       if (pendingEvents.length > 256) pendingEvents.shift();
@@ -185,7 +185,7 @@ if (!gotLock) {
       revealWindow();
     });
     win.webContents.once("did-finish-load", () => {
-      while (pendingEvents.length) win.webContents.send("borderCollie:event", pendingEvents.shift());
+      while (pendingEvents.length) win.webContents.send("bordercollie:event", pendingEvents.shift());
     });
 
     win.on("closed", () => {
@@ -260,7 +260,7 @@ if (!gotLock) {
     }
 
     console.log("");
-    console.log("  Border Collie is watching.");
+    console.log("  bordercollie is watching.");
     console.log(
       `    Mac:     ${prettyShortcut(TOGGLE_KEY, "darwin")}    show / hide`,
     );
@@ -279,7 +279,7 @@ if (!gotLock) {
     console.log("");
   }
 
-  ipcMain.handle("borderCollie:config", () => ({
+  ipcMain.handle("bordercollie:config", () => ({
     live: !DEV,
     solid: SOLID,
     dev: DEV,
@@ -287,22 +287,22 @@ if (!gotLock) {
     toggleKey: prettyShortcut(TOGGLE_KEY),
     animations,
   }));
-  ipcMain.handle("borderCollie:dev-scenarios", (event) => {
+  ipcMain.handle("bordercollie:dev-scenarios", (event) => {
     if (!DEV || !devHarness || !win || win.isDestroyed() || event.sender !== win.webContents) return [];
     return devHarness.scenarios();
   });
-  ipcMain.handle("borderCollie:dev-event", (event, id) => {
+  ipcMain.handle("bordercollie:dev-event", (event, id) => {
     if (!DEV || !devHarness || !win || win.isDestroyed() || event.sender !== win.webContents) return null;
     const entry = devHarness.trigger(id);
-    if (entry) win.webContents.send("borderCollie:event", entry);
+    if (entry) win.webContents.send("bordercollie:event", entry);
     return entry;
   });
-  ipcMain.on("borderCollie:hit-regions", (event, regions, nextDragRegions) => {
+  ipcMain.on("bordercollie:hit-regions", (event, regions, nextDragRegions) => {
     if (!win || win.isDestroyed() || event.sender !== win.webContents) return;
     if (windowInteraction) windowInteraction.updateRegions(regions);
     dragRegions = Array.isArray(nextDragRegions) ? nextDragRegions : [];
   });
-  ipcMain.on("borderCollie:drag-start", (event, x, y) => {
+  ipcMain.on("bordercollie:drag-start", (event, x, y) => {
     if (!win || win.isDestroyed() || event.sender !== win.webContents) return;
     if (!Number.isFinite(x) || !Number.isFinite(y)) return;
     const bounds = win.getBounds();
@@ -312,9 +312,9 @@ if (!gotLock) {
       lastX: x,
     };
     if (windowInteraction) windowInteraction.setDragging(true);
-    win.webContents.send("borderCollie:dragging", { phase: "start", deltaX: 0 });
+    win.webContents.send("bordercollie:dragging", { phase: "start", deltaX: 0 });
   });
-  ipcMain.on("borderCollie:drag-to", (event, x, y) => {
+  ipcMain.on("bordercollie:drag-to", (event, x, y) => {
     if (!win || win.isDestroyed() || event.sender !== win.webContents) return;
     if (!pointerDrag || pointerDrag.sender !== event.sender) return;
     const origin = G.dragOrigin({ x, y }, pointerDrag.grabOffset);
@@ -323,16 +323,16 @@ if (!gotLock) {
     const bounds = win.getBounds();
     win.setBounds({ ...bounds, ...origin });
     pointerDrag.lastX = x;
-    win.webContents.send("borderCollie:dragging", { phase: "move", deltaX });
+    win.webContents.send("bordercollie:dragging", { phase: "move", deltaX });
   });
-  ipcMain.on("borderCollie:drag-end", (event) => {
+  ipcMain.on("bordercollie:drag-end", (event) => {
     if (!win || win.isDestroyed() || event.sender !== win.webContents) return;
     if (!pointerDrag || pointerDrag.sender !== event.sender) return;
     pointerDrag = null;
     if (windowInteraction) windowInteraction.setDragging(false);
-    win.webContents.send("borderCollie:dragging", { phase: "end", deltaX: 0 });
+    win.webContents.send("bordercollie:dragging", { phase: "end", deltaX: 0 });
   });
-  ipcMain.on("borderCollie:scale-set", (_e, s) => setScale(s));
+  ipcMain.on("bordercollie:scale-set", (_e, s) => setScale(s));
 
   app.whenReady().then(() => {
     if (process.platform === "darwin" && !DEV) app.setActivationPolicy("accessory");
@@ -344,7 +344,7 @@ if (!gotLock) {
       if (BrowserWindow.getAllWindows().length === 0) create();
     });
   }).catch((error) => {
-    console.error(`[border-collie] ${error.message}`);
+    console.error(`[bordercollie] ${error.message}`);
     app.exit(1);
   });
 
