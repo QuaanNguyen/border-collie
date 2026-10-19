@@ -37,3 +37,13 @@ test('V2 worktree targets preserve the project boundary and inspect force remova
     ['patch', { patchText: 'not a complete patch' }, 'disallow'],
   ]) assert.equal((await session.propose({ tool, args, userMessage: 'Inspect the worktrees.' })).decision, expected, tool);
 });
+
+
+test('Codex freeform patches retain their exact source and every affected path', () => {
+  const patch = '*** Begin Patch\n*** Update File: src/parser.js\n@@\n-old\n+new\n*** Delete File: docs/old.md\n*** End Patch';
+  const call = proposedCall('apply_patch', patch);
+  assert.equal(call.args, patch);
+  assert.equal(call.effectError, null);
+  assert.deepEqual(call.writePaths, ['src/parser.js', 'docs/old.md']);
+  assert.deepEqual(call.deletePaths, ['docs/old.md']);
+});

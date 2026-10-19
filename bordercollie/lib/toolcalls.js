@@ -42,6 +42,10 @@ const URL_RE = /\bhttps?:\/\/[^\s'"`)>\]}]+/gi;
 // bare host:port or IP that a command might POST to
 const HOSTISH_RE = /\b(?:\d{1,3}\.){3}\d{1,3}(?::\d+)?\b/g;
 
+function canonicalToolName(tool) {
+  return String(tool).toLowerCase().replace(/^opencode\./, '').replace(/[^a-z_]/g, '');
+}
+
 function safeParse(s) {
   if (s == null) return {};
   if (typeof s === 'object') return s;
@@ -402,8 +406,9 @@ function urlsIn(text) {
 }
 
 function patchEffects(args) {
-  if (typeof args.patchText !== 'string') return { effectError: 'patch needs complete patchText' };
-  const lines = args.patchText.replace(/\r\n/g, '\n').split('\n');
+  const text = typeof args === 'string' ? args : args.patchText;
+  if (typeof text !== 'string') return { effectError: 'patch needs complete patchText' };
+  const lines = text.replace(/\r\n/g, '\n').split('\n');
   if (lines[0] !== '*** Begin Patch' || lines.at(-1)?.trim() !== '*** End Patch' && lines.at(-2)?.trim() !== '*** End Patch') return { effectError: 'patch envelope is incomplete' };
   const readPaths = [];
   const writePaths = [];
@@ -425,7 +430,7 @@ function patchEffects(args) {
 function normalise(toolCall) {
   const fn = toolCall.function || {};
   const rawName = String(fn.name || toolCall.name || 'unknown');
-  const name = rawName.toLowerCase().replace(/[^a-z_]/g, '');
+  const name = canonicalToolName(rawName);
   const args = safeParse(fn.arguments ?? toolCall.arguments ?? toolCall.input);
 
   const out = {
@@ -532,5 +537,5 @@ function proposedCall(tool, args) {
   };
 }
 
-module.exports = { normalise, pathsInCommand, proposedCall, urlsIn, truncate,
+module.exports = { canonicalToolName, normalise, pathsInCommand, proposedCall, urlsIn, truncate,
   READ_TOOLS, WRITE_TOOLS, EXEC_TOOLS, NET_TOOLS };

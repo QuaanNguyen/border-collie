@@ -73,7 +73,7 @@ function touchesPreference(relative) {
 }
 
 function boundaryDecision({ call, workdir }) {
-  const tool = String(call.tool).toLowerCase();
+  const tool = require('./toolcalls').canonicalToolName(call.tool);
   if (call.effectError) {
     return {
       rule: 'tool_contract',

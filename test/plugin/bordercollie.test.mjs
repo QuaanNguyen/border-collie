@@ -319,3 +319,13 @@ test('retired restrictions withhold tools until the owner migrates them', async 
     assert.match(judge.calls[0].preference.text, /git push/);
   });
 });
+
+test('V2 namespaced worktree removal cannot delete the Preference directory', async () => {
+  await withWorkdir(async (workdir) => {
+    writePreference(workdir, { text: 'Keep the project instructions intact.' });
+    const judge = judgeDouble();
+    const hooks = await bordercollie({ directory: workdir, client: {} }, { judge });
+    await assert.rejects(hooks['tool.execute.before']({ tool: 'opencode.worktree_remove', sessionID: 'one' }, { args: { directory: '.bordercollie', force: true } }), /Governing rule: preference/);
+    assert.equal(judge.calls.length, 0);
+  });
+});
