@@ -3,6 +3,7 @@ const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
 const { spawnSync } = require('node:child_process');
+const { assertOpenCodeVersion } = require('../bordercollie/lib/opencode-version');
 const { buildNativePet } = require('./build-native-pet');
 const { retrieveJudge } = require('../bordercollie/lib/judge-artifacts');
 const { LEGACY_PLUGIN_DIRECTORY, LEGACY_PLUGIN_ENTRY } = require('../bordercollie/lib/legacy-paths');
@@ -229,6 +230,11 @@ async function installPlugin(opts = {}) {
   }
   if (!fs.existsSync(path.join(srcPet, 'package.json'))) {
     throw new Error('missing pet/package.json under ' + srcPet);
+  }
+
+  if (opts.verifyOpenCode === true) {
+    const version = runCommand(opts.openCodeCommand || (process.platform === 'win32' ? 'opencode.exe' : 'opencode'), ['--version'], repoRoot, { capture: true, timeout: 15000 });
+    assertOpenCodeVersion(version.stdout.toString());
   }
 
   console.log('Retrieving the Needle Judge…');

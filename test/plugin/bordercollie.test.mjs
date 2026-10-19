@@ -13,10 +13,12 @@ const { bordercollie } = pluginModule;
 process.env.BORDERCOLLIE_NO_PET = '1';
 
 async function withWorkdir(run) {
+  const previousListeners = new Set(process.listeners('beforeExit'));
   const workdir = fs.realpathSync(fs.mkdtempSync(path.join(os.tmpdir(), 'bordercollie-plugin-')));
   try {
     return await run(workdir);
   } finally {
+    for (const listener of process.listeners('beforeExit')) if (!previousListeners.has(listener)) listener();
     fs.rmSync(workdir, { recursive: true, force: true });
   }
 }
@@ -260,6 +262,7 @@ test('OpenCode V2 applies the bordercollie to live tool input', async () => {
       const registered = {};
       assert.equal(pluginModule.default.id, 'bordercollie');
       const cleanup = await pluginModule.default.setup({
+        app: { version: "2.0.32" },
         location: { directory: workdir },
         session: { context: async () => [] },
         tool: {
@@ -328,4 +331,68 @@ test('V2 namespaced worktree removal cannot delete the Preference directory', as
     await assert.rejects(hooks['tool.execute.before']({ tool: 'opencode.worktree_remove', sessionID: 'one' }, { args: { directory: '.bordercollie', force: true } }), /Governing rule: preference/);
     assert.equal(judge.calls.length, 0);
   });
+});
+
+test('unsupported OpenCode versions refuse plugin startup before registering tools', async () => {
+  for (const version of ['1.19.2', '2.0.25', '2.0.29', '2.0.30-beta.1', undefined]) {
+    let registered = false;
+    await assert.rejects(pluginModule.default.setup({
+      app: { version },
+      tool: { hook: async () => { registered = true; } },
+    }), version?.startsWith('1.') ? /opencode upgrade --major/ : /2\.0\.30/);
+    assert.equal(registered, false);
+  }
+});
+
+test('auto-accept preserves each parallel refusal, owner question and allowed call', async () => {
+  for (const autoAccept of [false, true]) {
+    await withWorkdir(async (workdir) => {
+      const eventsFile = path.join(workdir, 'events.jsonl');
+      process.env.BORDERCOLLIE_EVENTS = eventsFile;
+      const registered = {};
+      const executed = [];
+      let nativeApprovalRequests = 0;
+      const nativePermission = { assert: async () => { nativeApprovalRequests++; } };
+      try {
+        writePreference(workdir, { text: 'Read project files. Do not delete old worktrees. Ask before removing the review worktree.' });
+        const judge = judgeDouble(({ call }) => ({ verdict: call.args.directory === 'review' ? 'ask' : call.tool === 'opencode.worktree_remove' ? 'disallow' : 'allow' }));
+        const cleanup = await pluginModule.default.setup({
+          app: { version: '2.0.32' },
+          location: { directory: workdir },
+          session: { context: async () => [] },
+          permission: nativePermission,
+          tool: { hook: async (name, callback) => { registered[name] = callback; } },
+        }, { judge });
+        const calls = [
+          { callID: 'protected', tool: 'edit', input: { path: '.bordercollie/preference.json', oldString: 'a', newString: 'b' } },
+          { callID: 'denied', tool: 'opencode.worktree_remove', input: { directory: 'old' } },
+          { callID: 'question', tool: 'opencode.worktree_remove', input: { directory: 'review' } },
+          { callID: 'allowed', tool: 'read', input: { path: 'README.md' } },
+        ];
+        const results = await Promise.allSettled(calls.map(async (call) => {
+          await registered['execute.before']({ ...call, sessionID: 'parallel' });
+          if (!autoAccept) await nativePermission.assert();
+          executed.push(call.callID);
+          await registered['execute.after']({ ...call, sessionID: 'parallel', result: 'done' });
+        }));
+        assert.deepEqual(results.map((r) => r.status), ['rejected', 'rejected', 'rejected', 'fulfilled']);
+        assert.match(results[0].reason.message, /Governing rule: preference/);
+        assert.match(results[0].reason.message, /Target: \.bordercollie/);
+        assert.match(results[1].reason.message, /Governing rule: judge/);
+        assert.match(results[1].reason.message, /Target: old/);
+        assert.match(results[2].reason.message, /holding this action for the owner/);
+        assert.deepEqual(executed, ['allowed']);
+        assert.equal(nativeApprovalRequests, autoAccept ? 0 : 1);
+        assert.equal(judge.calls.length, 3);
+        const actions = fs.readFileSync(eventsFile, 'utf8').trim().split('\n').map(JSON.parse).filter((e) => ['excursion', 'ask', 'action'].includes(e.type));
+        assert.deepEqual(actions.map((e) => [e.type, e.rule, e.petState]).sort(), [
+          ['action', null, 'allowed'], ['ask', 'judge', 'asking'], ['excursion', 'judge', 'refused'], ['excursion', 'preference', 'refused'],
+        ].sort());
+        assert.equal(new Set(actions.map((e) => e.detail.actionId)).size, 4);
+        cleanup();
+      } finally {
+        delete process.env.BORDERCOLLIE_EVENTS;
+      }
+    });
+  }
 });

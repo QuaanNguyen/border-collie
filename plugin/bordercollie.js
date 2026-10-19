@@ -39,6 +39,8 @@ const { PET_SCALES, readConfig } = require(path.join(repoRoot, "bordercollie/lib
 const { createLivePreference } = require(path.join(repoRoot, "bordercollie/lib/preference.js"));
 const { createNeedleJudge } = require(path.join(repoRoot, "bordercollie/lib/judge.js"));
 
+const { assertOpenCodeVersion } = require(path.join(repoRoot, "bordercollie/lib/opencode-version.js"));
+
 function targetOf(tool, args) {
   const a = args || {};
   return a.command || a.cmd || a.url || a.query || a.filePath || a.path || a.pattern || tool;
@@ -290,6 +292,8 @@ export const bordercollie = async ({ client, directory }, options = {}) => {
   function endSession() {
     if (ended) return;
     ended = true;
+    process.removeListener("beforeExit", endSession);
+    process.removeListener("exit", endSession);
     for (const state of sessions.values()) {
       try {
         publish(state.bordercollie.end());
@@ -437,6 +441,7 @@ export const bordercollie = async ({ client, directory }, options = {}) => {
   }
 
   return {
+    dispose: endSession,
     "chat.message": async (input, output) => {
       rememberUserMessage(input?.sessionID, userText(output?.parts));
     },
@@ -564,9 +569,10 @@ function toolInput(event) {
 
 export default {
   id: "bordercollie",
-  async setup(ctx) {
+  async setup(ctx, options = {}) {
+    assertOpenCodeVersion(ctx.app?.version);
     const directory = ctx.location?.directory || ctx.location?.project?.directory || process.cwd();
-    const hooks = await bordercollie({ client: v2Client(ctx), directory });
+    const hooks = await bordercollie({ client: v2Client(ctx), directory }, options);
     await ctx.tool.hook("execute.before", async (event) => {
       await hooks["tool.execute.before"](
         { tool: event.tool, sessionID: event.sessionID, callID: event.callID },
@@ -594,6 +600,9 @@ export default {
         }
       })();
     }
-    return () => controller.abort();
+    return () => {
+      controller.abort();
+      hooks.dispose();
+    };
   },
 };

@@ -50,7 +50,7 @@ bash scripts/install-plugin.sh
 ```
 
 The installation includes bordercollie and the desktop Pet.
-OpenCode v2 loads the package directory `~/.config/opencode/plugins/bordercollie`. A configured path must point at that directory; a bare `bordercollie.js` file is not a v2 plugin.
+OpenCode 2.0.30 or newer loads the package directory `~/.config/opencode/plugins/bordercollie`. A configured path must point at that directory; a bare `bordercollie.js` file is not a v2 plugin.
 On macOS, the installer builds a small native host that uses the system WebKit framework and does not download Electron.
 Windows and Linux use the locked Electron runtime.
 
@@ -143,3 +143,6 @@ npm run eval:judge
 bordercollie events and active sessions exist only while OpenCode and the Pet are running.
 The plugin sends bordercollie events over the Pet process's private input pipe.
 Pet size is the persistent setting in the bordercollie configuration.
+
+OpenCode 1.x users must run `opencode upgrade --major` before installing bordercollie.
+Project auto-accept does not bypass checker refusals or owner questions.

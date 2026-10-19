@@ -18,7 +18,6 @@ A missing Verdict, a Judge that is not installed, and a Judge that fails are all
 Allow runs the call.
 Disallow returns the action, target, rule, reason, a permitted alternative, and a no-retry instruction to the coding model, and the session continues.
 Ask withholds the call and tells the coding model to ask the owner; nothing is stored, and the owner's reply is judged with the next attempt.
-The Judge can only ask when the Preference's `ask` field is non-empty.
 
 ## The Judge
 
@@ -41,7 +40,7 @@ Missing fields use the shipped default, and a missing file uses the whole defaul
 Unknown fields, non-string prose, and unreadable JSON block the session until a person fixes the file.
 A Preference change observed while an agent tool runs is quarantined until a person saves a different version.
 
-While no Preference exists, the `done_criteria` of a retired Protocol are still read; its allowlists are ignored.
+While no Preference exists, the `done_criteria` of a retired Protocol are still read; project instructions require migration before any tool runs.
 `bordercollie migrate` moves those done criteria into a Preference and removes the retired files.
 
 ## Completion
@@ -64,3 +63,19 @@ The pinned engine still adds its own internal reasoning prefix; direct-output qu
 
 A retired Protocol with project instructions withholds tool use until the owner runs migration.
 Its restrictions are carried into the free-text Preference instead of being silently replaced by the default.
+
+## OpenCode versions and auto-accept
+
+OpenCode 2.0.30 or newer is required.
+The installer checks the installed version before downloading or replacing files, and the plugin checks the running version before registering hooks.
+OpenCode 1.x owners must run `opencode upgrade --major`.
+
+Project auto-accept and saved permission approvals do not bypass the tool execution hook.
+An approve answer may proceed to OpenCode's own permission checks.
+A deny or ask answer throws from the hook before the tool runs, whether auto-accept is on or off.
+An ask always returns control to the coding model to ask the owner and wait.
+bordercollie does not use a native permission assertion for this question, because an existing allow rule could satisfy that assertion without showing a question.
+
+The upstream ordering was checked against [OpenCode 2.0.32](https://github.com/anomalyco/opencode/tree/v2.0.32/packages/core/src).
+The regression test exercises the V2 plugin with a parallel protected write, denied worktree removal, worktree removal requiring confirmation, and an allowed read.
+Each refusal retains its own message and Pet event.
