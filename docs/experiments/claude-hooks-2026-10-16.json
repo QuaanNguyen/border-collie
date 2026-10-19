@@ -1,0 +1,154 @@
+{
+  "checkedAt": "2026-10-16T19:07:05.269Z",
+  "version": "2.1.296 (Claude Code)",
+  "binarySha256": "c9b5341637becbd423ddffc5b254afb645682a3868cb708bbc6cc0e7bb419937",
+  "modelTransport": "local fictional Anthropic protocol server; no external model calls",
+  "source": "https://code.claude.com/docs/en/hooks",
+  "shippedAdapter": false,
+  "results": [
+    {
+      "mode": "baseline",
+      "modelRequests": 3,
+      "hookRequests": 0,
+      "code": 0,
+      "signal": null,
+      "elapsedMs": 473,
+      "markers": [
+        true,
+        true
+      ]
+    },
+    {
+      "mode": "command-missing",
+      "modelRequests": 3,
+      "hookRequests": 0,
+      "code": 0,
+      "signal": null,
+      "elapsedMs": 280,
+      "markers": [
+        false,
+        false
+      ]
+    },
+    {
+      "mode": "command-crash",
+      "modelRequests": 3,
+      "hookRequests": 0,
+      "code": 0,
+      "signal": null,
+      "elapsedMs": 279,
+      "markers": [
+        false,
+        false
+      ]
+    },
+    {
+      "mode": "command-allow-error",
+      "modelRequests": 3,
+      "hookRequests": 0,
+      "code": 0,
+      "signal": null,
+      "elapsedMs": 288,
+      "markers": [
+        false,
+        false
+      ]
+    },
+    {
+      "mode": "command-unstructured-stdout",
+      "modelRequests": 3,
+      "hookRequests": 0,
+      "code": 0,
+      "signal": null,
+      "elapsedMs": 525,
+      "markers": [
+        true,
+        true
+      ]
+    },
+    {
+      "mode": "command-invalid-json",
+      "modelRequests": 3,
+      "hookRequests": 0,
+      "code": 0,
+      "signal": null,
+      "elapsedMs": 279,
+      "markers": [
+        false,
+        false
+      ]
+    },
+    {
+      "mode": "command-timeout",
+      "modelRequests": 3,
+      "hookRequests": 0,
+      "code": 0,
+      "signal": null,
+      "elapsedMs": 2286,
+      "markers": [
+        false,
+        false
+      ]
+    },
+    {
+      "mode": "command-stop",
+      "modelRequests": 1,
+      "hookRequests": 0,
+      "code": 0,
+      "signal": null,
+      "elapsedMs": 250,
+      "markers": [
+        false,
+        false
+      ]
+    },
+    {
+      "mode": "http-error",
+      "modelRequests": 3,
+      "hookRequests": 2,
+      "code": 0,
+      "signal": null,
+      "elapsedMs": 199,
+      "markers": [
+        false,
+        false
+      ]
+    },
+    {
+      "mode": "http-invalid-json",
+      "modelRequests": 3,
+      "hookRequests": 2,
+      "code": 0,
+      "signal": null,
+      "elapsedMs": 204,
+      "markers": [
+        false,
+        false
+      ]
+    },
+    {
+      "mode": "http-timeout",
+      "modelRequests": 3,
+      "hookRequests": 2,
+      "code": 0,
+      "signal": null,
+      "elapsedMs": 2236,
+      "markers": [
+        false,
+        false
+      ]
+    },
+    {
+      "mode": "http-stop",
+      "modelRequests": 1,
+      "hookRequests": 1,
+      "code": 0,
+      "signal": null,
+      "elapsedMs": 232,
+      "markers": [
+        false,
+        false
+      ]
+    }
+  ]
+}

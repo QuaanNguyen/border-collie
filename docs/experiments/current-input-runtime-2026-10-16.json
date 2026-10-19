@@ -1,0 +1,98 @@
+{
+  "status": "no-go",
+  "reason": "Official answers-only target omits reasoning prefix; pinned native runner emits reasoning even for answers-only exports. This mismatch is unresolved.",
+  "tokenAudit": {
+    "status": "complete",
+    "requestsSha256": "3c04b9eb9b2829b38a15143a5f7280e75d8b114d20890e01672d2ff99b6c9da4",
+    "tokenizerSha256": "9f839cd44027ea9203738897da2bac572a5cc77aec7fceacd4391fc412a3249f",
+    "officialSourceRevision": "ef3cf7543204d99878c0dd913a05f6a506da4be8",
+    "allThreeVerdictTargetsChecked": true,
+    "distribution": {
+      "count": 6644,
+      "minimum": 326,
+      "median": 490,
+      "p95": 588,
+      "maximum": 691,
+      "over512": 2312,
+      "over1024": 0,
+      "over2048": 0,
+      "over4096": 0
+    },
+    "requiredPadding": 1024,
+    "seconds": 89.08577337500174,
+    "solJobsSubmitted": 0
+  },
+  "modelMeasurements": [
+    {
+      "label": "untuned-export",
+      "rows": 108,
+      "weightsBytes": 63437076,
+      "weightsSha256": "3bde318ede183eb06eb65524c9139f83d749e929f46feadfe516cefa3c8e8863",
+      "runnerSha256": "342fa2c6f140e702354a99c4201c9057535ec908eed35c7382e911a19d1d2724",
+      "medianSeconds": 0.1912990409999984,
+      "p95Seconds": 0.3215734999999995,
+      "maximumSeconds": 0.5475429999999997,
+      "missingVerdicts": 8,
+      "infrastructureErrors": 0,
+      "reasoningOutputs": 108,
+      "correctnessClaimed": false,
+      "solJobsSubmitted": 0,
+      "maximumReportedRamMb": 140
+    },
+    {
+      "label": "shipped-base",
+      "rows": 108,
+      "weightsBytes": 35335380,
+      "weightsSha256": "c9d915eca282ed42d1a09b143b592adb4cc6744ffe2d294adf5cfc5548170c38",
+      "runnerSha256": "342fa2c6f140e702354a99c4201c9057535ec908eed35c7382e911a19d1d2724",
+      "medianSeconds": 0.26942808399999923,
+      "p95Seconds": 0.3820574579999993,
+      "maximumSeconds": 0.5615644580000001,
+      "missingVerdicts": 11,
+      "infrastructureErrors": 0,
+      "reasoningOutputs": 108,
+      "correctnessClaimed": false,
+      "solJobsSubmitted": 0,
+      "maximumReportedRamMb": 99.8
+    },
+    {
+      "label": "old-answers-r16-seed1",
+      "rows": 108,
+      "weightsBytes": 63437076,
+      "weightsSha256": "75848ef27d8ecc89ff7be6eb8631a0a00bd70b1baba2747524f3f8e041c0c9f1",
+      "runnerSha256": "342fa2c6f140e702354a99c4201c9057535ec908eed35c7382e911a19d1d2724",
+      "medianSeconds": 0.268492209,
+      "p95Seconds": 0.3630746250000011,
+      "maximumSeconds": 0.44179408399999737,
+      "missingVerdicts": 0,
+      "infrastructureErrors": 0,
+      "reasoningOutputs": 108,
+      "correctnessClaimed": false,
+      "solJobsSubmitted": 0,
+      "maximumReportedRamMb": 140
+    }
+  ],
+  "overflow": {
+    "exit": 0,
+    "seconds": 0.162949167,
+    "response": {
+      "type": "call",
+      "success": false,
+      "error": "input exceeds the context window (14008 tokens, 7668 available)",
+      "error_code": "context_overflow",
+      "reason": "runtime_failure",
+      "function_calls": [],
+      "suppressed_calls": [],
+      "reasoning": null,
+      "confidence": 0
+    },
+    "solJobsSubmitted": 0
+  },
+  "limitations": [
+    "These 108 complete inputs are development proposals, not a blind accuracy measurement.",
+    "Two model measurements ran concurrently on the Mac; latency includes that local contention.",
+    "No Linux qualification was run for the new input format because Sol job submission is prohibited.",
+    "The previous candidate was trained on historical inputs, not this repaired dataset."
+  ],
+  "solJobsSubmitted": 0
+}

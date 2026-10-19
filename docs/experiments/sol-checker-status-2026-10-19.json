@@ -1,0 +1,1023 @@
+{
+  "capturedAtUtc": "2026-10-19T16:25:01.877256+00:00",
+  "readOnly": true,
+  "queueEmpty": true,
+  "laterSubmissionsAfterOctober16": false,
+  "jobs": [
+    {
+      "JobID": "65695482",
+      "JobName": "v2-pilot-token-preflight",
+      "State": "COMPLETED",
+      "ExitCode": "0:0",
+      "Submit": "2026-10-13T12:03:57",
+      "Start": "2026-10-15T15:00:10",
+      "End": "2026-10-15T15:01:24",
+      "Elapsed": "00:01:14",
+      "WorkDir": "/scratch/qnguye19/needle/experiments/v2-improvement-pilot-2026-10-13"
+    },
+    {
+      "JobID": "65695585",
+      "JobName": "v2-pilot-baseline-build",
+      "State": "FAILED",
+      "ExitCode": "1:0",
+      "Submit": "2026-10-13T13:31:21",
+      "Start": "2026-10-15T15:01:26",
+      "End": "2026-10-15T15:02:14",
+      "Elapsed": "00:00:48",
+      "WorkDir": "/scratch/qnguye19/needle/experiments/v2-improvement-pilot-2026-10-13"
+    },
+    {
+      "JobID": "65695589",
+      "JobName": "v2-pilot-summary",
+      "State": "FAILED",
+      "ExitCode": "1:0",
+      "Submit": "2026-10-13T13:31:21",
+      "Start": "2026-10-15T15:02:40",
+      "End": "2026-10-15T15:02:42",
+      "Elapsed": "00:00:02",
+      "WorkDir": "/scratch/qnguye19/needle/experiments/v2-improvement-pilot-2026-10-13"
+    },
+    {
+      "JobID": "65785439",
+      "JobName": "v2-pilot-token-preflight",
+      "State": "COMPLETED",
+      "ExitCode": "0:0",
+      "Submit": "2026-10-16T08:21:07",
+      "Start": "2026-10-16T08:21:08",
+      "End": "2026-10-16T08:21:12",
+      "Elapsed": "00:00:04",
+      "WorkDir": "/scratch/qnguye19/needle/experiments/v2-improvement-pilot-2026-10-16-offline-recovery"
+    },
+    {
+      "JobID": "65785440",
+      "JobName": "v2-pilot-baseline-build",
+      "State": "COMPLETED",
+      "ExitCode": "0:0",
+      "Submit": "2026-10-16T08:21:08",
+      "Start": "2026-10-16T08:21:12",
+      "End": "2026-10-16T08:21:43",
+      "Elapsed": "00:00:31",
+      "WorkDir": "/scratch/qnguye19/needle/experiments/v2-improvement-pilot-2026-10-16-offline-recovery"
+    },
+    {
+      "JobID": "65785441",
+      "JobName": "v2-pilot-engine-preflight",
+      "State": "FAILED",
+      "ExitCode": "1:0",
+      "Submit": "2026-10-16T08:21:08",
+      "Start": "2026-10-16T08:21:44",
+      "End": "2026-10-16T08:22:13",
+      "Elapsed": "00:00:29",
+      "WorkDir": "/scratch/qnguye19/needle/experiments/v2-improvement-pilot-2026-10-16-offline-recovery"
+    },
+    {
+      "JobID": "65785444",
+      "JobName": "v2-pilot-summary",
+      "State": "FAILED",
+      "ExitCode": "1:0",
+      "Submit": "2026-10-16T08:21:08",
+      "Start": "2026-10-16T08:22:15",
+      "End": "2026-10-16T08:22:19",
+      "Elapsed": "00:00:04",
+      "WorkDir": "/scratch/qnguye19/needle/experiments/v2-improvement-pilot-2026-10-16-offline-recovery"
+    },
+    {
+      "JobID": "65785681",
+      "JobName": "v2-pilot-latency-probe",
+      "State": "COMPLETED",
+      "ExitCode": "0:0",
+      "Submit": "2026-10-16T08:23:26",
+      "Start": "2026-10-16T08:23:26",
+      "End": "2026-10-16T08:24:41",
+      "Elapsed": "00:01:15",
+      "WorkDir": "/scratch/qnguye19/needle/experiments/v2-improvement-pilot-2026-10-16-offline-recovery"
+    },
+    {
+      "JobID": "65785782",
+      "JobName": "v2-pilot-container-probe",
+      "State": "COMPLETED",
+      "ExitCode": "0:0",
+      "Submit": "2026-10-16T08:24:37",
+      "Start": "2026-10-16T08:24:37",
+      "End": "2026-10-16T08:24:46",
+      "Elapsed": "00:00:09",
+      "WorkDir": "/scratch/qnguye19/needle/experiments/v2-improvement-pilot-2026-10-16-offline-recovery"
+    },
+    {
+      "JobID": "65786008",
+      "JobName": "v2-pilot-syscall-probe",
+      "State": "COMPLETED",
+      "ExitCode": "0:0",
+      "Submit": "2026-10-16T08:27:04",
+      "Start": "2026-10-16T08:27:04",
+      "End": "2026-10-16T08:27:15",
+      "Elapsed": "00:00:11",
+      "WorkDir": "/scratch/qnguye19/needle/experiments/v2-improvement-pilot-2026-10-16-offline-recovery"
+    },
+    {
+      "JobID": "65789281",
+      "JobName": "v2-runtime-diagnosis",
+      "State": "COMPLETED",
+      "ExitCode": "0:0",
+      "Submit": "2026-10-16T08:58:37",
+      "Start": "2026-10-16T08:58:38",
+      "End": "2026-10-16T08:59:48",
+      "Elapsed": "00:01:10",
+      "WorkDir": "/scratch/qnguye19/needle/experiments/v2-improvement-runtime-2026-10-16"
+    },
+    {
+      "JobID": "65789376",
+      "JobName": "v2-runtime-sc009",
+      "State": "COMPLETED",
+      "ExitCode": "0:0",
+      "Submit": "2026-10-16T08:59:41",
+      "Start": "2026-10-16T08:59:41",
+      "End": "2026-10-16T09:01:34",
+      "Elapsed": "00:01:53",
+      "WorkDir": "/scratch/qnguye19/needle/experiments/v2-improvement-runtime-2026-10-16"
+    },
+    {
+      "JobID": "65790130",
+      "JobName": "v2-single-worker-stress",
+      "State": "CANCELLED by 2074025",
+      "ExitCode": "0:0",
+      "Submit": "2026-10-16T09:06:36",
+      "Start": "None",
+      "End": "2026-10-16T09:12:31",
+      "Elapsed": "00:00:00",
+      "WorkDir": "/scratch/qnguye19/needle/experiments/v2-improvement-pilot-2026-10-16-one-worker"
+    },
+    {
+      "JobID": "65790764",
+      "JobName": "v2-single-worker-stress",
+      "State": "COMPLETED",
+      "ExitCode": "0:0",
+      "Submit": "2026-10-16T09:13:07",
+      "Start": "2026-10-16T09:13:07",
+      "End": "2026-10-16T09:17:43",
+      "Elapsed": "00:04:36",
+      "WorkDir": "/scratch/qnguye19/needle/experiments/v2-improvement-pilot-2026-10-16-one-worker"
+    },
+    {
+      "JobID": "65790765",
+      "JobName": "v2-pilot-token-preflight",
+      "State": "COMPLETED",
+      "ExitCode": "0:0",
+      "Submit": "2026-10-16T09:13:07",
+      "Start": "2026-10-16T09:17:43",
+      "End": "2026-10-16T09:17:46",
+      "Elapsed": "00:00:03",
+      "WorkDir": "/scratch/qnguye19/needle/experiments/v2-improvement-pilot-2026-10-16-one-worker"
+    },
+    {
+      "JobID": "65790817",
+      "JobName": "v2-pilot-baseline-build",
+      "State": "COMPLETED",
+      "ExitCode": "0:0",
+      "Submit": "2026-10-16T09:13:10",
+      "Start": "2026-10-16T09:17:59",
+      "End": "2026-10-16T09:18:06",
+      "Elapsed": "00:00:07",
+      "WorkDir": "/scratch/qnguye19/needle/experiments/v2-improvement-pilot-2026-10-16-one-worker"
+    },
+    {
+      "JobID": "65790818",
+      "JobName": "v2-pilot-engine-preflight",
+      "State": "COMPLETED",
+      "ExitCode": "0:0",
+      "Submit": "2026-10-16T09:13:10",
+      "Start": "2026-10-16T09:18:06",
+      "End": "2026-10-16T09:20:26",
+      "Elapsed": "00:02:20",
+      "WorkDir": "/scratch/qnguye19/needle/experiments/v2-improvement-pilot-2026-10-16-one-worker"
+    },
+    {
+      "JobID": "65790819_0",
+      "JobName": "v2-pilot-fit",
+      "State": "COMPLETED",
+      "ExitCode": "0:0",
+      "Submit": "2026-10-16T09:13:10",
+      "Start": "2026-10-16T09:20:48",
+      "End": "2026-10-16T09:20:53",
+      "Elapsed": "00:00:05",
+      "WorkDir": "/scratch/qnguye19/needle/experiments/v2-improvement-pilot-2026-10-16-one-worker"
+    },
+    {
+      "JobID": "65790819_1",
+      "JobName": "v2-pilot-fit",
+      "State": "COMPLETED",
+      "ExitCode": "0:0",
+      "Submit": "2026-10-16T09:13:10",
+      "Start": "2026-10-16T09:20:53",
+      "End": "2026-10-16T09:37:18",
+      "Elapsed": "00:16:25",
+      "WorkDir": "/scratch/qnguye19/needle/experiments/v2-improvement-pilot-2026-10-16-one-worker"
+    },
+    {
+      "JobID": "65790819_4",
+      "JobName": "v2-pilot-fit",
+      "State": "COMPLETED",
+      "ExitCode": "0:0",
+      "Submit": "2026-10-16T09:13:10",
+      "Start": "2026-10-16T09:21:38",
+      "End": "2026-10-16T09:38:09",
+      "Elapsed": "00:16:31",
+      "WorkDir": "/scratch/qnguye19/needle/experiments/v2-improvement-pilot-2026-10-16-one-worker"
+    },
+    {
+      "JobID": "65790819_7",
+      "JobName": "v2-pilot-fit",
+      "State": "COMPLETED",
+      "ExitCode": "0:0",
+      "Submit": "2026-10-16T09:13:10",
+      "Start": "2026-10-16T09:38:08",
+      "End": "2026-10-16T09:54:48",
+      "Elapsed": "00:16:40",
+      "WorkDir": "/scratch/qnguye19/needle/experiments/v2-improvement-pilot-2026-10-16-one-worker"
+    },
+    {
+      "JobID": "65790819_8",
+      "JobName": "v2-pilot-fit",
+      "State": "COMPLETED",
+      "ExitCode": "0:0",
+      "Submit": "2026-10-16T09:13:10",
+      "Start": "2026-10-16T09:44:12",
+      "End": "2026-10-16T09:44:33",
+      "Elapsed": "00:00:21",
+      "WorkDir": "/scratch/qnguye19/needle/experiments/v2-improvement-pilot-2026-10-16-one-worker"
+    },
+    {
+      "JobID": "65790819_9",
+      "JobName": "v2-pilot-fit",
+      "State": "COMPLETED",
+      "ExitCode": "0:0",
+      "Submit": "2026-10-16T09:13:10",
+      "Start": "2026-10-16T09:45:14",
+      "End": "2026-10-16T10:02:58",
+      "Elapsed": "00:17:44",
+      "WorkDir": "/scratch/qnguye19/needle/experiments/v2-improvement-pilot-2026-10-16-one-worker"
+    },
+    {
+      "JobID": "65790819_12",
+      "JobName": "v2-pilot-fit",
+      "State": "COMPLETED",
+      "ExitCode": "0:0",
+      "Submit": "2026-10-16T09:13:10",
+      "Start": "2026-10-16T09:55:49",
+      "End": "2026-10-16T10:12:32",
+      "Elapsed": "00:16:43",
+      "WorkDir": "/scratch/qnguye19/needle/experiments/v2-improvement-pilot-2026-10-16-one-worker"
+    },
+    {
+      "JobID": "65790819_15",
+      "JobName": "v2-pilot-fit",
+      "State": "COMPLETED",
+      "ExitCode": "0:0",
+      "Submit": "2026-10-16T09:13:10",
+      "Start": "2026-10-16T10:03:00",
+      "End": "2026-10-16T10:20:22",
+      "Elapsed": "00:17:22",
+      "WorkDir": "/scratch/qnguye19/needle/experiments/v2-improvement-pilot-2026-10-16-one-worker"
+    },
+    {
+      "JobID": "65790819_16",
+      "JobName": "v2-pilot-fit",
+      "State": "COMPLETED",
+      "ExitCode": "0:0",
+      "Submit": "2026-10-16T09:13:10",
+      "Start": "2026-10-16T10:12:32",
+      "End": "2026-10-16T10:12:55",
+      "Elapsed": "00:00:23",
+      "WorkDir": "/scratch/qnguye19/needle/experiments/v2-improvement-pilot-2026-10-16-one-worker"
+    },
+    {
+      "JobID": "65790819_17",
+      "JobName": "v2-pilot-fit",
+      "State": "COMPLETED",
+      "ExitCode": "0:0",
+      "Submit": "2026-10-16T09:13:10",
+      "Start": "2026-10-16T10:12:55",
+      "End": "2026-10-16T10:29:51",
+      "Elapsed": "00:16:56",
+      "WorkDir": "/scratch/qnguye19/needle/experiments/v2-improvement-pilot-2026-10-16-one-worker"
+    },
+    {
+      "JobID": "65790819_20",
+      "JobName": "v2-pilot-fit",
+      "State": "COMPLETED",
+      "ExitCode": "0:0",
+      "Submit": "2026-10-16T09:13:10",
+      "Start": "2026-10-16T10:20:22",
+      "End": "2026-10-16T10:37:14",
+      "Elapsed": "00:16:52",
+      "WorkDir": "/scratch/qnguye19/needle/experiments/v2-improvement-pilot-2026-10-16-one-worker"
+    },
+    {
+      "JobID": "65790819_23",
+      "JobName": "v2-pilot-fit",
+      "State": "COMPLETED",
+      "ExitCode": "0:0",
+      "Submit": "2026-10-16T09:13:10",
+      "Start": "2026-10-16T10:30:01",
+      "End": "2026-10-16T10:47:03",
+      "Elapsed": "00:17:02",
+      "WorkDir": "/scratch/qnguye19/needle/experiments/v2-improvement-pilot-2026-10-16-one-worker"
+    },
+    {
+      "JobID": "65790820_0",
+      "JobName": "v2-pilot-evaluate",
+      "State": "COMPLETED",
+      "ExitCode": "0:0",
+      "Submit": "2026-10-16T09:13:10",
+      "Start": "2026-10-16T09:21:21",
+      "End": "2026-10-16T10:01:12",
+      "Elapsed": "00:39:51",
+      "WorkDir": "/scratch/qnguye19/needle/experiments/v2-improvement-pilot-2026-10-16-one-worker"
+    },
+    {
+      "JobID": "65790820_1",
+      "JobName": "v2-pilot-evaluate",
+      "State": "COMPLETED",
+      "ExitCode": "0:0",
+      "Submit": "2026-10-16T09:13:10",
+      "Start": "2026-10-16T09:38:08",
+      "End": "2026-10-16T10:17:37",
+      "Elapsed": "00:39:29",
+      "WorkDir": "/scratch/qnguye19/needle/experiments/v2-improvement-pilot-2026-10-16-one-worker"
+    },
+    {
+      "JobID": "65790820_4",
+      "JobName": "v2-pilot-evaluate",
+      "State": "COMPLETED",
+      "ExitCode": "0:0",
+      "Submit": "2026-10-16T09:13:10",
+      "Start": "2026-10-16T09:39:14",
+      "End": "2026-10-16T10:18:05",
+      "Elapsed": "00:38:51",
+      "WorkDir": "/scratch/qnguye19/needle/experiments/v2-improvement-pilot-2026-10-16-one-worker"
+    },
+    {
+      "JobID": "65790820_7",
+      "JobName": "v2-pilot-evaluate",
+      "State": "COMPLETED",
+      "ExitCode": "0:0",
+      "Submit": "2026-10-16T09:13:10",
+      "Start": "2026-10-16T10:01:59",
+      "End": "2026-10-16T10:39:08",
+      "Elapsed": "00:37:09",
+      "WorkDir": "/scratch/qnguye19/needle/experiments/v2-improvement-pilot-2026-10-16-one-worker"
+    },
+    {
+      "JobID": "65790820_8",
+      "JobName": "v2-pilot-evaluate",
+      "State": "COMPLETED",
+      "ExitCode": "0:0",
+      "Submit": "2026-10-16T09:13:10",
+      "Start": "2026-10-16T09:45:14",
+      "End": "2026-10-16T10:31:03",
+      "Elapsed": "00:45:49",
+      "WorkDir": "/scratch/qnguye19/needle/experiments/v2-improvement-pilot-2026-10-16-one-worker"
+    },
+    {
+      "JobID": "65790820_9",
+      "JobName": "v2-pilot-evaluate",
+      "State": "COMPLETED",
+      "ExitCode": "0:0",
+      "Submit": "2026-10-16T09:13:10",
+      "Start": "2026-10-16T10:17:37",
+      "End": "2026-10-16T10:52:33",
+      "Elapsed": "00:34:56",
+      "WorkDir": "/scratch/qnguye19/needle/experiments/v2-improvement-pilot-2026-10-16-one-worker"
+    },
+    {
+      "JobID": "65790820_12",
+      "JobName": "v2-pilot-evaluate",
+      "State": "COMPLETED",
+      "ExitCode": "0:0",
+      "Submit": "2026-10-16T09:13:10",
+      "Start": "2026-10-16T10:31:28",
+      "End": "2026-10-16T11:11:24",
+      "Elapsed": "00:39:56",
+      "WorkDir": "/scratch/qnguye19/needle/experiments/v2-improvement-pilot-2026-10-16-one-worker"
+    },
+    {
+      "JobID": "65790820_15",
+      "JobName": "v2-pilot-evaluate",
+      "State": "COMPLETED",
+      "ExitCode": "0:0",
+      "Submit": "2026-10-16T09:13:10",
+      "Start": "2026-10-16T10:39:16",
+      "End": "2026-10-16T11:19:17",
+      "Elapsed": "00:40:01",
+      "WorkDir": "/scratch/qnguye19/needle/experiments/v2-improvement-pilot-2026-10-16-one-worker"
+    },
+    {
+      "JobID": "65790820_16",
+      "JobName": "v2-pilot-evaluate",
+      "State": "COMPLETED",
+      "ExitCode": "0:0",
+      "Submit": "2026-10-16T09:13:10",
+      "Start": "2026-10-16T10:18:05",
+      "End": "2026-10-16T10:58:13",
+      "Elapsed": "00:40:08",
+      "WorkDir": "/scratch/qnguye19/needle/experiments/v2-improvement-pilot-2026-10-16-one-worker"
+    },
+    {
+      "JobID": "65790820_17",
+      "JobName": "v2-pilot-evaluate",
+      "State": "CANCELLED by 2074025",
+      "ExitCode": "0:0",
+      "Submit": "2026-10-16T09:13:10",
+      "Start": "2026-10-16T10:52:33",
+      "End": "2026-10-16T11:24:17",
+      "Elapsed": "00:31:44",
+      "WorkDir": "/scratch/qnguye19/needle/experiments/v2-improvement-pilot-2026-10-16-one-worker"
+    },
+    {
+      "JobID": "65790820_20",
+      "JobName": "v2-pilot-evaluate",
+      "State": "CANCELLED by 2074025",
+      "ExitCode": "0:0",
+      "Submit": "2026-10-16T09:13:10",
+      "Start": "2026-10-16T10:58:13",
+      "End": "2026-10-16T11:24:17",
+      "Elapsed": "00:26:04",
+      "WorkDir": "/scratch/qnguye19/needle/experiments/v2-improvement-pilot-2026-10-16-one-worker"
+    },
+    {
+      "JobID": "65790820_23",
+      "JobName": "v2-pilot-evaluate",
+      "State": "CANCELLED by 2074025",
+      "ExitCode": "0:0",
+      "Submit": "2026-10-16T09:13:10",
+      "Start": "2026-10-16T11:11:24",
+      "End": "2026-10-16T11:24:17",
+      "Elapsed": "00:12:53",
+      "WorkDir": "/scratch/qnguye19/needle/experiments/v2-improvement-pilot-2026-10-16-one-worker"
+    },
+    {
+      "JobID": "65794652",
+      "JobName": "v2-reference-format-probe",
+      "State": "COMPLETED",
+      "ExitCode": "0:0",
+      "Submit": "2026-10-16T09:46:53",
+      "Start": "2026-10-16T09:47:23",
+      "End": "2026-10-16T09:48:44",
+      "Elapsed": "00:01:21",
+      "WorkDir": "/scratch/qnguye19/needle/experiments/v2-format-probe-2026-10-16"
+    },
+    {
+      "JobID": "65796035",
+      "JobName": "needle-format-numerics",
+      "State": "COMPLETED",
+      "ExitCode": "0:0",
+      "Submit": "2026-10-16T09:58:58",
+      "Start": "2026-10-16T09:59:57",
+      "End": "2026-10-16T10:01:07",
+      "Elapsed": "00:01:10",
+      "WorkDir": "/home/qnguye19"
+    },
+    {
+      "JobID": "65695586",
+      "JobName": "v2-pilot-engine-preflight",
+      "State": "CANCELLED",
+      "ExitCode": "0:0",
+      "Submit": "2026-10-13T13:31:21",
+      "Start": "None",
+      "End": "2026-10-15T15:02:14",
+      "Elapsed": "00:00:00"
+    },
+    {
+      "JobID": "65695587_[0-23%2]",
+      "JobName": "v2-pilot-fit",
+      "State": "CANCELLED",
+      "ExitCode": "0:0",
+      "Submit": "2026-10-13T13:31:21",
+      "Start": "None",
+      "End": "2026-10-15T15:02:14",
+      "Elapsed": "00:00:00"
+    },
+    {
+      "JobID": "65695588_0",
+      "JobName": "v2-pilot-evaluate",
+      "State": "CANCELLED",
+      "ExitCode": "0:0",
+      "Submit": "2026-10-13T13:31:21",
+      "Start": "None",
+      "End": "2026-10-15T15:02:14",
+      "Elapsed": "00:00:00"
+    },
+    {
+      "JobID": "65695588_1",
+      "JobName": "v2-pilot-evaluate",
+      "State": "CANCELLED",
+      "ExitCode": "0:0",
+      "Submit": "2026-10-13T13:31:21",
+      "Start": "None",
+      "End": "2026-10-15T15:02:14",
+      "Elapsed": "00:00:00"
+    },
+    {
+      "JobID": "65695588_2",
+      "JobName": "v2-pilot-evaluate",
+      "State": "CANCELLED",
+      "ExitCode": "0:0",
+      "Submit": "2026-10-13T13:31:21",
+      "Start": "None",
+      "End": "2026-10-15T15:02:14",
+      "Elapsed": "00:00:00"
+    },
+    {
+      "JobID": "65695588_3",
+      "JobName": "v2-pilot-evaluate",
+      "State": "CANCELLED",
+      "ExitCode": "0:0",
+      "Submit": "2026-10-13T13:31:21",
+      "Start": "None",
+      "End": "2026-10-15T15:02:14",
+      "Elapsed": "00:00:00"
+    },
+    {
+      "JobID": "65695588_4",
+      "JobName": "v2-pilot-evaluate",
+      "State": "CANCELLED",
+      "ExitCode": "0:0",
+      "Submit": "2026-10-13T13:31:21",
+      "Start": "None",
+      "End": "2026-10-15T15:02:14",
+      "Elapsed": "00:00:00"
+    },
+    {
+      "JobID": "65695588_5",
+      "JobName": "v2-pilot-evaluate",
+      "State": "CANCELLED",
+      "ExitCode": "0:0",
+      "Submit": "2026-10-13T13:31:21",
+      "Start": "None",
+      "End": "2026-10-15T15:02:14",
+      "Elapsed": "00:00:00"
+    },
+    {
+      "JobID": "65695588_6",
+      "JobName": "v2-pilot-evaluate",
+      "State": "CANCELLED",
+      "ExitCode": "0:0",
+      "Submit": "2026-10-13T13:31:21",
+      "Start": "None",
+      "End": "2026-10-15T15:02:14",
+      "Elapsed": "00:00:00"
+    },
+    {
+      "JobID": "65695588_7",
+      "JobName": "v2-pilot-evaluate",
+      "State": "CANCELLED",
+      "ExitCode": "0:0",
+      "Submit": "2026-10-13T13:31:21",
+      "Start": "None",
+      "End": "2026-10-15T15:02:14",
+      "Elapsed": "00:00:00"
+    },
+    {
+      "JobID": "65695588_8",
+      "JobName": "v2-pilot-evaluate",
+      "State": "CANCELLED",
+      "ExitCode": "0:0",
+      "Submit": "2026-10-13T13:31:21",
+      "Start": "None",
+      "End": "2026-10-15T15:02:14",
+      "Elapsed": "00:00:00"
+    },
+    {
+      "JobID": "65695588_9",
+      "JobName": "v2-pilot-evaluate",
+      "State": "CANCELLED",
+      "ExitCode": "0:0",
+      "Submit": "2026-10-13T13:31:21",
+      "Start": "None",
+      "End": "2026-10-15T15:02:14",
+      "Elapsed": "00:00:00"
+    },
+    {
+      "JobID": "65695588_23",
+      "JobName": "v2-pilot-evaluate",
+      "State": "CANCELLED",
+      "ExitCode": "0:0",
+      "Submit": "2026-10-13T13:31:21",
+      "Start": "None",
+      "End": "2026-10-15T15:02:18",
+      "Elapsed": "00:00:00"
+    },
+    {
+      "JobID": "65785442_[0-23%2]",
+      "JobName": "v2-pilot-fit",
+      "State": "CANCELLED",
+      "ExitCode": "0:0",
+      "Submit": "2026-10-16T08:21:08",
+      "Start": "None",
+      "End": "2026-10-16T08:22:13",
+      "Elapsed": "00:00:00"
+    },
+    {
+      "JobID": "65785443_23",
+      "JobName": "v2-pilot-evaluate",
+      "State": "CANCELLED",
+      "ExitCode": "0:0",
+      "Submit": "2026-10-16T08:21:08",
+      "Start": "None",
+      "End": "2026-10-16T08:22:14",
+      "Elapsed": "00:00:00"
+    },
+    {
+      "JobID": "65790131",
+      "JobName": "v2-pilot-token-preflight",
+      "State": "CANCELLED by 2074025",
+      "ExitCode": "0:0",
+      "Submit": "2026-10-16T09:06:36",
+      "Start": "None",
+      "End": "2026-10-16T09:12:31",
+      "Elapsed": "00:00:00"
+    },
+    {
+      "JobID": "65790132",
+      "JobName": "v2-pilot-baseline-build",
+      "State": "CANCELLED by 2074025",
+      "ExitCode": "0:0",
+      "Submit": "2026-10-16T09:06:37",
+      "Start": "None",
+      "End": "2026-10-16T09:12:31",
+      "Elapsed": "00:00:00"
+    },
+    {
+      "JobID": "65790133",
+      "JobName": "v2-pilot-engine-preflight",
+      "State": "CANCELLED by 2074025",
+      "ExitCode": "0:0",
+      "Submit": "2026-10-16T09:06:37",
+      "Start": "None",
+      "End": "2026-10-16T09:12:31",
+      "Elapsed": "00:00:00"
+    },
+    {
+      "JobID": "65790134_[0-1,4,7-9,12,15-17,20,23%2]",
+      "JobName": "v2-pilot-fit",
+      "State": "CANCELLED by 2074025",
+      "ExitCode": "0:0",
+      "Submit": "2026-10-16T09:06:37",
+      "Start": "None",
+      "End": "2026-10-16T09:12:31",
+      "Elapsed": "00:00:00"
+    },
+    {
+      "JobID": "65790135_[20,23%4]",
+      "JobName": "v2-pilot-evaluate",
+      "State": "CANCELLED by 2074025",
+      "ExitCode": "0:0",
+      "Submit": "2026-10-16T09:06:37",
+      "Start": "None",
+      "End": "2026-10-16T09:12:31",
+      "Elapsed": "00:00:00"
+    },
+    {
+      "JobID": "65790138",
+      "JobName": "v2-pilot-summary",
+      "State": "CANCELLED by 2074025",
+      "ExitCode": "0:0",
+      "Submit": "2026-10-16T09:06:38",
+      "Start": "None",
+      "End": "2026-10-16T09:12:31",
+      "Elapsed": "00:00:00"
+    },
+    {
+      "JobID": "65790136_[2-3,5-6,10-11,13-14,18-19,21-22%2]",
+      "JobName": "v2-pilot-fit-wave2",
+      "State": "CANCELLED by 2074025",
+      "ExitCode": "0:0",
+      "Submit": "2026-10-16T09:06:38",
+      "Start": "None",
+      "End": "2026-10-16T09:12:31",
+      "Elapsed": "00:00:00"
+    },
+    {
+      "JobID": "65790137_[21-22%4]",
+      "JobName": "v2-pilot-evaluate-wave2",
+      "State": "CANCELLED by 2074025",
+      "ExitCode": "0:0",
+      "Submit": "2026-10-16T09:06:38",
+      "Start": "None",
+      "End": "2026-10-16T09:12:31",
+      "Elapsed": "00:00:00"
+    },
+    {
+      "JobID": "65790823",
+      "JobName": "v2-pilot-summary",
+      "State": "CANCELLED by 2074025",
+      "ExitCode": "0:0",
+      "Submit": "2026-10-16T09:13:10",
+      "Start": "None",
+      "End": "2026-10-16T11:24:17",
+      "Elapsed": "00:00:00"
+    },
+    {
+      "JobID": "65790821_[2-3,5-6,10-11,13-14,18-19,21-22%2]",
+      "JobName": "v2-pilot-fit-wave2",
+      "State": "CANCELLED by 2074025",
+      "ExitCode": "0:0",
+      "Submit": "2026-10-16T09:13:10",
+      "Start": "None",
+      "End": "2026-10-16T11:24:17",
+      "Elapsed": "00:00:00"
+    },
+    {
+      "JobID": "65790822_2",
+      "JobName": "v2-pilot-evaluate-wave2",
+      "State": "CANCELLED by 2074025",
+      "ExitCode": "0:0",
+      "Submit": "2026-10-16T09:13:10",
+      "Start": "None",
+      "End": "2026-10-16T11:24:17",
+      "Elapsed": "00:00:00"
+    },
+    {
+      "JobID": "65790822_3",
+      "JobName": "v2-pilot-evaluate-wave2",
+      "State": "CANCELLED by 2074025",
+      "ExitCode": "0:0",
+      "Submit": "2026-10-16T09:13:10",
+      "Start": "None",
+      "End": "2026-10-16T11:24:17",
+      "Elapsed": "00:00:00"
+    },
+    {
+      "JobID": "65790822_5",
+      "JobName": "v2-pilot-evaluate-wave2",
+      "State": "CANCELLED by 2074025",
+      "ExitCode": "0:0",
+      "Submit": "2026-10-16T09:13:10",
+      "Start": "None",
+      "End": "2026-10-16T11:24:17",
+      "Elapsed": "00:00:00"
+    },
+    {
+      "JobID": "65790822_6",
+      "JobName": "v2-pilot-evaluate-wave2",
+      "State": "CANCELLED by 2074025",
+      "ExitCode": "0:0",
+      "Submit": "2026-10-16T09:13:10",
+      "Start": "None",
+      "End": "2026-10-16T11:24:17",
+      "Elapsed": "00:00:00"
+    },
+    {
+      "JobID": "65790822_10",
+      "JobName": "v2-pilot-evaluate-wave2",
+      "State": "CANCELLED by 2074025",
+      "ExitCode": "0:0",
+      "Submit": "2026-10-16T09:13:10",
+      "Start": "None",
+      "End": "2026-10-16T11:24:17",
+      "Elapsed": "00:00:00"
+    },
+    {
+      "JobID": "65790822_11",
+      "JobName": "v2-pilot-evaluate-wave2",
+      "State": "CANCELLED by 2074025",
+      "ExitCode": "0:0",
+      "Submit": "2026-10-16T09:13:10",
+      "Start": "None",
+      "End": "2026-10-16T11:24:17",
+      "Elapsed": "00:00:00"
+    },
+    {
+      "JobID": "65790822_13",
+      "JobName": "v2-pilot-evaluate-wave2",
+      "State": "CANCELLED by 2074025",
+      "ExitCode": "0:0",
+      "Submit": "2026-10-16T09:13:10",
+      "Start": "None",
+      "End": "2026-10-16T11:24:17",
+      "Elapsed": "00:00:00"
+    },
+    {
+      "JobID": "65790822_14",
+      "JobName": "v2-pilot-evaluate-wave2",
+      "State": "CANCELLED by 2074025",
+      "ExitCode": "0:0",
+      "Submit": "2026-10-16T09:13:10",
+      "Start": "None",
+      "End": "2026-10-16T11:24:17",
+      "Elapsed": "00:00:00"
+    },
+    {
+      "JobID": "65790822_18",
+      "JobName": "v2-pilot-evaluate-wave2",
+      "State": "CANCELLED by 2074025",
+      "ExitCode": "0:0",
+      "Submit": "2026-10-16T09:13:10",
+      "Start": "None",
+      "End": "2026-10-16T11:24:17",
+      "Elapsed": "00:00:00"
+    },
+    {
+      "JobID": "65790822_19",
+      "JobName": "v2-pilot-evaluate-wave2",
+      "State": "CANCELLED by 2074025",
+      "ExitCode": "0:0",
+      "Submit": "2026-10-16T09:13:10",
+      "Start": "None",
+      "End": "2026-10-16T11:24:17",
+      "Elapsed": "00:00:00"
+    },
+    {
+      "JobID": "65790822_[21-22%4]",
+      "JobName": "v2-pilot-evaluate-wave2",
+      "State": "CANCELLED by 2074025",
+      "ExitCode": "0:0",
+      "Submit": "2026-10-16T09:13:10",
+      "Start": "None",
+      "End": "2026-10-16T11:24:17",
+      "Elapsed": "00:00:00"
+    }
+  ],
+  "singleWorkerConditions": {
+    "answers-r16-u300-seed0": {
+      "trainingStatus": "complete",
+      "trainingSeconds": 966.5032065760461,
+      "modelSha256": "b34486d0bf3e94f9bf6dae143a474b1f216d214341358a58b7f6c9ab4e60e81e",
+      "savedSolEvaluationStatus": "complete"
+    },
+    "answers-r16-u300-seed1": {
+      "trainingStatus": "complete",
+      "trainingSeconds": 1045.3320729690022,
+      "modelSha256": "75848ef27d8ecc89ff7be6eb8631a0a00bd70b1baba2747524f3f8e041c0c9f1",
+      "savedSolEvaluationStatus": "complete"
+    },
+    "answers-r16-u300-seed2": {
+      "trainingStatus": "complete",
+      "trainingSeconds": 997.155524515023,
+      "modelSha256": "e4113f5f1715732e702f84a202c70757e474ae73694804e0ecbfb0679a6320be",
+      "savedSolEvaluationStatus": "running"
+    },
+    "answers-r32-u300-seed0": {
+      "trainingStatus": "complete",
+      "trainingSeconds": 969.4571362879942,
+      "modelSha256": "9d8e586cfe0eae46d1fbd08639ee297453ea2bdb6467d159ee48abdd8d7171b5",
+      "savedSolEvaluationStatus": "complete"
+    },
+    "answers-r32-u300-seed1": {
+      "trainingStatus": "complete",
+      "trainingSeconds": 984.3510800070071,
+      "modelSha256": "9d285b8cc810eeee41f6c8abb560975b8112e6da64f01d9292c0faa43dce4991",
+      "savedSolEvaluationStatus": "complete"
+    },
+    "answers-r32-u300-seed2": {
+      "trainingStatus": "complete",
+      "trainingSeconds": 992.9070333410054,
+      "modelSha256": "0641c6d080e2e5ccdcedb79f69ff74e1c7d48b4b03712d8e0dd5c6dee2e5ada7",
+      "savedSolEvaluationStatus": "running"
+    },
+    "reasoning-r16-u300-seed0": {
+      "trainingStatus": "complete",
+      "trainingSeconds": 978.6902468669869,
+      "modelSha256": "0f7b965e8dfa57b41972bbff886be1e800a5ca3a8a8de51c75a690877db0c063",
+      "savedSolEvaluationStatus": "complete"
+    },
+    "reasoning-r16-u300-seed1": {
+      "trainingStatus": "complete",
+      "trainingSeconds": 1021.5985970789916,
+      "modelSha256": "386d5252bd152b58e61a515f2f7289a3d15b6390e8271249bfc23e40fb7a85da",
+      "savedSolEvaluationStatus": "complete"
+    },
+    "reasoning-r16-u300-seed2": {
+      "trainingStatus": "complete",
+      "trainingSeconds": 999.5975693120272,
+      "modelSha256": "b2fbd719a06605899364a0d9ccd68801b215f79f8670de744df43081b97f83a3",
+      "savedSolEvaluationStatus": "running"
+    },
+    "untuned-seed0": {
+      "trainingStatus": "complete",
+      "trainingSeconds": 0,
+      "modelSha256": "3bde318ede183eb06eb65524c9139f83d749e929f46feadfe516cefa3c8e8863",
+      "savedSolEvaluationStatus": "complete"
+    },
+    "untuned-seed1": {
+      "trainingStatus": "complete",
+      "trainingSeconds": 0,
+      "modelSha256": "3bde318ede183eb06eb65524c9139f83d749e929f46feadfe516cefa3c8e8863",
+      "savedSolEvaluationStatus": "complete"
+    },
+    "untuned-seed2": {
+      "trainingStatus": "complete",
+      "trainingSeconds": 0,
+      "modelSha256": "3bde318ede183eb06eb65524c9139f83d749e929f46feadfe516cefa3c8e8863",
+      "savedSolEvaluationStatus": "complete"
+    }
+  },
+  "savedMacDevelopmentResults": [
+    {
+      "label": "answers-r16-u300-seed0",
+      "status": "complete",
+      "platform": "darwin-arm64",
+      "cases": 100,
+      "correct": 41,
+      "evidenceSha256": "b135a6686216e1437a804c8c4061d518d532b8aa58a9d381e30f8a9c5d71445b"
+    },
+    {
+      "label": "answers-r16-u300-seed1",
+      "status": "complete",
+      "platform": "darwin-arm64",
+      "cases": 100,
+      "correct": 45,
+      "evidenceSha256": "5f279d2093242ad2c3c555b1ab8cde5181e395f0a5f4aafc890538d8506db1b9"
+    },
+    {
+      "label": "answers-r16-u300-seed2",
+      "status": "complete",
+      "platform": "darwin-arm64",
+      "cases": 100,
+      "correct": 45,
+      "evidenceSha256": "d94a64e052f9d8c14def4ea826488ae23f201964be927ebc7c21b04705bf1928"
+    },
+    {
+      "label": "answers-r32-u300-seed0",
+      "status": "complete",
+      "platform": "darwin-arm64",
+      "cases": 100,
+      "correct": 42,
+      "evidenceSha256": "361a832847fcbff28ff610376ebf57e8bd8ebbdc6d8982298cb4c2bd9f6714be"
+    },
+    {
+      "label": "answers-r32-u300-seed1",
+      "status": "complete",
+      "platform": "darwin-arm64",
+      "cases": 100,
+      "correct": 40,
+      "evidenceSha256": "725dccb6cef64f4e73ce40f68c7b5e53c186f270e0d468589a82932faf00d809"
+    },
+    {
+      "label": "answers-r32-u300-seed2",
+      "status": "complete",
+      "platform": "darwin-arm64",
+      "cases": 100,
+      "correct": 41,
+      "evidenceSha256": "11ebe0200dc8ce35edbfd16d96525d32522cc1bed5c0b9d87971a22205a598dd"
+    },
+    {
+      "label": "matched-untuned",
+      "status": "complete",
+      "platform": "darwin-arm64",
+      "cases": 100,
+      "correct": 41,
+      "evidenceSha256": "3dc9b16d033ad59cda00b866bb08d554120558378ef2661afc63f50a2df0eb62"
+    },
+    {
+      "label": "old-data-seed0",
+      "status": "complete",
+      "platform": "darwin-arm64",
+      "cases": 100,
+      "correct": 40,
+      "evidenceSha256": "b214d414606e01ccb0691dddce5f98aca95fefcad3f09d67f2a7d50bcf75ea16"
+    },
+    {
+      "label": "old-data-seed1",
+      "status": "complete",
+      "platform": "darwin-arm64",
+      "cases": 100,
+      "correct": 38,
+      "evidenceSha256": "76e1c9114333293211ccb5a9d4ec92fa0ce36a1b02a7f1342b051a640cd2a778"
+    },
+    {
+      "label": "old-data-seed2",
+      "status": "complete",
+      "platform": "darwin-arm64",
+      "cases": 100,
+      "correct": 41,
+      "evidenceSha256": "3396d2340c277332de9a3b8bfa37706ea609287c934ac6f3a4614ef4d32362db"
+    },
+    {
+      "label": "reasoning-r16-u300-seed0",
+      "status": "complete",
+      "platform": "darwin-arm64",
+      "cases": 100,
+      "correct": 50,
+      "evidenceSha256": "0be8faaca18c0df82a4f359bb934cf7187379c89d50056ac48517f60281363f9"
+    },
+    {
+      "label": "reasoning-r16-u300-seed1",
+      "status": "complete",
+      "platform": "darwin-arm64",
+      "cases": 100,
+      "correct": 53,
+      "evidenceSha256": "edabe4e0fee9bc9d3516e7f5ed6cf6758eb75e86959068d55ac299d6ca634cab"
+    },
+    {
+      "label": "reasoning-r16-u300-seed2",
+      "status": "complete",
+      "platform": "darwin-arm64",
+      "cases": 100,
+      "correct": 47,
+      "evidenceSha256": "00ba8dc602f9a15214a33812131508d05138b0725fd22e0045572d4ed94a5606"
+    }
+  ],
+  "conclusion": "No candidate is qualified. Three saved Sol evaluation files say running after owner cancellation; scheduler accounting is authoritative. No later fitting wave ran. No new Sol jobs were submitted or changed.",
+  "issue54Comment": "https://github.com/QuaanNguyen/border-collie/issues/54#issuecomment-6271265202"
+}
