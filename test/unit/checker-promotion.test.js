@@ -31,6 +31,8 @@ test('native qualification rejects reasoning, multiple calls and stale verdict n
   const response = { success: true, function_calls: [{ name: 'approve', arguments: {} }], reasoning: '' };
   assert.equal(directVerdict(response), 'approve');
   assert.equal(directVerdict({ ...response, reasoning: 'external explanation' }), null);
+  assert.equal(directVerdict({ ...response, reasoning: false }), null);
+  assert.equal(directVerdict({ ...response, reasoning: 0 }), null);
   assert.equal(directVerdict({ ...response, function_calls: [...response.function_calls, { name: 'deny', arguments: {} }] }), null);
   assert.equal(directVerdict({ ...response, function_calls: [{ name: 'allow_call', arguments: {} }] }), null);
 });

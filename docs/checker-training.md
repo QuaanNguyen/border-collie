@@ -10,6 +10,8 @@ The directory must be new.
 Preparation preserves earlier data and creates a frozen proposal file, a label-blind review packet and a manifest.
 The current prepared packet is `checker-v3-2026-10-19-final`.
 It contains 1,500 authored examples and is not training eligible.
+Bulk review is withheld at the incomplete-contract intake gate, with exact-input checkpoints preserved.
+The current counts and remaining work are recorded in `docs/experiments/checker-v3-data-readiness-2026-10-19.json`.
 The earlier packet with verdict names in its IDs is preserved and invalidated for independent review.
 
 The product runs two models: the coding model and the local Needle checker.

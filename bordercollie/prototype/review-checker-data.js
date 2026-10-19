@@ -70,7 +70,7 @@ async function review(directory, model, modelFamily, concurrency = 3) {
 if (require.main === module) {
   const [directory, model, modelFamily] = process.argv.slice(2);
   if (!directory || !model || !modelFamily) throw new Error('Usage: review-checker-data.js <directory> <model> <model-family>');
-  review(path.resolve(directory), model, modelFamily).then((result) => console.log(JSON.stringify(result))).catch((error) => { console.error(error.message); process.exitCode = 1; });
+  review(path.resolve(directory), model, modelFamily).then((result) => { console.log(JSON.stringify(result)); if (result.status !== 'complete') process.exitCode = 1; }).catch((error) => { console.error(error.message); process.exitCode = 1; });
 }
 
 module.exports = { review };

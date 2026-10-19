@@ -10,7 +10,7 @@ const { digest } = require('./checker-data');
 
 function directVerdict(response) {
   const verdict = verdictFrom(response);
-  if (!verdict || (typeof response.reasoning === 'string' && response.reasoning.trim()) || response.reasoning && typeof response.reasoning !== 'string') return null;
+  if (!verdict || response.reasoning !== undefined && response.reasoning !== null && (typeof response.reasoning !== 'string' || response.reasoning.trim())) return null;
   return { allow: 'approve', disallow: 'deny', ask: 'ask' }[verdict];
 }
 
