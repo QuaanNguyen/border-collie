@@ -102,9 +102,6 @@ test('an unreadable or invalid Preference blocks the session until a person fixe
 test('a retired Protocol only contributes done criteria while no Preference exists', async () => {
   await withWorkdir(async (workdir) => {
     writeRetiredProtocol(workdir, '.opencode/protocol.json', {
-      task: 'edit nothing',
-      write_paths: [],
-      allow_ordinary_bash: false,
       done_criteria: [{ id: 'parser-exists', checks: [{ type: 'file_exists', path: 'src/parser.js' }] }],
     });
     const judge = judgeDouble();
@@ -132,7 +129,7 @@ test('a retired Protocol only contributes done criteria while no Preference exis
       const verdict = fs.readFileSync(events, 'utf8').trim().split('\n').map((line) => JSON.parse(line)).filter((event) => event.type === 'verdict').at(-1);
       assert.equal(verdict.status, 'fail');
       assert.match(verdict.reason, /src\/parser\.js/);
-      assert.match(fs.readFileSync(path.join(workdir, '.opencode', 'protocol.json'), 'utf8'), /edit nothing/);
+      assert.match(fs.readFileSync(path.join(workdir, '.opencode', 'protocol.json'), 'utf8'), /parser-exists/);
     } finally {
       delete process.env.BORDERCOLLIE_EVENTS;
     }
@@ -303,5 +300,22 @@ test('OpenCode V2 applies the bordercollie to live tool input', async () => {
       if (previous === undefined) delete process.env.BORDERCOLLIE_NO_PET;
       else process.env.BORDERCOLLIE_NO_PET = previous;
     }
+  });
+});
+
+
+test('retired restrictions withhold tools until the owner migrates them', async () => {
+  await withWorkdir(async (workdir) => {
+    writeRetiredProtocol(workdir, '.opencode/protocol.json', { task: 'Documentation only.', write_paths: ['docs/**'], deny_commands: ['git push'] });
+    const judge = judgeDouble();
+    const hooks = await bordercollie({ directory: workdir, client: {} }, { judge });
+    await assert.rejects(hooks['tool.execute.before']({ tool: 'edit', sessionID: 'one' }, { args: { path: 'src/parser.js', oldString: 'a', newString: 'b' } }), /migrate/);
+    assert.equal(judge.calls.length, 0);
+    const { migrate } = await import('../../scripts/migrate.js');
+    migrate({ workdir, configRoot: path.join(workdir, 'owner-config'), ownerPolicyPath: path.join(workdir, 'owner-policy.json') });
+    await hooks['tool.execute.before']({ tool: 'read', sessionID: 'one' }, { args: { path: 'docs/parser.md' } });
+    assert.match(judge.calls[0].preference.text, /Documentation only/);
+    assert.match(judge.calls[0].preference.text, /docs\/\*\*/);
+    assert.match(judge.calls[0].preference.text, /git push/);
   });
 });

@@ -61,3 +61,6 @@ The coding model and Needle checker are the only models in the running product.
 Needle returns one no-argument approve, deny, or ask call.
 External data-review explanations never belong in training targets.
 The pinned engine still adds its own internal reasoning prefix; direct-output qualification remains open in issue #61, and no fine-tuned replacement is qualified.
+
+A retired Protocol with project instructions withholds tool use until the owner runs migration.
+Its restrictions are carried into the free-text Preference instead of being silently replaced by the default.

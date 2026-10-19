@@ -71,17 +71,20 @@ function withDefaults(value, doneCriteria = value.done_criteria || []) {
 }
 
 function retiredDoneCriteria(workdir) {
+  let first = null;
+  let hasInstructions = false;
+  const contents = [];
   for (const file of retiredProtocolPaths(workdir)) {
     const source = readJsonObject(file);
     if (!source.exists) continue;
     if (source.error) return { file, error: source.error, doneCriteria: [], contents: source.contents };
     const criteria = source.value.done_criteria;
-    if (criteria !== undefined && !Array.isArray(criteria)) {
-      return { file, error: new Error("'done_criteria' must be an array"), doneCriteria: [], contents: source.contents };
-    }
-    return { file, error: null, doneCriteria: criteria || [], contents: source.contents };
+    if (criteria !== undefined && !Array.isArray(criteria)) return { file, error: new Error("'done_criteria' must be an array"), doneCriteria: [], contents: source.contents };
+    first ||= { file, error: null, doneCriteria: criteria || [] };
+    hasInstructions ||= Object.keys(source.value).some((key) => key !== 'done_criteria');
+    contents.push(source.contents);
   }
-  return { file: null, error: null, doneCriteria: [], contents: 'missing' };
+  return { ...(first || { file: null, error: null, doneCriteria: [] }), hasInstructions, contents: contents.length ? contents.join('\0') : 'missing' };
 }
 
 function readPreference(workdir) {
@@ -112,6 +115,7 @@ function readPreference(workdir) {
   if (retired.error) {
     return { valid: false, fingerprint: print, file: retired.file, preference: null, reason: `the retired Protocol at ${retired.file} is unreadable: ${retired.error.message}` };
   }
+  if (retired.hasInstructions) return { valid: false, fingerprint: print, file: retired.file, preference: null, reason: 'Run bordercollie migrate to preserve the previous project instructions before using the checker.' };
   return { valid: true, fingerprint: print, file, source: 'default', preference: withDefaults({}, retired.doneCriteria), reason: null };
 }
 
