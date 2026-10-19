@@ -1,0 +1,876 @@
+{
+  "storage": "Git LFS",
+  "revision": "Use the commit containing this manifest; LFS objects are addressed by their SHA-256 values.",
+  "files": [
+    {
+      "path": "analysis/checker-v3-2026-10-19/evidence/checker-draft-v4/manifest.json",
+      "bytes": 149782,
+      "sha256": "00bd302950e9b61be6dad13f5a0cdd34741311127c2537e359db5cc6890e629f"
+    },
+    {
+      "path": "analysis/checker-v3-2026-10-19/evidence/checker-draft-v4/proposals.jsonl",
+      "bytes": 994580,
+      "sha256": "2ccd0eedbc207433acc82a84c5a0078e1fbb501acb025542caa69df3c5fc7a7b"
+    },
+    {
+      "path": "analysis/checker-v3-2026-10-19/evidence/checker-draft-v4/review-packet.json",
+      "bytes": 2464044,
+      "sha256": "6abb01bad8f91b045dc5438fc65858ca8d26950fb10b999cd7a2a7130a87b6e2"
+    },
+    {
+      "path": "analysis/checker-v3-2026-10-19/evidence/claude-live-tools.json",
+      "bytes": 98660,
+      "sha256": "9d578c1285ad44cce5f184ebe5048b08a988dd27e04b33bbdfa3870f35be5857"
+    },
+    {
+      "path": "analysis/checker-v3-2026-10-19/evidence/codex-live-tools-direct.json",
+      "bytes": 30303,
+      "sha256": "de6756ccebf0f2aaeef166c7d932251ab1692e74103ae591bb82bf0a96cd4700"
+    },
+    {
+      "path": "analysis/checker-v3-2026-10-19/evidence/codex-live-tools-featured.json",
+      "bytes": 29193,
+      "sha256": "e19507e4302a38f0958d5b97d3e138a1d691481d53d07ac30aafb0fe9ba111d6"
+    },
+    {
+      "path": "analysis/checker-v3-2026-10-19/evidence/codex-source/get_context_remaining_spec.rs",
+      "bytes": 1222,
+      "sha256": "7568f8f622bfb3e13d81e0d38279735f33a6d0d28ed1639e3607f68280d43c82"
+    },
+    {
+      "path": "analysis/checker-v3-2026-10-19/evidence/codex-source/list_available_plugins_to_install_spec.rs",
+      "bytes": 2608,
+      "sha256": "950a85c21c857af23f4d1c99aaa33cbddd6a9b7ee0e6e04b346e7fc4f39c77e0"
+    },
+    {
+      "path": "analysis/checker-v3-2026-10-19/evidence/codex-source/new_context_window_spec.rs",
+      "bytes": 658,
+      "sha256": "a8ae795a800d353ace35ed1366ee6917717066dd83f441cde60f78dc1cabd749"
+    },
+    {
+      "path": "analysis/checker-v3-2026-10-19/evidence/codex-source/plan_spec.rs",
+      "bytes": 1740,
+      "sha256": "ecbd36a78158967384269e1fb50f19991fd8f76c8d880cae536b5da105e0b197"
+    },
+    {
+      "path": "analysis/checker-v3-2026-10-19/evidence/codex-source/request_plugin_install_spec.rs",
+      "bytes": 9298,
+      "sha256": "f0a731499469a4ed581b9550d1a45d5881b01b508f9cb70036b78b0670f45023"
+    },
+    {
+      "path": "analysis/checker-v3-2026-10-19/evidence/codex-source/shell_spec.rs",
+      "bytes": 13308,
+      "sha256": "f63500f061206cec364f3f994fe4e5a8c18bb205b0f8f25bae83afe123505247"
+    },
+    {
+      "path": "analysis/checker-v3-2026-10-19/evidence/codex-source/tool_search_spec.rs",
+      "bytes": 9540,
+      "sha256": "06e8e03deb3d4a2da2fc36bc6660b399f3d8e54dee76b0557658ee55abed93de"
+    },
+    {
+      "path": "analysis/checker-v3-2026-10-19/evidence/codex-typed-inputs.json",
+      "bytes": 4065,
+      "sha256": "d65e989e4987a38d926bcac8568ca680275d5996dcb60509b072386ae6b0048c"
+    },
+    {
+      "path": "analysis/checker-v3-2026-10-19/evidence/direct-target-token-check.json",
+      "bytes": 506,
+      "sha256": "f999ef1d55ff336229fd7c17b379c0047f49bef979b69898bb939a303f41ad2f"
+    },
+    {
+      "path": "analysis/checker-v3-2026-10-19/evidence/mac-direct-probe.json",
+      "bytes": 10606,
+      "sha256": "6c078b9c91138ad97ca191d8e72f8d8ab6208d913c0bd781a46f8c9f49a8a96d"
+    },
+    {
+      "path": "analysis/checker-v3-2026-10-19/evidence/needle.h",
+      "bytes": 4306,
+      "sha256": "914bbd00423939b02fc349f91cdb7c12531b3f5bb7105b743e0e93c7e409d7b1"
+    },
+    {
+      "path": "analysis/checker-v3-2026-10-19/evidence/prior-checker-draft/STOP-REVIEWS",
+      "bytes": 139,
+      "sha256": "5019f9e23f0c5ae5ceccdad54766a57706ded63d3962f283d83ac06e7096400c"
+    },
+    {
+      "path": "analysis/checker-v3-2026-10-19/evidence/prior-checker-draft/manifest.json",
+      "bytes": 139219,
+      "sha256": "cddb74741d7de9c818c64dd084c983560e9f98f313cdbcfff1afe352d6e9193b"
+    },
+    {
+      "path": "analysis/checker-v3-2026-10-19/evidence/prior-checker-draft/proposals.jsonl",
+      "bytes": 903737,
+      "sha256": "05312203af9825cda10c27cdbdedd428e9d346114553a9c2ad5d3011c1bfa3ac"
+    },
+    {
+      "path": "analysis/checker-v3-2026-10-19/evidence/prior-checker-draft/readiness.json",
+      "bytes": 62660,
+      "sha256": "2d873d6149cef0626a9ead5fb56266b56a5a393d3320f919dc84b10adfb76a61"
+    },
+    {
+      "path": "analysis/checker-v3-2026-10-19/evidence/prior-checker-draft/review-inkling-small.json",
+      "bytes": 106965,
+      "sha256": "86f23bead15166b9e5ed6627d64e74a968d15ad2c6537cb4e7f4b51a79584696"
+    },
+    {
+      "path": "analysis/checker-v3-2026-10-19/evidence/prior-checker-draft/review-kimi-k2-7-code.json",
+      "bytes": 62525,
+      "sha256": "29f47f84100a650be5ad6dddbb13092c3f21d1397559c1df5ca1ecef706cd816"
+    },
+    {
+      "path": "analysis/checker-v3-2026-10-19/evidence/prior-checker-draft/review-packet.json",
+      "bytes": 2236956,
+      "sha256": "049babe7872588d15865b2c0dfc03cd89d603b6fa9a816ebeb6471c7e44ae87d"
+    },
+    {
+      "path": "analysis/checker-v3-2026-10-19/evidence/prior-checker-draft/review-payload-audit.json",
+      "bytes": 241,
+      "sha256": "14aa8ff21c0bde09e9fb4ab8344a6ac896fd04c5ec1a23d1968dad17aa8271cd"
+    },
+    {
+      "path": "analysis/checker-v3-2026-10-19/evidence/prior-checker-draft/review-preview.json",
+      "bytes": 5744,
+      "sha256": "a831ead276d6dcf6ad57f24532a8cf5eda7cfe6028858e91a766dc0bd3ea62c9"
+    },
+    {
+      "path": "analysis/checker-v3-2026-10-19/evidence/risk-review/INVALIDATED.json",
+      "bytes": 194,
+      "sha256": "1f5fbb3638e7d9dc8dcce93a6335d7d0311bac5247b8363dc1c35334db9e0b15"
+    },
+    {
+      "path": "analysis/checker-v3-2026-10-19/evidence/risk-review/STOP-REVIEWS",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "analysis/checker-v3-2026-10-19/evidence/risk-review/manifest.json",
+      "bytes": 13087,
+      "sha256": "4c20468e7dad6a8cb42a390dc90d33018bcad7e27790ff79de9d65c690038363"
+    },
+    {
+      "path": "analysis/checker-v3-2026-10-19/evidence/risk-review/proposals.jsonl",
+      "bytes": 41842,
+      "sha256": "9e394b7b97ab5f4b20bfd1818679f3442955620e767f4e2c56f3904af7247bf8"
+    },
+    {
+      "path": "analysis/checker-v3-2026-10-19/evidence/risk-review/review-inkling-small.json",
+      "bytes": 19638,
+      "sha256": "b9ae731980b7654389b3d044a897325915098c670618a240133c3536e9367527"
+    },
+    {
+      "path": "analysis/checker-v3-2026-10-19/evidence/risk-review/review-kimi-k2-7-code.json",
+      "bytes": 17098,
+      "sha256": "3119aa5f22ecc53768bed7b5c0b50a70762f9aee2b11a74bf74fbb7c581d4562"
+    },
+    {
+      "path": "analysis/checker-v3-2026-10-19/evidence/risk-review/review-packet.json",
+      "bytes": 104182,
+      "sha256": "d7d7a646183ca31c6a89cb2cf82c52cbffdd30d908148199da3a21075990f4b3"
+    },
+    {
+      "path": "analysis/checker-v3-2026-10-19/evidence/risk-review-v2/manifest.json",
+      "bytes": 13087,
+      "sha256": "a82c0f9810565fd3aed8992b70ab91bc812fb2cd166f55a20f24691a87dd6a76"
+    },
+    {
+      "path": "analysis/checker-v3-2026-10-19/evidence/risk-review-v2/proposals.jsonl",
+      "bytes": 42922,
+      "sha256": "ae7bd4352f6b34bb64e4f6aa032925256c25c04b672264582ae748b0e6a19bd8"
+    },
+    {
+      "path": "analysis/checker-v3-2026-10-19/evidence/risk-review-v2/review-inkling-small.json",
+      "bytes": 19637,
+      "sha256": "510e258514620753198c806c3457e1106fca64be318979c7191d4f9589473474"
+    },
+    {
+      "path": "analysis/checker-v3-2026-10-19/evidence/risk-review-v2/review-kimi-k2-7-code.json",
+      "bytes": 19134,
+      "sha256": "b2220729554bf75961c279d253a4f801629636ca9290252a36c48f4a71f80458"
+    },
+    {
+      "path": "analysis/checker-v3-2026-10-19/evidence/risk-review-v2/review-packet.json",
+      "bytes": 105298,
+      "sha256": "0dcb197b9b98c062b2dc76de3da14bf24977879b46a03bd6a5c412f1ac335dc1"
+    },
+    {
+      "path": "analysis/checker-v3-2026-10-19/evidence/risk-review-v2/review-status.json",
+      "bytes": 3406,
+      "sha256": "fc140d998f56aea16995aecd2f76a0d87e01271a3a5273bd025f0114afabe783"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/audit-findings.jsonl",
+      "bytes": 33508,
+      "sha256": "4fd9e1a575f65355e18fe0ffd670bbadd990c94a1d5ccb645d00776a470ebe12"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/audit.json",
+      "bytes": 26525,
+      "sha256": "21de41a62a5acc505ec378c4782d31f0fcadf2f4e85c1e9729c2454cca0b2258"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/candidate-all-control-check.json",
+      "bytes": 458600,
+      "sha256": "0e8ff74723c4c209037e4090842f7271cb72d387a3448398fc689d1cbe59f149"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/candidate-all-requests.jsonl",
+      "bytes": 8917243,
+      "sha256": "cef5c300b94dec5537c418291f8833c382e3e32f977935db50bc7af8446e58b9"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/candidate-development-provenance.json",
+      "bytes": 714,
+      "sha256": "24f3a549f207bb47f91943e32d555b1025bb74ee48182a08b41ce5c64fd212b7"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/candidate-development-requests.jsonl",
+      "bytes": 8022906,
+      "sha256": "bc69841e504441a4f68794bb58595f65064a09386bdc21992c5b907e87156688"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/candidate-development-scenarios.jsonl",
+      "bytes": 5141142,
+      "sha256": "3d1b0f789c84172d6a6d9f58a48b36476860e30541b491dbd38e0653c578f3ca"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/consensus-decisions.jsonl",
+      "bytes": 2038295,
+      "sha256": "bf16641d7fa1aeb5c38b5149b355113569ed97240660f031eb21de8b413999cf"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/consensus-label-changes.jsonl",
+      "bytes": 35712,
+      "sha256": "100bedc02c73d10a4fba47c50362028f1e78af27bdeed0bf3801705c39e08a55"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/consensus-quarantine.jsonl",
+      "bytes": 1590140,
+      "sha256": "683a8143e3da198a3e0014f2e2aa23f85fc71d28e6f2660dfa397286edbd9727"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/consensus-status.json",
+      "bytes": 2366,
+      "sha256": "91ea11b5f7d909f4bb0f797033c02e7d6e348eea959f3c40a50111a42727dde2"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/effect-replay.json",
+      "bytes": 17326,
+      "sha256": "9655186660780dc192e1a3b4db378aac1d6a02f866b3524200b62e8a4a46df52"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/final-candidate-provenance.json",
+      "bytes": 646,
+      "sha256": "f3242016f823d3b484c89ae73513073ec654c044311b163e7e3a2c006ba7b2c7"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/final-candidate-requests.jsonl",
+      "bytes": 11524078,
+      "sha256": "4215dc8f15e2daecf099b347d55b291de9344bba47de2d60535f5de2856c9ee5"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/final-candidate-scenarios.jsonl",
+      "bytes": 6021344,
+      "sha256": "d622e18e5e16ff6f3df71967b1e7efa817c8d284c09339f4f08b22f4c0300192"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/final-controls-requests.jsonl",
+      "bytes": 1159732,
+      "sha256": "e061fa6f27c8c1a8dc278288c78d55b30094f75db57bc6b2ff39bb2f83442c3d"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/final-token-check.json",
+      "bytes": 665,
+      "sha256": "7d95666f9cbc1edf388d513dcfc94a85af5491a4fdf55b47ce5d2f3a63973927"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/gateway-model-registry.json",
+      "bytes": 1432,
+      "sha256": "dcdedd42777b27d2ae63653b6102286236ed2406cd0937358af6fb8bbd07e718"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/historical-source/bordercollie/lib/judge-artifacts.js",
+      "bytes": 5980,
+      "sha256": "e333e222bcbc29a8f8bd47759fc1cbd54d656f9c107a74c2ed52aadcacc537b9"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/historical-source/bordercollie/lib/judge.js",
+      "bytes": 6071,
+      "sha256": "0b7044dbba773f94526b8c4635fd8405b5924bec20dc005df1fd7e6117ffdf9e"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/historical-source/bordercollie/prototype/finetune-pipeline.js",
+      "bytes": 60291,
+      "sha256": "a72b392c829038689b46a4cc2c84e93e6f25ea8bc18d52eb22da08ae7c095160"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/historical-source/bordercollie/prototype/output/needle-official-ladder/sol-batch-results/job-reasoning-1000-seed0.json",
+      "bytes": 19924,
+      "sha256": "2dffc60899477f0269684b1ffec22e96aafbf1be661f5d9e7e6147c447b380c9"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/historical-source/bordercollie/prototype/output/needle-official-ladder/sol-batch-results/reasoning-1000-seed0/run.json",
+      "bytes": 14400,
+      "sha256": "283b0655b550937822f48fc0be542be257232713c54ea9cb9d31ba2d36d05228"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/historical-source/bordercollie/prototype/output/needle-official-ladder/sol-batch-results/reasoning-1000-seed42/run.json",
+      "bytes": 14407,
+      "sha256": "73a273b656ac9a557d8a1a16e685f8fff9822894d71b2205957cc5019b99d512"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/historical-source/bordercollie/prototype/output/sol-300-seed42/upstream/finetune.py",
+      "bytes": 24500,
+      "sha256": "677b2e4aba1fd9ce5ff6e6e19763d0a66b8425eccf626f7107e2e3ace5d99241"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/input-token-length-details.jsonl",
+      "bytes": 1083852,
+      "sha256": "5410d01943a9fb19f5baeedd7b74159297e04c77072f99e3934d9ddff8a0aaed"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/input-token-lengths.json",
+      "bytes": 1445,
+      "sha256": "251c35ac2c9fc45703d1e33d148e053fb044194ff6e9495990468b925985c4a3"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/local-probe-models/65afd7ddc35cea9377df2a684edcbcafb98b10a528ce594e7814675aa1afd96b/candidate.cact",
+      "bytes": 63437076,
+      "sha256": "65afd7ddc35cea9377df2a684edcbcafb98b10a528ce594e7814675aa1afd96b"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/local-probe-models/65afd7ddc35cea9377df2a684edcbcafb98b10a528ce594e7814675aa1afd96b/needle",
+      "bytes": 1089896,
+      "sha256": "342fa2c6f140e702354a99c4201c9057535ec908eed35c7382e911a19d1d2724"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/local-probe-models/9702af7c276fd07737b70bd8cc33b9634bd5a568a97df612e4ddcfae892df7f2/candidate.cact",
+      "bytes": 63437076,
+      "sha256": "9702af7c276fd07737b70bd8cc33b9634bd5a568a97df612e4ddcfae892df7f2"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/local-probe-models/d73eb0c4e90831d18266f30e2d50b72291e270a303d70f9acbad9974acfdd5ec/candidate.cact",
+      "bytes": 63437076,
+      "sha256": "d73eb0c4e90831d18266f30e2d50b72291e270a303d70f9acbad9974acfdd5ec"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/local-probe-models/d73eb0c4e90831d18266f30e2d50b72291e270a303d70f9acbad9974acfdd5ec/needle",
+      "bytes": 1089896,
+      "sha256": "342fa2c6f140e702354a99c4201c9057535ec908eed35c7382e911a19d1d2724"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/metadata-check.json",
+      "bytes": 97066,
+      "sha256": "4c64a0f25dcc9930d2ce9043997aa85e1cb773aab6d794735dc8f1a4d8a87f56"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/original-requests.jsonl",
+      "bytes": 3240658,
+      "sha256": "697bf44bfdddac4a364ae030574b1bf4b575dff516a6db47815ea0c1b5c98fea"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/priority-candidate-control-check.json",
+      "bytes": 416391,
+      "sha256": "8c6e0d73f227ee61ae820bd9dcaa38eb6d77efe41c0fa4e5d3616750b1df3517"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/priority-candidate-provenance.json",
+      "bytes": 791,
+      "sha256": "9b9f735aeb9e79b024f1441abe676818bc866a59e0f69ebb794a8576cd1db6f4"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/priority-candidate-requests.jsonl",
+      "bytes": 9352342,
+      "sha256": "aba47ad200eaa3fb3bf061562f2aff0bf5e4f4c159fec0fda2fbed8025c1c3ac"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/priority-candidate-scenarios.jsonl",
+      "bytes": 6021344,
+      "sha256": "5883b37685f502fbed8a3b5e9ce10460e6ace8878e0789da4e0dbf9a7f3c769a"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/priority-consensus-decisions.jsonl",
+      "bytes": 3951735,
+      "sha256": "f6cb95365a0ba6308f715b142c0893044b5f15a516c2664a1b922194dbe163cd"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/priority-consensus-label-changes.jsonl",
+      "bytes": 47317,
+      "sha256": "394d3a84d89933eca929c65e3d503efb33636989f35dd15533f800e744df364f"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/priority-consensus-quarantine.jsonl",
+      "bytes": 1834692,
+      "sha256": "3438ccd5e78053944c75bb76df092d8ef3f24c19bd1b81e1165e32e306302ce5"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/priority-consensus-status.json",
+      "bytes": 2357,
+      "sha256": "cf643bb038355a5c8f537fd3365795d50dbc25fd96b6cd9ac44046390fc434c4"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/priority-control-single-consensus.json",
+      "bytes": 2382,
+      "sha256": "fd1ef923390b20399098d0b2db254afd84eb34216438218c2ebfc5c957ca903e"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/priority-control-single-control-check.json",
+      "bytes": 239044,
+      "sha256": "524b2b2c440b318e7f7dc419417dd98308263f321c255ddde88041180b3386ed"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/priority-control-single-provenance.json",
+      "bytes": 1303,
+      "sha256": "b28db9b5693cb7d601d3a91a7af8e2a00bc8006dcbce1cf8281f3b05628dfbc8"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/priority-control-single-requests.jsonl",
+      "bytes": 275120,
+      "sha256": "5779ed91f303e398ae4bce448fa3d59f6e4a9ac8fa0bf51607192327385a016b"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/priority-probe-control-check.json",
+      "bytes": 455299,
+      "sha256": "2fce6a319861e9b140242eebbce6e228e465ba79bb3cd2457f851e246faa65ac"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/priority-probe-requests.jsonl",
+      "bytes": 1032546,
+      "sha256": "7fedb069fb2e5bc0c89106f729d634b7d7fc7f1d7b7e87e808a4062f30b0d9a1"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/priority-single-consensus-decisions.jsonl",
+      "bytes": 5098569,
+      "sha256": "257dde3535184fbc760688a52fa1f3aca2d3206ae806465f0b9ba6b0c085146d"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/priority-single-consensus-label-changes.jsonl",
+      "bytes": 66443,
+      "sha256": "687858eb0796ea125842e9ef12c0fc449fb608fb842ccee798e3b220632c3dbf"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/priority-single-consensus-quarantine.jsonl",
+      "bytes": 1432833,
+      "sha256": "3b126d8fa4b4534714c4134dff07538b720347bfe27bd200a8729ac22048e388"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/priority-single-consensus-status.json",
+      "bytes": 3545,
+      "sha256": "14ca516767406519765c8ff02486be87ca87046e469e620e52ac0e789cc1634b"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/priority-single-resolved-control-check.json",
+      "bytes": 526731,
+      "sha256": "2c43d6cbe775fab4310cdc74069debe9d6f26be15ab3d99dcb2598358b4d979a"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/priority-single-resolved-provenance.json",
+      "bytes": 1777,
+      "sha256": "050dd1220d2f095a7ddeb848701482250ef17c383a20adf77015b3eec5dadef1"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/priority-single-resolved-requests.jsonl",
+      "bytes": 9352342,
+      "sha256": "aba47ad200eaa3fb3bf061562f2aff0bf5e4f4c159fec0fda2fbed8025c1c3ac"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/priority-token-check.json",
+      "bytes": 724,
+      "sha256": "c9e996071921c9e8e4e92d3b42e104c4553dbcd8076e5993f4cfe39c59352733"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/proposed-study-plan.json",
+      "bytes": 46467,
+      "sha256": "fccf1fa8a0ae06e3824c0f402262c759426f919842778f8a4c4badda32e5d560"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/public-source/ef3cf7543204d99878c0dd913a05f6a506da4be8/export.py.txt",
+      "bytes": 25305,
+      "sha256": "8e172b2a2982fa7d4467c9e9cfebf83cda0a70965248b116a5595cc53197746a"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/public-source/ef3cf7543204d99878c0dd913a05f6a506da4be8/finetune.py.txt",
+      "bytes": 24590,
+      "sha256": "1b3eb3006c32804a47f5e9f603dbee8e4104ea3c6179199807dd3690d31fc832"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/public-source/ef3cf7543204d99878c0dd913a05f6a506da4be8/provenance.json",
+      "bytes": 1300,
+      "sha256": "bca6381423a3432f9ef8f36ad232236e12904d474db552b755a85534bf82f1f2"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/public-source/ef3cf7543204d99878c0dd913a05f6a506da4be8/tokenizer.py.txt",
+      "bytes": 3988,
+      "sha256": "ad348fce5d93c99ce310eca41f60ac80c83cb958cca31363e515767d2ae91bce"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/public-tokenizer/provenance.json",
+      "bytes": 294,
+      "sha256": "a731735240d7a356d0b0bb70a83752bfbbcccf8f91447da52d0a1be4bb3d65cd"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/public-tokenizer/tokenizer.model",
+      "bytes": 126520,
+      "sha256": "97dfd5666620b19875deba9e55953d312364e7763bd08bee428b94f1b9491b25"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/python-dependencies/sentencepiece/__init__.py",
+      "bytes": 49422,
+      "sha256": "3504f490fde39231264512322bf8ec282ba0e8bf73422daf20f4d64229fc136c"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/python-dependencies/sentencepiece/__pycache__/__init__.cpython-312.pyc",
+      "bytes": 72815,
+      "sha256": "8ab4e72010c0e76df45075f2ae9d5832446f602d1b81bdbb654d1c49a6b68fb3"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/python-dependencies/sentencepiece/__pycache__/_version.cpython-312.pyc",
+      "bytes": 236,
+      "sha256": "78ca5da99ac8660a38132b4fa79261bb5ab84083804358b04c9eda2d400cd42d"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/python-dependencies/sentencepiece/__pycache__/sentencepiece_model_pb2.cpython-312.pyc",
+      "bytes": 4508,
+      "sha256": "f96bb6ece98b38b6e9ec291a0821fec1c66264275b3b3f216ff60180874a0349"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/python-dependencies/sentencepiece/__pycache__/sentencepiece_pb2.cpython-312.pyc",
+      "bytes": 1737,
+      "sha256": "92157a28fb2adfa85311e935db398bdfbbabadb484918b2ea4cfafa56da82ac5"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/python-dependencies/sentencepiece/_sentencepiece.cpython-312-darwin.so",
+      "bytes": 2041144,
+      "sha256": "bb66cf1ed60232a03362beb45f518d8394ef7441bde71bf9a2f4f783def65fe0"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/python-dependencies/sentencepiece/_version.py",
+      "bytes": 22,
+      "sha256": "3e6710d8f236a0ff22ae72ed24b25bcb661f5bab01bcb0262fe569001cd3ab07"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/python-dependencies/sentencepiece/package_data/nfkc.bin",
+      "bytes": 240008,
+      "sha256": "52f11028ff8a7df3e009d94a8b6a54d4a8a17132efb4ccc1c9a0a41e432bd91e"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/python-dependencies/sentencepiece/package_data/nfkc_cf.bin",
+      "bytes": 247028,
+      "sha256": "60833ec11201446659c3549c183b18f024c4007628cc6b3a4e91ae007697b826"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/python-dependencies/sentencepiece/package_data/nmt_nfkc.bin",
+      "bytes": 240007,
+      "sha256": "79372c41389c2b9b29bc171017ab5400e352debd686b02670a42bec709015074"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/python-dependencies/sentencepiece/package_data/nmt_nfkc_cf.bin",
+      "bytes": 247027,
+      "sha256": "22c292c76f503795f30c85d79d30a7f572fff4f49e00392d2d60f4f93e941a1e"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/python-dependencies/sentencepiece/sentencepiece.i",
+      "bytes": 72647,
+      "sha256": "1dfbfc00714e2447c37c4955608868cf6f56eeb575549d19d7768fed2edc93a3"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/python-dependencies/sentencepiece/sentencepiece_model_pb2.py",
+      "bytes": 6257,
+      "sha256": "2dac04c267548885354fd1dc62efab34455315cc0087d8bea9abcc32c83dae21"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/python-dependencies/sentencepiece/sentencepiece_pb2.py",
+      "bytes": 1753,
+      "sha256": "fd98275ce929a1270c5db27ef0130a9f643dec16cc387f47cfe2fb24531c26ba"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/python-dependencies/sentencepiece/sentencepiece_wrap.cxx",
+      "bytes": 381494,
+      "sha256": "5e56d416ceece3c8b78bf9e191af54fdbe355e9bff79e483f54feec4eef8d98d"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/python-dependencies/sentencepiece-0.2.1.dist-info/INSTALLER",
+      "bytes": 4,
+      "sha256": "ceebae7b8927a3227e5303cf5e0f1f7b34bb542ad7250ac03fbcde36ec2f1508"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/python-dependencies/sentencepiece-0.2.1.dist-info/METADATA",
+      "bytes": 10003,
+      "sha256": "ce0a2e9c599cd060a7bc3dffb18be5cfc3d5f293533e3ee4e870eaef0a5500fd"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/python-dependencies/sentencepiece-0.2.1.dist-info/RECORD",
+      "bytes": 1801,
+      "sha256": "7c1865d47128f7af9db20fb5b1167f1a3518131f5d41700417510dd8153d1fc1"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/python-dependencies/sentencepiece-0.2.1.dist-info/REQUESTED",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/python-dependencies/sentencepiece-0.2.1.dist-info/WHEEL",
+      "bytes": 136,
+      "sha256": "57596843a4e9c4006ed403d48343284d104ecd2293e7155cdec922cd7fa8bc25"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/python-dependencies/sentencepiece-0.2.1.dist-info/top_level.txt",
+      "bytes": 130,
+      "sha256": "3485d52a6b2afb1759e4a44e3071d5d2090b0377ef6cd4dbd60d4ab6089814e9"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/raw-response-probe/0a44120bc2ab3f567441709aa8ef645ea89200aaeb3d782939f533255a144127-tools.json",
+      "bytes": 2330,
+      "sha256": "0a44120bc2ab3f567441709aa8ef645ea89200aaeb3d782939f533255a144127"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/raw-response-probe/4c17d22cc4eab16d4850d59df8deaf93d5457872f1eec0ef0136345d73205d61-tools.json",
+      "bytes": 547,
+      "sha256": "4c17d22cc4eab16d4850d59df8deaf93d5457872f1eec0ef0136345d73205d61"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/raw-response-probe/6f0f13ffa0cadb781493a4825c36696a7dc43d445650e59829694b282f6d1734-tools.json",
+      "bytes": 2258,
+      "sha256": "6f0f13ffa0cadb781493a4825c36696a7dc43d445650e59829694b282f6d1734"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/raw-response-probe/90f4f4982cfaacb8d655896b52f6a8f8c68945945c5ed6b065e210eb15537321-tools.json",
+      "bytes": 818,
+      "sha256": "90f4f4982cfaacb8d655896b52f6a8f8c68945945c5ed6b065e210eb15537321"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/raw-response-probe.json",
+      "bytes": 52518,
+      "sha256": "a5349971946874d520b37971910afbd01dc3be17f86d4aa1b49feca567273b8b"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/raw-response-summary.json",
+      "bytes": 8853,
+      "sha256": "6d6416faead28942cee7c899ea36e10e47873637176fe6a7c26ce57d15abe87c"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/reasoning-1000-seed0-training-probe.json",
+      "bytes": 980548,
+      "sha256": "4bd7ff7e10d5e658055f4950b2c733d981269de1d8d18ee6df4278d4cb5c3f1c"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/reasoning-1000-seed42-training-probe.json",
+      "bytes": 980482,
+      "sha256": "4d548f19b83fdcb55f1faf537fffe9cf6eafb27e7630855a7ecff2ff5f70483c"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/repair-readiness.json",
+      "bytes": 13456,
+      "sha256": "a6e9e2e6019402462d52eb8b4c8e555dd985e5b7d1d160fa2ff05f5cd8c3bdf2"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/repair-verification.json",
+      "bytes": 691,
+      "sha256": "7dffd670bc358b50c645bdf8047287ca7e535c45f017b4f8303410ec3ab15aa2"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/repaired/9631cd4572f7357f1b9cc16c8142b2867e1118053ee8a50d14ca7615d427d830/accepted.jsonl",
+      "bytes": 7401069,
+      "sha256": "19d026959ea7d2fd1d2145ac0654bb58cfbb57b30d4d71168c6d641dc0aa192b"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/repaired/9631cd4572f7357f1b9cc16c8142b2867e1118053ee8a50d14ca7615d427d830/export-map.jsonl",
+      "bytes": 515228,
+      "sha256": "03c646a5e5f744cf7c05d5123301e8ad0005ba7a57d691d1a097266975ca6721"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/repaired/9631cd4572f7357f1b9cc16c8142b2867e1118053ee8a50d14ca7615d427d830/provenance.json",
+      "bytes": 3545,
+      "sha256": "14ca516767406519765c8ff02486be87ca87046e469e620e52ac0e789cc1634b"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/repaired/9631cd4572f7357f1b9cc16c8142b2867e1118053ee8a50d14ca7615d427d830/quarantine.jsonl",
+      "bytes": 1432833,
+      "sha256": "3b126d8fa4b4534714c4134dff07538b720347bfe27bd200a8729ac22048e388"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/repaired/9631cd4572f7357f1b9cc16c8142b2867e1118053ee8a50d14ca7615d427d830/train.jsonl",
+      "bytes": 5472451,
+      "sha256": "9b4da9080d79d78e3ca010c08862c15754edeaa7c8d532dee8319fa5f08eea19"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/repaired/9631cd4572f7357f1b9cc16c8142b2867e1118053ee8a50d14ca7615d427d830/validation.jsonl",
+      "bytes": 1264578,
+      "sha256": "ef2fe6e71471e424ac382375490c1fd8891c8e3c4e17c5ef17fda2c198e75c99"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/review-candidate-all-inkling-small.json",
+      "bytes": 756416,
+      "sha256": "b0f258b1fe9b04bfc455b0f02832d4ace4c7ff5902c07211eb9ec47c31355200"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/review-candidate-all-kimi-k2-7-code.json",
+      "bytes": 390115,
+      "sha256": "8ff8a2528efa666d16dfe60a420d4f018d972b09442d6edb94b31dbe7a957b8d"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/review-original-deepseek-v4-1-flash.json",
+      "bytes": 15243,
+      "sha256": "5d39c8da09421c0c3e45cd6e6540a6a477f9871c2e02e6a189f1acc68b874f7b"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/review-payload-evidence.json",
+      "bytes": 960,
+      "sha256": "b48a27283bef3d98086fdd7e90b3be9d7454ce014c58c272a0817812dd8c6fea"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/review-priority-candidate-inkling-small.json",
+      "bytes": 2855373,
+      "sha256": "5da5a1a9c7add57b9c9ffe99f9d1aea3b3379f511cac266ccc68ef4629af36ea"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/review-priority-candidate-kimi-k2-7-code.json",
+      "bytes": 2516195,
+      "sha256": "81223f8761f005e316525568d8f185179723c7a755aa9379c1666f0992563b62"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/review-priority-control-single-inkling-small.json",
+      "bytes": 102947,
+      "sha256": "abff1ccd840789121e630eb90f614185fa3dbb7157409165d11a2734bc1dc5e3"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/review-priority-control-single-kimi-k2-7-code.json",
+      "bytes": 85807,
+      "sha256": "276294df8a82ef3f787c08f96e521c14bd5c323cff83b74c56bcfae93bce6ac8"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/review-priority-probe-inkling-small.json",
+      "bytes": 163412,
+      "sha256": "03c24a78403c0fffa1582381e8bf2e73c1a299e3c55a8a43cfed85cfca3ecec7"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/review-priority-probe-kimi-k2-7-code.json",
+      "bytes": 152593,
+      "sha256": "acba4d21a884e48f0a1ca564b7d5062ae9a7b88c9229e09aa27a96b41b1b3524"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/review-priority-single-resolved-inkling-small.json",
+      "bytes": 2911903,
+      "sha256": "dc07dbac7ef282d03cc5cbfa26baaf0a5c676982198fd93e35996b7d5d851794"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/review-priority-single-resolved-kimi-k2-7-code.json",
+      "bytes": 2561059,
+      "sha256": "06cf54882e5e9d5cf3c240739b9c3785aaa43ddb3608373f930df72f6621d59c"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/review-sensitive-wording-inkling-small.json",
+      "bytes": 58725,
+      "sha256": "c543fb104eec895420ad1973a426be74331d2034fe013a92b76aa9b2a713dc63"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/review-sensitive-wording-kimi-k2-7-code.json",
+      "bytes": 47672,
+      "sha256": "72081bc33bb9de237e4bec8c6d88a0b0b296c395dcb7dced1804d1b71a903d3b"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/review-v2-development-inkling-small.json",
+      "bytes": 54392,
+      "sha256": "7e60cc9171998c9afb0b41a3c3eb5f72e859755ad2dfa55b9f4816abb787b27d"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/review-v2-development-kimi-k2-7-code.json",
+      "bytes": 37691,
+      "sha256": "260233cb8a57ac271b0e8999a8b84e6b96f7b945168319fdb89bd0ca788b7b21"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/security-provenance.json",
+      "bytes": 457,
+      "sha256": "c38e819dfa5a231ed9bbdc9d7caa757d50b0193ff3e2258a2f8bce6acbb49126"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/security-requests.jsonl",
+      "bytes": 894337,
+      "sha256": "43974417f90b16ec78ac903d9cd846fe9e8d6be6137df63f2d8168e4fadce38e"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/security-scenarios.jsonl",
+      "bytes": 414623,
+      "sha256": "5553490000407b30ce61e68c015fcf8d0d0741846506462eaa3b36963b0f2030"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/sensitive-wording-control-check.json",
+      "bytes": 142919,
+      "sha256": "a914d29a6200a0de6dad0d25dcd2ea287fd7d70f49778ef943557555d794bf59"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/sensitive-wording-provenance.json",
+      "bytes": 1241,
+      "sha256": "4507ffb2ec6f81e58fdf713a267871304d0bf0536a11145e7b30f92e3c98aaa0"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/sensitive-wording-requests.jsonl",
+      "bytes": 354892,
+      "sha256": "c74bd30f1eb4e17a253b3e7d1988794de3b71f8a48e0dd1aa178f9984219f6f2"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/sensitive-wording-token-check.json",
+      "bytes": 518,
+      "sha256": "9ffe2eed6db500b4b016ba84a0b9881777ade69e64a002d6cc364ec93ae9add8"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/singleton-response-format-probe.json",
+      "bytes": 801,
+      "sha256": "07edc9664ad6dad5c905d89109bb01646487c1d78a73ebfb86ad0a4f2ee829f1"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/source-flag-recheck.json",
+      "bytes": 211447,
+      "sha256": "b5e34f409721495db67ea5ad49959cbc0459110e2dadb872088117bcb2a01811"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/trainer-token-check.json",
+      "bytes": 4768,
+      "sha256": "46927f744255c2bc73355c9d6f99c9e5b4a7add17e7befde22067d6e421736b0"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/trainer-token-details.jsonl",
+      "bytes": 1083852,
+      "sha256": "5410d01943a9fb19f5baeedd7b74159297e04c77072f99e3934d9ddff8a0aaed"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/v2-build-provenance.json",
+      "bytes": 659,
+      "sha256": "5ff549b5b509f9ffa83057fb7bb1d25d0e768c04bcca2c9bfedb3dc04474ede1"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/v2-development-requests.jsonl",
+      "bytes": 7176906,
+      "sha256": "c314cfa50195e5296be2a3b5243e26a75c5814d778ab927b45df0ab25622de03"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/artifacts/v2-development-scenarios.jsonl",
+      "bytes": 5096142,
+      "sha256": "39ffa2da36e8b2c1a2e6b9704199ada13d9af31a56c853d231f1c5dbae184b57"
+    },
+    {
+      "path": "analysis/needle-judge-2026-10-09/snapshot-manifest.json",
+      "bytes": 193641,
+      "sha256": "eb9b7386f4a70da06c6d372b916644858a8bc3a39cfc35f4eccd78f7abd5561c"
+    },
+    {
+      "path": "bordercollie/prototype/data/stage2/accepted.jsonl",
+      "bytes": 3443832,
+      "sha256": "09bdff908a0ca6724c07d57e0477daad87e4277cb1677ab1bc8c0d347af5b077"
+    },
+    {
+      "path": "bordercollie/prototype/data/stage2/base-evaluation.json",
+      "bytes": 334048,
+      "sha256": "b18de74747faadfa32d0781be5243aaef668fd48d5c433a69142fbe94974ce8b"
+    },
+    {
+      "path": "bordercollie/prototype/data/stage2/held-out.jsonl",
+      "bytes": 344423,
+      "sha256": "c5b8976840c846f032c1cf13cfd69ae4589c24263335919c3f50f741b3753382"
+    },
+    {
+      "path": "docs/checker-tool-inventory.json",
+      "bytes": 359978,
+      "sha256": "28c3153c0a29de71a449f171b5fd3d6ad4c156187be4ff24ed212d8a595148d7"
+    }
+  ]
+}

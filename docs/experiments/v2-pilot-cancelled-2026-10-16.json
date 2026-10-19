@@ -1,0 +1,33 @@
+{
+  "status": "cancelled-by-owner",
+  "capturedAtUtc": "2026-10-16T18:25:22.440856+00:00",
+  "referenceChat": "01a122c8-ddca-7d62-9573-4ccddc5691a3",
+  "solDirectory": "/scratch/qnguye19/needle/experiments/v2-improvement-pilot-2026-10-16-one-worker",
+  "cancelledJobs": [
+    "65790820_17",
+    "65790820_20",
+    "65790820_23",
+    "65790821",
+    "65790822",
+    "65790823"
+  ],
+  "reason": "Owner requires completing and closing the dataset repair tickets before any new Sol jobs.",
+  "completedArtifactsPreserved": true,
+  "unrelatedJobsUntouched": [
+    "65805890"
+  ],
+  "localCollector": "Stopped PID 52379. Other study collectors had exited.",
+  "newSolJobsAllowed": false,
+  "requiredTickets": [
+    56,
+    57,
+    58,
+    59,
+    60,
+    61,
+    62,
+    63,
+    64,
+    65
+  ]
+}

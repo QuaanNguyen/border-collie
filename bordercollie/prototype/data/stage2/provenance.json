@@ -1,0 +1,144 @@
+{
+  "requestFormatVersion": "1",
+  "acceptedHash": "60bed4d0f8bc0e7b6a84afa9743a0ebebcc7e6b53f8a1bec04a03d76ded431a3",
+  "lineCounts": {
+    "train": 2447,
+    "validation": 553,
+    "heldOut": 300
+  },
+  "developmentPlanHash": "357e7eef037e74fcbd9e4984860d18ac1b2d892d4c5210b028819bc67906c2ec",
+  "evaluationPlanHash": "a7215957f730a4457eb418e80f6f5b02bc87e1b62bc7b03ec6a4530d64229f02",
+  "evaluationHash": "979fdf3c491ffc17601489db87c3aa5271f62f19327e4c21f287287021513a26",
+  "reviewMethod": "Independent model agreement; no human review claimed.",
+  "models": [
+    "inkling-small",
+    "kimi-k2-7-code"
+  ],
+  "coverage": {
+    "complete": true,
+    "targets": {
+      "total": 3000,
+      "byCategory": {
+        "ordinary-local": 900,
+        "requested-destructive": 240,
+        "unrequested-destructive": 300,
+        "off-machine-send": 360,
+        "network-read": 240,
+        "remote-git": 300,
+        "injected-instruction": 300,
+        "owner-reply": 210,
+        "hard-case": 150
+      },
+      "byVerdict": {
+        "allow": 1350,
+        "disallow": 1200,
+        "ask": 450
+      },
+      "defaultPreference": 990
+    },
+    "actual": {
+      "total": 3000,
+      "byCategory": {
+        "ordinary-local": 900,
+        "requested-destructive": 240,
+        "unrequested-destructive": 300,
+        "off-machine-send": 360,
+        "network-read": 240,
+        "remote-git": 300,
+        "injected-instruction": 300,
+        "owner-reply": 210,
+        "hard-case": 150
+      },
+      "byVerdict": {
+        "allow": 1350,
+        "disallow": 1200,
+        "ask": 450
+      },
+      "byPreference": {
+        "default": 990,
+        "repair-only": 210,
+        "docs-only": 600,
+        "ask-before-push": 420,
+        "data-analysis": 90,
+        "ask-before-write": 180,
+        "build-cleanup": 60,
+        "ask-before-delete": 60,
+        "backup-allowed": 300,
+        "confirm-backup": 30,
+        "ask-before-network": 30,
+        "remote-allowed": 30
+      },
+      "byFailure": {
+        "requested-code-edit": 180,
+        "source-deletion": 270,
+        "history-deletion": 89,
+        "project-transfer": 232,
+        "package-install": 116,
+        "documentation-fetch": 90
+      },
+      "bySplit": {
+        "train": {
+          "total": 2447,
+          "byCategory": {
+            "ordinary-local": 711,
+            "requested-destructive": 196,
+            "unrequested-destructive": 254,
+            "off-machine-send": 295,
+            "network-read": 196,
+            "remote-git": 241,
+            "injected-instruction": 259,
+            "owner-reply": 171,
+            "hard-case": 124
+          },
+          "byVerdict": {
+            "allow": 1084,
+            "disallow": 1002,
+            "ask": 361
+          },
+          "byFailure": {
+            "requested-code-edit": 142,
+            "source-deletion": 227,
+            "history-deletion": 76,
+            "project-transfer": 191,
+            "package-install": 91,
+            "documentation-fetch": 77
+          }
+        },
+        "validation": {
+          "total": 553,
+          "byCategory": {
+            "ordinary-local": 189,
+            "requested-destructive": 44,
+            "unrequested-destructive": 46,
+            "network-read": 44,
+            "remote-git": 59,
+            "hard-case": 26,
+            "injected-instruction": 41,
+            "owner-reply": 39,
+            "off-machine-send": 65
+          },
+          "byVerdict": {
+            "allow": 266,
+            "disallow": 198,
+            "ask": 89
+          },
+          "byFailure": {
+            "requested-code-edit": 38,
+            "source-deletion": 43,
+            "package-install": 25,
+            "history-deletion": 13,
+            "project-transfer": 41,
+            "documentation-fetch": 13
+          }
+        }
+      }
+    },
+    "gaps": [],
+    "missingTasks": [],
+    "evaluation": {
+      "heldOut": 300,
+      "required": 300,
+      "sufficient": true
+    }
+  }
+}

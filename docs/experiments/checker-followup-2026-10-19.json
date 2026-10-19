@@ -1,0 +1,60 @@
+{
+  "checkedAt": "2026-10-19",
+  "status": "not-training-ready",
+  "draftCases": 1656,
+  "inputContracts": {
+    "previouslyUnchecked": 47,
+    "verifiedNow": 27,
+    "removedFieldNames": 2,
+    "remaining": 18,
+    "audit": "analysis/checker-v3-2026-10-19/input-contract-audit.json"
+  },
+  "riskCases": {
+    "draft": 72,
+    "bothReviewersAgreed": 72,
+    "quarantined": 0,
+    "humanVerified": false,
+    "counts": "analysis/checker-v3-2026-10-19/evidence/risk-review-v2/review-status.json"
+  },
+  "macDirectOutput": {
+    "calls": 12,
+    "reasoningOutputs": 12,
+    "verdictOutputs": 12,
+    "inputs": 1,
+    "qualified": false,
+    "evidence": "analysis/checker-v3-2026-10-19/evidence/mac-direct-probe.json"
+  },
+  "trainerAlignment": "Separate pinned trainer copy closes an empty thinking block before the verdict; tokenizer checked; no trained model produced.",
+  "earlyPullRequests": {
+    "73": {
+      "head": "fd07dd697ce0da49228f0ceb54df4bdca535be0c",
+      "checksPassed": 12,
+      "requiredReviewPending": true,
+      "ubuntuRun": 39281071251,
+      "additionalUbuntuAttempts": [
+        2,
+        3,
+        4
+      ],
+      "allAdditionalRunsPassed": true,
+      "weekOfScheduledRunsStillRequired": true
+    },
+    "74": {
+      "head": "041efdc49dda2c3a84516e6e0cd406e3c5f1c7b7",
+      "checksPassed": 24,
+      "base": "codex/pet-e2e-repair"
+    }
+  },
+  "runtime": {
+    "head": "2f87fb3e2cdd40a3645d5b91a34ea91cf81bfc91",
+    "checksPassed": 24,
+    "minimumOpenCode": "2.0.30",
+    "autoAcceptCannotBypassChecker": true,
+    "parallelDenialsTested": true,
+    "modelQualified": false
+  },
+  "trainingEligible": false,
+  "solJobsAllowed": false,
+  "promotionAllowed": false,
+  "mainMerged": false
+}

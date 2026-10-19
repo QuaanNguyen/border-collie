@@ -146,3 +146,5 @@ Pet size is the persistent setting in the bordercollie configuration.
 
 OpenCode 1.x users must run `opencode upgrade --major` before installing bordercollie.
 Project auto-accept does not bypass checker refusals or owner questions.
+
+Research data and old analysis artifacts are available through [Git LFS](docs/research-data.md), with file sizes and checksums.

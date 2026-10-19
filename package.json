@@ -44,6 +44,8 @@
     "test:integration": "node --test test/integration/*.test.js",
     "test:package": "node scripts/check-package.js",
     "test:package:client": "node scripts/check-package-client.js npm",
-    "test:unit": "node --test test/unit/*.test.js"
+    "test:unit": "node --test test/unit/*.test.js",
+    "prototype:finetune": "node bordercollie/prototype/checker-data.js",
+    "check:checker-promotion": "node bordercollie/prototype/checker-promotion.js"
   }
 }

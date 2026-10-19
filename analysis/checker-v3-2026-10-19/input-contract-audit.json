@@ -1,0 +1,387 @@
+{
+  "checkedAt": "2026-10-19",
+  "previouslyUnverified": 47,
+  "counts": {
+    "still-needs-feature-or-server-catalog": 18,
+    "verified-complete-input": 27,
+    "removed-documentation-field": 2
+  },
+  "entries": [
+    {
+      "agent": "claude-code",
+      "previousName": "EndConversation",
+      "currentName": "EndConversation",
+      "status": "still-needs-feature-or-server-catalog",
+      "evidence": "https://code.claude.com/docs/en/agent-sdk/typescript#tool-input-types",
+      "nextStep": "Public tool name is documented, but its complete input schema is not exported by this SDK. Capture the live tool catalog."
+    },
+    {
+      "agent": "claude-code",
+      "previousName": "LSP",
+      "currentName": "LSP",
+      "status": "still-needs-feature-or-server-catalog",
+      "evidence": "https://code.claude.com/docs/en/agent-sdk/typescript#tool-input-types",
+      "nextStep": "Public tool name is documented, but its complete input schema is not exported by this SDK. Capture the live tool catalog."
+    },
+    {
+      "agent": "claude-code",
+      "previousName": "ListAgents",
+      "currentName": "ListAgents",
+      "status": "verified-complete-input",
+      "evidence": "analysis/checker-v3-2026-10-19/evidence/claude-live-tools.json",
+      "nextStep": null
+    },
+    {
+      "agent": "claude-code",
+      "previousName": "PowerShell",
+      "currentName": "PowerShell",
+      "status": "still-needs-feature-or-server-catalog",
+      "evidence": "https://code.claude.com/docs/en/agent-sdk/typescript#tool-input-types",
+      "nextStep": "Public tool name is documented, but its complete input schema is not exported by this SDK. Capture the live tool catalog."
+    },
+    {
+      "agent": "claude-code",
+      "previousName": "SendMessage",
+      "currentName": "SendMessage",
+      "status": "verified-complete-input",
+      "evidence": "analysis/checker-v3-2026-10-19/evidence/claude-live-tools.json",
+      "nextStep": null
+    },
+    {
+      "agent": "claude-code",
+      "previousName": "SendUserFile",
+      "currentName": "SendUserFile",
+      "status": "still-needs-feature-or-server-catalog",
+      "evidence": "https://code.claude.com/docs/en/agent-sdk/typescript#tool-input-types",
+      "nextStep": "Public tool name is documented, but its complete input schema is not exported by this SDK. Capture the live tool catalog."
+    },
+    {
+      "agent": "claude-code",
+      "previousName": "ShareOnboardingGuide",
+      "currentName": "ShareOnboardingGuide",
+      "status": "still-needs-feature-or-server-catalog",
+      "evidence": "https://code.claude.com/docs/en/agent-sdk/typescript#tool-input-types",
+      "nextStep": "Public tool name is documented, but its complete input schema is not exported by this SDK. Capture the live tool catalog."
+    },
+    {
+      "agent": "claude-code",
+      "previousName": "Skill",
+      "currentName": "Skill",
+      "status": "still-needs-feature-or-server-catalog",
+      "evidence": "https://code.claude.com/docs/en/agent-sdk/typescript#tool-input-types",
+      "nextStep": "Public tool name is documented, but its complete input schema is not exported by this SDK. Capture the live tool catalog."
+    },
+    {
+      "agent": "claude-code",
+      "previousName": "SubagentHandback",
+      "currentName": "SubagentHandback",
+      "status": "still-needs-feature-or-server-catalog",
+      "evidence": "https://code.claude.com/docs/en/agent-sdk/typescript#tool-input-types",
+      "nextStep": "Public tool name is documented, but its complete input schema is not exported by this SDK. Capture the live tool catalog."
+    },
+    {
+      "agent": "claude-code",
+      "previousName": "ToolSearch",
+      "currentName": "ToolSearch",
+      "status": "still-needs-feature-or-server-catalog",
+      "evidence": "https://code.claude.com/docs/en/agent-sdk/typescript#tool-input-types",
+      "nextStep": "Public tool name is documented, but its complete input schema is not exported by this SDK. Capture the live tool catalog."
+    },
+    {
+      "agent": "claude-code",
+      "previousName": "WaitForMcpServers",
+      "currentName": "WaitForMcpServers",
+      "status": "still-needs-feature-or-server-catalog",
+      "evidence": "https://code.claude.com/docs/en/agent-sdk/typescript#tool-input-types",
+      "nextStep": "Public tool name is documented, but its complete input schema is not exported by this SDK. Capture the live tool catalog."
+    },
+    {
+      "agent": "claude-code",
+      "previousName": "protocols",
+      "currentName": null,
+      "status": "removed-documentation-field",
+      "evidence": "These are WebSocket input fields, not tool names.",
+      "nextStep": null
+    },
+    {
+      "agent": "claude-code",
+      "previousName": "url",
+      "currentName": null,
+      "status": "removed-documentation-field",
+      "evidence": "These are WebSocket input fields, not tool names.",
+      "nextStep": null
+    },
+    {
+      "agent": "codex",
+      "previousName": "exec_command",
+      "currentName": "exec_command",
+      "status": "verified-complete-input",
+      "evidence": "analysis/checker-v3-2026-10-19/evidence/codex-typed-inputs.json",
+      "nextStep": null
+    },
+    {
+      "agent": "codex",
+      "previousName": "write_stdin",
+      "currentName": "write_stdin",
+      "status": "verified-complete-input",
+      "evidence": "analysis/checker-v3-2026-10-19/evidence/codex-typed-inputs.json",
+      "nextStep": null
+    },
+    {
+      "agent": "codex",
+      "previousName": "apply_patch",
+      "currentName": "apply_patch",
+      "status": "verified-complete-input",
+      "evidence": "analysis/checker-v3-2026-10-19/evidence/codex-typed-inputs.json",
+      "nextStep": null
+    },
+    {
+      "agent": "codex",
+      "previousName": "exec",
+      "currentName": "exec",
+      "status": "verified-complete-input",
+      "evidence": "analysis/checker-v3-2026-10-19/evidence/codex-live-tools-direct.json",
+      "nextStep": null
+    },
+    {
+      "agent": "codex",
+      "previousName": "update_plan",
+      "currentName": "update_plan",
+      "status": "verified-complete-input",
+      "evidence": "analysis/checker-v3-2026-10-19/evidence/codex-source/plan_spec.rs",
+      "nextStep": null
+    },
+    {
+      "agent": "codex",
+      "previousName": "request_user_input",
+      "currentName": "request_user_input",
+      "status": "verified-complete-input",
+      "evidence": "analysis/checker-v3-2026-10-19/evidence/codex-live-tools-direct.json",
+      "nextStep": null
+    },
+    {
+      "agent": "codex",
+      "previousName": "view_image",
+      "currentName": "view_image",
+      "status": "verified-complete-input",
+      "evidence": "analysis/checker-v3-2026-10-19/evidence/codex-typed-inputs.json",
+      "nextStep": null
+    },
+    {
+      "agent": "codex",
+      "previousName": "tool_search",
+      "currentName": "tool_search",
+      "status": "verified-complete-input",
+      "evidence": "analysis/checker-v3-2026-10-19/evidence/codex-source/tool_search_spec.rs",
+      "nextStep": null
+    },
+    {
+      "agent": "codex",
+      "previousName": "list_mcp_resources",
+      "currentName": "list_mcp_resources",
+      "status": "verified-complete-input",
+      "evidence": "analysis/checker-v3-2026-10-19/evidence/codex-typed-inputs.json",
+      "nextStep": null
+    },
+    {
+      "agent": "codex",
+      "previousName": "list_mcp_resource_templates",
+      "currentName": "list_mcp_resource_templates",
+      "status": "verified-complete-input",
+      "evidence": "analysis/checker-v3-2026-10-19/evidence/codex-typed-inputs.json",
+      "nextStep": null
+    },
+    {
+      "agent": "codex",
+      "previousName": "read_mcp_resource",
+      "currentName": "read_mcp_resource",
+      "status": "verified-complete-input",
+      "evidence": "analysis/checker-v3-2026-10-19/evidence/codex-typed-inputs.json",
+      "nextStep": null
+    },
+    {
+      "agent": "codex",
+      "previousName": "spawn_agent",
+      "currentName": "collaboration.spawn_agent",
+      "status": "verified-complete-input",
+      "evidence": "analysis/checker-v3-2026-10-19/evidence/codex-live-tools-direct.json",
+      "nextStep": null
+    },
+    {
+      "agent": "codex",
+      "previousName": "send_message",
+      "currentName": "collaboration.send_message",
+      "status": "verified-complete-input",
+      "evidence": "analysis/checker-v3-2026-10-19/evidence/codex-live-tools-direct.json",
+      "nextStep": null
+    },
+    {
+      "agent": "codex",
+      "previousName": "followup_task",
+      "currentName": "collaboration.followup_task",
+      "status": "verified-complete-input",
+      "evidence": "analysis/checker-v3-2026-10-19/evidence/codex-live-tools-direct.json",
+      "nextStep": null
+    },
+    {
+      "agent": "codex",
+      "previousName": "interrupt_agent",
+      "currentName": "collaboration.interrupt_agent",
+      "status": "verified-complete-input",
+      "evidence": "analysis/checker-v3-2026-10-19/evidence/codex-live-tools-direct.json",
+      "nextStep": null
+    },
+    {
+      "agent": "codex",
+      "previousName": "list_agents",
+      "currentName": "collaboration.list_agents",
+      "status": "verified-complete-input",
+      "evidence": "analysis/checker-v3-2026-10-19/evidence/codex-live-tools-direct.json",
+      "nextStep": null
+    },
+    {
+      "agent": "codex",
+      "previousName": "wait_agent",
+      "currentName": "collaboration.wait_agent",
+      "status": "verified-complete-input",
+      "evidence": "analysis/checker-v3-2026-10-19/evidence/codex-live-tools-direct.json",
+      "nextStep": null
+    },
+    {
+      "agent": "codex",
+      "previousName": "get_context_remaining",
+      "currentName": "get_context_remaining",
+      "status": "verified-complete-input",
+      "evidence": "analysis/checker-v3-2026-10-19/evidence/codex-source/get_context_remaining_spec.rs",
+      "nextStep": null
+    },
+    {
+      "agent": "codex",
+      "previousName": "new_context",
+      "currentName": "new_context",
+      "status": "verified-complete-input",
+      "evidence": "analysis/checker-v3-2026-10-19/evidence/codex-source/new_context_window_spec.rs",
+      "nextStep": null
+    },
+    {
+      "agent": "codex",
+      "previousName": "request_permissions",
+      "currentName": "request_permissions",
+      "status": "verified-complete-input",
+      "evidence": "analysis/checker-v3-2026-10-19/evidence/codex-source/shell_spec.rs",
+      "nextStep": null
+    },
+    {
+      "agent": "codex",
+      "previousName": "list_available_plugins_to_install",
+      "currentName": "list_available_plugins_to_install",
+      "status": "verified-complete-input",
+      "evidence": "analysis/checker-v3-2026-10-19/evidence/codex-source/list_available_plugins_to_install_spec.rs",
+      "nextStep": null
+    },
+    {
+      "agent": "codex",
+      "previousName": "request_plugin_install",
+      "currentName": "request_plugin_install",
+      "status": "verified-complete-input",
+      "evidence": "analysis/checker-v3-2026-10-19/evidence/codex-source/request_plugin_install_spec.rs",
+      "nextStep": null
+    },
+    {
+      "agent": "codex",
+      "previousName": "clock.curr_time",
+      "currentName": "clock.curr_time",
+      "status": "verified-complete-input",
+      "evidence": "analysis/checker-v3-2026-10-19/evidence/codex-typed-inputs.json",
+      "nextStep": null
+    },
+    {
+      "agent": "codex",
+      "previousName": "clock.sleep",
+      "currentName": "clock.sleep",
+      "status": "verified-complete-input",
+      "evidence": "analysis/checker-v3-2026-10-19/evidence/codex-live-tools-direct.json",
+      "nextStep": null
+    },
+    {
+      "agent": "codex",
+      "previousName": "request_user_input_async",
+      "currentName": "request_user_input_async",
+      "status": "verified-complete-input",
+      "evidence": "analysis/checker-v3-2026-10-19/evidence/codex-live-tools-direct.json",
+      "nextStep": null
+    },
+    {
+      "agent": "codex",
+      "previousName": "web_search",
+      "currentName": "web_search",
+      "status": "still-needs-feature-or-server-catalog",
+      "evidence": "https://learn.chatgpt.com/docs/hooks",
+      "nextStep": "Hosted or extension-provided surface; native PreToolUse coverage is not established. Capture the actual schema and document the interception path."
+    },
+    {
+      "agent": "codex",
+      "previousName": "web.run",
+      "currentName": "web.run",
+      "status": "still-needs-feature-or-server-catalog",
+      "evidence": "https://learn.chatgpt.com/docs/hooks",
+      "nextStep": "Hosted or extension-provided surface; native PreToolUse coverage is not established. Capture the actual schema and document the interception path."
+    },
+    {
+      "agent": "codex",
+      "previousName": "image_gen.imagegen",
+      "currentName": "image_gen.imagegen",
+      "status": "still-needs-feature-or-server-catalog",
+      "evidence": "https://learn.chatgpt.com/docs/hooks",
+      "nextStep": "Hosted or extension-provided surface; native PreToolUse coverage is not established. Capture the actual schema and document the interception path."
+    },
+    {
+      "agent": "opencode",
+      "previousName": "<server>_<tool>",
+      "currentName": "<server>_<tool>",
+      "status": "still-needs-feature-or-server-catalog",
+      "evidence": "https://modelcontextprotocol.io/specification/2025-11-25/server/tools",
+      "nextStep": "Capture tools/list from every connected server or enabled extension. A wildcard is an explicit gap, not coverage."
+    },
+    {
+      "agent": "claude-code",
+      "previousName": "mcp__<server>__<tool>",
+      "currentName": "mcp__<server>__<tool>",
+      "status": "still-needs-feature-or-server-catalog",
+      "evidence": "https://modelcontextprotocol.io/specification/2025-11-25/server/tools",
+      "nextStep": "Capture tools/list from every connected server or enabled extension. A wildcard is an explicit gap, not coverage."
+    },
+    {
+      "agent": "claude-code",
+      "previousName": "mcp__computer-use__*",
+      "currentName": "mcp__computer-use__*",
+      "status": "still-needs-feature-or-server-catalog",
+      "evidence": "https://modelcontextprotocol.io/specification/2025-11-25/server/tools",
+      "nextStep": "Capture tools/list from every connected server or enabled extension. A wildcard is an explicit gap, not coverage."
+    },
+    {
+      "agent": "claude-code",
+      "previousName": "mcp__claude-in-chrome__*",
+      "currentName": "mcp__claude-in-chrome__*",
+      "status": "still-needs-feature-or-server-catalog",
+      "evidence": "https://modelcontextprotocol.io/specification/2025-11-25/server/tools",
+      "nextStep": "Capture tools/list from every connected server or enabled extension. A wildcard is an explicit gap, not coverage."
+    },
+    {
+      "agent": "codex",
+      "previousName": "mcp__<server>__<tool>",
+      "currentName": "mcp__<server>__<tool>",
+      "status": "still-needs-feature-or-server-catalog",
+      "evidence": "https://modelcontextprotocol.io/specification/2025-11-25/server/tools",
+      "nextStep": "Capture tools/list from every connected server or enabled extension. A wildcard is an explicit gap, not coverage."
+    },
+    {
+      "agent": "codex",
+      "previousName": "browser/computer-use feature catalog",
+      "currentName": "browser/computer-use feature catalog",
+      "status": "still-needs-feature-or-server-catalog",
+      "evidence": "https://modelcontextprotocol.io/specification/2025-11-25/server/tools",
+      "nextStep": "Capture tools/list from every connected server or enabled extension. A wildcard is an explicit gap, not coverage."
+    }
+  ]
+}
