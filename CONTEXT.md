@@ -1,23 +1,43 @@
-# Domain
+# bordercollie
 
-**Guard** - deterministic gate and evidence checks with no model in the loop.
+bordercollie checks an agent's proposed actions against the owner's instructions and verifies evidence for completion claims.
 
-**Pet** - optional desktop companion that expresses events without deciding or changing Guard outcomes.
+## Language
 
-**Pet host** - platform window boundary that owns focus, pointer routing, movement, shortcuts, and lifecycle while sharing the Pet renderer.
-Production macOS uses AppKit and system WebKit, while Windows, Linux, and development mode use Electron.
+**bordercollie**:
+The single product and command name for the system that applies permission decisions and checks completion evidence.
 
-**Pet animation contract** - validated shared configuration that maps semantic Pet states to named animation tracks, ordered frames, and per-frame durations before either Pet host activates the renderer.
+**Judge**:
+The model that reads the user message, the Preference, and one proposed action and returns a Verdict.
 
-**Event stream** - transient contract sent over the Pet process's private input pipe through which the bordercollie plugin publishes events and Pet consumes them.
-The Pet keeps only a bounded in-memory queue while its renderer starts, and no events survive an OpenCode restart.
+**Verdict**:
+An approve, deny, or ask decision for one proposed action.
+A missing Verdict withholds the action, and an ask requires an applicable rule in the Preference.
 
-**bordercollie plugin** - OpenCode adapter whose source is `plugin/bordercollie.js` in this clone.
+**Preference**:
+One free-text statement of the owner's instructions for a project.
+Optional completion criteria remain separate for deterministic evidence checks.
 
-**bordercollie package** - self-contained installation containing the bordercollie plugin, Guard, Event stream contract, and Pet.
+**Migration**:
+An owner-initiated operation that carries existing settings and completion criteria into the current format.
 
-**Global bind** - installation operation that materializes a verified bordercollie package under OpenCode's global plugin directory while preserving the prior working package if verification fails.
+**Pet**:
+The optional desktop companion that expresses events without changing permission decisions.
 
-**Protocol** - task envelope at `.bordercollie/protocol.json` in the opened directory, containing allowed reads, writes, commands, egress, and done criteria.
-The legacy `.opencode/protocol.json` remains read-compatible during migration.
-A missing Protocol selects the conservative default.
+**Pet host**:
+The platform window that owns interaction, placement, and lifecycle for the Pet.
+
+**Pet animation contract**:
+The validated mapping from Pet states to animations and timing.
+
+**Event stream**:
+The transient sequence of events shared by bordercollie and the Pet during one session.
+
+**bordercollie plugin**:
+The connection between bordercollie and the coding application.
+
+**bordercollie package**:
+The installable product containing the plugin, action checks, evidence checks, Judge support, and Pet.
+
+**Global bind**:
+Installation of a verified bordercollie package for the coding application while preserving the previous working installation if verification fails.

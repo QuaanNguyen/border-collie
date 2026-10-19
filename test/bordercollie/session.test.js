@@ -8,22 +8,22 @@ const test = require('node:test');
 
 const { createSession } = require('../../bordercollie/lib/session');
 
-function withWorkdir(run) {
+async function withWorkdir(run) {
   const workdir = fs.mkdtempSync(path.join(os.tmpdir(), 'bordercollie-session-'));
   try {
-    return run(workdir);
+    return await run(workdir);
   } finally {
     fs.rmSync(workdir, { recursive: true, force: true });
   }
 }
 
-test('a Protocol replacement resets completion verification', () => {
+test('a Preference replacement resets completion verification', () => {
   withWorkdir((workdir) => {
     fs.writeFileSync(path.join(workdir, 'first.txt'), 'first');
     const session = createSession({
       workdir,
-      protocol: {
-        task: 'verify the first result',
+      preference: {
+        text: 'verify the first result',
         done_criteria: [{
           id: 'first-result',
           checks: [{ type: 'file_exists', path: 'first.txt' }],
@@ -34,8 +34,8 @@ test('a Protocol replacement resets completion verification', () => {
     const first = session.handle({ kind: 'assistant', completed: true, text: 'Done.' });
     assert.equal(first.events.at(-1).status, 'pass');
 
-    session.replaceProtocol({
-      task: 'verify the second result',
+    session.replacePreference({
+      text: 'verify the second result',
       done_criteria: [{
         id: 'second-result',
         checks: [{ type: 'file_exists', path: 'second.txt' }],
@@ -48,14 +48,12 @@ test('a Protocol replacement resets completion verification', () => {
   });
 });
 
-test('completion claims receive bounded remediation and then stop the session', () => {
-  withWorkdir((workdir) => {
+test('completion claims receive bounded remediation and then stop the session', async () => {
+  await withWorkdir(async (workdir) => {
     const session = createSession({
       workdir,
-      protocol: {
-        task: 'fix the parser',
-        read_paths: ['**'],
-        write_paths: ['src/**'],
+      preference: {
+        text: 'Fix the parser. Read any local file and edit only src/.',
         done_criteria: [{
           id: 'parser-fixed',
           claim_mentions: ['parser'],
@@ -85,17 +83,14 @@ test('completion claims receive bounded remediation and then stop the session', 
     assert.equal(terminal.events.at(-1).status, 'fail');
     assert.equal(terminal.events.at(-1).detail.terminal, true);
 
-    const blocked = session.handle({
-      kind: 'permission',
-      action: 'edit',
-      resources: ['src/parser.js'],
-    });
-    assert.ok(blocked.deny);
+    const blocked = await session.propose({ tool: 'edit', args: { filePath: 'src/parser.js' } });
+    assert.equal(blocked.decision, 'disallow');
+    assert.equal(blocked.events.at(-1).rule, 'completion_terminal');
 
     fs.mkdirSync(path.join(workdir, 'src'));
     fs.writeFileSync(path.join(workdir, 'src', 'parser.js'), 'export const parser = true;\n');
-    session.replaceProtocol({
-      task: 'verify parser',
+    session.replacePreference({
+      text: 'verify parser',
       done_criteria: [{
         id: 'parser-exists',
         checks: [{ type: 'file_exists', path: 'src/parser.js' }],

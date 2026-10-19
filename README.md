@@ -9,26 +9,36 @@ A desktop border collie that watches your AI coding agent and reacts when someth
 bordercollie is a small desktop companion for OpenCode.
 In plain terms, it sits beside your coding agent, watches what the agent tries to do, and reacts when the agent is working, blocked, refused, failed, or claiming it is done.
 
-The guard checks actions before they run, blocks work outside the task, and verifies important finish claims against the files in the project.
+The bordercollie checks every tool call before it runs.
+A small on-device model, the Judge, reads your latest message, the folder Preference, and the proposed call, and answers approve, deny, or ask.
+Paths outside the project folder and changes to the Preference are refused in code before the Judge runs.
+The bordercollie also verifies important finish claims against the files in the project.
+
+The Judge is the base [Needle 3](https://github.com/cactus-compute/needle) model from Cactus Compute, run locally with telemetry off.
+It is not tuned for this job yet, so expect some wrong calls in both directions; `npm run eval:judge` measures it on a fixed set of cases.
+bordercollie is not an operating-system sandbox.
 
 ## Installation
 
-OpenCode is the currently supported Guard-enforcing integration.
-Codex CLI and Claude Code are not yet advertised as Guard-enforcing because their deny-before-run coverage has not been verified.
+OpenCode is the currently supported bordercollie-enforcing integration.
+Codex CLI and Claude Code are not yet advertised as bordercollie-enforcing because their deny-before-run coverage has not been verified.
 
-For the public npm package, install the CLI globally and then install the plugin:
+Install this checkout globally and then install the plugin:
 
 ```sh
-npm install --global @quaannguyen/bordercollie
+npm install --global .
 bordercollie install
 ```
 
-The npm installation includes Guard and the desktop Pet.
+The npm installation includes bordercollie and the desktop Pet.
+`bordercollie install` also downloads the Needle runner for your platform and the 35 MB `needle3.cact` weights from Hugging Face, checks both against pinned SHA-256 digests, and caches them under `~/.cache/bordercollie/judge` (`%LOCALAPPDATA%\bordercollie\judge` on Windows).
+If that download or check fails, the previously installed plugin stays in place.
+The Judge has runners for macOS on Apple Silicon, Linux x64 and ARM64, and Windows x64 and ARM64.
 
 To install from a source clone for development:
 
 ```sh
-git clone https://github.com/QuaanNguyen/border-collie.git
+git clone https://github.com/QuaanNguyen/border-collie.git bordercollie
 cd bordercollie
 node scripts/install-plugin.js
 ```
@@ -39,7 +49,7 @@ Or on macOS and Linux:
 bash scripts/install-plugin.sh
 ```
 
-The installation includes Guard and the desktop Pet.
+The installation includes bordercollie and the desktop Pet.
 OpenCode v2 loads the package directory `~/.config/opencode/plugins/bordercollie`. A configured path must point at that directory; a bare `bordercollie.js` file is not a v2 plugin.
 On macOS, the installer builds a small native host that uses the system WebKit framework and does not download Electron.
 Windows and Linux use the locked Electron runtime.
@@ -62,25 +72,34 @@ Open any project with OpenCode:
 opencode <path>
 ```
 
-Inspect and select bordercollie profiles from the CLI:
+A folder with no Preference uses this default, held in memory; nothing is written to the project:
 
-```sh
-bc profile list
-bc profile create lab-research --from research
-bc profile assign opencode lab-research
+```json
+{
+  "text": "Work on my request in this folder. Local reads, edits and tests are fine. Do not upload project contents or delete work I did not ask you to delete. Ask when permission is unclear."
+}
 ```
 
-Set up the harness-neutral project Protocol without editing an OpenCode configuration path:
+To describe a folder yourself, save `.bordercollie/preference.json` with any of those four prose fields and optional `done_criteria`.
+Fields you leave out keep the default text.
+With `ask` empty the Judge never asks; set it to something like `"pushing or deploying"` to have those calls held until you answer in the chat.
+An unreadable Preference blocks the session until you fix it, and the agent cannot edit the file.
+
+Projects set up with an earlier release may still have `.bordercollie/protocol.json` or `.opencode/protocol.json`.
+Their allowlists are ignored; only their `done_criteria` are read, and only while no Preference exists.
+Clean them up when you choose:
 
 ```sh
-bc project setup --profile governed --write-path 'src/**'
+bordercollie migrate
 ```
+
+`bordercollie migrate` writes the Preference with those done criteria, deletes both Protocol files, and removes retired profiles from the bordercollie configuration while keeping the Pet size.
 
 Resize the Pet directly, without sending a UI preference through an agent conversation:
 
 ```sh
-bc pet size 115
-bc pet size reset
+bordercollie pet size 115
+bordercollie pet size reset
 ```
 
 Work on the desktop companion UI:
@@ -109,20 +128,18 @@ The current automated suite exercises unit behavior, non-UI integration behavior
 See [the release guide](docs/RELEASING.md) for the release plan, test layers, and the work GitHub Actions can automate.
 Pet UI, native window, renderer, and real OpenCode process coverage live in the e2e layer.
 
-Run the focused Guard and plugin behavior tests:
+Run the focused bordercollie and plugin behavior tests:
 
 ```sh
 node --test test/bordercollie/*.test.js test/plugin/*.test.mjs
 ```
 
-Guard events and active sessions exist only while OpenCode and the Pet are running.
-The plugin sends Guard events over the Pet process's private input pipe.
-Profiles and Pet size are persistent bordercollie owner preferences in the canonical bordercollie configuration.
-
-Existing installations can move their project and owner settings without changing their contents:
+Measure the installed Judge against the fixed evaluation cases:
 
 ```sh
-bordercollie migrate
+npm run eval:judge
 ```
 
-Migration stops before changing files when both folder names already exist.
+bordercollie events and active sessions exist only while OpenCode and the Pet are running.
+The plugin sends bordercollie events over the Pet process's private input pipe.
+Pet size is the persistent setting in the bordercollie configuration.

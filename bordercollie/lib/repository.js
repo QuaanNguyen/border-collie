@@ -4,7 +4,7 @@ const crypto = require('node:crypto');
 const { execFileSync } = require('node:child_process');
 const fs = require('node:fs');
 const path = require('node:path');
-const { globToRe } = require('./policy');
+const { globToRe } = require('./glob');
 
 function gitBuffer(workdir, args) {
   try {

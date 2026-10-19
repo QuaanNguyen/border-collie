@@ -28,16 +28,21 @@ try {
     'scripts/check-package.js',
     'scripts/check-syntax.js',
     'scripts/install-plugin.js',
+    'scripts/migrate.js',
     'scripts/run-e2e.js',
     'plugin/bordercollie.js',
     'plugin/package.json',
     'bordercollie/lib/session.js',
+    'bordercollie/lib/judge.js',
+    'bordercollie/lib/judge-artifacts.js',
+    'bordercollie/lib/preference.js',
     'events/index.js',
     'pet/package.json',
   ]) {
     assert(files.has(required), `packed artifact is missing ${required}`);
   }
   assert(![...files].some((file) => file.includes('node_modules/')), 'packed artifact contains node_modules');
+  assert(![...files].some((file) => file.startsWith('bordercollie/prototype/')), 'packed artifact contains research files');
   console.log(`Verified ${report[0].filename} (${files.size} files, ${report[0].size} bytes)`);
 } finally {
   fs.rmSync(output, { recursive: true, force: true });

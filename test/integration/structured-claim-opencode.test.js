@@ -10,9 +10,8 @@ const test = require('node:test');
 
 const ROOT = path.resolve(__dirname, '..', '..');
 
-test('OpenCode forwards structured completion claims to Guard', async () => {
+test('OpenCode forwards structured completion claims to bordercollie', async () => {
   const workdir = fs.mkdtempSync(path.join(os.tmpdir(), 'bordercollie-opencode-claims-'));
-  const owner = path.join(workdir, 'owner');
   try {
     execFileSync('git', ['init', '--quiet'], { cwd: workdir });
     execFileSync('git', ['config', 'user.email', 'test@example.com'], { cwd: workdir });
@@ -21,16 +20,14 @@ test('OpenCode forwards structured completion claims to Guard', async () => {
     execFileSync('git', ['add', '.'], { cwd: workdir });
     execFileSync('git', ['commit', '--quiet', '-m', 'initial'], { cwd: workdir });
     const head = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: workdir, encoding: 'utf8' }).trim();
-    fs.mkdirSync(owner, { recursive: true });
-    fs.writeFileSync(path.join(owner, 'policy.json'), JSON.stringify({
-      schema_version: 1, setup_package: 'custom',
+    fs.mkdirSync(path.join(workdir, '.bordercollie'), { recursive: true });
+    fs.writeFileSync(path.join(workdir, '.bordercollie', 'preference.json'), JSON.stringify({
       done_criteria: [{ id: 'answer', structured_claims: { minimum_observations: 1 }, checks: [{ type: 'file_exists', path: 'answer.js' }] }],
     }));
     process.env.BORDERCOLLIE_NO_PET = '1';
-    process.env.BORDERCOLLIE_OWNER_CONFIG = owner;
     process.env.BORDERCOLLIE_EVENTS = path.join(workdir, 'events.jsonl');
-    const { Bordercollie } = await import(pathToFileURL(path.join(ROOT, 'plugin', 'bordercollie.js')).href);
-    const hooks = await Bordercollie({
+    const { bordercollie } = await import(pathToFileURL(path.join(ROOT, 'plugin', 'bordercollie.js')).href);
+    const hooks = await bordercollie({
       directory: workdir,
       client: { session: { messages: async () => [{
         info: { id: 'completion', role: 'assistant', finish: 'stop', time: { completed: Date.now() } },
@@ -43,15 +40,13 @@ test('OpenCode forwards structured completion claims to Guard', async () => {
     assert.equal(events.at(-1).status, 'pass');
   } finally {
     delete process.env.BORDERCOLLIE_NO_PET;
-    delete process.env.BORDERCOLLIE_OWNER_CONFIG;
     delete process.env.BORDERCOLLIE_EVENTS;
     fs.rmSync(workdir, { recursive: true, force: true });
   }
 });
 
-test('OpenCode preserves Guard terminal structured verdicts and remediation', async () => {
+test('OpenCode preserves bordercollie terminal structured verdicts and remediation', async () => {
   const workdir = fs.mkdtempSync(path.join(os.tmpdir(), 'bordercollie-opencode-terminal-'));
-  const owner = path.join(workdir, 'owner');
   const prompts = [];
   try {
     execFileSync('git', ['init', '--quiet'], { cwd: workdir });
@@ -61,17 +56,15 @@ test('OpenCode preserves Guard terminal structured verdicts and remediation', as
     execFileSync('git', ['add', '.'], { cwd: workdir });
     execFileSync('git', ['commit', '--quiet', '-m', 'initial'], { cwd: workdir });
     const head = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: workdir, encoding: 'utf8' }).trim();
-    fs.mkdirSync(owner, { recursive: true });
-    fs.writeFileSync(path.join(owner, 'policy.json'), JSON.stringify({
-      schema_version: 1, setup_package: 'custom',
+    fs.mkdirSync(path.join(workdir, '.bordercollie'), { recursive: true });
+    fs.writeFileSync(path.join(workdir, '.bordercollie', 'preference.json'), JSON.stringify({
       done_criteria: [{ id: 'answer', claim_mentions: ['answer'], structured_claims: { minimum_observations: 1 }, checks: [{ type: 'file_exists', path: 'answer.js' }] }],
     }));
     process.env.BORDERCOLLIE_NO_PET = '1';
-    process.env.BORDERCOLLIE_OWNER_CONFIG = owner;
     process.env.BORDERCOLLIE_EVENTS = path.join(workdir, 'events.jsonl');
     let attempt = 0;
-    const { Bordercollie } = await import(pathToFileURL(path.join(ROOT, 'plugin', 'bordercollie.js')).href);
-    const hooks = await Bordercollie({
+    const { bordercollie } = await import(pathToFileURL(path.join(ROOT, 'plugin', 'bordercollie.js')).href);
+    const hooks = await bordercollie({
       directory: workdir,
       client: { session: {
         messages: async () => {
@@ -101,7 +94,6 @@ test('OpenCode preserves Guard terminal structured verdicts and remediation', as
     assert.match(prompts.at(-1).body.parts[0].text, /structured claim symbol is unknown at answer\.js:1/);
   } finally {
     delete process.env.BORDERCOLLIE_NO_PET;
-    delete process.env.BORDERCOLLIE_OWNER_CONFIG;
     delete process.env.BORDERCOLLIE_EVENTS;
     fs.rmSync(workdir, { recursive: true, force: true });
   }

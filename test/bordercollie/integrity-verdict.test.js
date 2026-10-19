@@ -23,13 +23,13 @@ function withRepository(run) {
   }
 }
 
-test('a terminal Guard verdict separates unavailable environment evidence from completion state', () => {
+test('a terminal bordercollie verdict separates unavailable environment evidence from completion state', () => {
   const workdir = fs.mkdtempSync(path.join(os.tmpdir(), 'bordercollie-integrity-'));
   try {
     const session = createSession({
       workdir,
-      protocol: {
-        task: 'verify an environment-dependent result',
+      preference: {
+        text: 'verify an environment-dependent result',
         done_criteria: [{
           id: 'environment-proof',
           checks: [{ type: 'command', dimension: 'environment', argv: ['bordercollie-missing-command'] }],
@@ -46,13 +46,13 @@ test('a terminal Guard verdict separates unavailable environment evidence from c
   }
 });
 
-test('a terminal Guard verdict treats an unavailable repository as inconclusive evidence', () => {
+test('a terminal bordercollie verdict treats an unavailable repository as inconclusive evidence', () => {
   const workdir = fs.mkdtempSync(path.join(os.tmpdir(), 'bordercollie-integrity-'));
   try {
     const session = createSession({
       workdir,
-      protocol: {
-        task: 'verify repository state',
+      preference: {
+        text: 'verify repository state',
         done_criteria: [{
           id: 'repository-proof',
           checks: [{ type: 'repository_state', require_changes: true }],
@@ -69,13 +69,13 @@ test('a terminal Guard verdict treats an unavailable repository as inconclusive 
   }
 });
 
-test('a terminal Guard verdict reports each verified integrity dimension separately', () => {
+test('a terminal bordercollie verdict reports each verified integrity dimension separately', () => {
   withRepository((workdir) => {
     const command = [process.execPath, '-e', 'process.stdout.write("proof\\n")'];
     const session = createSession({
       workdir,
-      protocol: {
-        task: 'verify a scoped implementation',
+      preference: {
+        text: 'verify a scoped implementation',
         done_criteria: [{
           id: 'complete-proof',
           checks: [
@@ -102,8 +102,8 @@ test('a zero-test command cannot verify test integrity', () => {
   try {
     const session = createSession({
       workdir,
-      protocol: {
-        task: 'verify a test run',
+      preference: {
+        text: 'verify a test run',
         done_criteria: [{
           id: 'test-proof',
           checks: [{
@@ -128,8 +128,8 @@ test('a passing command cannot overwrite a failed integrity dimension', () => {
   try {
     const session = createSession({
       workdir,
-      protocol: {
-        task: 'verify a test run',
+      preference: {
+        text: 'verify a test run',
         done_criteria: [{
           id: 'test-proof',
           checks: [

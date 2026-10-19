@@ -5,6 +5,8 @@
  * so we classify by name family first and fall back to inspecting arguments.
  */
 
+const path = require('node:path');
+
 const READ_TOOLS = new Set(['read', 'readfile', 'read_file', 'view', 'cat', 'open', 'list', 'ls',
   'glob', 'grep', 'search', 'codesearch', 'find', 'list_dir', 'listdirectory']);
 const WRITE_TOOLS = new Set(['write', 'writefile', 'write_file', 'edit', 'str_replace', 'patch',
@@ -220,21 +222,132 @@ function chownTargets(operands) {
   return operands.slice(1);
 }
 
+function expandKnownVariables(command, bindings) {
+  let output = '';
+  let quote = null;
+  for (let index = 0; index < command.length; index++) {
+    const character = command[index];
+    if (character === '\\' && quote !== "'") {
+      output += character + (command[++index] || '');
+      continue;
+    }
+    if ((character === '"' || character === "'") && (!quote || character === quote)) quote = quote ? null : character;
+    if (character === '$' && quote !== "'") {
+      const match = command.slice(index).match(/^\$(?:\{([A-Za-z_][A-Za-z0-9_]*)\}|([A-Za-z_][A-Za-z0-9_]*))/);
+      if (match && bindings.has(match[1] || match[2])) {
+        output += bindings.get(match[1] || match[2]);
+        index += match[0].length - 1;
+        continue;
+      }
+    }
+    output += character;
+  }
+  return output;
+}
+
 function commandEndpoints(command) {
   const readPaths = [];
   const writePaths = [];
+  const deletePaths = [];
+  const sharedMachineActions = [];
+  let environmentDisclosure = false;
+  const bindings = new Map();
   for (const part of splitShellCommands(command)) {
-    const tokens = shellTokens(part);
-    const start = commandStart(tokens);
-    const binary = commandName(tokens[start]);
+    const tokens = shellTokens(expandKnownVariables(part, bindings));
+    if (tokens.length && tokens.every((token) => /^[A-Za-z_][A-Za-z0-9_]*=/.test(token))) {
+      for (const token of tokens) {
+        const [name, value] = [token.slice(0, token.indexOf('=')), token.slice(token.indexOf('=') + 1)];
+        if (/^[A-Za-z0-9_./:-]+$/.test(value)) bindings.set(name, value);
+        else bindings.delete(name);
+      }
+      continue;
+    }
+    let start = commandStart(tokens);
+    let binary = commandName(tokens[start]);
+    if (binary === 'env') {
+      start++;
+      while (start < tokens.length) {
+        const token = tokens[start];
+        if (['-u', '--unset', '-C', '--chdir'].includes(token)) {
+          if ((token === '-C' || token === '--chdir') && tokens[start + 1]) readPaths.push(tokens[start + 1]);
+          start += 2;
+        }
+        else if (token.startsWith('--chdir=')) {
+          readPaths.push(token.slice('--chdir='.length));
+          start++;
+        }
+        else if (token.startsWith('-') || /^[A-Za-z_][A-Za-z0-9_]*=/.test(token)) start++;
+        else break;
+      }
+      environmentDisclosure ||= start >= tokens.length;
+      binary = commandName(tokens[start]);
+    }
+    environmentDisclosure ||= binary === 'printenv';
     const operands = operandTokens(tokens, start + 1);
+    const inlineFlags = INLINE_PROGRAM_FLAGS.get(binary);
+    const programArguments = new Set();
+    for (let index = start + 1; index < tokens.length; index++) {
+      if (inlineFlags?.has(tokens[index])) programArguments.add(tokens[index + 1]);
+    }
+    if (binary === 'awk') {
+      const program = tokens.slice(start + 1).find((token, index, all) => !token.startsWith('-') && all[index - 1] !== '-v' && all[index - 1] !== '-F');
+      if (program) programArguments.add(program);
+    }
     for (const token of operands) {
+      if (programArguments.has(token)) continue;
       if (pathish(token)) readPaths.push(token);
     }
     addRedirectWrites(tokens, writePaths);
+    if (binary === 'find') {
+      let index = start + 1;
+      while (['-H', '-L', '-P'].includes(tokens[index])) index++;
+      const roots = [];
+      while (index < tokens.length && !/^(?:-|!|\()/.test(tokens[index])) roots.push(tokens[index++]);
+      if (!roots.length) roots.push('.');
+      readPaths.push(...roots);
+      const executesWrite = tokens.some((token, position) => ['-exec', '-execdir', '-ok', '-okdir'].includes(token) && MODIFYING_COMMANDS.has(commandName(tokens[position + 1])));
+      if (tokens.includes('-delete') || executesWrite) {
+        writePaths.push(...roots);
+        deletePaths.push(...roots);
+      }
+      for (const flag of ['-fprint', '-fprint0', '-fprintf', '-fls']) {
+        const position = tokens.indexOf(flag);
+        if (position >= 0 && tokens[position + 1]) writePaths.push(tokens[position + 1]);
+      }
+    }
+    if (binary === 'git') {
+      let index = start + 1;
+      let directory = '.';
+      while (index < tokens.length && tokens[index].startsWith('-')) {
+        if (tokens[index] === '-C' && tokens[index + 1]) {
+          directory = path.isAbsolute(tokens[index + 1]) ? tokens[index + 1] : path.join(directory, tokens[index + 1]);
+          readPaths.push(directory);
+          index += 2;
+        } else if (tokens[index] === '-c') index += 2;
+        else index++;
+      }
+      if (tokens[index] === 'clean') {
+        const argumentsAfter = tokens.slice(index + 1);
+        const dryRun = argumentsAfter.some((token) => token === '--dry-run' || /^-[^-]*n/.test(token));
+        const targets = [];
+        for (let position = 0; position < argumentsAfter.length; position++) {
+          const token = argumentsAfter[position];
+          if (token === '-e' || token === '--exclude') position++;
+          else if (!token.startsWith('-')) targets.push(path.isAbsolute(token) ? token : path.join(directory, token));
+        }
+        if (!targets.length) targets.push(directory);
+        readPaths.push(...targets);
+        if (!dryRun) {
+          writePaths.push(...targets);
+          deletePaths.push(...targets);
+        }
+      }
+    }
+    if (binary === 'scancel') sharedMachineActions.push(`cancel scheduled jobs: ${part}`);
     if (!MODIFYING_COMMANDS.has(binary)) continue;
     if (binary === 'rm' || binary === 'touch' || binary === 'mkdir' || binary === 'tee' || binary === 'truncate') {
       writePaths.push(...operands);
+      if (binary === 'rm') deletePaths.push(...operands);
     } else if (binary === 'mv') {
       if (operands.length > 1) {
         readPaths.push(...operands.slice(0, -1));
@@ -256,6 +369,9 @@ function commandEndpoints(command) {
   return {
     readPaths: [...new Set(readPaths)],
     writePaths: [...new Set(writePaths)],
+    deletePaths: [...new Set(deletePaths)],
+    environmentDisclosure,
+    sharedMachineActions,
   };
 }
 
@@ -283,6 +399,24 @@ function urlsIn(text) {
   // only treat a bare IP as egress if it appears near a network verb
   const netty = /\b(curl|wget|nc|ncat|netcat|ssh|scp|rsync|ftp|telnet|invoke-webrequest|iwr)\b/i.test(s);
   return urls.concat(netty ? hosts : []);
+}
+
+function patchEffects(args) {
+  if (typeof args.patchText !== 'string') return { effectError: 'patch needs complete patchText' };
+  const lines = args.patchText.replace(/\r\n/g, '\n').split('\n');
+  if (lines[0] !== '*** Begin Patch' || lines.at(-1)?.trim() !== '*** End Patch' && lines.at(-2)?.trim() !== '*** End Patch') return { effectError: 'patch envelope is incomplete' };
+  const readPaths = [];
+  const writePaths = [];
+  const deletePaths = [];
+  for (const line of lines) {
+    const match = line.match(/^\*\*\* (Add File|Update File|Delete File|Move to): (.+)$/);
+    if (!match) continue;
+    const [, operation, target] = match;
+    writePaths.push(target);
+    if (operation === 'Update File' || operation === 'Delete File') readPaths.push(target);
+    if (operation === 'Delete File') deletePaths.push(target);
+  }
+  return writePaths.length ? { readPaths, writePaths, deletePaths } : { effectError: 'patch contains no recognized file operations' };
 }
 
 /**
@@ -322,8 +456,28 @@ function normalise(toolCall) {
     const endpoints = commandEndpoints(out.command);
     out.readPaths = endpoints.readPaths;
     out.writePaths = endpoints.writePaths;
+    out.deletePaths = endpoints.deletePaths;
+    out.environmentDisclosure = endpoints.environmentDisclosure;
+    out.sharedMachineActions = endpoints.sharedMachineActions;
     out.urls = urlsIn(out.command);
     out.summary = truncate(out.command, 70);
+  } else if (name === 'patch' || name === 'apply_patch') {
+    out.kind = 'write';
+    Object.assign(out, patchEffects(args));
+  } else if (name === 'worktree_remove') {
+    out.kind = 'write';
+    if (typeof args.directory !== 'string' || !args.directory.trim()) out.effectError = 'worktree_remove needs its recorded directory';
+    else {
+      out.readPaths = [args.directory];
+      out.writePaths = [args.directory];
+      out.deletePaths = [args.directory];
+    }
+  } else if (name === 'worktree_create') {
+    out.kind = 'write';
+    out.effectError = 'worktree_create destination depends on project configuration and cannot be verified before this call';
+  } else if (name === 'worktree_list') {
+    out.kind = 'read';
+    out.readPaths = ['.git/worktrees'];
   } else if (MOVE_TOOLS.has(name)) {
     out.kind = 'write';
     out.readPaths = collect(args, MOVE_SOURCE_KEYS);
@@ -358,5 +512,25 @@ function truncate(s, n) {
   return s.length > n ? s.slice(0, n - 1) + '…' : s;
 }
 
-module.exports = { normalise, pathsInCommand, urlsIn, truncate,
+const SEARCH_TOOLS = new Set(['grep', 'search', 'codesearch']);
+
+function proposedCall(tool, args) {
+  const call = normalise({ id: 'bordercollie', type: 'function', function: { name: tool, arguments: JSON.stringify(args || {}) } });
+  const searchedPaths = collect(call.args, ['path', 'directory', 'dir']);
+  return {
+    tool: call.name,
+    args: call.args,
+    kind: call.kind,
+    summary: call.summary,
+    readPaths: SEARCH_TOOLS.has(String(tool).toLowerCase()) ? searchedPaths : call.readPaths,
+    writePaths: call.writePaths,
+    urls: [...new Set(call.urls)],
+    deletePaths: call.deletePaths || [],
+    environmentDisclosure: call.environmentDisclosure || false,
+    sharedMachineActions: call.sharedMachineActions || [],
+    effectError: call.effectError || null,
+  };
+}
+
+module.exports = { normalise, pathsInCommand, proposedCall, urlsIn, truncate,
   READ_TOOLS, WRITE_TOOLS, EXEC_TOOLS, NET_TOOLS };

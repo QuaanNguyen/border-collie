@@ -25,8 +25,10 @@ assert.deepStrictEqual(rootPackage.bugs, {
   url: 'https://github.com/QuaanNguyen/border-collie/issues',
 })
 assert.strictEqual(rootPackage.homepage, 'https://github.com/QuaanNguyen/border-collie#readme')
-assert.match(readme, /npm install --global @quaannguyen\/bordercollie/)
+assert.match(readme, /npm install --global \./)
 assert.match(readme, /bordercollie install/)
+assert.doesNotMatch(readme, /\b(?:bdc|bcollie|bc) (?:install|profile|project|pet)\b/)
+assert.deepStrictEqual(rootPackage.bin, { bordercollie: 'scripts/bordercollie.js' })
 assert.doesNotMatch(readme, /start:demo/)
 assert.doesNotMatch(main, /--demo/)
 assert.doesNotMatch(renderer, /DEMO_SCRIPT/)

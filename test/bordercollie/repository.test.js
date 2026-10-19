@@ -64,8 +64,8 @@ test('a session evaluates repository-state criteria against its initial worktree
   withRepository((workdir) => {
     const session = createSession({
       workdir,
-      protocol: {
-        task: 'edit source files',
+      preference: {
+        text: 'edit source files',
         done_criteria: [{
           id: 'scoped-patch',
           checks: [{
@@ -93,8 +93,8 @@ test('a session detects edits to an ignored file named by a repository criterion
     fs.writeFileSync(path.join(workdir, 'generated', 'result.js'), 'before\n');
     const session = createSession({
       workdir,
-      protocol: {
-        task: 'edit source files',
+      preference: {
+        text: 'edit source files',
         done_criteria: [{
           id: 'no-generated-output',
           checks: [{
