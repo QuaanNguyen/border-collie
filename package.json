@@ -38,9 +38,10 @@
   "scripts": {
     "check": "node scripts/check-syntax.js",
     "eval:judge": "node scripts/evaluate-judge.js",
-    "test": "node --test test/unit/*.test.js test/integration/*.test.js",
+    "test": "node --test test/unit/*.test.js test/integration/*.test.js test/plugin/*.test.mjs",
     "test:e2e": "node scripts/run-e2e.js",
     "test:e2e:skip-native": "node scripts/run-e2e.js --skip-native",
+    "test:e2e:opencode": "python3 test/e2e/opencode-pet-lifecycle.test.py",
     "test:integration": "node --test test/integration/*.test.js",
     "test:package": "node scripts/check-package.js",
     "test:package:client": "node scripts/check-package-client.js npm",
