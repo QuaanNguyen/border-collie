@@ -1,5 +1,5 @@
 {
-  "authorModel": "inkling-small",
+  "authorModel": "gemma4-31b-it",
   "conditions": [
     "approve",
     "deny",

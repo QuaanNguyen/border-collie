@@ -23,6 +23,10 @@ No new model has been trained or promoted by this restart.
 
 ## Generate model-authored scenarios
 
+The active author is `gemma4-31b-it` following the owner's October 20 model switch.
+The review pair is `gemma4-31b-it` and `glm-5-3-flash`.
+Earlier Inkling and Kimi results remain historical evidence.
+
 Run these commands from the repository root.
 Use the existing ASU configuration on the Mac.
 Never copy gateway credentials to Sol.
@@ -53,8 +57,8 @@ Freeze writes a new immutable review packet and never overwrites an earlier pack
 ## Obtain independent reviews
 
 ```sh
-node bordercollie/prototype/review-checker-data.js bordercollie/prototype/output/authored-smoke-review inkling-small inkling
-node bordercollie/prototype/review-checker-data.js bordercollie/prototype/output/authored-smoke-review kimi-k2-7-code kimi
+node bordercollie/prototype/review-checker-data.js bordercollie/prototype/output/authored-smoke-review gemma4-31b-it gemma
+node bordercollie/prototype/review-checker-data.js bordercollie/prototype/output/authored-smoke-review glm-5-3-flash glm
 ```
 
 The two reviewers see only exact production inputs and opaque case identities.

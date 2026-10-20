@@ -263,6 +263,51 @@
       "sha256": "75885f2d9635708b1f494b64d55d883a67bedcb60d6c6c7618e7350c0df0368e"
     },
     {
+      "path": "analysis/checker-v3-2026-10-20/evidence/authored-2026-10-20-full-v2/STOP-AUTHORING",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "analysis/checker-v3-2026-10-20/evidence/authored-2026-10-20-full-v2/inventory.json",
+      "bytes": 359978,
+      "sha256": "28c3153c0a29de71a449f171b5fd3d6ad4c156187be4ff24ed212d8a595148d7"
+    },
+    {
+      "path": "analysis/checker-v3-2026-10-20/evidence/authored-2026-10-20-full-v2/pipeline-status.json",
+      "bytes": 247,
+      "sha256": "477b26d2ac5d69affd8987cebb87c4c3fac320b43984be430aba4a59db6210e7"
+    },
+    {
+      "path": "analysis/checker-v3-2026-10-20/evidence/authored-2026-10-20-full-v2/pipeline.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "analysis/checker-v3-2026-10-20/evidence/authored-2026-10-20-full-v2/plan.json",
+      "bytes": 3110607,
+      "sha256": "8262f8366a348b31d772a730aa2e8c099e8d92f6c07e400ae714a4579e7e26f3"
+    },
+    {
+      "path": "analysis/checker-v3-2026-10-20/evidence/authored-2026-10-20-full-v2/state.json",
+      "bytes": 308243,
+      "sha256": "b2567d4a6b3e6d671ce62d24d629c41622a02a9027853106862f6d1adb3a3374"
+    },
+    {
+      "path": "analysis/checker-v3-2026-10-20/evidence/authored-2026-10-20-full-v2-stopped-review/manifest.json",
+      "bytes": 588,
+      "sha256": "46ba7a299aaeca4529c8ba2ed38ade03fd03e032a2b8e28e158e897512ea5456"
+    },
+    {
+      "path": "analysis/checker-v3-2026-10-20/evidence/authored-2026-10-20-full-v2-stopped-review/proposals.jsonl",
+      "bytes": 67864,
+      "sha256": "568e209734bba45d55d725d6c15b127292e74427e2bbb8e59301e01eccb05ac4"
+    },
+    {
+      "path": "analysis/checker-v3-2026-10-20/evidence/authored-2026-10-20-full-v2-stopped-review/review-packet.json",
+      "bytes": 132323,
+      "sha256": "51da9ac03808266fa91d33b3ebc3ee11d3da408cb6a3b96164afefecec2d898c"
+    },
+    {
       "path": "analysis/checker-v3-2026-10-20/evidence/authored-2026-10-20-inkling-dynamic-v2/inventory.json",
       "bytes": 359978,
       "sha256": "28c3153c0a29de71a449f171b5fd3d6ad4c156187be4ff24ed212d8a595148d7"
