@@ -27,7 +27,7 @@
   ],
   "dynamicShellVariants": [
     "multiline",
-    "variable-substitution",
+    "command-substitution",
     "heredoc",
     "script-invocation"
   ],

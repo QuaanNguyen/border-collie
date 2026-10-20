@@ -21,10 +21,9 @@ The active task is V3 synthetic generation for one free-text Preference and appr
 Use the production request builder and checked input contracts.
 Never execute generated commands.
 
-On October 20, 2026, the owner requested synthetic generation and new Sol work for this restart.
-Local ASU generation is authorized.
-Automatic approval still blocks Sol submission under the earlier hold until an explicit override for generation and CPU validation is recorded.
-Do not submit a Sol job while that clarification is pending.
+On October 20, 2026, the owner explicitly overrode the older all-Sol-jobs hold for synthetic generation and CPU data validation while repair tickets remain open.
+Local ASU generation and credential-free CPU validation on Sol are authorized.
+This override does not authorize bypassing training or promotion requirements.
 Keep ASU gateway credentials on the Mac.
 Do not resume the canceled October 16 study or alter its frozen inputs.
 

@@ -198,6 +198,131 @@
       "sha256": "fc140d998f56aea16995aecd2f76a0d87e01271a3a5273bd025f0114afabe783"
     },
     {
+      "path": "analysis/checker-v3-2026-10-20/evidence/authored-2026-10-20-dynamic-partial-v2/manifest.json",
+      "bytes": 586,
+      "sha256": "d5dd751dffc2ba6d1dbb81dc0a4b4d87b6a7d9083448d83e62a95de4b755ef79"
+    },
+    {
+      "path": "analysis/checker-v3-2026-10-20/evidence/authored-2026-10-20-dynamic-partial-v2/proposals.jsonl",
+      "bytes": 10724,
+      "sha256": "132a592cd02916e745a66e0aa0226f5fdf59e4f3631c3c72cf07b8341b00518b"
+    },
+    {
+      "path": "analysis/checker-v3-2026-10-20/evidence/authored-2026-10-20-dynamic-partial-v2/review-packet.json",
+      "bytes": 21344,
+      "sha256": "85ea980c9d9123488c2ba9e69628b6d4d2510b3f7ed8d8e7a869e8901c0241fd"
+    },
+    {
+      "path": "analysis/checker-v3-2026-10-20/evidence/authored-2026-10-20-full/STOP-AUTHORING",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "analysis/checker-v3-2026-10-20/evidence/authored-2026-10-20-full/inventory.json",
+      "bytes": 359978,
+      "sha256": "28c3153c0a29de71a449f171b5fd3d6ad4c156187be4ff24ed212d8a595148d7"
+    },
+    {
+      "path": "analysis/checker-v3-2026-10-20/evidence/authored-2026-10-20-full/pipeline-status.json",
+      "bytes": 636,
+      "sha256": "955b5b4f1abb5b46bb4e331051516bc002b89b1e33bf3460e60e2cbd782d03c1"
+    },
+    {
+      "path": "analysis/checker-v3-2026-10-20/evidence/authored-2026-10-20-full/plan.json",
+      "bytes": 3110607,
+      "sha256": "0b6bd79ab47c5967c6d9856cdf4decf8fd66004816e420165fcedc5c3aa2bc2a"
+    },
+    {
+      "path": "analysis/checker-v3-2026-10-20/evidence/authored-2026-10-20-full/state.json",
+      "bytes": 65280,
+      "sha256": "d3671f2612d3e825bcd056511d40849bc2b05cd6d3f338669bca4a20f5932162"
+    },
+    {
+      "path": "analysis/checker-v3-2026-10-20/evidence/authored-2026-10-20-full-review/manifest.json",
+      "bytes": 588,
+      "sha256": "084583d8265960d76e0b1d8c0f8a1d845e6f9bcd349f1a63bfadb887a6172e2a"
+    },
+    {
+      "path": "analysis/checker-v3-2026-10-20/evidence/authored-2026-10-20-full-review/proposals.jsonl",
+      "bytes": 14371,
+      "sha256": "a0e1d924a7bb8a1923e1a77c0d60eb58f418054b4c6639562e4240d2b27e74d9"
+    },
+    {
+      "path": "analysis/checker-v3-2026-10-20/evidence/authored-2026-10-20-full-review/review-inkling-small.json",
+      "bytes": 4666,
+      "sha256": "32909aa78cc5075dead52295454d6d50fe5fef4f157969f09d735441f4c11c4d"
+    },
+    {
+      "path": "analysis/checker-v3-2026-10-20/evidence/authored-2026-10-20-full-review/review-kimi-k2-7-code.json",
+      "bytes": 4459,
+      "sha256": "053526f22ccd7c4201a488e709179be7270cde388bd63aaa085fc8c53fc1f83e"
+    },
+    {
+      "path": "analysis/checker-v3-2026-10-20/evidence/authored-2026-10-20-full-review/review-packet.json",
+      "bytes": 28404,
+      "sha256": "75885f2d9635708b1f494b64d55d883a67bedcb60d6c6c7618e7350c0df0368e"
+    },
+    {
+      "path": "analysis/checker-v3-2026-10-20/evidence/authored-2026-10-20-inkling-dynamic-v2/inventory.json",
+      "bytes": 359978,
+      "sha256": "28c3153c0a29de71a449f171b5fd3d6ad4c156187be4ff24ed212d8a595148d7"
+    },
+    {
+      "path": "analysis/checker-v3-2026-10-20/evidence/authored-2026-10-20-inkling-dynamic-v2/plan.json",
+      "bytes": 24231,
+      "sha256": "75c2d7b3efa1cdf0d5db198a718a7f12ac75bf12f75ccaf2b323a435dda025b1"
+    },
+    {
+      "path": "analysis/checker-v3-2026-10-20/evidence/authored-2026-10-20-inkling-dynamic-v2/state.json",
+      "bytes": 79613,
+      "sha256": "ce190782e4b5b90fdf3679fe955e9f65638b6f9ac023ccbb30f8f37e17ad8d2e"
+    },
+    {
+      "path": "analysis/checker-v3-2026-10-20/evidence/authored-2026-10-20-inkling-smoke-v2/inventory.json",
+      "bytes": 359978,
+      "sha256": "28c3153c0a29de71a449f171b5fd3d6ad4c156187be4ff24ed212d8a595148d7"
+    },
+    {
+      "path": "analysis/checker-v3-2026-10-20/evidence/authored-2026-10-20-inkling-smoke-v2/plan.json",
+      "bytes": 28022,
+      "sha256": "89847da3cd6533846a689f1be66366b3291abcfc601dc062a4be177083340760"
+    },
+    {
+      "path": "analysis/checker-v3-2026-10-20/evidence/authored-2026-10-20-inkling-smoke-v2/state.json",
+      "bytes": 101544,
+      "sha256": "615056dfcfa60a055bb2fb4f78e9dd2960a39fcf8fbb87e106d9e2fb3e3609d7"
+    },
+    {
+      "path": "analysis/checker-v3-2026-10-20/evidence/authored-2026-10-20-reviewed-smoke/agreement-summary.json",
+      "bytes": 368,
+      "sha256": "4d07c70b7d673af237cb93ced9228703d6579412eee804cc958d89aafd0bd3e3"
+    },
+    {
+      "path": "analysis/checker-v3-2026-10-20/evidence/authored-2026-10-20-reviewed-smoke/manifest.json",
+      "bytes": 590,
+      "sha256": "392c51e262f7378499781135e2af7c419945b5d3408f7c1506a57f86cdb43b5b"
+    },
+    {
+      "path": "analysis/checker-v3-2026-10-20/evidence/authored-2026-10-20-reviewed-smoke/proposals.jsonl",
+      "bytes": 21713,
+      "sha256": "eeb9876a3dee5d6b2acde556f4779a675ea78b5c5d319e9881a52f43a8c44eb0"
+    },
+    {
+      "path": "analysis/checker-v3-2026-10-20/evidence/authored-2026-10-20-reviewed-smoke/review-inkling-small.json",
+      "bytes": 7237,
+      "sha256": "46cbf68fb2f5ce01fbe03169afbcb0728a0682ec97c1895c05831d4bb4110173"
+    },
+    {
+      "path": "analysis/checker-v3-2026-10-20/evidence/authored-2026-10-20-reviewed-smoke/review-kimi-k2-7-code.json",
+      "bytes": 6920,
+      "sha256": "5b458b4f05b87bdef3e81e68a58920768ea64c5869690ccf1ccea6bae58cd362"
+    },
+    {
+      "path": "analysis/checker-v3-2026-10-20/evidence/authored-2026-10-20-reviewed-smoke/review-packet.json",
+      "bytes": 42469,
+      "sha256": "c2cf72c174587ae52c691ff10b5e52a417a2e5001ee79f567b3c0bce50f70cd7"
+    },
+    {
       "path": "analysis/needle-judge-2026-10-09/artifacts/audit-findings.jsonl",
       "bytes": 33508,
       "sha256": "4fd9e1a575f65355e18fe0ffd670bbadd990c94a1d5ccb645d00776a470ebe12"

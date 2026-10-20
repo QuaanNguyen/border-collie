@@ -41,7 +41,7 @@ async function review(directory, model, modelFamily, concurrency = 3) {
       const batch = batches[cursor++];
       if (!batch) return;
       try {
-        const response = await request(conn, '/chat/completions', { model, messages: [{ role: 'system', content: REVIEW_INSTRUCTIONS + ' Return {"decisions":[{"id":"...","inputHash":"...","verdict":"approve|deny|ask|abstain"}]} with exactly one row per input.' }, { role: 'user', content: JSON.stringify(batch) }] }, 45000);
+        const response = await request(conn, '/chat/completions', { model, messages: [{ role: 'system', content: REVIEW_INSTRUCTIONS + ' Return {"decisions":[{"id":"...","inputHash":"...","verdict":"approve|deny|ask|abstain"}]} with exactly one row per input.' }, { role: 'user', content: JSON.stringify(batch) }] }, 120000);
         if (typeof response.model !== 'string' || response.model !== model && !response.model.startsWith(model + '-')) throw new Error('Gateway reported an unexpected reviewer model');
         const raw = response?.choices?.[0]?.message?.content;
         if (typeof raw !== 'string') throw new Error('Reviewer returned no text');

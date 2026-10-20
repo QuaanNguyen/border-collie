@@ -4,6 +4,23 @@ The active task is to generate varied synthetic scenarios using the current prod
 Each scenario contains a natural user request, one free-text project Preference, and one complete proposed tool call.
 The training target is one approve, deny, or ask answer without an explanation.
 
+## Recorded restart on October 20, 2026
+
+The earlier 1,656-case V3 draft was generated from templates.
+It was not a completed model-authored training dataset.
+The new 24-case model-authored smoke snapshot has complete reviews from Inkling and Kimi.
+Both reviewers agreed on 16 cases, and eight cases in two disputed families remain quarantined.
+The retained answers comprise nine approvals, five refusals, and two requests for confirmation.
+These cases have not passed human verification and are not qualified training data.
+
+Two credential-free Sol CPU jobs completed successfully.
+The first audited the preserved template baseline, and the second audited the new frozen 24-case snapshot.
+Their receipts are in [the restart record](experiments/fine-tuning-reset-2026-10-20.json).
+The broader authoring configuration plans 1,764 cases across 132 verified tools and three isolated splits.
+It excludes 18 unverified tool contracts.
+Current generated outputs and progress remain local until frozen and archived.
+No new model has been trained or promoted by this restart.
+
 ## Generate model-authored scenarios
 
 Run these commands from the repository root.
