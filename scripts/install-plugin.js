@@ -250,9 +250,12 @@ async function installPlugin(opts = {}) {
   try {
     fs.mkdirSync(stagePackage, { recursive: true });
     fs.copyFileSync(srcPlugin, stageIndex);
+    for (const file of ['tui.mjs', 'pet-rpc.mjs', 'runtime-root.mjs']) {
+      fs.copyFileSync(path.join(repoRoot, 'plugin', file), path.join(stagePackage, file));
+    }
     fs.writeFileSync(path.join(stagePackage, 'package.json'), JSON.stringify({
       name: 'bordercollie',
-      exports: { '.': './index.mjs' },
+      exports: { '.': './index.mjs', './tui': './tui.mjs' },
     }, null, 2) + '\n');
     copyTree(srcBordercollie, path.join(stagePackage, 'bordercollie'), {
       skip: new Set(['prototype']),

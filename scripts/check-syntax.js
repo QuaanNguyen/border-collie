@@ -16,6 +16,10 @@ const files = [
   ['scripts/migrate.js', []],
   ['scripts/run-e2e.js', []],
   ['plugin/bordercollie.js', ['--input-type=module']],
+  ['plugin/tui.mjs', ['--input-type=module']],
+  ['plugin/pet-rpc.mjs', ['--input-type=module']],
+  ['plugin/runtime-root.mjs', ['--input-type=module']],
+  ['pet/runtime.mjs', ['--input-type=module']],
 ];
 
 for (const [file, args] of files) {

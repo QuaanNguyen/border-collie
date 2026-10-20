@@ -22,4 +22,5 @@ test('the public installer refuses old OpenCode before changing an installation'
     assert.equal(fs.existsSync(path.join(root, 'judge')), false);
   }
   for (const version of ['2.0.30', '2.0.32', '2.1.0', 'v2.0.30']) assert.equal(assertOpenCodeVersion(version), version);
+  assert.equal(assertOpenCodeVersion('opencode v2.1.1'), 'v2.1.1');
 });

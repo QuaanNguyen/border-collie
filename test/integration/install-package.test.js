@@ -39,6 +39,9 @@ test('Global bind excludes experiment artifacts and broken research links', asyn
   const repoRoot = path.join(temp, 'repo');
   for (const [name, contents] of [
     ['plugin/bordercollie.js', 'export function bordercollie() {}\n'],
+    ['plugin/tui.mjs', 'export default {}\n'],
+    ['plugin/pet-rpc.mjs', 'export default {}\n'],
+    ['plugin/runtime-root.mjs', 'export default {}\n'],
     ['bordercollie/lib/session.js', 'module.exports = {};\n'],
     ['events/index.js', 'module.exports = {};\n'],
     ['pet/package.json', '{}\n'],

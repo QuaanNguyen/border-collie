@@ -90,6 +90,11 @@ test('install binds an importable plugin and leaves retired policy files alone',
     assert.match(fs.readFileSync(path.join(configRoot, 'config.json'), 'utf8'), /"profiles"/);
     assert.equal(fs.existsSync(path.join(result.packageDir, 'bordercollie', 'lib', 'judge.js')), true);
     assert.equal(fs.existsSync(path.join(result.packageDir, 'pet', 'package.json')), true);
+    const manifest = JSON.parse(fs.readFileSync(path.join(result.packageDir, 'package.json'), 'utf8'));
+    assert.deepEqual(manifest.exports, { '.': './index.mjs', './tui': './tui.mjs' });
+    const companion = await import(pathToFileURL(path.join(result.packageDir, 'tui.mjs')).href);
+    assert.equal(companion.default.id, 'bordercollie-pet');
+    assert.equal(typeof companion.default.setup, 'function');
     const check = spawnSync(process.execPath, [
       '--input-type=module',
       '-e',

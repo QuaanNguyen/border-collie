@@ -3,7 +3,7 @@
 const MINIMUM_OPENCODE_VERSION = '2.0.30';
 
 function assertOpenCodeVersion(value) {
-  const version = typeof value === 'string' ? value.trim() : '';
+  const version = typeof value === 'string' ? value.trim().replace(/^opencode\s+/, '') : '';
   const match = /^v?(\d+)\.(\d+)\.(\d+)(?:\+[^\s]+)?$/.exec(version);
   const supported = match && (Number(match[1]) > 2 || Number(match[1]) === 2 && (Number(match[2]) > 0 || Number(match[3]) >= 30));
   if (supported) return version;

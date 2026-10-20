@@ -1,29 +1,11 @@
 import { createRequire } from "node:module";
-import { spawn } from "node:child_process";
-import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { resolveRoot } from "./runtime-root.mjs";
+import { petRpc } from "./pet-rpc.mjs";
 
 const require = createRequire(import.meta.url);
 const here = path.dirname(fileURLToPath(import.meta.url));
-
-function findRepo(start) {
-  let dir = start;
-  for (let i = 0; i < 12; i++) {
-    if (fs.existsSync(path.join(dir, "bordercollie/lib/session.js"))) return dir;
-    const parent = path.dirname(dir);
-    if (parent === dir) break;
-    dir = parent;
-  }
-  return null;
-}
-
-function resolveRoot(start) {
-  if (process.env.BORDERCOLLIE_ROOT) return process.env.BORDERCOLLIE_ROOT;
-  const bundled = path.join(start, "bordercollie");
-  if (fs.existsSync(path.join(bundled, "bordercollie/lib/session.js"))) return bundled;
-  return findRepo(start);
-}
 
 const repoRoot = resolveRoot(here);
 if (!repoRoot) {
@@ -119,80 +101,14 @@ function isIdle(event) {
   return ["idle", "stopped", "stop", "cancelled", "canceled", "error"].includes(type);
 }
 
-const DIST_CANDIDATES = [
-  "node_modules/electron/dist/electron.exe",
-  "node_modules/electron/dist/electron",
-  "node_modules/electron/dist/Electron.app/Contents/MacOS/Electron",
-];
-
-function electronBinary(petDir) {
-  for (const rel of DIST_CANDIDATES) {
-    const candidate = path.join(petDir, rel);
-    if (fs.existsSync(candidate)) return candidate;
-  }
-  const pkg = path.join(petDir, "node_modules/electron");
-  if (!fs.existsSync(pkg)) return null;
-  try {
-    const bin = require(pkg);
-    if (typeof bin === "string" && fs.existsSync(bin)) return bin;
-  } catch {
-    return null;
-  }
-  return null;
-}
-
-function launchPet() {
-  if (process.env.BORDERCOLLIE_NO_PET === "1") return;
-  const petDir = path.join(repoRoot, "pet");
-  const native = path.join(petDir, "native", "pet-host");
-  const bin = process.platform === "darwin" ? native : electronBinary(petDir);
-  if (!bin) {
-    console.error(
-      "[bordercollie] Pet bordercollie not launched: Electron binary missing under " + petDir +
-      ". Re-run: bash scripts/install-plugin.sh",
-    );
-    return;
-  }
-  if (!fs.existsSync(bin)) {
-    console.error(
-      "[bordercollie] Pet bordercollie not launched: native macOS host missing under " + petDir +
-      ". Re-run: bash scripts/install-plugin.sh",
-    );
-    return;
-  }
-  const env = { ...process.env };
-  delete env.ELECTRON_RUN_AS_NODE;
-  delete env.ELECTRON_SKIP_BINARY_DOWNLOAD;
-  const args = process.platform === "darwin"
-    ? [`--pet-dir=${petDir}`]
-    : ["."];
-  const child = spawn(bin, args, {
-    cwd: petDir,
-    detached: false,
-    stdio: ["pipe", "ignore", "ignore"],
-    env,
-  });
-  child.on("error", (err) => {
-    console.error("[bordercollie] failed to launch Pet bordercollie:", err.message);
-  });
-  child.stdin.on("error", () => {});
-  child.unref();
-  child.stdin.unref?.();
-  return child;
-}
-
 export const bordercollie = async ({ client, directory }, options = {}) => {
   const workdir = directory || process.cwd();
   const livePreference = createLivePreference({ workdir });
   const judge = typeof options?.judge === "function" ? options.judge : createNeedleJudge();
   let preferenceState = livePreference.refresh();
-  const petProcess = launchPet();
-  const bus = new EventBus({
-    sink: petProcess?.stdin
-      ? (event) => petProcess.stdin.write(JSON.stringify(event) + "\n")
-      : null,
-  });
-  const petControl = petProcess ? startControlServer((control) => {
+  const petSink = typeof options.petSink === "function" ? options.petSink : null;
+  const bus = new EventBus({ sink: petSink });
+  const petControl = petSink && process.env.BORDERCOLLIE_NO_PET !== "1" ? startControlServer((control) => {
     if (control.action !== 'size' || !PET_SCALES.includes(control.scale)) return false;
     emitPetSize(control.scale);
     return true;
@@ -302,7 +218,6 @@ export const bordercollie = async ({ client, directory }, options = {}) => {
     }
     bus.close();
     petControl?.close();
-    petProcess?.stdin?.end();
     judge.dispose?.();
   }
 
@@ -572,7 +487,25 @@ export default {
   async setup(ctx, options = {}) {
     assertOpenCodeVersion(ctx.app?.version);
     const directory = ctx.location?.directory || ctx.location?.project?.directory || process.cwd();
-    const hooks = await bordercollie({ client: v2Client(ctx), directory }, options);
+    let petSink;
+    if (process.env.BORDERCOLLIE_NO_PET !== "1") {
+      const { Rpc } = await import("@opencode/plugin/rpc");
+      const registration = await ctx.rpc.register(Rpc.define(petRpc), {
+        configuration: async () => {
+          const result = readConfig();
+          return { scale: result.error ? 1 : result.config.pet.scale };
+        },
+      });
+      let deliveryFailed = false;
+      petSink = (event) => {
+        Promise.resolve().then(() => registration.events.emit("event", event)).catch((error) => {
+          if (deliveryFailed) return;
+          deliveryFailed = true;
+          console.error("[bordercollie] Pet event delivery failed:", String(error?.message || error));
+        });
+      };
+    }
+    const hooks = await bordercollie({ client: v2Client(ctx), directory }, { ...options, petSink });
     await ctx.tool.hook("execute.before", async (event) => {
       await hooks["tool.execute.before"](
         { tool: event.tool, sessionID: event.sessionID, callID: event.callID },

@@ -18,6 +18,9 @@ fs.mkdirSync(path.join(repoRoot, 'events'), { recursive: true })
 fs.mkdirSync(path.join(repoRoot, 'pet'), { recursive: true })
 fs.mkdirSync(packageDir, { recursive: true })
 fs.writeFileSync(path.join(repoRoot, 'plugin', 'bordercollie.js'), 'export const bordercollie = async () => ({})\n')
+for (const file of ['tui.mjs', 'pet-rpc.mjs', 'runtime-root.mjs']) {
+  fs.writeFileSync(path.join(repoRoot, 'plugin', file), 'export default {}\n')
+}
 fs.writeFileSync(path.join(repoRoot, 'bordercollie', 'lib', 'session.js'), 'module.exports = {}\n')
 fs.writeFileSync(path.join(repoRoot, 'events', 'index.js'), 'module.exports = {}\n')
 fs.writeFileSync(path.join(repoRoot, 'pet', 'package.json'), JSON.stringify({
