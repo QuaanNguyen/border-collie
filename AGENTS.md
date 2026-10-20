@@ -15,11 +15,20 @@ See `docs/agents/triage-labels.md`.
 This repository uses a single-context domain-doc layout.
 See `docs/agents/domain.md`.
 
-### Dataset repair before Sol training
+### Synthetic data and training
 
-The owner canceled the incomplete dataset study on October 16, 2026.
-Do not submit, schedule, or restart any Sol job until the referenced repair tickets #56 through #65 have been resolved, verified, and closed.
-Preserve completed experiments and frozen inputs as historical evidence.
-Do not close a ticket merely to bypass this restriction.
-Human verification required by #59 must be recorded before claiming that requirement complete.
-The cancellation receipt is `docs/experiments/v2-pilot-cancelled-2026-10-16.json`.
+The active task is V3 synthetic generation for one free-text Preference and approve, deny, or ask answers.
+Use the production request builder and checked input contracts.
+Never execute generated commands.
+
+On October 20, 2026, the owner requested synthetic generation and new Sol work for this restart.
+Local ASU generation is authorized.
+Automatic approval still blocks Sol submission under the earlier hold until an explicit override for generation and CPU validation is recorded.
+Do not submit a Sol job while that clarification is pending.
+Keep ASU gateway credentials on the Mac.
+Do not resume the canceled October 16 study or alter its frozen inputs.
+
+Training and promotion still require verified data, exact-input independent reviews, recorded critical human decisions, isolated evaluation, and Mac direct-output qualification.
+Keep the repair requirements in issues #57, #58, #59, #60, #61, and #65 open until their actual acceptance criteria are satisfied.
+Do not close a ticket to bypass a requirement.
+The cancellation receipt remains `docs/experiments/v2-pilot-cancelled-2026-10-16.json`.

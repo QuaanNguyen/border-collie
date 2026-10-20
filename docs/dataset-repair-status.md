@@ -1,5 +1,8 @@
 # Dataset repair status
 
+This document records the earlier V2 study and is preserved as historical evidence.
+Use the current V3 training guide in docs/checker-training.md for active generation work.
+
 The owner requires all repair tickets to be completed and closed before any new Sol job.
 All remaining jobs in the incomplete dataset study have been canceled.
 Completed artifacts remain preserved.

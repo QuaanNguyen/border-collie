@@ -1,5 +1,8 @@
 # OpenCode V2 Scenario drafts
 
+This document records the earlier V2 study and is preserved as historical evidence.
+Use the current V3 training guide in docs/checker-training.md for active generation work.
+
 New generated command Scenarios use `shell`.
 Historical `bash` Scenarios remain readable for comparison with existing experiments.
 Both forms follow the same argument, task, and observed-failure checks.

@@ -1,150 +1,45 @@
 # bordercollie
 
-A desktop border collie that watches your AI coding agent and reacts when something needs attention.
+This work focuses on fine-tuning a small local checker that decides whether a coding agent may run a proposed tool call.
+The checker reads the user request, one free-text project Preference, and the complete proposed action.
+It returns approve, deny, or ask.
 
-![bordercollie watching agents](docs/bordercollie.gif)
+## Current work
 
-## What It Does
+Generate varied synthetic user requests and tool calls, obtain two independent reviews, and test a trained model on the Mac.
+Cover shell scripts, multiline commands, variables, substitutions, partial permissions, sensitive reads, outside-folder actions, delegation, and the checked tools across OpenCode, Claude Code, and Codex.
+Generated commands are data and are never executed by the generation pipeline.
 
-bordercollie is a small desktop companion for OpenCode.
-In plain terms, it sits beside your coding agent, watches what the agent tries to do, and reacts when the agent is working, blocked, refused, failed, or claiming it is done.
+The earlier 1,656-case draft consists mainly of template-written permission contrasts.
+It remains preserved for comparison and is not evidence of realistic request diversity or improved model quality.
+The [training guide](docs/checker-training.md) describes the current pipeline and remaining requirements.
+The [tool inventory](docs/checker-tool-inventory.json) records checked schemas and explicit gaps.
 
-The bordercollie checks every tool call before it runs.
-A small on-device model, the Judge, reads your latest message, the folder Preference, and the proposed call, and answers approve, deny, or ask.
-Paths outside the project folder and changes to the Preference are refused in code before the Judge runs.
-The bordercollie also verifies important finish claims against the files in the project.
+No replacement model is qualified.
+Independent agreement does not replace human verification or a fresh isolated evaluation.
+The Mac runner still needs to demonstrate direct verdicts without reasoning before new fitting can establish the intended behavior.
 
-The Judge is the base [Needle 3](https://github.com/cactus-compute/needle) model from Cactus Compute, run locally with telemetry off.
-It is not tuned for this job yet, so expect some wrong calls in both directions; `npm run eval:judge` measures it on a fixed set of cases.
-bordercollie is not an operating-system sandbox.
+## Research setup
 
-## Installation
-
-OpenCode is the currently supported bordercollie-enforcing integration.
-Codex CLI and Claude Code are not yet advertised as bordercollie-enforcing because their deny-before-run coverage has not been verified.
-
-Install this checkout globally and then install the plugin:
-
-```sh
-npm install --global .
-bordercollie install
-```
-
-The npm installation includes bordercollie and the desktop Pet.
-`bordercollie install` also downloads the Needle runner for your platform and the 35 MB `needle3.cact` weights from Hugging Face, checks both against pinned SHA-256 digests, and caches them under `~/.cache/bordercollie/judge` (`%LOCALAPPDATA%\bordercollie\judge` on Windows).
-If that download or check fails, the previously installed plugin stays in place.
-The Judge has runners for macOS on Apple Silicon, Linux x64 and ARM64, and Windows x64 and ARM64.
-
-To install from a source clone for development:
+Use Node.js 22.12 or newer, Git, and Git LFS.
+Install development dependencies and fetch the pinned research files:
 
 ```sh
-git clone https://github.com/QuaanNguyen/border-collie.git bordercollie
-cd bordercollie
-node scripts/install-plugin.js
-```
-
-Or on macOS and Linux:
-
-```sh
-bash scripts/install-plugin.sh
-```
-
-The installation includes bordercollie and the desktop Pet.
-OpenCode 2.0.30 or newer loads the package directory `~/.config/opencode/plugins/bordercollie`. A configured path must point at that directory; a bare `bordercollie.js` file is not a v2 plugin.
-On macOS, the installer builds a small native host that uses the system WebKit framework and does not download Electron.
-Windows and Linux use the locked Electron runtime.
-
-On Windows, from Command Prompt:
-
-```bat
-scripts\win\install-plugin.bat
-```
-
-You need Node.js 22.12 or newer, Git, and OpenCode installed.
-The macOS installation also needs Xcode Command Line Tools.
-Windows and Linux installations need npm.
-
-## Usage
-
-Open any project with OpenCode:
-
-```sh
-opencode <path>
-```
-
-A folder with no Preference uses this default, held in memory; nothing is written to the project:
-
-```json
-{
-  "text": "Work on my request in this folder. Local reads, edits and tests are fine. Do not upload project contents or delete work I did not ask you to delete. Ask when permission is unclear."
-}
-```
-
-To describe a folder yourself, save `.bordercollie/preference.json` with any of those four prose fields and optional `done_criteria`.
-Fields you leave out keep the default text.
-With `ask` empty the Judge never asks; set it to something like `"pushing or deploying"` to have those calls held until you answer in the chat.
-An unreadable Preference blocks the session until you fix it, and the agent cannot edit the file.
-
-Projects set up with an earlier release may still have `.bordercollie/protocol.json` or `.opencode/protocol.json`.
-Their allowlists are ignored; only their `done_criteria` are read, and only while no Preference exists.
-Clean them up when you choose:
-
-```sh
-bordercollie migrate
-```
-
-`bordercollie migrate` writes the Preference with those done criteria, deletes both Protocol files, and removes retired profiles from the bordercollie configuration while keeping the Pet size.
-
-Resize the Pet directly, without sending a UI preference through an agent conversation:
-
-```sh
-bordercollie pet size 115
-bordercollie pet size reset
-```
-
-Work on the desktop companion UI:
-
-```sh
-cd pet
 npm install
-npm run start:dev
+git lfs install
+git lfs pull
+python3 analysis/checker-v3-2026-10-19/manifest-data.py --check
 ```
 
-The development window includes animation controls plus local Event stream scenarios for working, allowed and refused actions, completion verdicts, review requests, errors, and Pet size.
-It is a visual harness only: it does not start a network listener or alter the private Adapter-to-Pet event path used in production.
-Use it to inspect the Pet's focus, visibility, geometry, dragging, and reactions without starting OpenCode.
+Use the existing ASU gateway configuration on your Mac.
+Credentials are never copied to Sol.
+Sol receives only frozen synthetic data and credential-free validation or separately qualified training work.
 
-Animation asset storage and replacement notes live in [docs/ANIMATION_ASSETS.md](docs/ANIMATION_ASSETS.md).
-The Pet validates its complete animation contract before activating it, uses elapsed-time frame scheduling, and shows a stable frame when the operating system requests reduced motion.
+The [research file guide](docs/research-data.md) lists the preserved inputs and checksum manifest.
+Completed experiments, rejected drafts, human decisions, and frozen evaluation files remain historical evidence.
 
-Run the fast release-readiness checks:
+## Runtime and historical product work
 
-```sh
-npm test
-npm run test:package
-```
-
-The current automated suite exercises unit behavior, non-UI integration behavior, the CLI, a no-download staged install, and the contents of the npm tarball.
-See [the release guide](docs/RELEASING.md) for the release plan, test layers, and the work GitHub Actions can automate.
-Pet UI, native window, renderer, and real OpenCode process coverage live in the e2e layer.
-
-Run the focused bordercollie and plugin behavior tests:
-
-```sh
-node --test test/bordercollie/*.test.js test/plugin/*.test.mjs
-```
-
-Measure the installed Judge against the fixed evaluation cases:
-
-```sh
-npm run eval:judge
-```
-
-bordercollie events and active sessions exist only while OpenCode and the Pet are running.
-The plugin sends bordercollie events over the Pet process's private input pipe.
-Pet size is the persistent setting in the bordercollie configuration.
-
-OpenCode 1.x users must run `opencode upgrade --major` before installing bordercollie.
-Project auto-accept does not bypass checker refusals or owner questions.
-
-Research data and old analysis artifacts are available through [Git LFS](docs/research-data.md), with file sizes and checksums.
+The runtime request builder stays in this repository so training and evaluation use the same inputs as the checker.
+The [runtime contract](docs/bordercollie-and-judge.md) and [project vocabulary](CONTEXT.md) define that boundary.
+The [product installation guide](docs/archive/product-guide.md) and [desktop companion documents](docs/archive/pet/animation-assets.md) are outside the active fine-tuning work.

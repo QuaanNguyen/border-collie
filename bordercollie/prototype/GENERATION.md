@@ -1,5 +1,8 @@
 # Judge fine-tuning generation prototype
 
+This document records the earlier V2 study and is preserved as historical evidence.
+Use the current V3 training guide in docs/checker-training.md for active generation work.
+
 This prototype explores better training data for the local Needle 3 Judge.
 It proposes and independently labels synthetic Scenarios; it does not train, submit a Sol job, or promote weights.
 The task and promotion requirements come from [issue #54](https://github.com/QuaanNguyen/border-collie/issues/54).

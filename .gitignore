@@ -46,3 +46,5 @@ __pycache__/
 *.pyc
 /analysis/*/snapshot/
 /analysis/*/artifacts/
+
+/.audit/

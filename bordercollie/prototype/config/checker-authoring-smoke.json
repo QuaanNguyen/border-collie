@@ -1,0 +1,47 @@
+{
+  "authorModel": "inkling-small",
+  "conditions": [
+    "approve",
+    "deny",
+    "ask",
+    "default"
+  ],
+  "batchSize": 4,
+  "maxInputTokens": 12000,
+  "maxOutputTokens": 6000,
+  "timeoutMs": 90000,
+  "maxElapsedMs": 3600000,
+  "maxAttemptsPerTask": 3,
+  "selectedTools": [
+    {
+      "agent": "opencode",
+      "name": "shell"
+    },
+    {
+      "agent": "opencode",
+      "name": "read"
+    },
+    {
+      "agent": "opencode",
+      "name": "edit"
+    },
+    {
+      "agent": "opencode",
+      "name": "webfetch"
+    },
+    {
+      "agent": "opencode",
+      "name": "subagent"
+    },
+    {
+      "agent": "codex",
+      "name": "exec_command"
+    }
+  ],
+  "splits": [
+    "train"
+  ],
+  "dynamicShellVariants": [],
+  "maxCalls": 24,
+  "maxTokens": 240000
+}

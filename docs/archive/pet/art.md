@@ -11,4 +11,4 @@ The renderer preloads a complete valid replacement before activating it, ignores
 
 Replace art by updating the tracked source sheet and running the deterministic packaging command.
 
-Use `docs/ANIMATION_ASSETS.md` for the source layout, packaging, and QA workflow.
+Use [the animation asset guide](animation-assets.md) for the source layout, packaging, and QA workflow.

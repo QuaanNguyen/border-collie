@@ -47,5 +47,9 @@
     "test:unit": "node --test test/unit/*.test.js",
     "prototype:finetune": "node bordercollie/prototype/checker-data.js",
     "check:checker-promotion": "node bordercollie/prototype/checker-promotion.js"
+  },
+  "devDependencies": {
+    "ajv": "^8.20.0",
+    "ajv-formats": "^3.0.1"
   }
 }

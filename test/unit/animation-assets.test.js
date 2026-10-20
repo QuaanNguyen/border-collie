@@ -12,7 +12,7 @@ const SOURCE = path.join(ROOT, 'docs', 'assets', 'bordercollie-source.png')
 const SCRIPT = path.join(ROOT, 'scripts', 'package-animation-assets.js')
 const RUNTIME = path.join(ROOT, 'pet', 'assets', 'default-animations')
 const QA = path.join(ROOT, 'docs', 'assets', 'bordercollie-animation-qa.png')
-const GUIDE = path.join(ROOT, 'docs', 'ANIMATION_ASSETS.md')
+const GUIDE = path.join(ROOT, 'docs', 'archive', 'pet', 'animation-assets.md')
 const SOURCE_SHA256 = '656deba7e0dfe60e516e9e5db6a3247b3fe031038cbf01fec33fd931e6b28cc3'
 const ANIMATIONS = ['normal', 'dragging', 'hovering', 'thinking', 'suspicious', 'refused', 'denied', 'celebrating']
 

@@ -1,5 +1,8 @@
 # Current input and runtime qualification
 
+This document records the earlier V2 study and is preserved as historical evidence.
+Use the current V3 training guide in docs/checker-training.md for active generation work.
+
 **Do not train or deploy a replacement yet.**
 The official answers-only target and pinned native decoding still disagree.
 The target starts directly with the tool-call marker, whereas the native runner produces reasoning before the decision.

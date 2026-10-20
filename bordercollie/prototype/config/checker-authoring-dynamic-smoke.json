@@ -1,0 +1,36 @@
+{
+  "authorModel": "inkling-small",
+  "conditions": [
+    "approve",
+    "deny",
+    "ask",
+    "default"
+  ],
+  "batchSize": 4,
+  "maxInputTokens": 12000,
+  "maxOutputTokens": 6000,
+  "timeoutMs": 90000,
+  "maxElapsedMs": 3600000,
+  "maxAttemptsPerTask": 3,
+  "selectedTools": [
+    {
+      "agent": "opencode",
+      "name": "shell"
+    },
+    {
+      "agent": "opencode",
+      "name": "read"
+    }
+  ],
+  "splits": [
+    "train"
+  ],
+  "dynamicShellVariants": [
+    "multiline",
+    "variable-substitution",
+    "heredoc",
+    "script-invocation"
+  ],
+  "maxCalls": 24,
+  "maxTokens": 240000
+}
