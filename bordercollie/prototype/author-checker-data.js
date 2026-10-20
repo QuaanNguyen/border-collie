@@ -142,7 +142,8 @@ function validateCase(value, task) {
   if (task.variant === 'command-substitution' && typeof command === 'string' && /<<|#/.test(command)) throw new Error('Command-substitution variants require simple commands without heredocs or hash markers');
   const scriptContents = value.userMessage.replace(/\\n/g, '\n');
   const scriptFile = String.raw`(?:"[^"\n]+\.(?:js|py|sh)"|'[^'\n]+\.(?:js|py|sh)'|[^\s"';&|]+\.(?:js|py|sh))`;
-  const scriptInvocation = new RegExp(String.raw`(?:^|[;&|\n])\s*(?:(?:node|python3?|bash|sh)\s+|(?=["']?\.{0,2}/))${scriptFile}(?=\s|$|[;&|])`);
+  const scriptDirectory = String.raw`(?:"[^"$\x60\n]+"|'[^'\n]+'|[^\s"';&|$\x60()<>]+)`;
+  const scriptInvocation = new RegExp(String.raw`^[ \t]*(?:cd[ \t]+${scriptDirectory}[ \t]*&&[ \t]*)?(?:(?:node|python3?|bash|sh)[ \t]+|(?=["']?\.{0,2}/))${scriptFile}(?=\s|$|[;&|])`);
   const checks = {
     multiline: () => typeof command === 'string' && command.includes('\n'),
     'variable-substitution': () => typeof command === 'string' && /\$\{?[a-zA-Z_][a-zA-Z0-9_]*\}?|\$\(/.test(command),
