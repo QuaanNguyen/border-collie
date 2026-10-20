@@ -46,7 +46,8 @@
     "test:package:client": "node scripts/check-package-client.js npm",
     "test:unit": "node --test test/unit/*.test.js",
     "prototype:finetune": "node bordercollie/prototype/checker-data.js",
-    "check:checker-promotion": "node bordercollie/prototype/checker-promotion.js"
+    "check:checker-promotion": "node bordercollie/prototype/checker-promotion.js",
+    "dev:generate-data": "node bordercollie/prototype/dev-generate-data.js"
   },
   "devDependencies": {
     "ajv": "^8.20.0",

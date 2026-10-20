@@ -27,6 +27,34 @@ The active author is `gemma4-31b-it` following the owner's October 20 model swit
 The review pair is `gemma4-31b-it` and `glm-5-3-flash`.
 Earlier Inkling and Kimi results remain historical evidence.
 
+Start or resume generation with the compact developer terminal display.
+Gemma writes cases, then Gemma and GLM review a frozen snapshot separately.
+
+```sh
+npm run dev:generate-data
+npm run dev:generate-data -- /absolute/path/to/existing-study
+npm run dev:generate-data -- --status
+```
+
+The default study is `bordercollie/prototype/output/checker-authoring`.
+An explicit directory selects another study, and `--status` reads its progress once without calling the gateway.
+The terminal shows generated cases, each model's review coverage, accepted and excluded cases, and retained approve, deny, and ask answers.
+A denied action can be an accepted sample.
+Accepted and excluded counts remain pending until both reviewers cover the current snapshot.
+Reviews begin after generation stops or reaches its saved limits.
+
+Keep this command running in the foreground on the Mac with its existing ASU configuration.
+Ctrl-C stops the owned child process and preserves checkpoints.
+Rerun the same command to resume.
+The runner skips exhausted invalid tasks, preserves author call and token limits, and tries each reviewer at most twice per invocation.
+A later invocation can retry missing reviews.
+An existing directory lock causes refusal, so inspect its owner before removing an abandoned lock.
+Diagnostics remain in `dev-generation.log` inside the study.
+New snapshots live in `dev-reviews` and never overwrite earlier frozen reviews.
+This command is excluded from the published package.
+
+Use the individual commands below for smaller experiments.
+
 Run these commands from the repository root.
 Use the existing ASU configuration on the Mac.
 Never copy gateway credentials to Sol.
