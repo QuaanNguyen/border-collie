@@ -103,20 +103,31 @@ async function main(args) {
   let interrupted = false;
   let phase = 'Starting';
   let previous = '';
-  let rendered = false;
+  let renderedRows = 0;
   let timer;
   const interrupt = () => {
     if (child) child.kill(interrupted ? 'SIGKILL' : 'SIGTERM');
     interrupted = true;
   };
   const render = () => {
-    const lines = display(progress(directory, phase));
+    const lines = display(progress(directory, phase)).flatMap((line) => {
+      if (!process.stdout.isTTY) return [line];
+      const width = Math.max(1, (process.stdout.columns || 80) - 1);
+      const wrapped = [];
+      while (line.length > width) {
+        const end = line.lastIndexOf(' ', width) > 0 ? line.lastIndexOf(' ', width) : width;
+        wrapped.push(line.slice(0, end));
+        line = line.slice(end).trimStart();
+      }
+      return [...wrapped, line];
+    });
+    while (process.stdout.isTTY && lines.length < renderedRows) lines.push('');
     const text = lines.join(process.stdout.isTTY ? '\n' : ' | ');
     if (text === previous) return;
-    if (process.stdout.isTTY && rendered) process.stdout.write(`\x1b[${lines.length}A`);
+    if (process.stdout.isTTY && renderedRows) process.stdout.write(`\x1b[${renderedRows}A`);
     process.stdout.write((process.stdout.isTTY ? lines.map((line) => '\x1b[2K' + line).join('\n') : text) + '\n');
     previous = text;
-    rendered = true;
+    renderedRows = lines.length;
   };
   const run = async (script, childArgs) => {
     if (interrupted) return null;
@@ -162,7 +173,18 @@ async function main(args) {
     if (!interrupted && value.generated) {
       phase = 'Freezing';
       render();
-      if (!fs.existsSync(value.snapshot) && await run('author-checker-data.js', ['freeze', directory, value.snapshot]) !== 0) throw new Error('Snapshot creation failed; inspect diagnostics');
+      if (!fs.existsSync(value.snapshot)) {
+        const staging = value.snapshot + '.pending-' + crypto.randomUUID();
+        try {
+          const code = await run('author-checker-data.js', ['freeze', directory, staging]);
+          if (!interrupted) {
+            if (code !== 0) throw new Error('Snapshot creation failed; inspect diagnostics');
+            fs.renameSync(staging, value.snapshot);
+          }
+        } finally {
+          fs.rmSync(staging, { recursive: true, force: true });
+        }
+      }
       session.snapshots[path.basename(value.snapshot)] ??= {};
       const launches = session.snapshots[path.basename(value.snapshot)];
       for (const [index, reviewer] of reviewers.entries()) {
@@ -185,7 +207,7 @@ async function main(args) {
     render();
     value = progress(directory, phase);
     session.stopReason = interrupted ? 'interrupted; checkpoints preserved' : stop;
-    session.activeSnapshot = value.generated ? value.snapshot : null;
+    session.activeSnapshot = fs.existsSync(value.snapshot) ? value.snapshot : null;
     session.updatedAt = new Date().toISOString();
     save();
     console.log(`Reason ${session.stopReason}\nReview snapshot ${session.activeSnapshot || 'none'}`);

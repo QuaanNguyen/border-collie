@@ -51,7 +51,7 @@ async function fixture(t, handle) {
     });
     return { child, done };
   };
-  return { root, directory, requests, start };
+  return { root, directory, requests, start, environment };
 }
 function reviewResponse(body) {
   const inputs = JSON.parse(body.messages[1].content);
@@ -153,4 +153,50 @@ test('review retries are bounded per invocation and later starts resume missing 
   assert.equal(stale.code, 1);
   assert.match(stale.output, /Invalid or stale/);
   assert.equal(requests.length, count);
+});
+
+test('status stays readable while a frozen snapshot is being written', async (t) => {
+  const { root, directory, start, environment } = await fixture(t, (body) => reviewResponse(body));
+  await author(directory, 2, { connection: { key: 'mock' }, request: async (_connection, _route, body) => response(body) });
+  fs.writeFileSync(path.join(directory, 'STOP-AUTHORING'), '');
+  const marker = path.join(root, 'freezing');
+  const preload = path.join(root, 'slow-freeze.cjs');
+  fs.writeFileSync(preload, `const fs = require('node:fs');
+if (process.argv[2] === 'freeze') {
+  const mkdir = fs.mkdirSync;
+  fs.mkdirSync = function (...args) {
+    const result = mkdir.apply(this, args);
+    fs.writeFileSync(${JSON.stringify(marker)}, '');
+    Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, 1800);
+    return result;
+  };
+}
+`);
+  environment.NODE_OPTIONS = `--require=${preload}`;
+  const running = start(directory);
+  await waitFor(() => fs.existsSync(marker));
+  const status = await start(directory, '--status').done;
+  assert.equal(status.code, 0, status.output);
+  assert.match(status.output, /Accepted pending/);
+  const result = await running.done;
+  assert.equal(result.code, 0, result.output);
+  const snapshot = read(path.join(directory, 'dev-runner.json')).activeSnapshot;
+  assert.equal(read(path.join(snapshot, 'review-packet.json')).requests.length, 2);
+  assert.equal((await start(directory, '--status').done).code, 0);
+});
+
+test('narrow terminal frames preserve every metric and redraw their actual rows', async (t) => {
+  const { root, directory, start, environment } = await fixture(t, (body) => JSON.parse(body.messages[1].content).tasks ? response(body) : reviewResponse(body));
+  const preload = path.join(root, 'terminal.cjs');
+  fs.writeFileSync(preload, `Object.defineProperties(process.stdout, { isTTY: { value: true }, columns: { value: 50 } });`);
+  environment.NODE_OPTIONS = `--require=${preload}`;
+  const result = await start(directory).done;
+  assert.equal(result.code, 0, result.output);
+  const frames = [...result.output.matchAll(/(?:\x1b\[2K[^\n]*\n)+/g)].map(([frame]) => frame.trimEnd().split('\n').map((line) => line.replace('\x1b[2K', '')));
+  assert.ok(frames.length > 1);
+  assert.ok(frames.every((frame) => frame.every((line) => line.length <= 49)));
+  const movements = [...result.output.matchAll(/\x1b\[(\d+)A/g)].map((match) => Number(match[1]));
+  assert.deepEqual(movements, frames.slice(0, -1).map((frame) => frame.length));
+  const last = frames.at(-1).join('');
+  for (const metric of ['Generated', 'Gemma', 'GLM', 'Accepted', 'Excluded', 'approve', 'deny', 'ask', 'Calls', 'failed', 'exhausted', 'blocked', 'uncertain']) assert.ok(last.includes(metric), metric);
 });
