@@ -65,4 +65,3 @@ export function launchPet(petDir) {
   child.stdin.unref?.();
   return child;
 }
-

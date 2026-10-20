@@ -18,4 +18,3 @@ export function resolveRoot(start) {
   if (fs.existsSync(path.join(bundled, "bordercollie/lib/session.js"))) return bundled;
   return findRepo(start);
 }
-
