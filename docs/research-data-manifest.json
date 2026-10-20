@@ -278,11 +278,6 @@
       "sha256": "477b26d2ac5d69affd8987cebb87c4c3fac320b43984be430aba4a59db6210e7"
     },
     {
-      "path": "analysis/checker-v3-2026-10-20/evidence/authored-2026-10-20-full-v2/pipeline.log",
-      "bytes": 0,
-      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
-    },
-    {
       "path": "analysis/checker-v3-2026-10-20/evidence/authored-2026-10-20-full-v2/plan.json",
       "bytes": 3110607,
       "sha256": "8262f8366a348b31d772a730aa2e8c099e8d92f6c07e400ae714a4579e7e26f3"
