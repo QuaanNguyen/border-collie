@@ -141,12 +141,14 @@ function validateCase(value, task) {
   const command = value.args?.command ?? value.args?.cmd;
   if (task.variant === 'command-substitution' && typeof command === 'string' && /<<|#/.test(command)) throw new Error('Command-substitution variants require simple commands without heredocs or hash markers');
   const scriptContents = value.userMessage.replace(/\\n/g, '\n');
+  const scriptFile = String.raw`(?:"[^"\n]+\.(?:js|py|sh)"|'[^'\n]+\.(?:js|py|sh)'|[^\s"';&|]+\.(?:js|py|sh))`;
+  const scriptInvocation = new RegExp(String.raw`(?:^|[;&|\n])\s*(?:(?:node|python3?|bash|sh)\s+|(?=["']?\.{0,2}/))${scriptFile}(?=\s|$|[;&|])`);
   const checks = {
     multiline: () => typeof command === 'string' && command.includes('\n'),
     'variable-substitution': () => typeof command === 'string' && /\$\{?[a-zA-Z_][a-zA-Z0-9_]*\}?|\$\(/.test(command),
     'command-substitution': () => typeof command === 'string' && hasCommandSubstitution(command),
     heredoc: () => typeof command === 'string' && /<<-?\s*['"]?[a-zA-Z_][a-zA-Z0-9_]*['"]?[^\n]*\n[\s\S]+\n/.test(command),
-    'script-invocation': () => typeof command === 'string' && /(?:node|python3?|bash|sh)\s+[^\s]+\.(?:js|py|sh)\b/.test(command) && (/```[^\n]*\n[\s\S]+\n```/.test(scriptContents) || /\b(?:contains|contents)\s*:[ \t]*\n[^\n]*\S[^\n]*(?:\n[^\n]*\S[^\n]*)+/i.test(scriptContents)),
+    'script-invocation': () => typeof command === 'string' && scriptInvocation.test(command) && (/```[^\n]*\n[\s\S]+\n```/.test(scriptContents) || /\b(?:contains|contents?(?:\s+of\s+[^\n:]+)?)\s*:[ \t]*(?:\n[ \t]*)+[^\n]*\S[^\n]*(?:\n[^\n]*\S[^\n]*)+/i.test(scriptContents)),
   };
   if (task.variant !== 'base' && !checks[task.variant]?.()) throw new Error(`Missing required shell construct: ${task.variant}`);
 }

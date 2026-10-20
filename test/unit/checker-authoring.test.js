@@ -386,6 +386,9 @@ test('script invocation requires execution rather than printing or mentioning a 
   const { directory } = fixture(t, { conditions: ['approve'], dynamicShellVariants: ['script-invocation'] });
   const task = JSON.parse(fs.readFileSync(path.join(directory, 'plan.json'), 'utf8')).tasks.find((item) => item.variant === 'script-invocation');
   const value = { taskId: task.taskId, tool: task.tool, userMessage: 'Inspect the catalog.\n```sh\n#!/bin/sh\ncat catalog.txt\n```', preference: { text: 'Read only the local catalog.' } };
+  for (const command of ['./scripts/catalog.sh', '/opt/catalog.sh', '../scripts/catalog.sh', '"./scripts/catalog check.sh"', "'/opt/catalog check.sh'", 'bash "scripts/catalog check.sh"', 'cd scripts && ./catalog.sh']) {
+    assert.doesNotThrow(() => authoring.validateCase({ ...value, args: { command } }, task), command);
+  }
   for (const command of ['echo ./scripts/catalog.sh', 'printf \"%s\\n\" ./scripts/catalog.sh', 'echo bash scripts/catalog.sh', 'cat ./scripts/catalog.sh', '# ./scripts/catalog.sh', './scripts/catalog.sh.backup']) {
     assert.throws(() => authoring.validateCase({ ...value, args: { command } }, task), /Missing required/, command);
   }
