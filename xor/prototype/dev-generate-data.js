@@ -68,6 +68,7 @@ function display(value) {
 function authorStop(value, directory) {
   if (value.generated === value.planned) return 'generation complete';
   if (fs.existsSync(path.join(directory, 'STOP-AUTHORING'))) return 'STOP-AUTHORING exists';
+  if (fs.existsSync(directory + '.dev-stop')) return 'interrupted; checkpoints preserved';
   if (value.calls >= value.config.maxCalls) return 'author call limit reached';
   if (value.state.elapsedMs >= value.config.maxElapsedMs) return 'author elapsed limit reached';
   const charged = value.state.calls.reduce((sum, call) => sum + (call.chargedTokens ?? call.reservedTokens), 0);
@@ -152,18 +153,23 @@ async function main(args) {
     const session = fs.existsSync(sessionFile) ? read(sessionFile) : { snapshots: {} };
     const save = () => write(sessionFile, session);
     timer = setInterval(() => {
+      if (fs.existsSync(directory + '.dev-stop')) interrupt();
       try { render(); } catch (error) { console.error(error.message); interrupt(); }
-    }, 1000);
+    }, 100);
     phase = 'Generating';
     render();
     let stop;
     for (;;) {
+      if (fs.existsSync(directory + '.dev-stop')) interrupt();
       const before = progress(directory, phase);
       stop = authorStop(before, directory);
       if (stop || interrupted) break;
       const code = await run('author-checker-data.js', ['author', directory, '1']);
       render();
-      if (interrupted) break;
+      if (interrupted || fs.existsSync(directory + '.dev-stop')) {
+        interrupt();
+        break;
+      }
       if (code !== 0) { stop = 'author process failed; inspect diagnostics'; break; }
       const after = progress(directory, phase);
       if (checkpoint(before.state) === checkpoint(after.state)) { stop = 'no eligible author tasks or no checkpoint progress'; break; }
@@ -216,6 +222,7 @@ async function main(args) {
     clearInterval(timer);
     process.removeListener('SIGINT', interrupt);
     process.removeListener('SIGTERM', interrupt);
+    try { if (fs.existsSync(directory + '.dev-stop')) fs.unlinkSync(directory + '.dev-stop'); } catch {}
     if (read(lock).token === owner.token) fs.unlinkSync(lock);
   }
 }

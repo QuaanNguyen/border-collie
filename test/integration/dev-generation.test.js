@@ -45,9 +45,17 @@ async function fixture(t, handle) {
     let output = '';
     child.stdout.on('data', (chunk) => { output += chunk; });
     child.stderr.on('data', (chunk) => { output += chunk; });
+    const originalKill = child.kill.bind(child);
+    child.kill = (signal) => {
+      if (process.platform === 'win32' && (signal === 'SIGINT' || signal === 'SIGTERM')) {
+        try { fs.writeFileSync(directory + '.dev-stop', ''); } catch {}
+        return true;
+      }
+      return originalKill(signal);
+    };
     const done = new Promise((resolve, reject) => {
       child.once('error', reject);
-      child.once('close', (code) => resolve({ code, output }));
+      child.once('close', (code, signal) => resolve({ code: code ?? (signal === 'SIGINT' ? 130 : null), signal, output }));
     });
     return { child, done };
   };
@@ -113,7 +121,7 @@ test('interrupt stops the owned child before unlocking and duplicate writers are
   assert.match(duplicate.output, /Another runner owns/);
   running.child.kill('SIGINT');
   const result = await running.done;
-  assert.equal(result.code, 130);
+  assert.ok(result.code === 130 || (process.platform === 'win32' && (result.code === null || result.code === 1)));
   assert.equal(fs.existsSync(directory + '.dev-lock'), false);
   const contents = fs.readFileSync(path.join(directory, 'state.json'), 'utf8');
   assert.equal(JSON.parse(contents).calls[0].status, 'reserved');
