@@ -4,7 +4,7 @@ const assert = require('node:assert/strict');
 const http = require('node:http');
 const { once } = require('node:events');
 const test = require('node:test');
-const pipeline = require('../../bordercollie/prototype/finetune-pipeline');
+const pipeline = require('../../xor/prototype/finetune-pipeline');
 
 async function localGateway(t, handler) {
   const requests = [];

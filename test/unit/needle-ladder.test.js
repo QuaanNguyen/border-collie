@@ -6,9 +6,9 @@ const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
 const test = require('node:test');
-const { prepareLadder } = require('../../bordercollie/prototype/prepare-needle-ladder');
-const { runtimeRequest, trainingLines } = require('../../bordercollie/prototype/finetune-pipeline');
-const { DEFAULT_PREFERENCE } = require('../../bordercollie/prototype/historical-v2/preference');
+const { prepareLadder } = require('../../xor/prototype/prepare-needle-ladder');
+const { runtimeRequest, trainingLines } = require('../../xor/prototype/finetune-pipeline');
+const { DEFAULT_PREFERENCE } = require('../../xor/prototype/historical-v2/preference');
 
 function fixture(t, count) {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'needle-ladder-'));

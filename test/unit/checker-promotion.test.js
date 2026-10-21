@@ -2,8 +2,8 @@
 
 const assert = require('node:assert/strict');
 const test = require('node:test');
-const { assess } = require('../../bordercollie/prototype/checker-promotion');
-const { directVerdict } = require('../../bordercollie/prototype/evaluate-checker-native');
+const { assess } = require('../../xor/prototype/checker-promotion');
+const { directVerdict } = require('../../xor/prototype/evaluate-checker-native');
 
 const qualification = { blind: true, humanVerified: true, coverageComplete: true, frozenEvaluationSha256: 'frozen', originalModelSha256: 'original', caseIds: ['deny-case'] };
 const evidence = (changes = {}) => ({ status: 'complete', platform: 'darwin-arm64', machineId: 'same-mac', requestFormatVersion: '3', evaluationSha256: 'frozen', modelSha256: 'original', runnerSha256: 'runner', settings: { threads: 4 }, deploymentBytes: 100, rows: [{ id: 'deny-case', inputHash: 'same', expected: 'deny', observed: 'deny', directVerdict: true, latenciesMs: [10, 11, 12] }], ...changes });

@@ -3,7 +3,7 @@
 Prepare a new draft from the checked tool inventory:
 
 ```sh
-npm run prototype:finetune -- docs/checker-tool-inventory.json bordercollie/prototype/output/checker-v3-next
+npm run prototype:finetune -- docs/checker-tool-inventory.json xor/prototype/output/checker-v3-next
 ```
 
 The directory must be new.
@@ -80,7 +80,7 @@ Missing, multiple, stale-name or reasoning-prefixed answers fail direct-output q
 Sol timings cannot satisfy the promotion gate.
 
 ```sh
-node bordercollie/prototype/checker-promotion.js original-mac.json candidate-mac.json qualification.json
+node xor/prototype/checker-promotion.js original-mac.json candidate-mac.json qualification.json
 ```
 
 The native evaluator pins model and runner digests, preserves every response and timing, and refuses to overwrite previous results.
@@ -100,7 +100,7 @@ Fetch the preservation tag before replaying historical Git-backed artifacts:
 git fetch origin tag needle-judge-pr53-aaf39bd
 ```
 
-Historical V2 request handling lives under `bordercollie/prototype/historical-v2` so old records remain reproducible without being mislabeled as V3.
+Historical V2 request handling lives under `xor/prototype/historical-v2` so old records remain reproducible without being mislabeled as V3.
 The current npm preparation command uses the V3 builder.
 New study preparation no longer copies reviewer explanations or creates reasoning-target conditions.
 Old completed models and frozen files remain unchanged.
@@ -126,7 +126,7 @@ It must be tested with a correctly trained model on the Mac before #61 can close
 No training was started.
 
 ```sh
-python3 bordercollie/prototype/prepare_direct_trainer.py analysis/needle-judge-2026-10-09/artifacts/public-source/ef3cf7543204d99878c0dd913a05f6a506da4be8/finetune.py.txt /tmp/needle-direct-finetune.py
+python3 xor/prototype/prepare_direct_trainer.py analysis/needle-judge-2026-10-09/artifacts/public-source/ef3cf7543204d99878c0dd913a05f6a506da4be8/finetune.py.txt /tmp/needle-direct-finetune.py
 ```
 
 Download and verify the [research files](../research-data.md) before running these commands.

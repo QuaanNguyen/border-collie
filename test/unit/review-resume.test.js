@@ -6,8 +6,8 @@ const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
 const test = require('node:test');
-const { review } = require('../../bordercollie/prototype/review-v2-pilot');
-const { runtimeRequest } = require('../../bordercollie/prototype/finetune-pipeline');
+const { review } = require('../../xor/prototype/review-v2-pilot');
+const { runtimeRequest } = require('../../xor/prototype/finetune-pipeline');
 
 test('review service failures preserve completed decisions and stop new requests until a resume', async (t) => {
   const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'bordercollie-review-resume-'));

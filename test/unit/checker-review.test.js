@@ -6,8 +6,8 @@ const http = require('node:http');
 const os = require('node:os');
 const path = require('node:path');
 const test = require('node:test');
-const data = require('../../bordercollie/prototype/checker-data');
-const { review } = require('../../bordercollie/prototype/review-checker-data');
+const data = require('../../xor/prototype/checker-data');
+const { review } = require('../../xor/prototype/review-checker-data');
 
 test('offline reviews are blind, checkpoint failures and resume only missing exact inputs', async (t) => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'checker-review-'));

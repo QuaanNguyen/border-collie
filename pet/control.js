@@ -3,11 +3,11 @@
 const net = require('node:net');
 const fs = require('node:fs');
 const path = require('node:path');
-const { defaultConfigRoot } = require('../bordercollie/lib/config');
+const { defaultConfigRoot } = require('../xor/lib/config');
 
 function controlSocketPath(root = defaultConfigRoot()) {
   return process.platform === 'win32'
-    ? '\\\\.\\pipe\\bordercollie-pet-control'
+    ? '\\\\.\\pipe\\xor-pet-control'
     : path.join(root, 'pet-control.sock');
 }
 

@@ -7,13 +7,13 @@ const path = require('node:path');
 const test = require('node:test');
 const { spawnSync } = require('node:child_process');
 
-const cli = path.resolve(__dirname, '..', '..', 'scripts', 'bordercollie.js');
-const { DEFAULT_PREFERENCE, withDefaults } = require('../../bordercollie/lib/preference');
+const cli = path.resolve(__dirname, '..', '..', 'scripts', 'xor.js');
+const { DEFAULT_PREFERENCE, withDefaults } = require('../../xor/lib/preference');
 
 const CRITERION = { id: 'parser-exists', checks: [{ type: 'file_exists', path: 'src/parser.js' }] };
 
 function withLayout(run) {
-  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'bordercollie-migrate-'));
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'xor-migrate-'));
   const layout = {
     root,
     project: path.join(root, 'project'),
@@ -41,7 +41,13 @@ function migrate(layout) {
   return spawnSync(process.execPath, [cli, 'migrate'], {
     cwd: layout.project,
     encoding: 'utf8',
-    env: { ...process.env, BORDERCOLLIE_CONFIG_ROOT: layout.configRoot, BORDERCOLLIE_OWNER_CONFIG: layout.ownerDir },
+    env: {
+      ...process.env,
+      XOR_CONFIG_ROOT: layout.configRoot,
+      XOR_OWNER_CONFIG: layout.ownerDir,
+      BORDERCOLLIE_CONFIG_ROOT: layout.configRoot,
+      BORDERCOLLIE_OWNER_CONFIG: layout.ownerDir,
+    },
   });
 }
 
@@ -63,7 +69,7 @@ test('migrate carries done criteria into a new Preference and removes the retire
     assert.equal(result.status, 0, result.stderr);
     assert.match(result.stdout, /with 1 done criteria/);
 
-    const migrated = read(path.join(layout.project, '.bordercollie', 'preference.json'));
+    const migrated = read(path.join(layout.project, '.xor', 'preference.json'));
     assert.deepEqual(migrated.done_criteria, [CRITERION]);
     assert.match(migrated.text, /fix the parser/);
     assert.match(migrated.text, /src\/\*\*/);
@@ -76,7 +82,7 @@ test('migrate carries done criteria into a new Preference and removes the retire
 
 test('migrate keeps an existing Preference and fills done criteria only when it has none', () => {
   withLayout((layout) => {
-    const preferenceFile = path.join(layout.project, '.bordercollie', 'preference.json');
+    const preferenceFile = path.join(layout.project, '.xor', 'preference.json');
     write(preferenceFile, { purpose: 'Docs only.' });
     write(path.join(layout.project, '.opencode', 'protocol.json'), { done_criteria: [CRITERION] });
 
@@ -93,7 +99,7 @@ test('migrate keeps an existing Preference and fills done criteria only when it 
 
 test('migrate changes nothing when a file it reads is unreadable', () => {
   withLayout((layout) => {
-    const preferenceFile = path.join(layout.project, '.bordercollie', 'preference.json');
+    const preferenceFile = path.join(layout.project, '.xor', 'preference.json');
     const protocol = path.join(layout.project, '.bordercollie', 'protocol.json');
     write(preferenceFile, '{ not json');
     write(protocol, { done_criteria: [CRITERION] });

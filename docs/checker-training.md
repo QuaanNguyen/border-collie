@@ -36,7 +36,7 @@ npm run dev:generate-data -- /absolute/path/to/existing-study
 npm run dev:generate-data -- --status
 ```
 
-The default study is `bordercollie/prototype/output/checker-authoring`.
+The default study is `xor/prototype/output/checker-authoring`.
 An explicit directory selects another study, and `--status` reads its progress once without calling the gateway.
 The terminal shows generated cases, each model's review coverage, accepted and excluded cases, and retained approve, deny, and ask answers.
 A denied action can be an accepted sample.
@@ -60,9 +60,9 @@ Use the existing ASU configuration on the Mac.
 Never copy gateway credentials to Sol.
 
 ```sh
-node bordercollie/prototype/author-checker-data.js plan docs/checker-tool-inventory.json bordercollie/prototype/config/checker-authoring-smoke.json bordercollie/prototype/output/authored-smoke
-node bordercollie/prototype/author-checker-data.js author bordercollie/prototype/output/authored-smoke 6
-node bordercollie/prototype/author-checker-data.js freeze bordercollie/prototype/output/authored-smoke bordercollie/prototype/output/authored-smoke-review
+node xor/prototype/author-checker-data.js plan docs/checker-tool-inventory.json xor/prototype/config/checker-authoring-smoke.json xor/prototype/output/authored-smoke
+node xor/prototype/author-checker-data.js author xor/prototype/output/authored-smoke 6
+node xor/prototype/author-checker-data.js freeze xor/prototype/output/authored-smoke xor/prototype/output/authored-smoke-review
 ```
 
 The small plan contains 24 intended cases across six verified tools.
@@ -85,8 +85,8 @@ Freeze writes a new immutable review packet and never overwrites an earlier pack
 ## Obtain independent reviews
 
 ```sh
-node bordercollie/prototype/review-checker-data.js bordercollie/prototype/output/authored-smoke-review gemma4-31b-it gemma
-node bordercollie/prototype/review-checker-data.js bordercollie/prototype/output/authored-smoke-review glm-5-3-flash glm
+node xor/prototype/review-checker-data.js xor/prototype/output/authored-smoke-review gemma4-31b-it gemma
+node xor/prototype/review-checker-data.js xor/prototype/output/authored-smoke-review glm-5-3-flash glm
 ```
 
 The two reviewers see only exact production inputs and opaque case identities.
@@ -107,7 +107,7 @@ The audit checks hashes, unique inputs, family isolation, direct verdict tool na
 It reports script and shell-feature counts without executing generated commands.
 
 ```sh
-python3 bordercollie/prototype/audit-authored-data.py bordercollie/prototype/output/authored-smoke-review /tmp/new-checker-audit.json
+python3 xor/prototype/audit-authored-data.py xor/prototype/output/authored-smoke-review /tmp/new-checker-audit.json
 ```
 
 A passed integrity check does not measure token limits, label correctness, model accuracy, latency, or runtime interception.

@@ -6,7 +6,7 @@ import tempfile
 import unittest
 
 ROOT = Path(__file__).resolve().parents[2]
-spec = importlib.util.spec_from_file_location('direct_trainer', ROOT / 'bordercollie/prototype/prepare_direct_trainer.py')
+spec = importlib.util.spec_from_file_location('direct_trainer', ROOT / 'xor/prototype/prepare_direct_trainer.py')
 module = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(module)
 SOURCE = ROOT / 'analysis/needle-judge-2026-10-09/artifacts/public-source/ef3cf7543204d99878c0dd913a05f6a506da4be8/finetune.py.txt'

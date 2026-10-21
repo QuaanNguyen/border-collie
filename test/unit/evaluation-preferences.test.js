@@ -2,8 +2,8 @@
 
 const assert = require('node:assert/strict');
 const test = require('node:test');
-const { profiles, materialize } = require('../../bordercollie/prototype/evaluation-preferences');
-const { runtimeRequest } = require('../../bordercollie/prototype/finetune-pipeline');
+const { profiles, materialize } = require('../../xor/prototype/evaluation-preferences');
+const { runtimeRequest } = require('../../xor/prototype/finetune-pipeline');
 
 test('an independent author cannot introduce contradictory Preference prose into a fixed-contract evaluation', () => {
   const action = { tool: 'shell', args: { command: 'env' }, userMessage: 'List only variable names.', preferenceId: 'environment' };

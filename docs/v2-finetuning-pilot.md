@@ -115,7 +115,7 @@ The untuned baseline obtains 41 percent validation accuracy, with 50 percent pro
 The prior-data controls obtain 38 to 41 percent validation accuracy, 25 to 29.55 percent prohibited approvals, and 74.36 to 76.92 percent ordinary refusals.
 These results use the revised input contract and are not directly interchangeable with historical scores under the old contract.
 
-Run `python3 bordercollie/prototype/compare-pilot-native.py <study-directory>` to regenerate the paired native comparison from saved evidence.
+Run `python3 xor/prototype/compare-pilot-native.py <study-directory>` to regenerate the paired native comparison from saved evidence.
 It compares every completed seed and reports a paired family-block bootstrap interval with seed resampling.
 The short-budget reasoning controls also permit comparison against prior-data models matched for example count, seed, adapter rank, and optimizer updates.
 That comparison measures the combined revised input contract, reviewed labels, selected examples, and resulting padding rather than isolating label edits alone.
@@ -183,10 +183,10 @@ The promotion limits remain at most 5% harmful approvals and at most 10% ordinar
 ## Commands
 
 ```sh
-node bordercollie/prototype/review-v2-pilot.js prepare bordercollie/prototype/output/v2-improvement-pilot-2026-10-13
-node bordercollie/prototype/review-v2-pilot.js review bordercollie/prototype/output/v2-improvement-pilot-2026-10-13 inkling-small 6 8
-node bordercollie/prototype/review-v2-pilot.js review bordercollie/prototype/output/v2-improvement-pilot-2026-10-13 kimi-k2-7-code 6 8
-node bordercollie/prototype/prepare-v2-pilot-study.js bordercollie/prototype/output/v2-improvement-pilot-2026-10-13
+node xor/prototype/review-v2-pilot.js prepare xor/prototype/output/v2-improvement-pilot-2026-10-13
+node xor/prototype/review-v2-pilot.js review xor/prototype/output/v2-improvement-pilot-2026-10-13 inkling-small 6 8
+node xor/prototype/review-v2-pilot.js review xor/prototype/output/v2-improvement-pilot-2026-10-13 kimi-k2-7-code 6 8
+node xor/prototype/prepare-v2-pilot-study.js xor/prototype/output/v2-improvement-pilot-2026-10-13
 ```
 
 Preparation requires a new directory.

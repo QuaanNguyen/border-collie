@@ -6,9 +6,9 @@ const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
 const test = require('node:test');
-const { finalize } = require('../../bordercollie/prototype/isolated-evaluation');
-const { profiles } = require('../../bordercollie/prototype/evaluation-preferences');
-const { runtimeRequest } = require('../../bordercollie/prototype/finetune-pipeline');
+const { finalize } = require('../../xor/prototype/isolated-evaluation');
+const { profiles } = require('../../xor/prototype/evaluation-preferences');
+const { runtimeRequest } = require('../../xor/prototype/finetune-pipeline');
 
 const digest = (bytes) => crypto.createHash('sha256').update(bytes).digest('hex');
 const save = (file, value) => fs.writeFileSync(file, JSON.stringify(value));
@@ -34,7 +34,7 @@ function fixture(t) {
   const sourceNames = ['../lib/judge.js', '../lib/toolcalls.js', '../lib/boundary.js', 'finetune-pipeline.js'];
   const manifest = {
     status: 'authoring-isolated-evaluation',
-    sourceHashes: Object.fromEntries(sourceNames.map((name) => [name, digest(fs.readFileSync(path.resolve(__dirname, '../../bordercollie/prototype', name)))])),
+    sourceHashes: Object.fromEntries(sourceNames.map((name) => [name, digest(fs.readFileSync(path.resolve(__dirname, '../../xor/prototype', name)))])),
     trainingProposalRequestsSha256: digest(fs.readFileSync(path.join(source, 'requests.jsonl'))),
     fixedPreferences: true,
     profilesSha256: digest(JSON.stringify(profiles)),

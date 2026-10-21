@@ -6,9 +6,9 @@ const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
 const test = require('node:test');
-const pipeline = require('../../bordercollie/prototype/finetune-pipeline');
-const scale = require('../../bordercollie/prototype/scale-generation');
-const { DEFAULT_PREFERENCE } = require('../../bordercollie/prototype/historical-v2/preference');
+const pipeline = require('../../xor/prototype/finetune-pipeline');
+const scale = require('../../xor/prototype/scale-generation');
+const { DEFAULT_PREFERENCE } = require('../../xor/prototype/historical-v2/preference');
 
 function reviewedFixture() {
   const scenarios = Array.from({ length: 300 }, (_, index) => ({
@@ -148,7 +148,7 @@ test('publication rejects inconsistent matched actions even when their individua
 });
 
 test('explicit frozen evaluation scores held-out cases and leaves development cases out', async () => {
-  const { diagnoseBase } = require('../../bordercollie/prototype/base-diagnostic');
+  const { diagnoseBase } = require('../../xor/prototype/base-diagnostic');
   const fixture = reviewedFixture();
   const heldOut = fixture.intake.accepted.map((scenario) => ({ ...scenario, split: 'heldOut' }));
   const development = { ...heldOut[0], id: 'development', split: 'train' };
@@ -163,7 +163,7 @@ test('explicit frozen evaluation scores held-out cases and leaves development ca
 
 test('the scaled CLI exposes its full targets offline without generation', () => {
   const { spawnSync } = require('node:child_process');
-  const run = spawnSync(process.execPath, [path.resolve(__dirname, '../../bordercollie/prototype/scale-generation.js'), '--offline'], { encoding: 'utf8' });
+  const run = spawnSync(process.execPath, [path.resolve(__dirname, '../../xor/prototype/scale-generation.js'), '--offline'], { encoding: 'utf8' });
   assert.equal(run.status, 0, run.stderr);
   assert.match(run.stdout, /3,000 development Scenarios and 300 separately frozen evaluation/);
   assert.match(run.stdout, /"total": 3000/);

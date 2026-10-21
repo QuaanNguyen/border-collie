@@ -3,7 +3,7 @@
 const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
-const { CONFIG_SCHEMA_VERSION, PET_SCALES, configPath, defaultConfigRoot, writeConfig } = require('../bordercollie/lib/config');
+const { CONFIG_SCHEMA_VERSION, PET_SCALES, configPath, defaultConfigRoot, writeConfig } = require('../xor/lib/config');
 const {
   DEFAULT_PREFERENCE,
   LEGACY_PREFERENCE_RELATIVE_PATH,
@@ -12,16 +12,20 @@ const {
   retiredProtocolPaths,
   validatePreference,
   withDefaults,
-} = require('../bordercollie/lib/preference');
+} = require('../xor/lib/preference');
 
 function retiredOwnerPolicyPath() {
-  const dir = process.env.BORDERCOLLIE_OWNER_CONFIG || path.join(os.homedir(), '.config', 'opencode', 'bordercollie');
+  if (process.env.XOR_OWNER_CONFIG) return path.join(process.env.XOR_OWNER_CONFIG, 'policy.json');
+  if (process.env.BORDERCOLLIE_OWNER_CONFIG) return path.join(process.env.BORDERCOLLIE_OWNER_CONFIG, 'policy.json');
+  const xorDir = path.join(os.homedir(), '.config', 'opencode', 'xor');
+  const legacyDir = path.join(os.homedir(), '.config', 'opencode', 'bordercollie');
+  const dir = !fs.existsSync(xorDir) && fs.existsSync(legacyDir) ? legacyDir : xorDir;
   return path.join(dir, 'policy.json');
 }
 
 function readOrThrow(file, label) {
   const source = readJsonObject(file);
-  if (source.error) throw new Error(`${label} at ${file} is unreadable (${source.error.message}). Fix or remove it, then run bordercollie migrate again. Nothing was changed.`);
+  if (source.error) throw new Error(`${label} at ${file} is unreadable (${source.error.message}). Fix or remove it, then run xor migrate again. Nothing was changed.`);
   return source;
 }
 
@@ -66,7 +70,7 @@ function migratePreference(opts = {}) {
   }
   const protocols = retiredProtocolPaths(workdir).map((file) => ({ file, source: readOrThrow(file, 'The retired Protocol') }));
   const doneCriteria = retiredDoneCriteria(protocols);
-  const config = readOrThrow(configPath(configRoot), 'The bordercollie configuration');
+  const config = readOrThrow(configPath(configRoot), 'The xor configuration');
   const owner = readOrThrow(ownerPolicy, 'The retired owner policy');
 
   const report = { preferenceFile, wrotePreference: false, carriedDoneCriteria: 0, removed: [], configFile: null };

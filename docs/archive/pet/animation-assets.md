@@ -14,14 +14,14 @@ Each folder contains five transparent PNG frames.
 
 ```text
 pet/assets/default-animations/
-|-- bordercollie-normal/
-|-- bordercollie-dragging/
-|-- bordercollie-hovering/
-|-- bordercollie-thinking/
-|-- bordercollie-suspicious/
-|-- bordercollie-refused/
-|-- bordercollie-denied/
-`-- bordercollie-celebrating/
+|-- xor-normal/
+|-- xor-dragging/
+|-- xor-hovering/
+|-- xor-thinking/
+|-- xor-suspicious/
+|-- xor-refused/
+|-- xor-denied/
+`-- xor-celebrating/
 ```
 
 Semantic Pet states map onto named animation tracks in `events/pet-config.json`.
@@ -65,13 +65,13 @@ node scripts/package-animation-assets.js
 
 The packaging command:
 
-1. Reads the tracked `960x1536` source sheet as five columns and eight rows.
+1. Reads the tracked `960x1536` source sheet (`docs/assets/xor-source.png`) as five columns and eight rows.
 2. Preserves every pixel that the source alpha channel marks as visible.
 3. Crops each cell to its visible bounds.
 4. Places each sprite at bottom-center on a `192x208` transparent canvas.
 5. Writes the matching runtime animation folders.
 6. Records the source checksum, conversion recipe, and per-frame checksums in the runtime manifest.
-7. Produces a QA sheet against black, white, checkerboard, and varied-color backgrounds.
+7. Produces a QA sheet against black, white, checkerboard, and varied-color backgrounds (`docs/assets/xor-animation-qa.png`).
 
 The packager uses a small repository-local codec limited to non-interlaced 8-bit RGBA PNG files so contributors can regenerate assets offline without a native image toolchain or another install-time dependency.
 The acceptance test decodes PNG data independently from the packager so a shared codec defect cannot make corrupted output validate itself.

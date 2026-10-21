@@ -2,9 +2,9 @@
 
 const assert = require('node:assert/strict');
 const test = require('node:test');
-const { judgeRequest, verdictFrom } = require('../../bordercollie/lib/judge');
-const { DEFAULT_PREFERENCE, withDefaults, validatePreference } = require('../../bordercollie/lib/preference');
-const { proposedCall } = require('../../bordercollie/lib/toolcalls');
+const { judgeRequest, verdictFrom } = require('../../xor/lib/judge');
+const { DEFAULT_PREFERENCE, withDefaults, validatePreference } = require('../../xor/lib/preference');
+const { proposedCall } = require('../../xor/lib/toolcalls');
 
 test('the default and free-text Preferences use the same three direct decisions', () => {
   for (const preference of [DEFAULT_PREFERENCE, { text: '' }, { text: 'Ask before deployment.\nLocal edits are fine.' }]) {

@@ -6,7 +6,7 @@ const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
 const test = require('node:test');
-const { evaluate } = require('../../bordercollie/prototype/evaluate-pilot-native');
+const { evaluate } = require('../../xor/prototype/evaluate-pilot-native');
 
 function fixture(t) {
   const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'pilot-native-evaluation-'));

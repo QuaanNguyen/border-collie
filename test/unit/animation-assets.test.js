@@ -8,10 +8,10 @@ const zlib = require('node:zlib')
 const { spawnSync } = require('node:child_process')
 
 const ROOT = path.resolve(__dirname, '..', '..')
-const SOURCE = path.join(ROOT, 'docs', 'assets', 'bordercollie-source.png')
+const SOURCE = path.join(ROOT, 'docs', 'assets', 'xor-source.png')
 const SCRIPT = path.join(ROOT, 'scripts', 'package-animation-assets.js')
 const RUNTIME = path.join(ROOT, 'pet', 'assets', 'default-animations')
-const QA = path.join(ROOT, 'docs', 'assets', 'bordercollie-animation-qa.png')
+const QA = path.join(ROOT, 'docs', 'assets', 'xor-animation-qa.png')
 const GUIDE = path.join(ROOT, 'docs', 'archive', 'pet', 'animation-assets.md')
 const SOURCE_SHA256 = '656deba7e0dfe60e516e9e5db6a3247b3fe031038cbf01fec33fd931e6b28cc3'
 const ANIMATIONS = ['normal', 'dragging', 'hovering', 'thinking', 'suspicious', 'refused', 'denied', 'celebrating']
@@ -155,7 +155,7 @@ try {
   for (let row = 0; row < ANIMATIONS.length; row += 1) {
     const animation = ANIMATIONS[row]
     for (let column = 0; column < 5; column += 1) {
-      const relative = path.join(`bordercollie-${animation}`, `bordercollie-${animation}-${column + 1}.png`)
+      const relative = path.join(`xor-${animation}`, `xor-${animation}-${column + 1}.png`)
       const generatedPath = path.join(first.output, relative)
       const repeatedPath = path.join(second.output, relative)
       const runtimePath = path.join(RUNTIME, relative)

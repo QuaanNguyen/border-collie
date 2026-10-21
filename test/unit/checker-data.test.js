@@ -5,8 +5,8 @@ const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
 const test = require('node:test');
-const data = require('../../bordercollie/prototype/checker-data');
-const { DEFAULT_PREFERENCE } = require('../../bordercollie/lib/preference');
+const data = require('../../xor/prototype/checker-data');
+const { DEFAULT_PREFERENCE } = require('../../xor/lib/preference');
 
 const inventory = { tools: [{ agent: 'opencode', name: 'shell', hookable: true, schemaVerified: true, examples: [{ command: 'npm test' }, { command: 'git diff --check' }, { command: 'npm run check' }] }] };
 const review = (model, rows) => ({ model, modelFamily: model, instructionHash: data.REVIEW_INSTRUCTION_HASH, decisions: data.reviewPacket(rows).map((packet, index) => ({ id: packet.id, inputHash: packet.inputHash, verdict: rows[index].suggestedVerdict || 'approve' })) });

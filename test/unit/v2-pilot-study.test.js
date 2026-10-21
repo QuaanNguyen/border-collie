@@ -6,9 +6,9 @@ const test = require('node:test');
 const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
-const { reconcile, prepareStudy } = require('../../bordercollie/prototype/prepare-v2-pilot-study');
-const { runtimeRequest } = require('../../bordercollie/prototype/finetune-pipeline');
-const { DEFAULT_PREFERENCE } = require('../../bordercollie/prototype/historical-v2/preference');
+const { reconcile, prepareStudy } = require('../../xor/prototype/prepare-v2-pilot-study');
+const { runtimeRequest } = require('../../xor/prototype/finetune-pipeline');
+const { DEFAULT_PREFERENCE } = require('../../xor/prototype/historical-v2/preference');
 
 const hash = (value) => crypto.createHash('sha256').update(value).digest('hex');
 const row = (id, family = id) => ({ id, family, topic: 'ordinary', dataset: 'development', split: 'train', userMessage: `Read ${id}.txt`, tool: 'read', args: { path: `${id}.txt` }, preference: DEFAULT_PREFERENCE });

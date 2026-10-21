@@ -224,7 +224,7 @@ The implementation has focused coverage at every seam:
 - Async coordination tests verify cached built-in loads and rejection of stale preview and selection completions.[Source](https://github.com/openai/codex/blob/4dcce4f0c47e0183e4b05ffcbb38b4fffb8b8042/codex-rs/tui/src/chatwidget/pets_tests.rs#L5-L86)
 - Layout tests verify hidden-by-default behavior, the 9-by-5 placement, anchor switching, width reservation, full-screen-area placement, earlier transcript reflow, and absence of a text overlay.[Source](https://github.com/openai/codex/blob/4dcce4f0c47e0183e4b05ffcbb38b4fffb8b8042/codex-rs/tui/src/chatwidget/tests/status_and_layout.rs#L2477-L2551) [Source](https://github.com/openai/codex/blob/4dcce4f0c47e0183e4b05ffcbb38b4fffb8b8042/codex-rs/tui/src/chatwidget/tests/status_and_layout.rs#L2607-L2746) [Source](https://github.com/openai/codex/blob/4dcce4f0c47e0183e4b05ffcbb38b4fffb8b8042/codex-rs/tui/src/app/tests.rs#L6500-L6524)
 
-## Design lessons for bordercollie
+## Design lessons for xor
 
 These are implementation inferences from the source above rather than additional claims about Codex:
 

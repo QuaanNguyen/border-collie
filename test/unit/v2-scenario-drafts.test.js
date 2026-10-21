@@ -6,8 +6,8 @@ const os = require('node:os');
 const path = require('node:path');
 const { spawnSync } = require('node:child_process');
 const test = require('node:test');
-const { DEFAULT_PREFERENCE } = require('../../bordercollie/prototype/historical-v2/preference');
-const pipeline = require('../../bordercollie/prototype/finetune-pipeline');
+const { DEFAULT_PREFERENCE } = require('../../xor/prototype/historical-v2/preference');
+const pipeline = require('../../xor/prototype/finetune-pipeline');
 
 test('V2 shell proposals pass the same intake and observed-failure checks as live calls', () => {
   const task = pipeline.generationPlan().find((item) => item.failure === 'package-install' && item.variant === 1);
@@ -39,7 +39,7 @@ test('V2 draft preparation preserves source evidence and withholds historical an
   ];
   const original = scenarios.map(JSON.stringify).join('\n') + '\n';
   fs.writeFileSync(source, original);
-  const script = path.resolve(__dirname, '../../bordercollie/prototype/prepare-v2-scenario-drafts.js');
+  const script = path.resolve(__dirname, '../../xor/prototype/prepare-v2-scenario-drafts.js');
   const result = spawnSync(process.execPath, [script, source, output], { encoding: 'utf8' });
   assert.equal(result.status, 0, result.stderr);
   assert.equal(fs.readFileSync(source, 'utf8'), original);

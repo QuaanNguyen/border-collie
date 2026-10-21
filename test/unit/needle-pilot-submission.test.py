@@ -9,7 +9,7 @@ import unittest
 from unittest.mock import patch
 
 
-source = Path(__file__).resolve().parents[2] / 'bordercollie/prototype/submit-v2-pilot.py'
+source = Path(__file__).resolve().parents[2] / 'xor/prototype/submit-v2-pilot.py'
 spec = importlib.util.spec_from_file_location('pilot_submission', source)
 submission = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(submission)

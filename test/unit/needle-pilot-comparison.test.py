@@ -3,7 +3,7 @@ from pathlib import Path
 import unittest
 
 
-source = Path(__file__).resolve().parents[2] / 'bordercollie/prototype/compare-pilot-native.py'
+source = Path(__file__).resolve().parents[2] / 'xor/prototype/compare-pilot-native.py'
 spec = importlib.util.spec_from_file_location('pilot_comparison', source)
 comparison = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(comparison)

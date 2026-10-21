@@ -7,9 +7,9 @@ const os = require('node:os');
 const path = require('node:path');
 const { spawn } = require('node:child_process');
 const test = require('node:test');
-const { plan, author } = require('../../bordercollie/prototype/author-checker-data');
+const { plan, author } = require('../../xor/prototype/author-checker-data');
 
-const script = path.resolve(__dirname, '../../bordercollie/prototype/dev-generate-data.js');
+const script = path.resolve(__dirname, '../../xor/prototype/dev-generate-data.js');
 const read = (file) => JSON.parse(fs.readFileSync(file, 'utf8'));
 const inventory = { tools: ['first', 'second'].map((name) => ({ agent: 'codex', name, schemaVerified: true, inputSchema: { type: 'object', required: ['command'], properties: { command: { type: 'string' } }, additionalProperties: false }, examples: [{ command: 'pwd' }] })) };
 function response(body, invalid = false) {

@@ -8,7 +8,7 @@ All remaining jobs in the incomplete dataset study have been canceled.
 Completed artifacts remain preserved.
 The unrelated q.it job is outside this work.
 
-The canonical product, command, package, source directory, and documentation name is bordercollie.
+The canonical product, command, package, source directory, and documentation name is xor.
 Historical experiment receipts and frozen datasets preserve their original bytes and provenance.
 Compatibility paths exist only to preserve and migrate prior owner instructions and installed plugins.
 

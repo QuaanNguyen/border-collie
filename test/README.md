@@ -1,10 +1,10 @@
 # Test Layout
 
-`unit/` contains deterministic tests for bordercollie core, Event stream, installer helper, Pet geometry, animation, and package-surface behavior.
+`unit/` contains deterministic tests for xor core, Event stream, installer helper, Pet geometry, animation, and package-surface behavior.
 
-`bordercollie/` contains focused Node test-runner coverage for the bordercollie entry with a Judge double, the folder boundary, repository, session, and evidence behavior.
+`xor/` contains focused Node test-runner coverage for the xor entry with a Judge double, the folder boundary, repository, session, and evidence behavior.
 
-`integration/` contains tests that compose bordercollie modules across the OpenCode adapter, installer, Judge retrieval, `bordercollie migrate`, and package CLI boundaries.
+`integration/` contains tests that compose xor modules across the OpenCode adapter, installer, Judge retrieval, `xor migrate`, and package CLI boundaries.
 
 `plugin/` contains Node test-runner coverage for the OpenCode plugin lifecycle, the folder Preference, and the tool hooks.
 

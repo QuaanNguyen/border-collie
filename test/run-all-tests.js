@@ -20,9 +20,10 @@ function run(command, args, cwd = ROOT) {
 }
 
 run(npm, ['test'])
-run(process.execPath, ['--test', 'test/bordercollie/*.test.js', 'test/plugin/*.test.mjs'])
+const xorTests = fs.existsSync(path.join(ROOT, 'test', 'xor')) ? 'test/xor/*.test.js' : 'test/bordercollie/*.test.js'
+run(process.execPath, ['--test', xorTests, 'test/plugin/*.test.mjs'])
 
-if (process.env.BORDERCOLLIE_SKIP_NATIVE_TESTS !== '1') {
+if (process.env.XOR_SKIP_NATIVE_TESTS !== '1' && process.env.BORDERCOLLIE_SKIP_NATIVE_TESTS !== '1') {
   if (!electronMatchesLock()) {
     run(npm, ['ci'], PET_DIR)
   }
@@ -31,4 +32,4 @@ if (process.env.BORDERCOLLIE_SKIP_NATIVE_TESTS !== '1') {
   run(npm, ['run', 'test:e2e:skip-native'])
 }
 
-process.stdout.write('complete bordercollie test suite verified\n')
+process.stdout.write('complete xor test suite verified\n')

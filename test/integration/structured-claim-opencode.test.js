@@ -10,24 +10,26 @@ const test = require('node:test');
 
 const ROOT = path.resolve(__dirname, '..', '..');
 
-test('OpenCode forwards structured completion claims to bordercollie', async () => {
-  const workdir = fs.mkdtempSync(path.join(os.tmpdir(), 'bordercollie-opencode-claims-'));
+test('OpenCode forwards structured completion claims to xor', async () => {
+  const workdir = fs.mkdtempSync(path.join(os.tmpdir(), 'xor-opencode-claims-'));
   try {
     execFileSync('git', ['init', '--quiet'], { cwd: workdir });
     execFileSync('git', ['config', 'user.email', 'test@example.com'], { cwd: workdir });
-    execFileSync('git', ['config', 'user.name', 'bordercollie Test'], { cwd: workdir });
+    execFileSync('git', ['config', 'user.name', 'xor Test'], { cwd: workdir });
     fs.writeFileSync(path.join(workdir, 'answer.js'), 'export const answer = 42;\n');
     execFileSync('git', ['add', '.'], { cwd: workdir });
     execFileSync('git', ['commit', '--quiet', '-m', 'initial'], { cwd: workdir });
     const head = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: workdir, encoding: 'utf8' }).trim();
-    fs.mkdirSync(path.join(workdir, '.bordercollie'), { recursive: true });
-    fs.writeFileSync(path.join(workdir, '.bordercollie', 'preference.json'), JSON.stringify({
+    fs.mkdirSync(path.join(workdir, '.xor'), { recursive: true });
+    fs.writeFileSync(path.join(workdir, '.xor', 'preference.json'), JSON.stringify({
       done_criteria: [{ id: 'answer', structured_claims: { minimum_observations: 1 }, checks: [{ type: 'file_exists', path: 'answer.js' }] }],
     }));
+    process.env.XOR_NO_PET = '1';
     process.env.BORDERCOLLIE_NO_PET = '1';
+    process.env.XOR_EVENTS = path.join(workdir, 'events.jsonl');
     process.env.BORDERCOLLIE_EVENTS = path.join(workdir, 'events.jsonl');
-    const { bordercollie } = await import(pathToFileURL(path.join(ROOT, 'plugin', 'bordercollie.js')).href);
-    const hooks = await bordercollie({
+    const { xor } = await import(pathToFileURL(path.join(ROOT, 'plugin', 'xor.js')).href);
+    const hooks = await xor({
       directory: workdir,
       client: { session: { messages: async () => [{
         info: { id: 'completion', role: 'assistant', finish: 'stop', time: { completed: Date.now() } },
@@ -39,32 +41,36 @@ test('OpenCode forwards structured completion claims to bordercollie', async () 
     const events = fs.readFileSync(process.env.BORDERCOLLIE_EVENTS, 'utf8').trim().split('\n').map(JSON.parse);
     assert.equal(events.at(-1).status, 'pass');
   } finally {
+    delete process.env.XOR_NO_PET;
     delete process.env.BORDERCOLLIE_NO_PET;
+    delete process.env.XOR_EVENTS;
     delete process.env.BORDERCOLLIE_EVENTS;
     fs.rmSync(workdir, { recursive: true, force: true });
   }
 });
 
-test('OpenCode preserves bordercollie terminal structured verdicts and remediation', async () => {
-  const workdir = fs.mkdtempSync(path.join(os.tmpdir(), 'bordercollie-opencode-terminal-'));
+test('OpenCode preserves xor terminal structured verdicts and remediation', async () => {
+  const workdir = fs.mkdtempSync(path.join(os.tmpdir(), 'xor-opencode-terminal-'));
   const prompts = [];
   try {
     execFileSync('git', ['init', '--quiet'], { cwd: workdir });
     execFileSync('git', ['config', 'user.email', 'test@example.com'], { cwd: workdir });
-    execFileSync('git', ['config', 'user.name', 'bordercollie Test'], { cwd: workdir });
+    execFileSync('git', ['config', 'user.name', 'xor Test'], { cwd: workdir });
     fs.writeFileSync(path.join(workdir, 'answer.js'), 'export const answer = 42;\n');
     execFileSync('git', ['add', '.'], { cwd: workdir });
     execFileSync('git', ['commit', '--quiet', '-m', 'initial'], { cwd: workdir });
     const head = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: workdir, encoding: 'utf8' }).trim();
-    fs.mkdirSync(path.join(workdir, '.bordercollie'), { recursive: true });
-    fs.writeFileSync(path.join(workdir, '.bordercollie', 'preference.json'), JSON.stringify({
+    fs.mkdirSync(path.join(workdir, '.xor'), { recursive: true });
+    fs.writeFileSync(path.join(workdir, '.xor', 'preference.json'), JSON.stringify({
       done_criteria: [{ id: 'answer', claim_mentions: ['answer'], structured_claims: { minimum_observations: 1 }, checks: [{ type: 'file_exists', path: 'answer.js' }] }],
     }));
+    process.env.XOR_NO_PET = '1';
     process.env.BORDERCOLLIE_NO_PET = '1';
+    process.env.XOR_EVENTS = path.join(workdir, 'events.jsonl');
     process.env.BORDERCOLLIE_EVENTS = path.join(workdir, 'events.jsonl');
     let attempt = 0;
-    const { bordercollie } = await import(pathToFileURL(path.join(ROOT, 'plugin', 'bordercollie.js')).href);
-    const hooks = await bordercollie({
+    const { xor } = await import(pathToFileURL(path.join(ROOT, 'plugin', 'xor.js')).href);
+    const hooks = await xor({
       directory: workdir,
       client: { session: {
         messages: async () => {

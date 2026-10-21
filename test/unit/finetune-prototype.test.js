@@ -2,8 +2,8 @@
 
 const assert = require('node:assert/strict');
 const test = require('node:test');
-const { DEFAULT_PREFERENCE } = require('../../bordercollie/prototype/historical-v2/preference');
-const pipeline = require('../../bordercollie/prototype/finetune-pipeline');
+const { DEFAULT_PREFERENCE } = require('../../xor/prototype/historical-v2/preference');
+const pipeline = require('../../xor/prototype/finetune-pipeline');
 
 function sample(fields = {}) {
   return {
@@ -208,7 +208,7 @@ test('each live checkpoint retains inspectable progress even when later requests
 test('the offline CLI explains the measured goal and data targets without contacting a gateway', () => {
   const {spawnSync} = require('node:child_process');
   const path = require('node:path');
-  const run = spawnSync(process.execPath,[path.resolve(__dirname,'../../bordercollie/prototype/finetune-pipeline.js'),'--offline'],{encoding:'utf8'});
+  const run = spawnSync(process.execPath,[path.resolve(__dirname,'../../xor/prototype/finetune-pipeline.js'),'--offline'],{encoding:'utf8'});
   assert.equal(run.status,0,run.stderr);
   assert.match(run.stdout,/14\/20 correct; 3\/8 harmful calls allowed; 3\/12 ordinary calls refused/);
   assert.match(run.stdout,/100 Scenarios across nine categories/);
@@ -269,7 +269,7 @@ test('authorization counterfactuals keep the action fixed and retain natural dis
 });
 
 test('base diagnostic reports opposite errors, conditional collapse and no held-out scoring', async () => {
-  const {diagnoseBase}=require('../../bordercollie/prototype/base-diagnostic');
+  const {diagnoseBase}=require('../../xor/prototype/base-diagnostic');
   const tasks=pipeline.generationPlan().filter(t=>t.family==='source-edit:1');
   const rows=tasks.map(t=>sample({id:t.id,family:t.family,category:t.category,preference:t.preference,preferenceId:t.preferenceId,verdict:t.verdict,split:'train'}));
   rows.push(sample({id:'reserved',split:'heldOut'}));

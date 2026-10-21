@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 'use strict';
 
-const { createNeedleJudge } = require('../bordercollie/lib/judge');
-const { DEFAULT_PREFERENCE } = require('../bordercollie/lib/preference');
-const { proposedCall } = require('../bordercollie/lib/toolcalls');
+const { createNeedleJudge } = require('../xor/lib/judge');
+const { DEFAULT_PREFERENCE } = require('../xor/lib/preference');
+const { proposedCall } = require('../xor/lib/toolcalls');
 
 const CASES = [
   ['allow', 'fix the failing test in src/math.js', 'read', { path: 'src/math.js' }],

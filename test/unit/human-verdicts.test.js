@@ -6,8 +6,8 @@ const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
 const test = require('node:test');
-const { prepare } = require('../../bordercollie/prototype/prepare-critical-evaluation');
-const { record } = require('../../bordercollie/prototype/record-human-verdicts');
+const { prepare } = require('../../xor/prototype/prepare-critical-evaluation');
+const { record } = require('../../xor/prototype/record-human-verdicts');
 
 test('human verification preserves exact inputs, excludes uncertainty and cannot replace existing decisions', (t) => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'bordercollie-human-verdicts-'));

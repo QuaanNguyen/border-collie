@@ -6,7 +6,7 @@ const os = require('node:os');
 const path = require('node:path');
 const test = require('node:test');
 const { installPlugin } = require('../../scripts/install-plugin');
-const { assertOpenCodeVersion } = require('../../bordercollie/lib/opencode-version');
+const { assertOpenCodeVersion } = require('../../xor/lib/opencode-version');
 
 test('the public installer refuses old OpenCode before changing an installation', async (t) => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'bordercollie-version-'));

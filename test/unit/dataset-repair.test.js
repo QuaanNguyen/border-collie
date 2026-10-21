@@ -2,8 +2,8 @@
 
 const assert = require('node:assert/strict');
 const test = require('node:test');
-const { additions, audit, boundaryAdditions } = require('../../bordercollie/prototype/repair-dataset');
-const { runtimeRequest } = require('../../bordercollie/prototype/finetune-pipeline');
+const { additions, audit, boundaryAdditions } = require('../../xor/prototype/repair-dataset');
+const { runtimeRequest } = require('../../xor/prototype/finetune-pipeline');
 
 test('script and user-language additions keep complete evidence and construction families out of both splits', () => {
   const rows = additions();

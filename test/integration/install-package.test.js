@@ -9,7 +9,7 @@ const { installPlugin } = require('../../scripts/install-plugin');
 const { fakeJudgeManifest } = require('../fixtures/fake-judge');
 
 test('Global bind stages a complete package without downloading a runtime', async () => {
-  const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'bordercollie-install-'));
+  const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'xor-install-'));
   const destDir = path.join(temp, 'plugins');
 
   try {
@@ -24,7 +24,7 @@ test('Global bind stages a complete package without downloading a runtime', asyn
     assert.equal(result.dest, path.join(result.packageDir, 'index.mjs'));
     assert.equal(fs.existsSync(path.join(destDir, 'bordercollie.js')), false);
     assert(fs.existsSync(path.join(result.packageDir, 'index.mjs')));
-    assert(fs.existsSync(path.join(result.packageDir, 'bordercollie', 'lib', 'session.js')));
+    assert(fs.existsSync(path.join(result.packageDir, 'xor', 'lib', 'session.js')));
     assert(fs.existsSync(path.join(result.packageDir, 'events', 'index.js')));
     assert(fs.existsSync(path.join(result.petDir, 'package.json')));
     assert(fs.existsSync(path.join(result.judgeDir, 'needle3.cact')));
@@ -34,21 +34,21 @@ test('Global bind stages a complete package without downloading a runtime', asyn
 });
 
 test('Global bind excludes experiment artifacts and broken research links', async (t) => {
-  const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'bordercollie-research-install-'));
+  const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'xor-research-install-'));
   t.after(() => fs.rmSync(temp, { recursive: true, force: true }));
   const repoRoot = path.join(temp, 'repo');
   for (const [name, contents] of [
-    ['plugin/bordercollie.js', 'export function bordercollie() {}\n'],
-    ['bordercollie/lib/session.js', 'module.exports = {};\n'],
+    ['plugin/xor.js', 'export function xor() {}\nexport const bordercollie = xor;\n'],
+    ['xor/lib/session.js', 'module.exports = {};\n'],
     ['events/index.js', 'module.exports = {};\n'],
     ['pet/package.json', '{}\n'],
-    ['bordercollie/prototype/output/result.json', '{}\n'],
+    ['xor/prototype/output/result.json', '{}\n'],
   ]) {
     const target = path.join(repoRoot, name);
     fs.mkdirSync(path.dirname(target), { recursive: true });
     fs.writeFileSync(target, contents);
   }
-  fs.symlinkSync(path.join(temp, 'missing-runner'), path.join(repoRoot, 'bordercollie/prototype/output/needle'), process.platform === 'win32' ? 'junction' : 'file');
+  fs.symlinkSync(path.join(temp, 'missing-runner'), path.join(repoRoot, 'xor/prototype/output/needle'), process.platform === 'win32' ? 'junction' : 'file');
   const result = await installPlugin({
     repoRoot,
     destDir: path.join(temp, 'plugins'),
@@ -56,6 +56,6 @@ test('Global bind excludes experiment artifacts and broken research links', asyn
     judgeManifest: fakeJudgeManifest(path.join(temp, 'judge-source')).manifest,
     skipRuntimeSetup: true,
   });
-  assert(fs.existsSync(path.join(result.packageDir, 'bordercollie/lib/session.js')));
-  assert.equal(fs.existsSync(path.join(result.packageDir, 'bordercollie/prototype')), false);
+  assert(fs.existsSync(path.join(result.packageDir, 'xor/lib/session.js')));
+  assert.equal(fs.existsSync(path.join(result.packageDir, 'xor/prototype')), false);
 });

@@ -7,9 +7,9 @@ const os = require('node:os');
 const path = require('node:path');
 const test = require('node:test');
 const childProcess = require('node:child_process');
-const { platformKey } = require('../../bordercollie/lib/judge-artifacts');
-const { DEFAULT_PREFERENCE } = require('../../bordercollie/lib/preference');
-const { proposedCall } = require('../../bordercollie/lib/toolcalls');
+const { platformKey } = require('../../xor/lib/judge-artifacts');
+const { DEFAULT_PREFERENCE } = require('../../xor/lib/preference');
+const { proposedCall } = require('../../xor/lib/toolcalls');
 
 test('native evaluation can pin workers without changing default runtime arguments or verdict parsing', async (t) => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'judge-workers-'));
@@ -25,7 +25,7 @@ test('native evaluation can pin workers without changing default runtime argumen
     assert.equal(executable, runner);
     return spawn(process.execPath, [executable, ...args], options);
   });
-  const { createNeedleJudge } = require('../../bordercollie/lib/judge');
+  const { createNeedleJudge } = require('../../xor/lib/judge');
   fs.writeFileSync(weights, 'test weights');
   const artifact = (file) => ({ path: path.basename(file), size: fs.statSync(file).size, sha256: crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex') });
   const manifest = { revision: 'test-workers', weights: artifact(weights), runners: { [platformKey()]: artifact(runner) } };

@@ -5,9 +5,9 @@ const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
 const test = require('node:test');
-const authoring = require('../../bordercollie/prototype/author-checker-data');
-const { digest, reviewPacket } = require('../../bordercollie/prototype/checker-data');
-const { DEFAULT_PREFERENCE } = require('../../bordercollie/lib/preference');
+const authoring = require('../../xor/prototype/author-checker-data');
+const { digest, reviewPacket } = require('../../xor/prototype/checker-data');
+const { DEFAULT_PREFERENCE } = require('../../xor/lib/preference');
 
 const inventory = { tools: [{ agent: 'opencode', name: 'shell', schemaVerified: true, inputSchema: { type: 'object', required: ['command'], properties: { command: { type: 'string' } }, additionalProperties: false }, examples: [{ command: 'npm test' }] }, { agent: 'codex', name: 'unknown', schemaVerified: false }] };
 const connection = { key: 'synthetic-secret', baseUrl: 'https://fictional.example/v1' };

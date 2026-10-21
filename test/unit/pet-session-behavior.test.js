@@ -5,7 +5,7 @@ const os = require('node:os');
 const path = require('node:path');
 const { PassThrough } = require('node:stream');
 const { EventBus } = require('../../events');
-const { createSession } = require('../../bordercollie/lib/session');
+const { createSession } = require('../../xor/lib/session');
 const { readLiveEvents } = require('../../pet/live-events');
 
 const ROOT = path.resolve(__dirname, '..', '..');

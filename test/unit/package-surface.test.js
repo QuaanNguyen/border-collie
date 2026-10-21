@@ -15,7 +15,7 @@ const html = fs.readFileSync(path.join(ROOT, 'pet', 'src', 'index.html'), 'utf8'
 const animationPlayer = fs.readFileSync(path.join(ROOT, 'pet', 'src', 'animation-player.js'), 'utf8')
 
 assert.strictEqual(petPackage.scripts['start:demo'], undefined)
-assert.strictEqual(rootPackage.name, '@quaannguyen/bordercollie')
+assert.strictEqual(rootPackage.name, '@quaannguyen/xor')
 assert.strictEqual(rootPackage.version, '0.1.2')
 assert.strictEqual(rootPackage.private, undefined)
 assert.deepStrictEqual(rootPackage.repository, {
@@ -27,9 +27,9 @@ assert.deepStrictEqual(rootPackage.bugs, {
 })
 assert.strictEqual(rootPackage.homepage, 'https://github.com/QuaanNguyen/border-collie#readme')
 assert.match(installationGuide, /npm install --global \./)
-assert.match(installationGuide, /bordercollie install/)
+assert.match(installationGuide, /(?:xor|bordercollie) install/)
 assert.doesNotMatch(readme, /\b(?:bdc|bcollie|bc) (?:install|profile|project|pet)\b/)
-assert.deepStrictEqual(rootPackage.bin, { bordercollie: 'scripts/bordercollie.js' })
+assert.deepStrictEqual(rootPackage.bin, { xor: 'scripts/xor.js', bordercollie: 'scripts/xor.js' })
 assert.doesNotMatch(readme, /start:demo/)
 assert.doesNotMatch(main, /--demo/)
 assert.doesNotMatch(renderer, /DEMO_SCRIPT/)

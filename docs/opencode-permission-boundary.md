@@ -64,5 +64,5 @@ It does not create a distinct security principal from the owner, and it does not
 
 The security claim should therefore be: “OpenCode permission rules are an application-level policy layer, not a replacement for OS permissions, a sandbox, or an independent policy gate.”
 
-An additional deterministic gate such as bordercollie remains valuable when the product promise is task-specific path, command, and egress control with an audit trail.
+An additional deterministic gate such as xor remains valuable when the product promise is task-specific path, command, and egress control with an audit trail.
 For a hard cross-directory boundary against an agent with owner authority, the execution environment must also enforce it, for example through a separate OS identity, container, VM, or equivalent sandbox.

@@ -6,11 +6,11 @@ const os = require('node:os');
 const path = require('node:path');
 const test = require('node:test');
 const { migrate } = require('../../scripts/migrate');
-const { readPreference, LEGACY_PREFERENCE_RELATIVE_PATH } = require('../../bordercollie/lib/preference');
-const { LEGACY_PLUGIN_DIRECTORY, LEGACY_PLUGIN_ENTRY } = require('../../bordercollie/lib/legacy-paths');
+const { readPreference, LEGACY_PREFERENCE_RELATIVE_PATH } = require('../../xor/lib/preference');
+const { LEGACY_PLUGIN_DIRECTORY, LEGACY_PLUGIN_ENTRY } = require('../../xor/lib/legacy-paths');
 const { replaceInstallation } = require('../../scripts/install-plugin');
-const { boundaryDecision } = require('../../bordercollie/lib/boundary');
-const { proposedCall } = require('../../bordercollie/lib/toolcalls');
+const { boundaryDecision } = require('../../xor/lib/boundary');
+const { proposedCall } = require('../../xor/lib/toolcalls');
 
 test('renaming preserves existing owner instructions and migrates them without defaults', (t) => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'bordercollie-rename-'));
@@ -39,14 +39,14 @@ test('renamed installation removes duplicate plugin entries and restores them af
   fs.mkdirSync(oldPackage);
   fs.writeFileSync(path.join(oldPackage, 'original'), 'original package');
   fs.writeFileSync(oldEntry, 'original entry');
-  const destination = path.join(root, 'bordercollie');
+  const destination = path.join(root, 'xor');
   const stage = path.join(root, 'stage');
   fs.mkdirSync(stage);
-  assert.throws(() => replaceInstallation({ stagePackage: stage, packageDir: destination, entry: path.join(root, 'bordercollie.js'), pluginsDir: root, verify: () => { throw new Error('readiness failed'); } }), /readiness failed/);
+  assert.throws(() => replaceInstallation({ stagePackage: stage, packageDir: destination, entry: path.join(root, 'xor.js'), pluginsDir: root, verify: () => { throw new Error('readiness failed'); } }), /readiness failed/);
   assert.equal(fs.readFileSync(oldEntry, 'utf8'), 'original entry');
   assert.equal(fs.readFileSync(path.join(oldPackage, 'original'), 'utf8'), 'original package');
   fs.mkdirSync(stage);
-  replaceInstallation({ stagePackage: stage, packageDir: destination, entry: path.join(root, 'bordercollie.js'), pluginsDir: root });
+  replaceInstallation({ stagePackage: stage, packageDir: destination, entry: path.join(root, 'xor.js'), pluginsDir: root });
   assert.equal(fs.existsSync(oldEntry), false);
   assert.equal(fs.existsSync(oldPackage), false);
   assert.equal(fs.existsSync(destination), true);
