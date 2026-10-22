@@ -51,3 +51,21 @@ test('renamed installation removes duplicate plugin entries and restores them af
   assert.equal(fs.existsSync(oldPackage), false);
   assert.equal(fs.existsSync(destination), true);
 });
+
+for (const canonical of [true, false]) {
+  test(`event output uses ${canonical ? 'xor before the legacy setting' : 'the legacy fallback'}`, (t) => {
+    const root = fs.mkdtempSync(path.join(os.tmpdir(), 'xor-event-rename-'));
+    t.after(() => fs.rmSync(root, { recursive: true, force: true }));
+    const legacy = path.join(root, 'legacy.jsonl');
+    const current = path.join(root, 'xor.jsonl');
+    const env = { ...process.env, BORDERCOLLIE_EVENTS: legacy };
+    delete env.XOR_EVENTS;
+    if (canonical) env.XOR_EVENTS = current;
+    const result = require('node:child_process').spawnSync(process.execPath, ['-e',
+      "new (require('./events').EventBus)().emit({ type: 'run', summary: 'rename check' })",
+    ], { cwd: path.resolve(__dirname, '../..'), env, encoding: 'utf8' });
+    assert.equal(result.status, 0, result.stderr);
+    assert.equal(JSON.parse(fs.readFileSync(canonical ? current : legacy, 'utf8')).summary, 'rename check');
+    assert.equal(fs.existsSync(canonical ? legacy : current), false);
+  });
+}

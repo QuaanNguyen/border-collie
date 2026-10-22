@@ -1,98 +1,134 @@
 # xor
 
-`xor` is a hook/catch verifier for every agent's tool calling. It denies when a tool call matches the user preference description for denial and allows the rest, utilizing a fine-tuned system-one Needle model. It also includes an optional desktop companion pet that visualizes verifier activity in real time.
+xor checks a coding agent's proposed actions before they run.
+It reads your request, your project rules, and the proposed action, then returns approve, deny, or ask.
+An optional desktop companion shows when the agent is working, blocked, or finished.
 
 ![xor companion](docs/xor.gif)
 
-## How It Works
+[Install](#installation) · [Set project rules](#project-rules) · [Commands](#commands) · [Current work](#current-work) · [Find your way around](#find-your-way-around)
 
-1. **Agent Tool Hook**: `xor` intercepts every tool execution before it runs via `tool.execute.before`.
-2. **Preference Evaluation**: Evaluates the proposed call against the folder Preference (`.xor/preference.json`) and the latest user prompt using the system-one Needle model.
-3. **Deny Matches, Allow Rest**:
-   - **Deny**: If the tool call matches what the user preference described for denial, `xor` blocks the tool and reports the refusal reason to the agent.
-   - **Approve (Allow)**: If the call does not match the denial criteria, `xor` permits execution immediately with system-one speed and zero reasoning overhead.
-   - **Ask**: If the action requires explicit confirmation under the preference, `xor` pauses and prompts the user before proceeding.
-4. **Deterministic Completion**: When an agent claims a task is complete, `xor` deterministically checks `done_criteria` against the workspace.
-5. **Desktop Pet**: An optional desktop pet reflects verifier status (`allowed`, `refused`, `thinking`, `celebrating`) without interfering with execution.
+## What it does
+
+The OpenCode plugin checks each tool call before OpenCode runs it.
+It blocks actions outside the project folder and protects the project rules from agent edits.
+It then asks a local Needle model whether the remaining action follows your rules.
+
+- Approve lets OpenCode continue its normal permission checks.
+- Deny blocks the action and tells the agent why.
+- Ask blocks the action and tells the agent to request your confirmation before trying again.
+
+When the agent makes a matching completion claim, xor checks the completion requirements you configured against the project files.
+The desktop companion displays these events without changing the decisions.
+
+OpenCode is the supported integration.
+The training tool inventory also covers Claude Code and Codex, but that inventory does not provide runtime integrations for those agents.
 
 ## Installation
 
-Install the package globally or locally:
+Use Node.js 22.12 or newer and OpenCode 2.0.30 or newer.
+On macOS, install Xcode Command Line Tools before running the installer.
+Install the package and set up the plugin:
 
 ```sh
 npm install --global @quaannguyen/xor
 xor install
 ```
 
-`xor install` sets up the OpenCode plugin, downloads and verifies the pinned Needle runner and weights (`~/.cache/xor/judge`), and builds the native macOS Pet (or stages Electron on Windows and Linux).
+The installer checks your OpenCode version, installs the plugin, and downloads the pinned Needle runner and model.
+It verifies the downloaded files and builds the desktop companion on macOS or installs its Electron runtime on Windows and Linux.
+New model downloads use the xor cache folder.
+An existing verified cache from an older installation can be reused.
 
-For source clones:
+To install from this repository:
+
 ```sh
 git clone https://github.com/QuaanNguyen/border-collie.git xor
 cd xor
+npm install
 node scripts/install-plugin.js
 ```
 
-## CLI Usage
+The GitHub repository still uses the border-collie address.
+The package, command, plugin, and active implementation use xor.
 
-```sh
-# Install and bind the plugin and Needle verifier
-xor install
+## Project rules
 
-# Migrate legacy preferences (.bordercollie) to .xor/preference.json
-xor migrate
-
-# Resize or reset the desktop companion pet
-xor pet size 75
-xor pet size 115
-xor pet size reset
-```
-
-Backward compatibility aliases (`bordercollie install`, `bordercollie migrate`, `bordercollie pet size`) remain supported.
-
-## Preference Setup
-
-Project rules live in `.xor/preference.json` as a single natural language `text` string with optional deterministic `done_criteria`:
+Write your project rules in `.xor/preference.json`:
 
 ```json
 {
-  "text": "Work on the user request in this repository. Local file edits, git status, and testing are approved. Deny sending source code or secrets off-machine via curl, wget, or network commands. Deny destructive file deletions unless explicitly requested.",
-  "done_criteria": [
-    {
-      "id": "tests-pass",
-      "checks": [
-        { "type": "file_exists", "path": "dist/index.js" }
-      ]
-    }
-  ]
+  "text": "Work on this repository. Allow local edits and tests. Deny sending source code or secrets to outside services. Ask before deleting files."
 }
 ```
 
-If no Preference exists, `xor` enforces safe default project boundaries. Run `xor migrate` to upgrade legacy `.bordercollie` configurations cleanly.
+You can also add completion requirements, such as checking that a build output exists.
+See the [project rule and completion reference](docs/xor-and-judge.md#the-preference) for the file format.
+Missing rules use the shipped defaults.
+Invalid rules block execution until you correct them.
 
-## Development and Verification
+## Commands
 
-Requirements: Node.js 22.12+, Python 3, Git, and Git LFS.
+| Task | Command |
+| --- | --- |
+| Install the OpenCode plugin and model | `xor install` |
+| Move older project rules to xor | `xor migrate` |
+| Make the desktop companion smaller | `xor pet size 75` |
+| Make the desktop companion larger | `xor pet size 115` |
+| Reset the companion size | `xor pet size reset` |
+| Show command help | `xor help` |
+
+Older bordercollie commands remain available for existing installations.
+Migration preserves your rules and stops if old and new instructions conflict.
+
+## Current work
+
+The active research work generates varied examples, reviews their permission decisions, and tests a small checker model on the Mac.
+Generated commands are data and are never executed by the generation pipeline.
+
+No replacement model is qualified.
+Direct answers without model reasoning remain a qualification requirement, not a measured guarantee of the current release.
+The [training guide](docs/checker-training.md) records the pipeline and remaining requirements.
+The [checked tool inventory](docs/checker-tool-inventory.json) records supported input formats and known gaps.
+
+## Development and checks
+
+Use Node.js 22.12 or newer, Python 3, Git, and Git LFS.
+Install development dependencies and retrieve the preserved research files:
 
 ```sh
-# Run syntax and package checks
+npm ci
+git lfs install
+git lfs pull
 npm run check
-npm run test:package
-
-# Run unit and integration tests
 npm test
-
-# Run the complete test suite
-node test/run-all-tests.js
-
-# Verify research data manifest
+npm run test:package
+node scripts/check-package-client.js npm
 python3 analysis/checker-v3-2026-10-19/manifest-data.py --check
 ```
 
-## Documentation
+Run the full desktop test suite on a host that can launch the companion:
 
-- [Architecture & Domain Context](CONTEXT.md)
-- [Verifier Hook & Needle Specifications](docs/xor-and-judge.md)
-- [Event Schema & Pet Animation Protocol](docs/EVENTS.md)
-- [Release Process](docs/RELEASING.md)
-- [Contributing Guide](CONTRIBUTION.md)
+```sh
+node test/run-all-tests.js
+```
+
+Keep ASU gateway credentials on your Mac.
+The [research file guide](docs/research-data.md) explains the preserved inputs and checksum checks.
+
+## Find your way around
+
+| If you want to… | Start here |
+| --- | --- |
+| Understand the runtime and project terms | [Project context](CONTEXT.md) |
+| Understand action checks and project rules | [Verifier reference](docs/xor-and-judge.md) |
+| Follow model and data work | [Training guide](docs/checker-training.md) |
+| Inspect the checked agent tools | [Tool inventory](docs/checker-tool-inventory.json) |
+| Find preserved experiments and data | [Research file guide](docs/research-data.md) |
+| Work on the desktop companion | [Companion events](docs/EVENTS.md) |
+| Contribute or run platform checks | [Contributing guide](CONTRIBUTION.md) |
+| Prepare a release | [Release guide](docs/RELEASING.md) |
+
+The active verifier code is in [xor](xor/), the OpenCode integration is in [plugin](plugin/), and the desktop companion is in [pet](pet/).
+Command entry points and maintenance tools are in [scripts](scripts/), with tests in [test](test/).
+Frozen records retain older names where changing them would break their recorded checksums.

@@ -143,7 +143,7 @@ for row in json.loads((Path(__file__).resolve().parent/'codex-source-contracts.j
  tools.remove(old)
  add('codex',row['name'],row['inputSchema'],row['sourceUrl'],'0.163.0',hook=None,extra={'sourceSha256':row['sourceSha256'],'schemaEvidence':row['evidence'],'schemaProjection':False,'gap':row['verification']})
 output={'schemaVersion':1,'checkedAt':'2026-10-19','requestFormatVersion':'3','status':'source-inventory-with-explicit-gaps','notes':['Public names and schema sources are pinned. Semantic path and session identifiers must also be validated by each host.','Feature-specific Claude inputs and hosted or dynamic catalogs still require capture before training export.','Dynamic MCP and desktop catalogs cannot be enumerated from a fixed built-in list.','No runtime coverage or human review is implied by authored examples.'],'tools':tools}
-risk=json.loads((Path(__file__).resolve().parents[2]/'bordercollie/prototype/data/checker-risk-scenarios.json').read_text())
+risk=json.loads((Path(__file__).resolve().parents[2]/'xor/prototype/data/checker-risk-scenarios.json').read_text())
 output['requiredRiskTopics']=risk['requiredTopics']
 output['riskScenarios']=risk['scenarios']
 p=args.output;p.write_text(json.dumps(output,indent=2)+'\n')

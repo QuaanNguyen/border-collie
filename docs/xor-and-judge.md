@@ -1,7 +1,9 @@
 # xor and the Needle Verifier
 
-xor is a hook/catch verifier that intercepts every agent tool call in the OpenCode `tool.execute.before` hook and decides whether to permit execution before the tool runs.
-It denies proposed actions when they match the user preference description for denial, and allows the rest, utilizing a fine-tuned system-one Needle model.
+xor checks proposed tool calls in OpenCode's tool execution hook before they run.
+It evaluates the proposed action against the user request and project rules using a local Needle model.
+No replacement model is qualified.
+Direct answers without model reasoning remain a qualification requirement.
 
 ## Order of decisions
 
@@ -9,13 +11,13 @@ It denies proposed actions when they match the user preference description for d
 2. **Folder boundary**: The folder boundary refuses, in code, a call whose path leaves the project folder, including through a symlink or `~`.
 3. **Protected configuration**: The folder boundary refuses, in code, a write that would change `.xor/`, `.bordercollie/`, the retired `.opencode/protocol.json`, or a folder containing them.
 4. **Subagent dispatch**: The folder boundary refuses subagent dispatch, because a child session cannot carry the folder Preference.
-5. **Needle Verifier**: Every other call is evaluated against the owner's Preference using the fine-tuned system-one Needle model.
+5. **Needle Verifier**: Every other call is evaluated against the owner's Preference using the local Needle model.
 
 The verifier reads three inputs: the latest user message, the folder Preference, and the proposed tool call.
 For shell commands, it also inspects the derived read paths, write paths, and network targets.
-The Needle model emits an immediate system-one Verdict: `approve`, `deny`, or `ask`.
+The expected model response is a Verdict: `approve`, `deny`, or `ask`.
 
-- **Approve (`allow`)**: The tool call does not match the denial criteria; execution proceeds immediately without reasoning delay.
+- **Approve (`allow`)**: The tool call does not match the denial criteria; OpenCode continues its normal permission checks.
 - **Deny (`disallow`)**: The tool call matches the user preference description for denial; execution is blocked and xor returns the requested action, target, governing rule, reason, permitted alternative, and a no-retry notice to the agent.
 - **Ask (`ask`)**: The preference specifies explicit confirmation or the action is ambiguous; execution is withheld and the agent is instructed to ask the owner before retrying.
 
@@ -64,7 +66,8 @@ A completion claim without declared `done_criteria` requests human review.
 
 - xor is not an operating-system sandbox or an independent security principal; commands execute with the running user's credentials.
 - Path and effect detection within complex shell scripts is best-effort. Strong execution containment requires a dedicated sandbox, container, or virtual machine.
-- The coding agent and Needle verifier are the only models in the runtime loop. The verifier returns direct function calls without multi-step reasoning overhead.
+- The coding agent and Needle verifier are the only models in the runtime loop. The request asks for direct verdict calls.
+  Qualification must establish the response format and behavior of a replacement model.
 
 ## OpenCode Integration and Auto-Accept
 

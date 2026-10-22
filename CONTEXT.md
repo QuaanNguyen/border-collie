@@ -1,8 +1,12 @@
 # xor verifier and companion
 
-xor is a hook/catch verifier for every agent's tool calling where it denies when the tool call matches with the user preference description for denial and allows the rest, utilizing a fine-tuned system-one needle model.
+xor checks proposed OpenCode tool calls against the user's request and project rules before they run.
+It uses local Needle decisions to approve, deny, or ask for confirmation.
 
-The active work centers on fine-tuning the system-one Needle verifier model, validating its zero-overhead direct decisions on macOS Apple Silicon and Linux/Windows runtimes, generating reviewed synthetic scenarios, and preserving the desktop companion Pet.
+The active work prepares reviewed synthetic scenarios and qualifies a replacement Needle model on the Mac.
+No replacement model is qualified.
+Direct answers without model reasoning remain a qualification requirement.
+The desktop companion remains part of the runtime.
 
 ## Core architecture
 
@@ -10,14 +14,15 @@ The active work centers on fine-tuning the system-one Needle verifier model, val
 The verifier operates as a hook interceptor on agent tool execution (`tool.execute.before`).
 Before any proposed tool call is allowed to run:
 1. **Safety and Boundary Checks**: Enforces folder boundaries in deterministic code (e.g., rejecting paths escaping the project root, attempts to alter `.xor/preference.json`, or unmanaged subagent dispatches).
-2. **Needle Verifier Execution**: Evaluates the proposed call against the folder Preference and the active user request using the fine-tuned system-one Needle model.
+2. **Needle Verifier Execution**: Evaluates the proposed call against the folder Preference and the active user request using the local Needle model.
 3. **Denial vs. Allowance**:
    - When the proposed action matches the user preference description for denial, the verifier returns `deny`, blocking tool execution and informing the agent of the refusal reason and permitted alternatives.
-   - When the proposed action does not match the denial description, the verifier returns `approve` (`allow`), letting the agent proceed without reasoning latency or overhead.
-   - If explicit human confirmation is mandated by the preference or when permission is ambiguous, it returns `ask`, withholding execution until the owner replies.
+   - When the proposed action does not match the denial description, the verifier returns `approve` (`allow`), letting the agent proceed through OpenCode's normal permission checks.
+   - If explicit human confirmation is mandated by the preference or the model returns `ask`, execution is blocked and the agent is instructed to ask the owner before retrying.
 
-### 2. The Fine-Tuned System-One Needle Model
-- **Zero-overhead System-One Decisions**: Emits direct `approve`, `deny`, or `ask` tool calls without slow internal reasoning or chain-of-thought overhead.
+### 2. The local Needle model
+- **Decision format**: The target format is direct `approve`, `deny`, or `ask` tool calls.
+  Qualification must establish this behavior for a replacement model.
 - **Checked Inputs**: The verifier consumes the exact production request format (version 3): the latest user request, one free-text project Preference, and the complete proposed tool call (including derived read/write paths and network targets for shell commands).
 - **Fail-Closed**: Missing models, unreadable preferences, missing verdicts, or execution timeouts automatically fail-closed into refusals.
 
@@ -38,7 +43,7 @@ The interceptor that traps every agent tool call before execution, comparing pro
 One free-text statement of the user's project rules (canonical location `.xor/preference.json`), defining what actions are permitted, what must be denied, and what requires owner confirmation. Optional `done_criteria` define deterministic completion verification.
 
 **Needle Model (Judge / Verifier Engine)**:
-The fine-tuned, on-device Cactus Needle model that performs instant system-one classification.
+The on-device Cactus Needle model that classifies proposed actions.
 
 **Verdict**:
 One direct `approve`, `deny`, or `ask` answer returned by the verifier.

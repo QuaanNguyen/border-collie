@@ -6,7 +6,7 @@ on:
       - package.json
       - scripts/**
       - plugin/**
-      - bordercollie/**
+      - xor/**
       - events/**
       - pet/**
       - test/unit/**
@@ -18,7 +18,7 @@ on:
       - package.json
       - scripts/**
       - plugin/**
-      - bordercollie/**
+      - xor/**
       - events/**
       - pet/**
       - test/unit/**
