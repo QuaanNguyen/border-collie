@@ -11,10 +11,12 @@ const ROOT = path.resolve(__dirname, '..', '..');
 const PET_DIR = path.join(ROOT, 'pet');
 const FIXTURE_DIR = path.join(__dirname, '..', 'fixtures', 'renderer-probe');
 const electron = require(path.join(PET_DIR, 'node_modules', 'electron'));
-const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'bordercollie-dev-harness-'));
+const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'xor-dev-harness-'));
 const statusPath = path.join(tempDir, 'status.json');
-const frame = pathToFileURL(path.join(PET_DIR, 'assets', 'default-animations', 'bordercollie-normal', 'bordercollie-normal-1.png')).href;
-const env = { ...process.env, BORDERCOLLIE_ROOT: ROOT, BORDERCOLLIE_STATUS_PATH: statusPath, BORDERCOLLIE_EVENT_PATH: path.join(tempDir, 'events.jsonl'), BORDERCOLLIE_TEST_FRAME: frame, BORDERCOLLIE_DEV_HARNESS: '1' };
+const animFolder = 'xor-normal';
+const animFile = 'xor-normal-1.png';
+const frame = pathToFileURL(path.join(PET_DIR, 'assets', 'default-animations', animFolder, animFile)).href;
+const env = { ...process.env, XOR_ROOT: ROOT, XOR_STATUS_PATH: statusPath, XOR_EVENT_PATH: path.join(tempDir, 'events.jsonl'), XOR_TEST_FRAME: frame, XOR_DEV_HARNESS: '1' };
 delete env.ELECTRON_RUN_AS_NODE;
 const args = [`--user-data-dir=${path.join(tempDir, 'user-data')}`, FIXTURE_DIR];
 if (process.env.CI === 'true' && process.platform === 'linux') args.unshift('--disable-gpu', '--no-sandbox', '--disable-dev-shm-usage');
@@ -52,7 +54,7 @@ main().finally(async () => {
     await exited;
     clearTimeout(timer);
   }
-  fs.rmSync(tempDir, { recursive: true, force: true });
+  fs.rmSync(tempDir, { recursive: true, force: true, maxRetries: 10, retryDelay: 100 });
 }).catch((error) => {
   process.stderr.write(error.stack + '\n');
   process.exitCode = 1;

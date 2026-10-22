@@ -4,24 +4,24 @@ const os = require('os')
 const path = require('path')
 
 const { installPlugin, replaceInstallation } = require('../../scripts/install-plugin')
-const { fakeJudgeManifest } = require('../fixtures/fake-judge')
+const { fakeGateManifest } = require('../fixtures/fake-gate')
 
-const root = fs.mkdtempSync(path.join(os.tmpdir(), 'bordercollie-atomic-install-'))
+const root = fs.mkdtempSync(path.join(os.tmpdir(), 'xor-atomic-install-'))
 const repoRoot = path.join(root, 'repo')
 const pluginsDir = path.join(root, 'plugins')
-const packageDir = path.join(pluginsDir, 'bordercollie')
-const entryPath = path.join(pluginsDir, 'bordercollie.js')
+const packageDir = path.join(pluginsDir, 'xor')
+const entryPath = path.join(pluginsDir, 'xor.js')
 
 fs.mkdirSync(path.join(repoRoot, 'plugin'), { recursive: true })
-fs.mkdirSync(path.join(repoRoot, 'bordercollie', 'lib'), { recursive: true })
+fs.mkdirSync(path.join(repoRoot, 'xor', 'lib'), { recursive: true })
 fs.mkdirSync(path.join(repoRoot, 'events'), { recursive: true })
 fs.mkdirSync(path.join(repoRoot, 'pet'), { recursive: true })
 fs.mkdirSync(packageDir, { recursive: true })
-fs.writeFileSync(path.join(repoRoot, 'plugin', 'bordercollie.js'), 'export const bordercollie = async () => ({})\n')
+fs.writeFileSync(path.join(repoRoot, 'plugin', 'xor.js'), 'export const xor = async () => ({})\n')
 for (const file of ['tui.mjs', 'pet-rpc.mjs', 'runtime-root.mjs']) {
   fs.writeFileSync(path.join(repoRoot, 'plugin', file), 'export default {}\n')
 }
-fs.writeFileSync(path.join(repoRoot, 'bordercollie', 'lib', 'session.js'), 'module.exports = {}\n')
+fs.writeFileSync(path.join(repoRoot, 'xor', 'lib', 'session.js'), 'module.exports = {}\n')
 fs.writeFileSync(path.join(repoRoot, 'events', 'index.js'), 'module.exports = {}\n')
 fs.writeFileSync(path.join(repoRoot, 'pet', 'package.json'), JSON.stringify({
   name: 'failing-pet-install',
@@ -48,15 +48,15 @@ async function main() {
   await assert.rejects(installPlugin({
     repoRoot,
     destDir: pluginsDir,
-    judgeRoot: path.join(root, 'judge'),
-    judgeManifest: fakeJudgeManifest(path.join(root, 'judge-source')).manifest,
+    gateRoot: path.join(root, 'gate'),
+    gateManifest: fakeGateManifest(path.join(root, 'gate-source')).manifest,
   }))
   assert.strictEqual(fs.readFileSync(entryPath, 'utf8'), 'old entry\n')
   assert.strictEqual(fs.readFileSync(path.join(packageDir, 'old-marker'), 'utf8'), 'old package\n')
 
   const verificationRoot = path.join(root, 'verification')
-  const verificationPackage = path.join(verificationRoot, 'bordercollie')
-  const verificationEntry = path.join(verificationRoot, 'bordercollie.js')
+  const verificationPackage = path.join(verificationRoot, 'xor')
+  const verificationEntry = path.join(verificationRoot, 'xor.js')
   fs.mkdirSync(verificationPackage, { recursive: true })
   fs.writeFileSync(path.join(verificationPackage, 'new-marker'), 'new package\n')
   fs.writeFileSync(verificationEntry, 'new entry\n')

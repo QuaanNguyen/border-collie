@@ -1,6 +1,6 @@
 "use strict";
 /**
- * bordercollie  -  the window.
+ * xor  -  the window.
  *
  * A frameless, transparent, always-on-top companion that floats over whatever
  * you are working in. It has no idea what Guard is beyond one URL: it reads the
@@ -35,7 +35,7 @@ const { BASE_W, BASE_H, DEFAULT_SCALE, clampScale } = G;
 
 if (!app || typeof app.requestSingleInstanceLock !== "function") {
   console.error(
-    "[bordercollie] Electron app API missing. Unset ELECTRON_RUN_AS_NODE and relaunch via the Electron binary.",
+    "[xor] Electron app API missing. Unset ELECTRON_RUN_AS_NODE and relaunch via the Electron binary.",
   );
   process.exit(1);
 }
@@ -67,9 +67,9 @@ const devHarness = DEV ? createDevHarness() : null;
 const settings = { scale: DEFAULT_SCALE, x: null, y: null };
 let animations = null;
 const pendingEvents = [];
-const runtimeDirectory = path.join(os.tmpdir(), `bordercollie-electron-${process.pid}`);
+const runtimeDirectory = path.join(os.tmpdir(), `xor-electron-${process.pid}`);
 
-app.setName(DEV ? "pet-bordercollie-dev" : "pet-bordercollie");
+app.setName(DEV ? "pet-xor-dev" : "pet-xor");
 app.setPath("userData", runtimeDirectory);
 
 function applyLayout() {
@@ -99,7 +99,7 @@ function setScale(next) {
   settings.scale = s;
   applyLayout();
   if (win && !win.isDestroyed()) {
-    win.webContents.send("bordercollie:scaled", Math.round(s * 100));
+    win.webContents.send("xor:scaled", Math.round(s * 100));
   }
 }
 
@@ -122,7 +122,7 @@ if (!gotLock) {
 
   if (!DEV) liveEventReader = readLiveEvents(process.stdin, (event) => {
     if (win && !win.isDestroyed()) {
-      win.webContents.send("bordercollie:event", event);
+      win.webContents.send("xor:event", event);
     } else {
       pendingEvents.push(event);
       if (pendingEvents.length > 256) pendingEvents.shift();
@@ -185,7 +185,10 @@ if (!gotLock) {
       revealWindow();
     });
     win.webContents.once("did-finish-load", () => {
-      while (pendingEvents.length) win.webContents.send("bordercollie:event", pendingEvents.shift());
+      while (pendingEvents.length) {
+        const ev = pendingEvents.shift();
+        win.webContents.send("xor:event", ev);
+      }
     });
 
     win.on("closed", () => {
@@ -260,7 +263,7 @@ if (!gotLock) {
     }
 
     console.log("");
-    console.log("  bordercollie is watching.");
+    console.log("  xor is watching.");
     console.log(
       `    Mac:     ${prettyShortcut(TOGGLE_KEY, "darwin")}    show / hide`,
     );
@@ -279,30 +282,40 @@ if (!gotLock) {
     console.log("");
   }
 
-  ipcMain.handle("bordercollie:config", () => ({
+  const handleConfig = () => ({
     live: !DEV,
     solid: SOLID,
     dev: DEV,
     scale: settings.scale,
     toggleKey: prettyShortcut(TOGGLE_KEY),
     animations,
-  }));
-  ipcMain.handle("bordercollie:dev-scenarios", (event) => {
+  });
+  ipcMain.handle("xor:config", handleConfig);
+
+  const handleDevScenarios = (event) => {
     if (!DEV || !devHarness || !win || win.isDestroyed() || event.sender !== win.webContents) return [];
     return devHarness.scenarios();
-  });
-  ipcMain.handle("bordercollie:dev-event", (event, id) => {
+  };
+  ipcMain.handle("xor:dev-scenarios", handleDevScenarios);
+
+  const handleDevEvent = (event, id) => {
     if (!DEV || !devHarness || !win || win.isDestroyed() || event.sender !== win.webContents) return null;
     const entry = devHarness.trigger(id);
-    if (entry) win.webContents.send("bordercollie:event", entry);
+    if (entry) {
+      win.webContents.send("xor:event", entry);
+    }
     return entry;
-  });
-  ipcMain.on("bordercollie:hit-regions", (event, regions, nextDragRegions) => {
+  };
+  ipcMain.handle("xor:dev-event", handleDevEvent);
+
+  const handleHitRegions = (event, regions, nextDragRegions) => {
     if (!win || win.isDestroyed() || event.sender !== win.webContents) return;
     if (windowInteraction) windowInteraction.updateRegions(regions);
     dragRegions = Array.isArray(nextDragRegions) ? nextDragRegions : [];
-  });
-  ipcMain.on("bordercollie:drag-start", (event, x, y) => {
+  };
+  ipcMain.on("xor:hit-regions", handleHitRegions);
+
+  const handleDragStart = (event, x, y) => {
     if (!win || win.isDestroyed() || event.sender !== win.webContents) return;
     if (!Number.isFinite(x) || !Number.isFinite(y)) return;
     const bounds = win.getBounds();
@@ -312,9 +325,11 @@ if (!gotLock) {
       lastX: x,
     };
     if (windowInteraction) windowInteraction.setDragging(true);
-    win.webContents.send("bordercollie:dragging", { phase: "start", deltaX: 0 });
-  });
-  ipcMain.on("bordercollie:drag-to", (event, x, y) => {
+    win.webContents.send("xor:dragging", { phase: "start", deltaX: 0 });
+  };
+  ipcMain.on("xor:drag-start", handleDragStart);
+
+  const handleDragTo = (event, x, y) => {
     if (!win || win.isDestroyed() || event.sender !== win.webContents) return;
     if (!pointerDrag || pointerDrag.sender !== event.sender) return;
     const origin = G.dragOrigin({ x, y }, pointerDrag.grabOffset);
@@ -323,16 +338,20 @@ if (!gotLock) {
     const bounds = win.getBounds();
     win.setBounds({ ...bounds, ...origin });
     pointerDrag.lastX = x;
-    win.webContents.send("bordercollie:dragging", { phase: "move", deltaX });
-  });
-  ipcMain.on("bordercollie:drag-end", (event) => {
+    win.webContents.send("xor:dragging", { phase: "move", deltaX });
+  };
+  ipcMain.on("xor:drag-to", handleDragTo);
+
+  const handleDragEnd = (event) => {
     if (!win || win.isDestroyed() || event.sender !== win.webContents) return;
     if (!pointerDrag || pointerDrag.sender !== event.sender) return;
     pointerDrag = null;
     if (windowInteraction) windowInteraction.setDragging(false);
-    win.webContents.send("bordercollie:dragging", { phase: "end", deltaX: 0 });
-  });
-  ipcMain.on("bordercollie:scale-set", (_e, s) => setScale(s));
+    win.webContents.send("xor:dragging", { phase: "end", deltaX: 0 });
+  };
+  ipcMain.on("xor:drag-end", handleDragEnd);
+
+  ipcMain.on("xor:scale-set", (_e, s) => setScale(s));
 
   app.whenReady().then(() => {
     if (process.platform === "darwin" && !DEV) app.setActivationPolicy("accessory");
@@ -344,7 +363,7 @@ if (!gotLock) {
       if (BrowserWindow.getAllWindows().length === 0) create();
     });
   }).catch((error) => {
-    console.error(`[bordercollie] ${error.message}`);
+    console.error(`[xor] ${error.message}`);
     app.exit(1);
   });
 

@@ -3,22 +3,22 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
-import { bordercollie } from '../../plugin/bordercollie.js';
+import { xor } from '../../plugin/xor.js';
 
 test('the backend sends live Pet events without owning a desktop process', async () => {
-  const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'bordercollie-pet-events-'));
+  const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'xor-pet-events-'));
   const events = [];
-  const previous = process.env.BORDERCOLLIE_NO_PET;
-  process.env.BORDERCOLLIE_NO_PET = '1';
-  const hooks = await bordercollie({ directory, client: {} }, { petSink: (event) => events.push(event) });
+  const previous = process.env.XOR_NO_PET;
+  process.env.XOR_NO_PET = '1';
+  const hooks = await xor({ directory, client: {} }, { petSink: (event) => events.push(event) });
   try {
     await hooks.event({ event: { type: 'session.status', properties: { sessionID: 'one', status: 'busy' } } });
     assert.ok(events.some((event) => event.petState === 'thinking'));
     assert.ok(events.every((event) => event.runId && event.seq > 0));
   } finally {
     hooks.dispose();
-    if (previous === undefined) delete process.env.BORDERCOLLIE_NO_PET;
-    else process.env.BORDERCOLLIE_NO_PET = previous;
+    if (previous === undefined) delete process.env.XOR_NO_PET;
+    else process.env.XOR_NO_PET = previous;
     fs.rmSync(directory, { recursive: true, force: true });
   }
 });
@@ -63,8 +63,8 @@ function terminal(location) {
 }
 
 test('each terminal owns its pipe, filters locations, and closes independently', async () => {
-  const previous = process.env.BORDERCOLLIE_NO_PET;
-  delete process.env.BORDERCOLLIE_NO_PET;
+  const previous = process.env.XOR_NO_PET;
+  delete process.env.XOR_NO_PET;
   const location = { directory: '/workspace/one', workspaceID: 'workspace-one' };
   const first = terminal(location);
   const second = terminal(location);
@@ -94,14 +94,14 @@ test('each terminal owns its pipe, filters locations, and closes independently',
     assert.equal(second.unsubscribed(), 1);
   } finally {
     for (const cleanup of cleanups) cleanup();
-    if (previous === undefined) delete process.env.BORDERCOLLIE_NO_PET;
-    else process.env.BORDERCOLLIE_NO_PET = previous;
+    if (previous === undefined) delete process.env.XOR_NO_PET;
+    else process.env.XOR_NO_PET = previous;
   }
 });
 
 test('a disabled Pet creates no process or subscription', async () => {
-  const previous = process.env.BORDERCOLLIE_NO_PET;
-  process.env.BORDERCOLLIE_NO_PET = '1';
+  const previous = process.env.XOR_NO_PET;
+  process.env.XOR_NO_PET = '1';
   const instance = terminal({ directory: '/workspace' });
   try {
     const cleanup = await startPetCompanion(instance.context, { launch: instance.launch });
@@ -109,7 +109,7 @@ test('a disabled Pet creates no process or subscription', async () => {
     assert.equal(instance.launches(), 0);
     assert.equal(instance.unsubscribed(), 0);
   } finally {
-    if (previous === undefined) delete process.env.BORDERCOLLIE_NO_PET;
-    else process.env.BORDERCOLLIE_NO_PET = previous;
+    if (previous === undefined) delete process.env.XOR_NO_PET;
+    else process.env.XOR_NO_PET = previous;
   }
 });

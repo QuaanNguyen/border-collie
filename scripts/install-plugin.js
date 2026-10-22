@@ -3,10 +3,9 @@ const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
 const { spawnSync } = require('node:child_process');
-const { assertOpenCodeVersion } = require('../bordercollie/lib/opencode-version');
+const { assertOpenCodeVersion } = require('../xor/lib/opencode-version');
 const { buildNativePet } = require('./build-native-pet');
-const { retrieveJudge } = require('../bordercollie/lib/judge-artifacts');
-const { LEGACY_PLUGIN_DIRECTORY, LEGACY_PLUGIN_ENTRY } = require('../bordercollie/lib/legacy-paths');
+const { retrieveGate } = require('../xor/lib/gate-artifacts');
 
 function defaultPluginsDir() {
   return path.join(os.homedir(), '.config', 'opencode', 'plugins');
@@ -142,7 +141,7 @@ function ensureElectron(petDir, donorPetDirs = []) {
 
   if (!electronReady(petDir)) {
     throw new Error(
-      'Electron binary did not install. From the bordercollie clone run: cd pet && npm install\n' +
+      'Electron binary did not install. From the xor clone run: cd pet && npm install\n' +
       'Then re-run scripts/install-plugin.',
     );
   }
@@ -150,13 +149,13 @@ function ensureElectron(petDir, donorPetDirs = []) {
 
 function verifyStagedPlugin(entry, cwd) {
   const href = require('node:url').pathToFileURL(entry).href;
-  const script = `const plugin = await import(${JSON.stringify(href)}); if (typeof plugin.bordercollie !== 'function') process.exit(2); if (plugin.default != null && (plugin.default.id !== 'bordercollie' || typeof plugin.default.setup !== 'function')) process.exit(3)`;
+  const script = `const plugin = await import(${JSON.stringify(href)}); if (typeof plugin.xor !== 'function') process.exit(2); if (plugin.default != null && (plugin.default.id !== 'xor' || typeof plugin.default.setup !== 'function')) process.exit(3)`;
   runCommand(process.execPath, ['--input-type=module', '-e', script], cwd, { capture: true });
 }
 
 function verifyOpenCode(cwd, command = process.platform === 'win32' ? 'opencode.exe' : 'opencode') {
   const env = installEnv();
-  env.BORDERCOLLIE_NO_PET = '1';
+  env.XOR_NO_PET = '1';
   runCommand(command, ['debug', 'config'], cwd, {
     capture: true,
     env,
@@ -166,22 +165,14 @@ function verifyOpenCode(cwd, command = process.platform === 'win32' ? 'opencode.
 
 function replaceInstallation({ stagePackage, stageEntry, packageDir, entry, pluginsDir, verify }) {
   const suffix = `${process.pid}-${Date.now()}`;
-  const packageBackup = path.join(pluginsDir, `.bordercollie-package-backup-${suffix}`);
-  const entryBackup = path.join(pluginsDir, `.bordercollie-entry-backup-${suffix}.js`);
+  const packageBackup = path.join(pluginsDir, `.xor-package-backup-${suffix}`);
+  const entryBackup = path.join(pluginsDir, `.xor-entry-backup-${suffix}.js`);
   const hadPackage = fs.existsSync(packageDir);
   const hadEntry = fs.existsSync(entry);
   let installedPackage = false;
   let installedEntry = false;
-  const previousEntries = [];
 
   try {
-    for (const name of [LEGACY_PLUGIN_DIRECTORY, LEGACY_PLUGIN_ENTRY]) {
-      const original = path.join(pluginsDir, name);
-      if (original === packageDir || original === entry || !fs.existsSync(original)) continue;
-      const backup = path.join(pluginsDir, `.bordercollie-previous-${previousEntries.length}-${suffix}`);
-      fs.renameSync(original, backup);
-      previousEntries.push({ original, backup });
-    }
     if (hadPackage) fs.renameSync(packageDir, packageBackup);
     fs.renameSync(stagePackage, packageDir);
     installedPackage = true;
@@ -198,13 +189,11 @@ function replaceInstallation({ stagePackage, stageEntry, packageDir, entry, plug
       fs.rmSync(packageDir, { recursive: true, force: true });
     }
     if (hadPackage && fs.existsSync(packageBackup)) fs.renameSync(packageBackup, packageDir);
-    for (const { original, backup } of previousEntries.reverse()) if (fs.existsSync(backup)) fs.renameSync(backup, original);
     throw error;
   }
   try {
     if (hadPackage) fs.rmSync(packageBackup, { recursive: true, force: true });
     if (hadEntry) fs.rmSync(entryBackup, { force: true });
-    for (const { backup } of previousEntries) fs.rmSync(backup, { recursive: true, force: true });
   } catch {
   }
 }
@@ -212,18 +201,18 @@ function replaceInstallation({ stagePackage, stageEntry, packageDir, entry, plug
 async function installPlugin(opts = {}) {
   const repoRoot = path.resolve(opts.repoRoot || path.join(__dirname, '..'));
   const pluginsDir = opts.destDir || defaultPluginsDir();
-  const packageDir = path.join(pluginsDir, 'bordercollie');
-  const entry = path.join(pluginsDir, 'bordercollie.js');
+  const packageDir = path.join(pluginsDir, 'xor');
+  const entry = path.join(pluginsDir, 'xor.js');
   const skipRuntimeSetup = opts.skipRuntimeSetup === true || opts.skipNpm === true;
 
-  const srcPlugin = path.join(repoRoot, 'plugin', 'bordercollie.js');
-  const srcBordercollie = path.join(repoRoot, 'bordercollie');
+  const srcPlugin = path.join(repoRoot, 'plugin', 'xor.js');
+  const srcXor = path.join(repoRoot, 'xor');
   const srcEvents = path.join(repoRoot, 'events');
   const srcPet = path.join(repoRoot, 'pet');
 
   if (!fs.existsSync(srcPlugin)) throw new Error('missing ' + srcPlugin);
-  if (!fs.existsSync(path.join(srcBordercollie, 'lib', 'session.js'))) {
-    throw new Error('missing bordercollie/lib/session.js under ' + srcBordercollie);
+  if (!fs.existsSync(path.join(srcXor, 'lib', 'session.js'))) {
+    throw new Error('missing xor/lib/session.js under ' + srcXor);
   }
   if (!fs.existsSync(path.join(srcEvents, 'index.js'))) {
     throw new Error('missing events/index.js under ' + srcEvents);
@@ -237,12 +226,12 @@ async function installPlugin(opts = {}) {
     assertOpenCodeVersion(version.stdout.toString());
   }
 
-  console.log('Retrieving the Needle Judge…');
-  const judge = await retrieveJudge({ manifest: opts.judgeManifest, root: opts.judgeRoot });
+  console.log('Retrieving the Needle Gate…');
+  const gate = await retrieveGate({ manifest: opts.gateManifest || opts.verifierManifest, root: opts.gateRoot || opts.verifierRoot });
 
   fs.mkdirSync(pluginsDir, { recursive: true });
-  const stageRoot = fs.mkdtempSync(path.join(pluginsDir, '.bordercollie-stage-'));
-  const stagePackage = path.join(stageRoot, 'bordercollie');
+  const stageRoot = fs.mkdtempSync(path.join(pluginsDir, '.xor-stage-'));
+  const stagePackage = path.join(stageRoot, 'xor');
   const stageIndex = path.join(stagePackage, 'index.mjs');
   const stagedPetDir = path.join(stagePackage, 'pet');
   let petRuntimeReused = false;
@@ -254,10 +243,10 @@ async function installPlugin(opts = {}) {
       fs.copyFileSync(path.join(repoRoot, 'plugin', file), path.join(stagePackage, file));
     }
     fs.writeFileSync(path.join(stagePackage, 'package.json'), JSON.stringify({
-      name: 'bordercollie',
+      name: 'xor',
       exports: { '.': './index.mjs', './tui': './tui.mjs' },
     }, null, 2) + '\n');
-    copyTree(srcBordercollie, path.join(stagePackage, 'bordercollie'), {
+    copyTree(srcXor, path.join(stagePackage, 'xor'), {
       skip: new Set(['prototype']),
     });
     copyTree(srcEvents, path.join(stagePackage, 'events'));
@@ -321,8 +310,10 @@ async function installPlugin(opts = {}) {
     dest: path.join(packageDir, 'index.mjs'),
     petDir,
     petRuntimeReused,
-    judgeDir: judge.dir,
-    judgeReused: judge.reused,
+    gateDir: gate.dir,
+    gateReused: gate.reused,
+    verifierDir: gate.dir,
+    verifierReused: gate.reused,
   };
 }
 
@@ -331,7 +322,7 @@ if (require.main === module) {
     console.error('Usage: node scripts/install-plugin.js');
     process.exit(2);
   }
-  require('./bordercollie').main(['install']).catch((error) => {
+  require('./xor').main(['install']).catch((error) => {
     console.error(error.message);
     process.exitCode = 2;
   });

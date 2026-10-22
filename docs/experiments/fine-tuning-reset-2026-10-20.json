@@ -1,0 +1,124 @@
+{
+  "capturedAtUtc": "2026-10-20T18:19:56.719839+00:00",
+  "directoryInventoryCount": 1606,
+  "fileInventoryCount": 5337,
+  "removedMergedWorktrees": [
+    {
+      "path": ".worktrees/opencode-v2",
+      "preservedHead": "e64e057f62cc3a189070175740eada6c38074e4c"
+    },
+    {
+      "path": ".worktrees/pr73-pet-e2e",
+      "preservedHead": "fd07dd697ce0da49228f0ceb54df4bdca535be0c"
+    },
+    {
+      "path": ".worktrees/pr74-rename",
+      "preservedHead": "8b010aa979526c17c9ee1653e4c7ef6bf9274d79"
+    }
+  ],
+  "removedDuplicateResearchWorktrees": [
+    {
+      "path": ".worktrees/pr75-runtime",
+      "preservedBranch": "codex/checker-runtime",
+      "preservedHead": "2f87fb3e2cdd40a3645d5b91a34ea91cf81bfc91"
+    },
+    {
+      "path": ".worktrees/pr76-research",
+      "preservedBranch": "codex/checker-research",
+      "preservedHead": "2548a7b007552c58342c542a1df1450b3977ed11"
+    }
+  ],
+  "preservedIgnoredCheckpointFiles": 28,
+  "disposablePaths": [
+    ".DS_Store",
+    "bordercollie/.DS_Store",
+    "bordercollie/prototype/.DS_Store",
+    "bordercollie/prototype/__pycache__",
+    "analysis/needle-judge-2026-10-09/scripts/__pycache__",
+    "pet/node_modules",
+    ".scratch"
+  ],
+  "historicalStudiesPreserved": true,
+  "activeWorktree": "/Users/quan/Repos/border-collie/.worktrees/fine-tuning-reset",
+  "issueCleanup": {
+    "closedOutOfScope": [
+      77
+    ],
+    "remainingRelated": 11
+  },
+  "verification": {
+    "nodeTestsPassed": 134,
+    "publishedResearchFilesChecked": 199,
+    "independentAuthoringReview": "Final review passed after fixing reproduced shell substitution false positives; no-comments inspection passed."
+  },
+  "solSubmission": {
+    "explicitOverrideRecorded": true,
+    "authorizedScope": [
+      "synthetic generation",
+      "CPU data validation"
+    ],
+    "trainingOrPromotionOverride": false,
+    "jobs": [
+      {
+        "id": "66230637",
+        "purpose": "Preserved 1656-case baseline integrity and shell-feature audit",
+        "state": "COMPLETED",
+        "exitCode": "0:0"
+      },
+      {
+        "id": "66230682",
+        "purpose": "New 24-case model-authored snapshot integrity audit",
+        "state": "COMPLETED",
+        "exitCode": "0:0"
+      }
+    ]
+  },
+  "smokeGeneration": {
+    "cases": 24,
+    "reviewers": [
+      {
+        "model": "inkling-small",
+        "decisions": 24
+      },
+      {
+        "model": "kimi-k2-7-code",
+        "decisions": 24
+      }
+    ],
+    "agreedCases": 16,
+    "quarantinedCases": 8,
+    "quarantinedFamilies": 2,
+    "labels": {
+      "approve": 9,
+      "deny": 5,
+      "ask": 2
+    },
+    "trainingEligible": false,
+    "humanVerified": false
+  },
+  "generationRestart": {
+    "previousFullAttempt": {
+      "path": "bordercollie/prototype/output/authored-2026-10-20-full",
+      "accepted": 16,
+      "planned": 1764,
+      "stoppedGracefully": true,
+      "reason": "Preserve before correcting command-substitution coverage validation",
+      "calls": 4,
+      "errors": 0,
+      "uncertainCalls": 0,
+      "reviewersComplete": true,
+      "agreedCases": 12,
+      "quarantinedCases": 4
+    },
+    "currentPath": "bordercollie/prototype/output/authored-2026-10-20-full-v2",
+    "planned": 1764,
+    "excludedUnverifiedContracts": 18,
+    "trainingEligible": false,
+    "planSha256": "ee6bef52076701cb092ef8c47b6b2997c41fa84045be922993429c2445c49d19",
+    "authorPidAtLaunch": 17734,
+    "launchedAtUtc": "2026-10-20T18:19:34.341Z",
+    "progressFile": "bordercollie/prototype/output/authored-2026-10-20-full-v2/state.json",
+    "pipelineStatusFile": "bordercollie/prototype/output/authored-2026-10-20-full-v2/pipeline-status.json",
+    "credentialsLocation": "Mac only; never staged to Sol"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "status": "no-go",
+  "requestFormatVersion": "3",
+  "platform": "darwin-arm64",
+  "runnerSha256": "342fa2c6f140e702354a99c4201c9057535ec908eed35c7382e911a19d1d2724",
+  "modelSha256": "c9d915eca282ed42d1a09b143b592adb4cc6744ffe2d294adf5cfc5548170c38",
+  "settings": {
+    "threads": 4,
+    "maxTokens": 128,
+    "timeoutMs": 15000,
+    "repetitions": 3,
+    "warmupPasses": 1
+  },
+  "cases": 9,
+  "measuredResponses": 27,
+  "directVerdictCases": 0,
+  "reasoningResponses": 27,
+  "evidenceSha256": "2a148468d03b809698ec16f79e3c8718a81ea28424619614b59ee82ebd3d70a7",
+  "limits": [
+    "Authored smoke probes only; not blind or human gold.",
+    "This packet was invalidated for independent review because its IDs exposed suggestions; the engine-prefix finding does not use suggested labels.",
+    "No model promotion, training eligibility or Sol authorization."
+  ]
+}

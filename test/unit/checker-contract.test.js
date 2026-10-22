@@ -2,13 +2,13 @@
 
 const assert = require('node:assert/strict');
 const test = require('node:test');
-const { judgeRequest, verdictFrom } = require('../../bordercollie/lib/judge');
-const { DEFAULT_PREFERENCE, withDefaults, validatePreference } = require('../../bordercollie/lib/preference');
-const { proposedCall } = require('../../bordercollie/lib/toolcalls');
+const { gateRequest, verdictFrom } = require('../../xor/lib/gate');
+const { DEFAULT_PREFERENCE, withDefaults, validatePreference } = require('../../xor/lib/preference');
+const { proposedCall } = require('../../xor/lib/toolcalls');
 
 test('the default and free-text Preferences use the same three direct decisions', () => {
   for (const preference of [DEFAULT_PREFERENCE, { text: '' }, { text: 'Ask before deployment.\nLocal edits are fine.' }]) {
-    const request = judgeRequest({ userMessage: 'Inspect the deployment.', preference, call: proposedCall('read', { path: 'deploy.json' }) });
+    const request = gateRequest({ userMessage: 'Inspect the deployment.', preference, call: proposedCall('read', { path: 'deploy.json' }) });
     assert.equal(request.version, '3');
     assert.deepEqual(request.tools.map((tool) => tool.name), ['approve', 'deny', 'ask']);
     assert.match(request.query, /Folder Preference:/);

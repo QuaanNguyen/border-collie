@@ -1,0 +1,215 @@
+[
+  {
+    "name": "update_plan",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "explanation": {
+          "type": "string"
+        },
+        "plan": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "step": {
+                "type": "string"
+              },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "pending",
+                  "in_progress",
+                  "completed"
+                ]
+              }
+            },
+            "required": [
+              "step",
+              "status"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "plan"
+      ],
+      "additionalProperties": false
+    },
+    "sourceSha256": "ecbd36a78158967384269e1fb50f19991fd8f76c8d880cae536b5da105e0b197",
+    "sourceUrl": "https://github.com/openai/codex/blob/rust-v0.163.0/codex-rs/core/src/tools/handlers/plan_spec.rs",
+    "evidence": "analysis/checker-v3-2026-10-19/evidence/codex-source/plan_spec.rs",
+    "verification": "Complete constructor and helper functions inspected; feature variants retained; native availability unqualified."
+  },
+  {
+    "name": "tool_search",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string"
+        },
+        "limit": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "query"
+      ],
+      "additionalProperties": false
+    },
+    "sourceSha256": "06e8e03deb3d4a2da2fc36bc6660b399f3d8e54dee76b0557658ee55abed93de",
+    "sourceUrl": "https://github.com/openai/codex/blob/rust-v0.163.0/codex-rs/core/src/tools/handlers/tool_search_spec.rs",
+    "evidence": "analysis/checker-v3-2026-10-19/evidence/codex-source/tool_search_spec.rs",
+    "verification": "Complete constructor and helper functions inspected; feature variants retained; native availability unqualified."
+  },
+  {
+    "name": "get_context_remaining",
+    "inputSchema": {
+      "type": "object",
+      "properties": {},
+      "required": [],
+      "additionalProperties": false
+    },
+    "sourceSha256": "7568f8f622bfb3e13d81e0d38279735f33a6d0d28ed1639e3607f68280d43c82",
+    "sourceUrl": "https://github.com/openai/codex/blob/rust-v0.163.0/codex-rs/core/src/tools/handlers/get_context_remaining_spec.rs",
+    "evidence": "analysis/checker-v3-2026-10-19/evidence/codex-source/get_context_remaining_spec.rs",
+    "verification": "Complete constructor and helper functions inspected; feature variants retained; native availability unqualified."
+  },
+  {
+    "name": "new_context",
+    "inputSchema": {
+      "type": "object",
+      "properties": {},
+      "required": [],
+      "additionalProperties": false
+    },
+    "sourceSha256": "a8ae795a800d353ace35ed1366ee6917717066dd83f441cde60f78dc1cabd749",
+    "sourceUrl": "https://github.com/openai/codex/blob/rust-v0.163.0/codex-rs/core/src/tools/handlers/new_context_window_spec.rs",
+    "evidence": "analysis/checker-v3-2026-10-19/evidence/codex-source/new_context_window_spec.rs",
+    "verification": "Complete constructor and helper functions inspected; feature variants retained; native availability unqualified."
+  },
+  {
+    "name": "list_available_plugins_to_install",
+    "inputSchema": {
+      "type": "object",
+      "properties": {},
+      "required": [],
+      "additionalProperties": false
+    },
+    "sourceSha256": "950a85c21c857af23f4d1c99aaa33cbddd6a9b7ee0e6e04b346e7fc4f39c77e0",
+    "sourceUrl": "https://github.com/openai/codex/blob/rust-v0.163.0/codex-rs/core/src/tools/handlers/list_available_plugins_to_install_spec.rs",
+    "evidence": "analysis/checker-v3-2026-10-19/evidence/codex-source/list_available_plugins_to_install_spec.rs",
+    "verification": "Complete constructor and helper functions inspected; feature variants retained; native availability unqualified."
+  },
+  {
+    "name": "request_plugin_install",
+    "inputSchema": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "tool_type": {
+              "type": "string"
+            },
+            "action_type": {
+              "type": "string"
+            },
+            "tool_id": {
+              "type": "string"
+            },
+            "suggest_reason": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "tool_type",
+            "action_type",
+            "tool_id",
+            "suggest_reason"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "plugin_id": {
+              "type": "string"
+            },
+            "suggest_reason": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "plugin_id",
+            "suggest_reason"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "sourceSha256": "f0a731499469a4ed581b9550d1a45d5881b01b508f9cb70036b78b0670f45023",
+    "sourceUrl": "https://github.com/openai/codex/blob/rust-v0.163.0/codex-rs/core/src/tools/handlers/request_plugin_install_spec.rs",
+    "evidence": "analysis/checker-v3-2026-10-19/evidence/codex-source/request_plugin_install_spec.rs",
+    "verification": "Complete constructor and helper functions inspected; feature variants retained; native availability unqualified."
+  },
+  {
+    "name": "request_permissions",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "reason": {
+          "type": "string"
+        },
+        "environment_id": {
+          "type": "string"
+        },
+        "permissions": {
+          "type": "object",
+          "properties": {
+            "network": {
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "type": "boolean"
+                }
+              },
+              "required": [],
+              "additionalProperties": false
+            },
+            "file_system": {
+              "type": "object",
+              "properties": {
+                "read": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "write": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "required": [],
+              "additionalProperties": false
+            }
+          },
+          "required": [],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "permissions"
+      ],
+      "additionalProperties": false
+    },
+    "sourceSha256": "f63500f061206cec364f3f994fe4e5a8c18bb205b0f8f25bae83afe123505247",
+    "sourceUrl": "https://github.com/openai/codex/blob/rust-v0.163.0/codex-rs/core/src/tools/handlers/shell_spec.rs",
+    "evidence": "analysis/checker-v3-2026-10-19/evidence/codex-source/shell_spec.rs",
+    "verification": "Complete constructor and helper functions inspected; feature variants retained; native availability unqualified."
+  }
+]

@@ -20,11 +20,14 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
+      - run: git lfs install --local
+      - run: git lfs pull --include="docs/checker-tool-inventory.json"
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
           cache: npm
           cache-dependency-path: pet/package-lock.json
       - run: npm run check
+      - run: npm ci
       - run: npm test
       - run: npm run test:package

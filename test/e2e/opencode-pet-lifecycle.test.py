@@ -81,10 +81,10 @@ def main():
     if platform.system() != 'Darwin' or not shutil.which('opencode'):
         print('SKIP: requires macOS and OpenCode on PATH')
         return
-    with tempfile.TemporaryDirectory(prefix='bordercollie-opencode-lifecycle-') as temporary:
+    with tempfile.TemporaryDirectory(prefix='xor-opencode-lifecycle-') as temporary:
         workroot = Path(temporary)
         config = workroot / 'config'
-        plugin = config / 'plugins' / 'bordercollie'
+        plugin = config / 'plugins' / 'xor'
         plugin.mkdir(parents=True)
         packed = subprocess.run(['npm', 'pack', '--ignore-scripts', '--json', '--pack-destination', temporary],
                                 cwd=ROOT, text=True, capture_output=True, check=True)
@@ -92,13 +92,13 @@ def main():
         with tarfile.open(archive) as package:
             package.extractall(workroot / 'unpacked', filter='data')
         source = workroot / 'unpacked' / 'package'
-        for name in ['bordercollie', 'events', 'pet']:
+        for name in ['xor', 'events', 'pet']:
             shutil.copytree(source / name, plugin / name)
         for entry in (source / 'plugin').iterdir():
             if entry.suffix in ['.js', '.mjs']:
                 shutil.copy(entry, plugin / entry.name)
-        shutil.copy(source / 'plugin' / 'bordercollie.js', plugin / 'index.mjs')
-        (plugin / 'package.json').write_text(json.dumps({'name': 'bordercollie',
+        shutil.copy(source / 'plugin' / 'xor.js', plugin / 'index.mjs')
+        (plugin / 'package.json').write_text(json.dumps({'name': 'xor',
                                                        'exports': {'.': './index.mjs', './tui': './tui.mjs'}}))
         (config / 'opencode.json').write_text(json.dumps({'enabled_providers': [], 'server': {'port': 0}}))
         subprocess.run(['node', str(ROOT / 'scripts' / 'build-native-pet.js'), '--pet-dir=' + str(plugin / 'pet')],
@@ -111,10 +111,10 @@ def main():
         work = workroot / 'work'
         work.mkdir()
         env = {key: value for key, value in os.environ.items()
-               if not key.startswith(('OPENCODE', 'BORDERCOLLIE', 'BORDER_COLLIE', 'XDG_'))}
+               if not key.startswith(('OPENCODE', 'XOR', 'BORDERCOLLIE', 'BORDER_COLLIE', 'XDG_'))}
         env.update(OPENCODE_CONFIG_DIR=str(config), XDG_DATA_HOME=str(workroot / 'data'),
                    XDG_STATE_HOME=str(workroot / 'state'), XDG_CACHE_HOME=str(workroot / 'cache'),
-                   XDG_CONFIG_HOME=str(workroot / 'xdg-config'), BORDERCOLLIE_CONFIG_ROOT=str(workroot / 'owner'),
+                   XDG_CONFIG_HOME=str(workroot / 'xdg-config'), XOR_CONFIG_ROOT=str(workroot / 'owner'),
                    TERM='xterm-256color')
         with socket.socket() as reservation:
             reservation.bind(('127.0.0.1', 0))
@@ -178,7 +178,7 @@ def main():
             first, first_dog = start_tui()
             second, second_dog = start_tui()
             initial_width = visible(first_dog)['width']
-            resized = subprocess.run(['node', str(ROOT / 'scripts' / 'bordercollie.js'), 'pet', 'size', '135'],
+            resized = subprocess.run(['node', str(ROOT / 'scripts' / 'xor.js'), 'pet', 'size', '135'],
                                      env=env, cwd=work, capture_output=True, text=True, check=True)
             assert 'active Pet resized' in resized.stdout, 'Size command did not reach the backend control socket'
 

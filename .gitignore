@@ -15,19 +15,37 @@ lerna-debug.log*
 
 # dotenv environment variable files
 .env
-.env.development
-.env.test
-.env.production
-.env.local
+.env.*
+!.env.example
+!.env.*.example
 
 # temp directory
 .temp
 .tmp
 
-# bordercollie
+# xor
 /pet/node_modules
 
 # opencode
 .opencode/
 .DS_Store
 opencode.json
+/xor/prototype/output/
+/.worktrees/
+*.bin
+*.cact
+*.gguf
+*.onnx
+*.pt
+*.pth
+*.safetensors
+*.sif
+*.model
+
+__pycache__/
+*.pyc
+/analysis/*/snapshot/
+/analysis/*/artifacts/
+
+/.audit/
+/.scratch/

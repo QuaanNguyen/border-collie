@@ -1,7 +1,7 @@
 const { contextBridge } = require('electron')
-const frame = process.env.BORDERCOLLIE_TEST_FRAME
+const frame = process.env.XOR_TEST_FRAME
 
-contextBridge.exposeInMainWorld('bordercollie', {
+contextBridge.exposeInMainWorld('xor', {
   config: async () => ({
     animations: {
       calm: {

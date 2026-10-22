@@ -1,0 +1,14 @@
+{
+  "checkedAt": "2026-10-19",
+  "claudeRelease": "2.1.303",
+  "claudeBinarySha256": "d2da3b003dc08b88b7230469014fe3e1dc6fe94bc8f648e89b34175d30269370",
+  "codexRelease": "0.163.0",
+  "codexBinarySha256": "8813367285524ac798dd96d1b071aea30d58708c7226fd236cd275cf1cfdee31",
+  "transport": "Fictional local HTTP servers. No real model response or tool call.",
+  "isolation": "Temporary empty workspaces; user configuration ignored; synthetic credentials for Claude; Codex provider requires no authentication; no requested MCP servers.",
+  "limitations": [
+    "Feature-gated and platform-specific tools may not be advertised.",
+    "Codex fallback capture initially exposed app schemas; these were excluded and the saved final captures explicitly disable app, browser and desktop integrations.",
+    "Schemas do not prove that the bordercollie adapter intercepts the calls."
+  ]
+}

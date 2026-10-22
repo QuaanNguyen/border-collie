@@ -34,21 +34,24 @@ async function waitFor(read, timeoutMs = 10000) {
 }
 
 async function main() {
-  const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'bordercollie-renderer-'))
+  const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'xor-renderer-'))
   const statusPath = path.join(tempDir, 'status.json')
   const eventPath = path.join(tempDir, 'events.jsonl')
   const env = { ...process.env }
   delete env.ELECTRON_RUN_AS_NODE
-  env.BORDERCOLLIE_ROOT = ROOT
-  env.BORDERCOLLIE_STATUS_PATH = statusPath
-  env.BORDERCOLLIE_EVENT_PATH = eventPath
-  env.BORDERCOLLIE_TEST_FRAME = pathToFileURL(path.join(
+  env.XOR_ROOT = ROOT
+  env.XOR_STATUS_PATH = statusPath
+  env.XOR_EVENT_PATH = eventPath
+  const animFolder = 'xor-normal';
+  const animFile = 'xor-normal-1.png';
+  env.XOR_TEST_FRAME = pathToFileURL(path.join(
     PET_DIR,
     'assets',
     'default-animations',
-    'bordercollie-normal',
-    'bordercollie-normal-1.png',
+    animFolder,
+    animFile,
   )).href
+
 
   let diagnostic = ''
   let childState = 'running'
@@ -108,8 +111,14 @@ async function main() {
     assert.strictEqual(child.exitCode, 0)
     process.stdout.write('ok - directional dragging and the clean denial bubble render correctly\n')
   } finally {
-    if (child.exitCode === null) child.kill('SIGTERM')
-    fs.rmSync(tempDir, { recursive: true, force: true })
+    if (child.exitCode === null && child.signalCode === null) {
+      const exited = new Promise((resolve) => child.once('exit', resolve));
+      child.kill('SIGTERM');
+      const timer = setTimeout(() => child.kill('SIGKILL'), 2000);
+      await exited;
+      clearTimeout(timer);
+    }
+    fs.rmSync(tempDir, { recursive: true, force: true, maxRetries: 10, retryDelay: 100 });
   }
 }
 

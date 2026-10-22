@@ -1,5 +1,5 @@
 export const petRpc = {
-  id: 'bordercollie.pet',
+  id: 'xor.pet',
   methods: {
     configuration: {
       input: { type: 'object', additionalProperties: false },

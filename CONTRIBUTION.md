@@ -1,10 +1,10 @@
-# Contributing to bordercollie
+# Contributing to xor
 
-bordercollie is an OpenCode plugin, deterministic Guard, transient event stream, and optional desktop Pet.
-The plugin in `plugin/` adapts OpenCode hooks to Guard decisions and publishes events to the Pet over a private input pipe.
-Guard owns policy enforcement and completion evidence, while the Pet only expresses events and never changes Guard outcomes.
+xor is an OpenCode plugin, deterministic action gate and guard, transient event stream, and optional desktop Pet companion.
+The plugin in `plugin/` adapts OpenCode hooks (`tool.execute.before`) to gate decisions and publishes events to the Pet over a private input pipe.
+The gate owns policy enforcement and completion evidence, while the Pet expresses events and never changes gate outcomes.
 The production macOS Pet uses the native AppKit and WebKit host in `pet/native/`, while Windows, Linux, and development mode use the locked Electron runtime in `pet/`.
-The root package is public metadata for the upcoming `0.1.0` release, so contributions must not publish it or change release metadata unless the release task explicitly calls for that change.
+The root package is configured for `@quaannguyen/xor`.
 
 ## Before you start
 
@@ -12,15 +12,15 @@ Use Node.js 22.12 or newer, Git, npm, and an installed OpenCode executable.
 Use Xcode Command Line Tools on macOS because the default macOS installer builds the native Pet host.
 Use Windows Command Prompt or PowerShell with npm on Windows because the Windows installer delegates to `node` and the checked-in batch wrapper.
 Use the repository's current branch and keep unrelated worktree changes intact.
-Read `README.md`, `docs/RELEASING.md`, and the relevant domain documentation before changing policy, packaging, OpenCode integration, or Pet behavior.
+Read `README.md`, `CONTEXT.md`, `docs/RELEASING.md`, and the relevant domain documentation before changing policy, packaging, OpenCode integration, or Pet behavior.
 
 ## Setup
 
 Clone the repository and enter its root directory.
 
 ```sh
-git clone <repository-url>
-cd bordercollie
+git clone https://github.com/QuaanNguyen/xor.git
+cd xor
 ```
 
 Install the locked Pet dependencies before running any renderer, Electron, or full-suite checks.
@@ -29,7 +29,7 @@ Install the locked Pet dependencies before running any renderer, Electron, or fu
 npm ci --prefix pet
 ```
 
-The root package has no runtime dependency installation step today, but running the root commands from the repository root is required because the scripts resolve repository-relative paths.
+The root package has no runtime dependency installation step today, but running the root commands from the repository root is required because scripts resolve repository-relative paths.
 The Pet lockfile pins Electron 44.3.0, and `npm ci --prefix pet` is the supported way to reproduce that runtime.
 Start the development Pet when you need to inspect the desktop UI directly.
 
@@ -49,16 +49,16 @@ Run the syntax checks for the packaged JavaScript entry points before opening a 
 npm run check
 ```
 
-Run the fast unit and non-UI integration suite.
+Run the unit and integration suite.
 
 ```sh
 npm test
 ```
 
-Run the focused Guard and plugin suites when changing those boundaries.
+Run the focused gate and plugin suites when changing those boundaries.
 
 ```sh
-node --test test/bordercollie/*.test.js test/plugin/*.test.mjs
+node --test test/xor/*.test.js test/plugin/*.test.mjs
 ```
 
 Run the package surface check to verify required files and ensure `node_modules/` is absent from the tarball.
@@ -75,7 +75,7 @@ node test/run-all-tests.js
 ```
 
 The full orchestrator runs the selected unit and integration suites plus the renderer and window tests when the locked Electron runtime is available.
-Use `BORDERCOLLIE_SKIP_NATIVE_TESTS=1 node test/run-all-tests.js` when native or Electron acceptance is unavailable, but report that reduced coverage in the pull request.
+Use `XOR_SKIP_NATIVE_TESTS=1 node test/run-all-tests.js` when native or Electron acceptance is unavailable, but report that reduced coverage in the pull request.
 
 Run the E2E lane directly when changing external processes, OpenCode integration, the renderer, or the Pet host.
 
@@ -99,7 +99,7 @@ Install the current worktree into OpenCode's global plugin directory before test
 node scripts/install-plugin.js
 ```
 
-The installer stages and verifies the plugin before replacing the existing global package, preserves the owner policy, and builds the native macOS Pet or installs the locked Electron runtime on other platforms.
+The installer stages and verifies the plugin before replacing the existing global package, preserves the owner preference, and builds the native macOS Pet or installs the locked Electron runtime on other platforms.
 The installer may download Electron on Windows and Linux when a matching installed runtime is not reusable.
 OpenCode must be restarted after installation because it loads global plugins at startup.
 
@@ -109,13 +109,13 @@ Open a disposable project with OpenCode from a separate directory.
 opencode <path-to-disposable-project>
 ```
 
-Exercise `bc pet size` with `75`, `115`, and `reset`, and confirm that the Pet changes size without installing keyboard shortcuts.
+Exercise `xor pet size` with `75`, `115`, and `reset`, and confirm that the Pet changes size without installing keyboard shortcuts.
 Exercise an allowed read or edit inside the project and confirm that the Pet remains quiet or shows the expected allowed activity.
-Exercise a path, command, or egress action outside the active Protocol and confirm that Guard refuses it with a remediation message.
-Create or modify `.bordercollie/protocol.json` only as a human during this test, because project policy may narrow the owner policy but cannot broaden it.
+Exercise a path, command, or egress action that matches a denial rule in the active Preference and confirm that xor refuses it with a remediation message.
+Create or modify `.xor/preference.json` as a human during this test.
 Ask OpenCode to make a completion claim that is missing required evidence, then satisfy the criterion and continue the session to verify failed and accepted completion verdicts.
 Confirm that an OpenCode restart starts a fresh event stream and that events are not replayed from a previous session.
-Use a disposable owner configuration and disposable project when testing installer or policy migration behavior.
+Use a disposable owner configuration and disposable project when testing installer or preference migration behavior.
 Do not put real API keys, private data, or production workspaces in test fixtures or issue reports.
 
 ## Windows testing
@@ -131,7 +131,7 @@ Windows uses the Electron Pet runtime and does not use the macOS Swift host or X
 Use `npm ci --prefix pet` before UI tests and use `npm run test:e2e:skip-native` for the supported Windows E2E command.
 Verify the installed command with `opencode <path-to-disposable-project>` after restarting OpenCode.
 When a test fails only on Windows, include the exact shell, Node version, OpenCode version, path shape, and stderr in the report.
-Check both relative and absolute paths when changing installation or policy code because platform path handling is part of the supported behavior.
+Check both relative and absolute paths when changing installation or preference code because platform path handling is part of the supported behavior.
 
 ## Package-manager compatibility
 
@@ -164,8 +164,8 @@ For OpenCode API or permission claims, record the version or date checked and li
 
 Start by reproducing a user-visible bug through the closest E2E path, especially for installation, OpenCode, process lifecycle, renderer, native host, and Windows issues.
 Reduce the reproduction to a deterministic unit or integration test after confirming the end-user failure.
-Keep the fix at the narrowest responsible boundary, such as Guard policy resolution, the OpenCode adapter, the event stream, the Pet host, or packaging.
-Preserve fail-closed behavior for ambiguous policy, malformed active-project Protocol files, protected paths, and unsupported subagent policy inheritance.
+Keep the fix at the narrowest responsible boundary, such as gate policy resolution, the OpenCode adapter, the event stream, the Pet host, or packaging.
+Preserve fail-closed behavior for ambiguous preferences, malformed project files, protected paths, and unsupported subagent policy inheritance.
 Do not describe OpenCode permissions as an operating-system sandbox or as a complete shell filesystem boundary.
 Run the relevant focused tests, the fast checks, and the closest E2E coverage before submitting the change.
 
@@ -175,7 +175,7 @@ Keep each pull request focused on one coherent change and explain the user-visib
 State the problem, the approach, affected platforms, and any compatibility or security implications.
 List the exact validation commands that passed and identify checks that could not run.
 Include screenshots or short recordings for visible Pet or renderer changes when they make the result easier to review.
-Call out changes to policy semantics, package contents, installer behavior, OpenCode hooks, or release metadata explicitly.
+Call out changes to gate semantics, package contents, installer behavior, OpenCode hooks, or release metadata explicitly.
 Do not publish packages, alter protected release configuration, or make unrelated cleanup changes as part of a normal contribution.
 Keep source comments out of new code and express intent through names, types, and structure.
 Request review only after the worktree contains the intended changes and no unrelated files are modified.

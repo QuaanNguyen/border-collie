@@ -28,19 +28,19 @@ function electronBinary(petDir) {
 }
 
 export function launchPet(petDir) {
-  if (process.env.BORDERCOLLIE_NO_PET === "1") return;
+  if (process.env.XOR_NO_PET === "1") return;
   const native = path.join(petDir, "native", "pet-host");
   const bin = process.platform === "darwin" ? native : electronBinary(petDir);
   if (!bin) {
     console.error(
-      "[bordercollie] Pet bordercollie not launched: Electron binary missing under " + petDir +
+      "[xor] Pet not launched: Electron binary missing under " + petDir +
       ". Re-run: bash scripts/install-plugin.sh",
     );
     return;
   }
   if (!fs.existsSync(bin)) {
     console.error(
-      "[bordercollie] Pet bordercollie not launched: native macOS host missing under " + petDir +
+      "[xor] Pet not launched: native macOS host missing under " + petDir +
       ". Re-run: bash scripts/install-plugin.sh",
     );
     return;
@@ -58,7 +58,7 @@ export function launchPet(petDir) {
     env,
   });
   child.on("error", (err) => {
-    console.error("[bordercollie] failed to launch Pet bordercollie:", err.message);
+    console.error("[xor] failed to launch Pet:", err.message);
   });
   child.stdin.on("error", () => {});
   child.unref();

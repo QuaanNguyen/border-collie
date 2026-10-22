@@ -1,0 +1,65 @@
+'use strict';
+
+const test = require('node:test');
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const os = require('node:os');
+const path = require('node:path');
+const author = require('../../xor/prototype/author-checker-data');
+const { repair } = require('../../xor/prototype/repair-checker-study');
+const { digest, requestFor } = require('../../xor/prototype/checker-data');
+
+test('repair preserves source bytes, records new allocation and regenerates current request hashes', (t) => {
+  const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'checker-repair-'));
+  t.after(() => fs.rmSync(directory, { recursive: true, force: true }));
+  const parent = path.join(directory, 'parent');
+  const output = path.join(directory, 'successor');
+  const inventory = { tools: [{ agent: 'opencode', name: 'shell', schemaVerified: true, inputSchema: { type: 'object', required: ['command'], properties: { command: { type: 'string' } }, additionalProperties: false } }], requiredRiskTopics: ['environment-disclosure'], riskScenarios: [{ topic: 'environment-disclosure', agent: 'opencode', tool: 'shell', args: { command: 'printenv' } }] };
+  author.plan(inventory, { authorModel: 'gemma4-31b-it', conditions: ['approve'], splits: ['train'] }, parent);
+  const planned = JSON.parse(fs.readFileSync(path.join(parent, 'plan.json')));
+  const stateFile = path.join(parent, 'state.json');
+  const state = JSON.parse(fs.readFileSync(stateFile));
+  const task = planned.tasks[0];
+  state.accepted.push({ id: task.taskId, family: task.family, agent: task.agent, tool: task.tool, split: task.split, args: { command: 'cat catalog.txt' }, userMessage: 'Read the local catalog to check the listed titles.', preference: { text: 'Read local catalog files when checking the listed titles.' }, inputHash: 'historical-request-hash', trainingEligible: false });
+  const value = { taskId: task.taskId, userMessage: state.accepted[0].userMessage, preference: state.accepted[0].preference, tool: task.tool, args: state.accepted[0].args };
+  state.calls.push({ sequence: 1, status: 'accepted', chargedTokens: 20, taskIds: [task.taskId], response: { model: 'gemma4-31b-it', choices: [{ finish_reason: 'stop', message: { content: JSON.stringify({ cases: [value] }) } }] } });
+  state.calls.push({ sequence: 2, status: 'rejected', chargedTokens: 10, taskIds: [task.taskId], response: { model: 'gemma4-31b-it', choices: [{ finish_reason: 'stop', message: { content: '{"cases":[null]}' } }] } });
+  state.elapsedMs = 100;
+  fs.writeFileSync(stateFile, JSON.stringify(state));
+  const before = fs.readFileSync(stateFile);
+  const result = repair(parent, output);
+  assert.equal(result.imported, 1);
+  assert.equal(result.planned, 2);
+  assert.deepEqual(fs.readFileSync(stateFile), before);
+  const successor = JSON.parse(fs.readFileSync(path.join(output, 'state.json')));
+  assert.equal(successor.accepted[0].inputHash, digest(requestFor(successor.accepted[0])));
+  assert.equal(successor.calls.length, 0);
+  const receipt = JSON.parse(fs.readFileSync(path.join(output, 'repair.json')));
+  assert.equal(receipt.priorCalls, 2);
+  assert.equal(receipt.priorTokens, 30);
+  assert.equal(receipt.exactInputReviewsReused, false);
+  assert.equal(receipt.imported[0].previousInputHash, 'historical-request-hash');
+  const successorPlan = JSON.parse(fs.readFileSync(path.join(output, 'plan.json')));
+  assert.equal(successorPlan.tasks.filter((item) => item.topic === 'environment-disclosure').length, 1);
+  assert.throws(() => repair(parent, output), /Preserve/);
+  const descendant = path.join(directory, 'descendant');
+  assert.equal(repair(output, descendant).imported, 1);
+  const descendantReceipt = JSON.parse(fs.readFileSync(path.join(descendant, 'repair.json')));
+  assert.equal(descendantReceipt.ancestry.length, 2);
+  state.accepted[0].split = 'test';
+  fs.writeFileSync(stateFile, JSON.stringify(state));
+  const failed = path.join(directory, 'failed');
+  assert.throws(() => repair(parent, failed), /Saved parent case identity changed/);
+  assert.equal(fs.existsSync(failed), false);
+  assert.equal(fs.readdirSync(directory).some((name) => name.includes('.pending-')), false);
+});
+
+test('required risk topics must have checked contracts and cannot be silently ignored', (t) => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'checker-risk-plan-'));
+  t.after(() => fs.rmSync(root, { recursive: true, force: true }));
+  const inventory = require('../../docs/checker-tool-inventory.json');
+  author.plan(inventory, { authorModel: 'gemma4-31b-it', riskTopics: inventory.requiredRiskTopics }, path.join(root, 'valid'));
+  const plan = JSON.parse(fs.readFileSync(path.join(root, 'valid', 'plan.json')));
+  for (const topic of inventory.requiredRiskTopics) for (const split of ['train', 'validation', 'test']) assert.equal(plan.tasks.filter((task) => task.topic === topic && task.split === split).length, topic === 'parallel-denials' ? 3 : 4);
+  assert.throws(() => author.plan(inventory, { authorModel: 'gemma4-31b-it', riskTopics: ['invented-topic'] }, path.join(root, 'invalid')), /Unknown required risk topic/);
+});

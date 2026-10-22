@@ -1,7 +1,8 @@
 {
   "type": "module",
   "exports": {
-    ".": "./bordercollie.js",
+    ".": "./xor.js",
     "./tui": "./tui.mjs"
   }
 }
+

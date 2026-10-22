@@ -1,8 +1,8 @@
 {
-  "name": "pet-bordercollie",
+  "name": "pet-xor",
   "version": "0.1.0",
   "private": true,
-  "description": "bordercollie - a desktop companion that watches what your coding agent is doing, and reacts.",
+  "description": "xor - a desktop companion that watches what your coding agent is doing, and reacts.",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
@@ -10,7 +10,7 @@
     "start:dev": "electron . --dev"
   },
   "dependencies": {
-    "electron": "44.3.0"
+    "electron": "44.9.3"
   },
   "allowScripts": {
     "electron": true

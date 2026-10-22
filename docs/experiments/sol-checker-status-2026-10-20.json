@@ -1,0 +1,369 @@
+{
+  "capturedAtUtc": "2026-10-20T17:13:32.439284+00:00",
+  "readOnly": true,
+  "studyDirectory": "/scratch/qnguye19/needle/experiments/v2-improvement-pilot-2026-10-16-one-worker",
+  "queue": [],
+  "queueEmpty": true,
+  "checkerAccounting": [
+    "65695482|v2-pilot-token-preflight|COMPLETED|2026-10-13T12:03:57|2026-10-15T15:00:10|2026-10-15T15:01:24|0:0",
+    "65695585|v2-pilot-baseline-build|FAILED|2026-10-13T13:31:21|2026-10-15T15:01:26|2026-10-15T15:02:14|1:0",
+    "65695589|v2-pilot-summary|FAILED|2026-10-13T13:31:21|2026-10-15T15:02:40|2026-10-15T15:02:42|1:0",
+    "65785439|v2-pilot-token-preflight|COMPLETED|2026-10-16T08:21:07|2026-10-16T08:21:08|2026-10-16T08:21:12|0:0",
+    "65785440|v2-pilot-baseline-build|COMPLETED|2026-10-16T08:21:08|2026-10-16T08:21:12|2026-10-16T08:21:43|0:0",
+    "65785441|v2-pilot-engine-preflight|FAILED|2026-10-16T08:21:08|2026-10-16T08:21:44|2026-10-16T08:22:13|1:0",
+    "65785444|v2-pilot-summary|FAILED|2026-10-16T08:21:08|2026-10-16T08:22:15|2026-10-16T08:22:19|1:0",
+    "65785681|v2-pilot-latency-probe|COMPLETED|2026-10-16T08:23:26|2026-10-16T08:23:26|2026-10-16T08:24:41|0:0",
+    "65785782|v2-pilot-container-probe|COMPLETED|2026-10-16T08:24:37|2026-10-16T08:24:37|2026-10-16T08:24:46|0:0",
+    "65786008|v2-pilot-syscall-probe|COMPLETED|2026-10-16T08:27:04|2026-10-16T08:27:04|2026-10-16T08:27:15|0:0",
+    "65789281|v2-runtime-diagnosis|COMPLETED|2026-10-16T08:58:37|2026-10-16T08:58:38|2026-10-16T08:59:48|0:0",
+    "65789376|v2-runtime-sc009|COMPLETED|2026-10-16T08:59:41|2026-10-16T08:59:41|2026-10-16T09:01:34|0:0",
+    "65790130|v2-single-worker-stress|CANCELLED by 2074025|2026-10-16T09:06:36|None|2026-10-16T09:12:31|0:0",
+    "65790764|v2-single-worker-stress|COMPLETED|2026-10-16T09:13:07|2026-10-16T09:13:07|2026-10-16T09:17:43|0:0",
+    "65790765|v2-pilot-token-preflight|COMPLETED|2026-10-16T09:13:07|2026-10-16T09:17:43|2026-10-16T09:17:46|0:0",
+    "65790817|v2-pilot-baseline-build|COMPLETED|2026-10-16T09:13:10|2026-10-16T09:17:59|2026-10-16T09:18:06|0:0",
+    "65790818|v2-pilot-engine-preflight|COMPLETED|2026-10-16T09:13:10|2026-10-16T09:18:06|2026-10-16T09:20:26|0:0",
+    "65790819_0|v2-pilot-fit|COMPLETED|2026-10-16T09:13:10|2026-10-16T09:20:48|2026-10-16T09:20:53|0:0",
+    "65790819_1|v2-pilot-fit|COMPLETED|2026-10-16T09:13:10|2026-10-16T09:20:53|2026-10-16T09:37:18|0:0",
+    "65790819_4|v2-pilot-fit|COMPLETED|2026-10-16T09:13:10|2026-10-16T09:21:38|2026-10-16T09:38:09|0:0",
+    "65790819_7|v2-pilot-fit|COMPLETED|2026-10-16T09:13:10|2026-10-16T09:38:08|2026-10-16T09:54:48|0:0",
+    "65790819_8|v2-pilot-fit|COMPLETED|2026-10-16T09:13:10|2026-10-16T09:44:12|2026-10-16T09:44:33|0:0",
+    "65790819_9|v2-pilot-fit|COMPLETED|2026-10-16T09:13:10|2026-10-16T09:45:14|2026-10-16T10:02:58|0:0",
+    "65790819_12|v2-pilot-fit|COMPLETED|2026-10-16T09:13:10|2026-10-16T09:55:49|2026-10-16T10:12:32|0:0",
+    "65790819_15|v2-pilot-fit|COMPLETED|2026-10-16T09:13:10|2026-10-16T10:03:00|2026-10-16T10:20:22|0:0",
+    "65790819_16|v2-pilot-fit|COMPLETED|2026-10-16T09:13:10|2026-10-16T10:12:32|2026-10-16T10:12:55|0:0",
+    "65790819_17|v2-pilot-fit|COMPLETED|2026-10-16T09:13:10|2026-10-16T10:12:55|2026-10-16T10:29:51|0:0",
+    "65790819_20|v2-pilot-fit|COMPLETED|2026-10-16T09:13:10|2026-10-16T10:20:22|2026-10-16T10:37:14|0:0",
+    "65790819_23|v2-pilot-fit|COMPLETED|2026-10-16T09:13:10|2026-10-16T10:30:01|2026-10-16T10:47:03|0:0",
+    "65790820_0|v2-pilot-evaluate|COMPLETED|2026-10-16T09:13:10|2026-10-16T09:21:21|2026-10-16T10:01:12|0:0",
+    "65790820_1|v2-pilot-evaluate|COMPLETED|2026-10-16T09:13:10|2026-10-16T09:38:08|2026-10-16T10:17:37|0:0",
+    "65790820_4|v2-pilot-evaluate|COMPLETED|2026-10-16T09:13:10|2026-10-16T09:39:14|2026-10-16T10:18:05|0:0",
+    "65790820_7|v2-pilot-evaluate|COMPLETED|2026-10-16T09:13:10|2026-10-16T10:01:59|2026-10-16T10:39:08|0:0",
+    "65790820_8|v2-pilot-evaluate|COMPLETED|2026-10-16T09:13:10|2026-10-16T09:45:14|2026-10-16T10:31:03|0:0",
+    "65790820_9|v2-pilot-evaluate|COMPLETED|2026-10-16T09:13:10|2026-10-16T10:17:37|2026-10-16T10:52:33|0:0",
+    "65790820_12|v2-pilot-evaluate|COMPLETED|2026-10-16T09:13:10|2026-10-16T10:31:28|2026-10-16T11:11:24|0:0",
+    "65790820_15|v2-pilot-evaluate|COMPLETED|2026-10-16T09:13:10|2026-10-16T10:39:16|2026-10-16T11:19:17|0:0",
+    "65790820_16|v2-pilot-evaluate|COMPLETED|2026-10-16T09:13:10|2026-10-16T10:18:05|2026-10-16T10:58:13|0:0",
+    "65790820_17|v2-pilot-evaluate|CANCELLED by 2074025|2026-10-16T09:13:10|2026-10-16T10:52:33|2026-10-16T11:24:17|0:0",
+    "65790820_20|v2-pilot-evaluate|CANCELLED by 2074025|2026-10-16T09:13:10|2026-10-16T10:58:13|2026-10-16T11:24:17|0:0",
+    "65790820_23|v2-pilot-evaluate|CANCELLED by 2074025|2026-10-16T09:13:10|2026-10-16T11:11:24|2026-10-16T11:24:17|0:0",
+    "65794652|v2-reference-format-probe|COMPLETED|2026-10-16T09:46:53|2026-10-16T09:47:23|2026-10-16T09:48:44|0:0",
+    "65796035|needle-format-numerics|COMPLETED|2026-10-16T09:58:58|2026-10-16T09:59:57|2026-10-16T10:01:07|0:0"
+  ],
+  "registeredJobAccounting": [
+    "65790817|v2-pilot-baseline-build|COMPLETED|2026-10-16T09:13:10|2026-10-16T09:17:59|2026-10-16T09:18:06|0:0",
+    "65790818|v2-pilot-engine-preflight|COMPLETED|2026-10-16T09:13:10|2026-10-16T09:18:06|2026-10-16T09:20:26|0:0",
+    "65790823|v2-pilot-summary|CANCELLED by 2074025|2026-10-16T09:13:10|None|2026-10-16T11:24:17|0:0",
+    "65790819_0|v2-pilot-fit|COMPLETED|2026-10-16T09:13:10|2026-10-16T09:20:48|2026-10-16T09:20:53|0:0",
+    "65790819_1|v2-pilot-fit|COMPLETED|2026-10-16T09:13:10|2026-10-16T09:20:53|2026-10-16T09:37:18|0:0",
+    "65790819_4|v2-pilot-fit|COMPLETED|2026-10-16T09:13:10|2026-10-16T09:21:38|2026-10-16T09:38:09|0:0",
+    "65790819_7|v2-pilot-fit|COMPLETED|2026-10-16T09:13:10|2026-10-16T09:38:08|2026-10-16T09:54:48|0:0",
+    "65790819_8|v2-pilot-fit|COMPLETED|2026-10-16T09:13:10|2026-10-16T09:44:12|2026-10-16T09:44:33|0:0",
+    "65790819_9|v2-pilot-fit|COMPLETED|2026-10-16T09:13:10|2026-10-16T09:45:14|2026-10-16T10:02:58|0:0",
+    "65790819_12|v2-pilot-fit|COMPLETED|2026-10-16T09:13:10|2026-10-16T09:55:49|2026-10-16T10:12:32|0:0",
+    "65790819_15|v2-pilot-fit|COMPLETED|2026-10-16T09:13:10|2026-10-16T10:03:00|2026-10-16T10:20:22|0:0",
+    "65790819_16|v2-pilot-fit|COMPLETED|2026-10-16T09:13:10|2026-10-16T10:12:32|2026-10-16T10:12:55|0:0",
+    "65790819_17|v2-pilot-fit|COMPLETED|2026-10-16T09:13:10|2026-10-16T10:12:55|2026-10-16T10:29:51|0:0",
+    "65790819_20|v2-pilot-fit|COMPLETED|2026-10-16T09:13:10|2026-10-16T10:20:22|2026-10-16T10:37:14|0:0",
+    "65790819_23|v2-pilot-fit|COMPLETED|2026-10-16T09:13:10|2026-10-16T10:30:01|2026-10-16T10:47:03|0:0",
+    "65790820_0|v2-pilot-evaluate|COMPLETED|2026-10-16T09:13:10|2026-10-16T09:21:21|2026-10-16T10:01:12|0:0",
+    "65790820_1|v2-pilot-evaluate|COMPLETED|2026-10-16T09:13:10|2026-10-16T09:38:08|2026-10-16T10:17:37|0:0",
+    "65790820_4|v2-pilot-evaluate|COMPLETED|2026-10-16T09:13:10|2026-10-16T09:39:14|2026-10-16T10:18:05|0:0",
+    "65790820_7|v2-pilot-evaluate|COMPLETED|2026-10-16T09:13:10|2026-10-16T10:01:59|2026-10-16T10:39:08|0:0",
+    "65790820_8|v2-pilot-evaluate|COMPLETED|2026-10-16T09:13:10|2026-10-16T09:45:14|2026-10-16T10:31:03|0:0",
+    "65790820_9|v2-pilot-evaluate|COMPLETED|2026-10-16T09:13:10|2026-10-16T10:17:37|2026-10-16T10:52:33|0:0",
+    "65790820_12|v2-pilot-evaluate|COMPLETED|2026-10-16T09:13:10|2026-10-16T10:31:28|2026-10-16T11:11:24|0:0",
+    "65790820_15|v2-pilot-evaluate|COMPLETED|2026-10-16T09:13:10|2026-10-16T10:39:16|2026-10-16T11:19:17|0:0",
+    "65790820_16|v2-pilot-evaluate|COMPLETED|2026-10-16T09:13:10|2026-10-16T10:18:05|2026-10-16T10:58:13|0:0",
+    "65790820_17|v2-pilot-evaluate|CANCELLED by 2074025|2026-10-16T09:13:10|2026-10-16T10:52:33|2026-10-16T11:24:17|0:0",
+    "65790820_20|v2-pilot-evaluate|CANCELLED by 2074025|2026-10-16T09:13:10|2026-10-16T10:58:13|2026-10-16T11:24:17|0:0",
+    "65790820_23|v2-pilot-evaluate|CANCELLED by 2074025|2026-10-16T09:13:10|2026-10-16T11:11:24|2026-10-16T11:24:17|0:0",
+    "65790821_[2-3,5-6,10-11,13-14,18-19,21-22%2]|v2-pilot-fit-wave2|CANCELLED by 2074025|2026-10-16T09:13:10|None|2026-10-16T11:24:17|0:0",
+    "65790822_2|v2-pilot-evaluate-wave2|CANCELLED by 2074025|2026-10-16T09:13:10|None|2026-10-16T11:24:17|0:0",
+    "65790822_3|v2-pilot-evaluate-wave2|CANCELLED by 2074025|2026-10-16T09:13:10|None|2026-10-16T11:24:17|0:0",
+    "65790822_5|v2-pilot-evaluate-wave2|CANCELLED by 2074025|2026-10-16T09:13:10|None|2026-10-16T11:24:17|0:0",
+    "65790822_6|v2-pilot-evaluate-wave2|CANCELLED by 2074025|2026-10-16T09:13:10|None|2026-10-16T11:24:17|0:0",
+    "65790822_10|v2-pilot-evaluate-wave2|CANCELLED by 2074025|2026-10-16T09:13:10|None|2026-10-16T11:24:17|0:0",
+    "65790822_11|v2-pilot-evaluate-wave2|CANCELLED by 2074025|2026-10-16T09:13:10|None|2026-10-16T11:24:17|0:0",
+    "65790822_13|v2-pilot-evaluate-wave2|CANCELLED by 2074025|2026-10-16T09:13:10|None|2026-10-16T11:24:17|0:0",
+    "65790822_14|v2-pilot-evaluate-wave2|CANCELLED by 2074025|2026-10-16T09:13:10|None|2026-10-16T11:24:17|0:0",
+    "65790822_18|v2-pilot-evaluate-wave2|CANCELLED by 2074025|2026-10-16T09:13:10|None|2026-10-16T11:24:17|0:0",
+    "65790822_19|v2-pilot-evaluate-wave2|CANCELLED by 2074025|2026-10-16T09:13:10|None|2026-10-16T11:24:17|0:0",
+    "65790822_[21-22%4]|v2-pilot-evaluate-wave2|CANCELLED by 2074025|2026-10-16T09:13:10|None|2026-10-16T11:24:17|0:0"
+  ],
+  "frozenInputChecks": {
+    "train-scenarios.jsonl": true,
+    "train-answers.jsonl": true,
+    "train-reasoning.jsonl": true,
+    "validation-scenarios.jsonl": true,
+    "validation-answers.jsonl": true,
+    "validation-reasoning.jsonl": true,
+    "fit-requests.jsonl": true,
+    "validation-requests.jsonl": true,
+    "diagnostic-requests.jsonl": true,
+    "quarantine.jsonl": true
+  },
+  "allFrozenInputHashesMatch": true,
+  "conditions": {
+    "answers-r16-u300-seed0": {
+      "savedEvaluationStatus": "complete",
+      "evaluationSha256": "8286b476ad3798990a9778ef893eb35a3991825afdf442866671714eab37e51e",
+      "modelPresent": true,
+      "modelBytes": 63437076,
+      "archiveWeightsSha256": "b34486d0bf3e94f9bf6dae143a474b1f216d214341358a58b7f6c9ab4e60e81e"
+    },
+    "answers-r16-u300-seed1": {
+      "savedEvaluationStatus": "complete",
+      "evaluationSha256": "1d0fe39e32815be20ce46eae6c299e7680b4b3d837fc99c8d8ae578fd64889dd",
+      "modelPresent": true,
+      "modelBytes": 63437076,
+      "archiveWeightsSha256": "75848ef27d8ecc89ff7be6eb8631a0a00bd70b1baba2747524f3f8e041c0c9f1"
+    },
+    "answers-r16-u300-seed2": {
+      "savedEvaluationStatus": "running",
+      "evaluationSha256": "7c0fb7266d66938910300180ce9647c723ad78f9fa87e20e91c71d9219989d31",
+      "modelPresent": true,
+      "modelBytes": 63437076,
+      "archiveWeightsSha256": "e4113f5f1715732e702f84a202c70757e474ae73694804e0ecbfb0679a6320be"
+    },
+    "answers-r32-u300-seed0": {
+      "savedEvaluationStatus": "complete",
+      "evaluationSha256": "1f9b06a39cef9df60d02c10917771dbc49912422ef92590ea900404ab3b0d43b",
+      "modelPresent": true,
+      "modelBytes": 63437076,
+      "archiveWeightsSha256": "9d8e586cfe0eae46d1fbd08639ee297453ea2bdb6467d159ee48abdd8d7171b5"
+    },
+    "answers-r32-u300-seed1": {
+      "savedEvaluationStatus": "complete",
+      "evaluationSha256": "8d64f15ee88cde912892884a932ec5ace611be28a926aafb094a7e38ba643283",
+      "modelPresent": true,
+      "modelBytes": 63437076,
+      "archiveWeightsSha256": "9d285b8cc810eeee41f6c8abb560975b8112e6da64f01d9292c0faa43dce4991"
+    },
+    "answers-r32-u300-seed2": {
+      "savedEvaluationStatus": "running",
+      "evaluationSha256": "6be8667ff2e958a2867e48f023aab060f3c3ab25664f3c7d144dee06f0cd792b",
+      "modelPresent": true,
+      "modelBytes": 63437076,
+      "archiveWeightsSha256": "0641c6d080e2e5ccdcedb79f69ff74e1c7d48b4b03712d8e0dd5c6dee2e5ada7"
+    },
+    "reasoning-r16-u300-seed0": {
+      "savedEvaluationStatus": "complete",
+      "evaluationSha256": "661b49dda39b60245a6ac490fc282df071549d4a46f37646e2e3eabd58a42a08",
+      "modelPresent": true,
+      "modelBytes": 63437076,
+      "archiveWeightsSha256": "0f7b965e8dfa57b41972bbff886be1e800a5ca3a8a8de51c75a690877db0c063"
+    },
+    "reasoning-r16-u300-seed1": {
+      "savedEvaluationStatus": "complete",
+      "evaluationSha256": "398112bf3fea80e08aaa4852de3f0465c627a8d9efae3c9be5d47708742285ee",
+      "modelPresent": true,
+      "modelBytes": 63437076,
+      "archiveWeightsSha256": "386d5252bd152b58e61a515f2f7289a3d15b6390e8271249bfc23e40fb7a85da"
+    },
+    "reasoning-r16-u300-seed2": {
+      "savedEvaluationStatus": "running",
+      "evaluationSha256": "293c8c7ca5d33576851582ebb99d4e8a908d311e6dcda9b2ef065fedeaea1ab9",
+      "modelPresent": true,
+      "modelBytes": 63437076,
+      "archiveWeightsSha256": "b2fbd719a06605899364a0d9ccd68801b215f79f8670de744df43081b97f83a3"
+    },
+    "untuned-seed0": {
+      "savedEvaluationStatus": "complete",
+      "evaluationSha256": "da97ca1566f136dd8c1d74233550e2aede5590ef2193d13fc674e90bd58c9125",
+      "modelPresent": true,
+      "modelBytes": 63437076,
+      "archiveWeightsSha256": "3bde318ede183eb06eb65524c9139f83d749e929f46feadfe516cefa3c8e8863"
+    },
+    "untuned-seed1": {
+      "savedEvaluationStatus": "complete",
+      "evaluationSha256": "151e252e6dea425db13d28fa6b21fff1cac47788f1c604bef4838b8f1020b0aa",
+      "modelPresent": true,
+      "modelBytes": 63437076,
+      "archiveWeightsSha256": "3bde318ede183eb06eb65524c9139f83d749e929f46feadfe516cefa3c8e8863"
+    },
+    "untuned-seed2": {
+      "savedEvaluationStatus": "complete",
+      "evaluationSha256": "a701e6f24a546c5a0c19de652584261d10908387374be78baa5f926c21e35252",
+      "modelPresent": true,
+      "modelBytes": 63437076,
+      "archiveWeightsSha256": "3bde318ede183eb06eb65524c9139f83d749e929f46feadfe516cefa3c8e8863"
+    }
+  },
+  "laterCheckerSubmissionsAfterOctober16": false,
+  "scope": "Scheduler records and existing files only. No jobs or remote files changed.",
+  "sourceChat": "01a154d4-8da3-75f1-848e-1eaa638a5fda",
+  "researchHead": "2548a7b007552c58342c542a1df1450b3977ed11",
+  "draft": {
+    "cases": 1656,
+    "proposalsSha256": "2ccd0eedbc207433acc82a84c5a0078e1fbb501acb025542caa69df3c5fc7a7b",
+    "partitionsValid": true,
+    "exactMatchingIndependentReviews": 72,
+    "withoutMatchingReviewPair": 1584,
+    "allToolSchemas": 150,
+    "verifiedSchemas": 132,
+    "unverifiedSchemas": [
+      {
+        "agent": "claude-code",
+        "name": "EndConversation"
+      },
+      {
+        "agent": "claude-code",
+        "name": "LSP"
+      },
+      {
+        "agent": "claude-code",
+        "name": "PowerShell"
+      },
+      {
+        "agent": "claude-code",
+        "name": "SendUserFile"
+      },
+      {
+        "agent": "claude-code",
+        "name": "ShareOnboardingGuide"
+      },
+      {
+        "agent": "claude-code",
+        "name": "Skill"
+      },
+      {
+        "agent": "claude-code",
+        "name": "SubagentHandback"
+      },
+      {
+        "agent": "claude-code",
+        "name": "ToolSearch"
+      },
+      {
+        "agent": "claude-code",
+        "name": "WaitForMcpServers"
+      },
+      {
+        "agent": "codex",
+        "name": "web_search"
+      },
+      {
+        "agent": "codex",
+        "name": "web.run"
+      },
+      {
+        "agent": "codex",
+        "name": "image_gen.imagegen"
+      },
+      {
+        "agent": "opencode",
+        "name": "<server>_<tool>"
+      },
+      {
+        "agent": "claude-code",
+        "name": "mcp__<server>__<tool>"
+      },
+      {
+        "agent": "claude-code",
+        "name": "mcp__computer-use__*"
+      },
+      {
+        "agent": "claude-code",
+        "name": "mcp__claude-in-chrome__*"
+      },
+      {
+        "agent": "codex",
+        "name": "mcp__<server>__<tool>"
+      },
+      {
+        "agent": "codex",
+        "name": "browser/computer-use feature catalog"
+      }
+    ],
+    "runtimeInterceptionGaps": 150
+  },
+  "checks": {
+    "focusedJavascriptTests": {
+      "passed": 17,
+      "failed": 0
+    },
+    "directTrainerTests": {
+      "passed": 2,
+      "failed": 0
+    }
+  },
+  "priorMacDevelopmentScores": {
+    "source": "docs/experiments/sol-checker-status-2026-10-19.json",
+    "rerunThisSession": false,
+    "results": [
+      {
+        "label": "answers-r16-u300-seed0",
+        "cases": 100,
+        "correct": 41
+      },
+      {
+        "label": "answers-r16-u300-seed1",
+        "cases": 100,
+        "correct": 45
+      },
+      {
+        "label": "answers-r16-u300-seed2",
+        "cases": 100,
+        "correct": 45
+      },
+      {
+        "label": "answers-r32-u300-seed0",
+        "cases": 100,
+        "correct": 42
+      },
+      {
+        "label": "answers-r32-u300-seed1",
+        "cases": 100,
+        "correct": 40
+      },
+      {
+        "label": "answers-r32-u300-seed2",
+        "cases": 100,
+        "correct": 41
+      },
+      {
+        "label": "matched-untuned",
+        "cases": 100,
+        "correct": 41
+      }
+    ],
+    "qualification": "Development results only. No blind evaluation or model promotion."
+  },
+  "remainingRequiredRepairs": [
+    {
+      "issue": 57,
+      "work": "Complete reviewed tool and risk coverage."
+    },
+    {
+      "issue": 58,
+      "work": "Finish copied scenario scope alignment."
+    },
+    {
+      "issue": 59,
+      "work": "Finish isolated blind evaluation, leakage checks and recorded critical human verification."
+    },
+    {
+      "issue": 60,
+      "work": "Finish disputed-family review."
+    },
+    {
+      "issue": 61,
+      "work": "Prove direct verdict output and realistic latency on the Mac."
+    },
+    {
+      "issue": 65,
+      "work": "Complete V2 contracts and verify actual interception."
+    }
+  ],
+  "constraint": "The prepared empty-thinking trainer copy is unproven. It does not close the direct-output gate or authorize training.",
+  "nextActions": [
+    "Capture the 18 remaining conditional or dynamic tool contracts in enabled clients.",
+    "Verify interception for each supported surface before claiming runtime coverage.",
+    "Complete exact-input independent reviews and isolate fresh human-verified evaluation.",
+    "Resolve the Mac direct-output gate before new fitting.",
+    "Only after required repairs are verified and closed, request separate authorization for new Sol jobs."
+  ],
+  "trainingReady": false,
+  "newSolJobsAuthorized": false,
+  "modelPromoted": false
+}

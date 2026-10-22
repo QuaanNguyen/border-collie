@@ -1,0 +1,14 @@
+const fs = require('node:fs');
+const path = require('node:path');
+const [catalog, dependencyDirectory, output] = process.argv.slice(2);
+const schema = require(path.resolve(dependencyDirectory, 'typescript-json-schema'));
+const tools = JSON.parse(fs.readFileSync(catalog));
+const flat = tools.flatMap((tool) => tool.type === 'namespace' ? tool.tools : [tool]);
+const description = flat.find((tool) => tool.name === 'exec').description;
+const declarations = [...description.matchAll(/declare const tools: \{ (\w+)\((?:args|input): ([\s\S]*?)\): Promise</g)];
+const inputFile = output + '.ts';
+fs.writeFileSync(inputFile, declarations.map(([, name, type]) => `export type Input_${name} = ${type};`).join('\n'));
+const program = schema.getProgramFromFiles([inputFile], { strictNullChecks: true });
+const result = declarations.map(([, name]) => ({ name, inputSchema: schema.generateSchema(program, `Input_${name}`, { required: true }) }));
+fs.writeFileSync(output, JSON.stringify(result, null, 2) + '\n');
+fs.unlinkSync(inputFile);

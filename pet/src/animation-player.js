@@ -133,6 +133,8 @@
   }
 
   const interfaceValue = { createAnimationPlayer }
-  if (typeof window !== 'undefined') window.BordercollieAnimation = interfaceValue
+  if (typeof window !== 'undefined') {
+    window.XorAnimation = interfaceValue
+  }
   if (typeof module !== 'undefined') module.exports = interfaceValue
 })()

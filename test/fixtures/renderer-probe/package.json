@@ -1,5 +1,5 @@
 {
-  "name": "bordercollie-renderer-probe",
+  "name": "xor-renderer-probe",
   "private": true,
   "main": "main.js"
 }

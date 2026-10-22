@@ -1,0 +1,31 @@
+{
+  "status": "complete-integrity-check",
+  "cases": 24,
+  "families": 6,
+  "splits": {
+    "train": 24
+  },
+  "tools": {
+    "opencode:edit": 4,
+    "opencode:read": 4,
+    "opencode:shell": 4,
+    "opencode:subagent": 4,
+    "opencode:webfetch": 4,
+    "codex:exec_command": 4
+  },
+  "shellFeatures": {
+    "shellCalls": 8,
+    "multiline": 2,
+    "variables": 1,
+    "commandSubstitution": 0,
+    "heredocs": 1,
+    "scriptInvocation": 1
+  },
+  "proposalsSha256": "eeb9876a3dee5d6b2acde556f4779a675ea78b5c5d319e9881a52f43a8c44eb0",
+  "requestsSha256": "40078a396f79cc273943f4392e5dc2a8f6ab2bae5d47934ffddfa56a8c9b2ebe",
+  "generatedCommandsExecuted": false,
+  "trainingEligible": false,
+  "humanVerified": false,
+  "modelQualityMeasured": false,
+  "scope": "Frozen input integrity and visible request checks only. No schema, label, tokenizer, runtime interception, or model qualification is implied."
+}

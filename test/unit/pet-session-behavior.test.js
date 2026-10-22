@@ -5,7 +5,7 @@ const os = require('node:os');
 const path = require('node:path');
 const { PassThrough } = require('node:stream');
 const { EventBus } = require('../../events');
-const { createSession } = require('../../bordercollie/lib/session');
+const { createSession } = require('../../xor/lib/session');
 const { readLiveEvents } = require('../../pet/live-events');
 
 const ROOT = path.resolve(__dirname, '..', '..');
@@ -21,7 +21,7 @@ async function run(name, test) {
 }
 
 async function main() {
-  const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'bordercollie-session-'));
+  const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'xor-session-'));
   try {
     await run('a new Pet cannot receive events from an ended plugin session', async () => {
       const previousPipe = new PassThrough();

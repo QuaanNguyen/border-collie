@@ -1,43 +1,73 @@
-# bordercollie
+# xor action gate and companion
 
-bordercollie checks an agent's proposed actions against the owner's instructions and verifies evidence for completion claims.
+xor checks proposed OpenCode tool calls against the user's request and project rules before they run.
+It uses local Needle decisions to approve, deny, or ask for confirmation.
 
-## Language
+The active work prepares reviewed synthetic scenarios and qualifies a replacement Needle model on the Mac.
+No replacement model is qualified.
+Direct answers without model reasoning remain a qualification requirement.
+The desktop companion remains part of the runtime.
 
-**bordercollie**:
-The single product and command name for the system that applies permission decisions and checks completion evidence.
+## Core architecture
 
-**Judge**:
-The model that reads the user message, the Preference, and one proposed action and returns a Verdict.
+### 1. The Hook / Catch Gate
+The gate operates as a hook interceptor on agent tool execution (`tool.execute.before`).
+Before any proposed tool call is allowed to run:
+1. **Safety and Boundary Checks**: Enforces folder boundaries in deterministic code (e.g., rejecting paths escaping the project root, attempts to alter `.xor/preference.json`, or unmanaged subagent dispatches).
+2. **Needle Gate Execution**: Evaluates the proposed call against the folder Preference and the active user request using the local Needle model.
+3. **Denial vs. Allowance**:
+   - When the proposed action matches the user preference description for denial, the gate returns `deny`, blocking tool execution and informing the agent of the refusal reason and permitted alternatives.
+   - When the proposed action does not match the denial description, the gate returns `approve` (`allow`), letting the agent proceed through OpenCode's normal permission checks.
+   - If explicit human confirmation is mandated by the preference or the model returns `ask`, execution is blocked and the agent is instructed to ask the owner before retrying.
 
-**Verdict**:
-An approve, deny, or ask decision for one proposed action.
-A missing Verdict withholds the action, and an ask requires an applicable rule in the Preference.
+### 2. The local Needle model
+- **Decision format**: The target format is direct `approve`, `deny`, or `ask` tool calls.
+  Qualification must establish this behavior for a replacement model.
+- **Checked Inputs**: The gate consumes the exact production request format (version 3): the latest user request, one free-text project Preference, and the complete proposed tool call (including derived read/write paths and network targets for shell commands).
+- **Fail-Closed**: Missing models, unreadable preferences, missing verdicts, or execution timeouts automatically fail-closed into refusals.
+
+### 3. The Desktop Companion (Pet)
+- Sits beside the coding agent and reflects the live event stream emitted by the gate (`calm`, `allowed`, `thinking`, `refused`, `denied`, `suspicious`, `celebrating`).
+- Uses native macOS AppKit / WebKit (`pet/native/`) on Darwin and locked Electron on Windows / Linux.
+- The Pet observes and displays events via a private IPC pipe; it never alters gate decisions.
+
+## Language and Domain Vocabulary
+
+**xor**:
+The verifier product, plugin, and CLI command suite (`xor install`, `xor migrate`, `xor pet size`).
+
+**Gate / Hook**:
+The interceptor that traps every agent tool call before execution, comparing proposed actions against the owner Preference using the system-one Needle model.
 
 **Preference**:
-One free-text statement of the owner's instructions for a project.
-Optional completion criteria remain separate for deterministic evidence checks.
+One free-text statement of the user's project rules (canonical location `.xor/preference.json`), defining what actions are permitted, what must be denied, and what requires owner confirmation. Optional `done_criteria` define deterministic completion verification.
 
-**Migration**:
-An owner-initiated operation that carries existing settings and completion criteria into the current format.
+**Needle Model (Gate / Gate Engine)**:
+The on-device Cactus Needle model that classifies proposed actions.
 
-**Pet**:
-The optional desktop companion that expresses events without changing permission decisions.
+**Verdict**:
+One direct `approve`, `deny`, or `ask` answer returned by the gate.
+- `deny`: Withholds the proposed action because it matches the user preference description for denial.
+- `approve`: Allows the proposed action because it does not match the denial description.
+- `ask`: Withholds the action pending owner confirmation.
 
-**Pet host**:
-The platform window that owns interaction, placement, and lifecycle for the Pet.
+**Scenario**:
+A synthetic tuple of (user request, Preference, proposed tool call) used for fine-tuning and evaluating the gate. Generated commands are inert data and never executed.
 
-**Pet animation contract**:
-The validated mapping from Pet states to animations and timing.
+**Family**:
+A cluster of related scenarios and syntactic command variants that are kept together in the same data split to prevent leakage.
 
-**Event stream**:
-The transient sequence of events shared by bordercollie and the Pet during one session.
+**Split**:
+Disjoint partitions for training, validation, and frozen blind evaluation.
 
-**bordercollie plugin**:
-The connection between bordercollie and the coding application.
+**Author**:
+The model responsible for synthesizing diverse, schema-valid tool calls, tasks, and preferences.
 
-**bordercollie package**:
-The installable product containing the plugin, action checks, evidence checks, Judge support, and Pet.
+**Independent Review**:
+Evaluating author cases across two distinct model families without access to intended labels; families with disputes or abstentions are quarantined.
 
-**Global bind**:
-Installation of a verified bordercollie package for the coding application while preserving the previous working installation if verification fails.
+**Human Verification**:
+Explicit human audit and sign-off on critical safety cases and distribution boundaries.
+
+**Promotion**:
+Upgrading the shipped Needle gate only after proving parity or improvement over the baseline on frozen evaluation sets with lower latency or smaller size.
