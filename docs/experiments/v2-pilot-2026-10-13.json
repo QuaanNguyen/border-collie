@@ -1,0 +1,320 @@
+{
+  "studyId": "v2-improvement-pilot-2026-10-13",
+  "status": "submitted-pending-maintenance",
+  "implementationCommit": "a6c93a20c188ab3ec11b16f289013c3fee8eea06",
+  "plan": "docs/v2-finetuning-pilot.md",
+  "studyPlanSha256": "31d603b61a6531c66fd835a1eaf37f007dffcc0bed90f08213b5b9e3a4731c63",
+  "issueNumbers": [
+    54,
+    57,
+    58,
+    59,
+    60,
+    61,
+    65
+  ],
+  "modelConditions": 24,
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "training": {
+    "batchSize": 20,
+    "learningRate": 0.0001,
+    "loraRank": 16,
+    "loraAlpha": 32,
+    "maxLength": 1024,
+    "exportLayers": 20,
+    "quantizedWeightBits": 4,
+    "reasoningTargets": false
+  },
+  "data": {
+    "eligibleTrain": 2006,
+    "eligibleValidation": 485,
+    "selectedTrain": 1000,
+    "selectedValidation": 100,
+    "diagnosticCases": 239,
+    "quarantinedCases": 842,
+    "duplicateInputsRemoved": 0,
+    "trainVerdicts": {
+      "allow": 432,
+      "ask": 105,
+      "disallow": 463
+    },
+    "trainTopics": {
+      "build-delete:1": 11,
+      "build-delete:2": 11,
+      "documentation-fetch:1": 6,
+      "documentation-fetch:2": 1,
+      "history-delete:1": 18,
+      "history-delete:2": 18,
+      "injected-action:1": 39,
+      "injected-action:2": 36,
+      "injected-action:3": 42,
+      "injected-action:4": 8,
+      "local-git:1": 14,
+      "local-git:2": 13,
+      "local-git:3": 10,
+      "local-report:1": 8,
+      "local-report:2": 11,
+      "local-report:3": 11,
+      "local-sensitive:1": 4,
+      "package-install:1": 18,
+      "package-install:2": 11,
+      "package-install:3": 9,
+      "project-send:1": 40,
+      "project-send:2": 36,
+      "project-send:3": 42,
+      "project-send:4": 26,
+      "read-search:1": 9,
+      "read-search:2": 16,
+      "read-search:3": 14,
+      "read-search:4": 12,
+      "read-search:5": 17,
+      "read-search:6": 14,
+      "remote-git:1": 42,
+      "remote-git:2": 42,
+      "remote-git:3": 15,
+      "remote-git:4": 10,
+      "security-v2:aws-credentials": 8,
+      "security-v2:cron-install": 6,
+      "security-v2:dd-write": 6,
+      "security-v2:extra-upload": 6,
+      "security-v2:forced-push": 6,
+      "security-v2:git-credentials": 8,
+      "security-v2:ordinary-package-install": 6,
+      "security-v2:ordinary-report-write": 6,
+      "security-v2:process-stop": 6,
+      "security-v2:python-remove": 6,
+      "security-v2:xargs-remove": 6,
+      "source-delete:1": 21,
+      "source-delete:2": 18,
+      "source-delete:3": 18,
+      "source-delete:4": 8,
+      "source-delete:5": 14,
+      "source-delete:6": 17,
+      "source-edit:1": 40,
+      "source-edit:2": 20,
+      "source-edit:3": 15,
+      "source-edit:4": 20,
+      "test-build:1": 30,
+      "test-build:2": 15,
+      "test-build:3": 14,
+      "test-build:4": 13,
+      "write-confirmation:1": 6,
+      "write-confirmation:2": 7,
+      "write-dry-run:1": 20
+    },
+    "validationTopics": {
+      "build-delete:1": 2,
+      "history-delete:2": 2,
+      "injected-action:3": 6,
+      "injected-action:4": 1,
+      "local-git:1": 1,
+      "local-git:2": 2,
+      "local-report:2": 2,
+      "local-report:3": 2,
+      "package-install:2": 2,
+      "project-send:1": 4,
+      "project-send:3": 6,
+      "read-search:1": 1,
+      "read-search:4": 1,
+      "read-search:5": 1,
+      "read-search:6": 1,
+      "remote-git:1": 14,
+      "remote-git:2": 12,
+      "remote-git:4": 2,
+      "security-v2:encoded-delete": 6,
+      "source-delete:1": 3,
+      "source-delete:5": 1,
+      "source-edit:1": 12,
+      "source-edit:3": 3,
+      "source-edit:4": 6,
+      "test-build:1": 2,
+      "test-build:4": 1,
+      "write-confirmation:1": 1,
+      "write-confirmation:2": 1,
+      "write-dry-run:1": 2
+    }
+  },
+  "preparation": {
+    "sha256": "f3f6d92236c0f5fd1c66460ba961339a92e599b708dc8680666f670d495ffc2a",
+    "sourceHashes": {
+      "development": "09bdff908a0ca6724c07d57e0477daad87e4277cb1677ab1bc8c0d347af5b077",
+      "diagnostic": "c5b8976840c846f032c1cf13cfd69ae4589c24263335919c3f50f741b3753382",
+      "controls": "5553490000407b30ce61e68c015fcf8d0d0741846506462eaa3b36963b0f2030"
+    },
+    "scenariosSha256": "2d9e7bd9fafd1239cd165b0939f9a36703e6665a32dfa9a7eb427848e29b7806",
+    "proposedCases": 3572,
+    "excludedBeforeReview": 64,
+    "customPreferenceContract": "v2-sensitive-scope-pilot-1"
+  },
+  "dataHashes": {
+    "train-scenarios.jsonl": "7581ac23eeb0d0451b0dca3437a6aa0d6a9172d93a4ba41185788f2e8097dc07",
+    "train-answers.jsonl": "b53f60fab5c1a284b897dd0224978b40812cf31df09383868c5fbc10173b182a",
+    "train-reasoning.jsonl": "f93ebf1fd5fe1f3205bb45a4ebfd098f3d0c50c66efc75fdeea5174bdfd26d2e",
+    "validation-scenarios.jsonl": "46f0544a219dda8c627c339db4d6e1a37695a947077c8aeb6ef36669525205bd",
+    "validation-answers.jsonl": "28023381c5648890693ff30e0096aaa9091af43c063f9ef9be3db347aed43096",
+    "validation-reasoning.jsonl": "1c31a3c37bea7567db37e66b5ef5e052d9a482ed721f468a91b8f57771be0c58",
+    "fit-requests.jsonl": "2643bf64aa62840cfbd487cd086002b0dd3d107663f385c69d5a06188c688f00",
+    "validation-requests.jsonl": "9d26cb85166fb041ce55cbd23d5c4fd7865378ef2248efc7e3a0f45bab1eb326",
+    "diagnostic-requests.jsonl": "8fccec0acf72f0b50b489b4dfbb60abb018b351eecaa3421660eb5387a74f54b",
+    "quarantine.jsonl": "239d54c3ea272298497bf29a7ca0baa4456ec680fe9a913ba57269de45ca03a5"
+  },
+  "reviewHashes": {
+    "inkling-small": "df22bd4d3e08f76ea23c3b7fe6dfe87aff280aff2eebcb3a2fa83a157889791a",
+    "kimi-k2-7-code": "0934912ec6a3c6a525e54c960f07cb1b2498d27347e682e96239e0121488ff15"
+  },
+  "wrapperHashes": {
+    "needle-4bit-study.py": "bb0c0a81f47cf02348cb68d9121aae4a81b12c740246a2bfc06d00357118e5d6",
+    "preflight-v2-pilot.py": "8dcc766e3ae98a60d18cb967318ae98f67c580829ad6dd7d62a6c4d07cf24cd2",
+    "summarize-v2-pilot.py": "df211e7488e87196809d3ce0090a8fbad908f4d58951c87fd48d88f32e4fbc2f",
+    "submit-v2-pilot.py": "d6e29398b3bd149e5df045d840530290bc420a78cd4ccd0630e6cab9a5a069a7"
+  },
+  "tokenEvidence": {
+    "status": "complete",
+    "jobId": null,
+    "cases": 3572,
+    "sourceSha256": "53b718077b70ac7b34e1031a103273df4e1ddc0374a7e2cd324659dc4ac0a81a",
+    "trainerSourceSha256": "677b2e4aba1fd9ce5ff6e6e19763d0a66b8425eccf626f7107e2e3ace5d99241",
+    "maximumTokens": 690,
+    "medianTokens": 513,
+    "overflowIds": [],
+    "answersOnlyHasReasoningMarkers": false,
+    "finishedAt": "2026-10-13T19:08:19Z",
+    "limitation": "Checks official training rendering and complete inputs; native runner behavior is a separate measurement."
+  },
+  "exactTargetEvidence": {
+    "status": "complete",
+    "studyPlanSha256": "31d603b61a6531c66fd835a1eaf37f007dffcc0bed90f08213b5b9e3a4731c63",
+    "trainerSourceSha256": "677b2e4aba1fd9ce5ff6e6e19763d0a66b8425eccf626f7107e2e3ace5d99241",
+    "formats": {
+      "answers": {
+        "cases": 1100,
+        "maximumTokens": 690,
+        "paddedLength": 1024,
+        "sourceSha256": {
+          "train-answers.jsonl": "b53f60fab5c1a284b897dd0224978b40812cf31df09383868c5fbc10173b182a",
+          "validation-answers.jsonl": "28023381c5648890693ff30e0096aaa9091af43c063f9ef9be3db347aed43096"
+        }
+      },
+      "reasoning": {
+        "cases": 1100,
+        "maximumTokens": 732,
+        "paddedLength": 1024,
+        "sourceSha256": {
+          "train-reasoning.jsonl": "f93ebf1fd5fe1f3205bb45a4ebfd098f3d0c50c66efc75fdeea5174bdfd26d2e",
+          "validation-reasoning.jsonl": "1c31a3c37bea7567db37e66b5ef5e052d9a482ed721f468a91b8f57771be0c58"
+        }
+      }
+    }
+  },
+  "exactTargetAuditSha256": "704f69ef0f231f58b0dee532e70cd137503c32f3c31f6f727231109fcb13e559",
+  "macUntunedProbe": {
+    "status": "complete",
+    "runnerSha256": "342fa2c6f140e702354a99c4201c9057535ec908eed35c7382e911a19d1d2724",
+    "weightsSha256": "3bde318ede183eb06eb65524c9139f83d749e929f46feadfe516cefa3c8e8863",
+    "cases": 20,
+    "recognizedVerdicts": 20,
+    "medianSeconds": 0.193404125,
+    "maximumSeconds": 0.617260042,
+    "productionTimeoutSeconds": 15,
+    "limitation": "Untuned compatibility probe only; does not establish trained answers-only behavior or promotion quality."
+  },
+  "solDirectory": "/scratch/qnguye19/needle/experiments/v2-improvement-pilot-2026-10-13",
+  "submittedJobs": {
+    "tokenPreflight": "65695482",
+    "v2-pilot-baseline-build": "65695585",
+    "v2-pilot-engine-preflight": "65695586",
+    "v2-pilot-fit": "65695587",
+    "v2-pilot-evaluate": "65695588",
+    "v2-pilot-summary": "65695589"
+  },
+  "concurrency": {
+    "gpu": 2,
+    "evaluation": 4
+  },
+  "schedulerSnapshot": {
+    "capturedAtUtc": "2026-10-13T20:33:40.591823+00:00",
+    "schedulerTimeZone": "America/Chicago",
+    "jobs": {
+      "tokenPreflight": {
+        "requestedId": "65695482",
+        "JobId": "65695482",
+        "JobState": "PENDING",
+        "Reason": "ReqNodeNotAvail,_Reserved_for_maintenance",
+        "Dependency": "(null)",
+        "Partition": "public",
+        "StartTime": "2026-10-22T16:00:00"
+      },
+      "v2-pilot-baseline-build": {
+        "requestedId": "65695585",
+        "JobId": "65695585",
+        "JobState": "PENDING",
+        "Reason": "Dependency",
+        "Dependency": "afterok:65695482(unfulfilled)",
+        "Partition": "public",
+        "StartTime": "Unknown"
+      },
+      "v2-pilot-engine-preflight": {
+        "requestedId": "65695586",
+        "JobId": "65695586",
+        "JobState": "PENDING",
+        "Reason": "Dependency",
+        "Dependency": "afterok:65695585(unfulfilled)",
+        "Partition": "public",
+        "StartTime": "Unknown"
+      },
+      "v2-pilot-fit": {
+        "requestedId": "65695587",
+        "JobId": "65695587",
+        "JobState": "PENDING",
+        "Reason": "Dependency",
+        "Dependency": "afterok:65695586(unfulfilled)",
+        "Partition": "public",
+        "StartTime": "Unknown",
+        "ArrayTaskThrottle": "2"
+      },
+      "v2-pilot-evaluate": {
+        "requestedId": "65695588",
+        "JobId": "65695588",
+        "JobState": "PENDING",
+        "Reason": "Dependency",
+        "Dependency": "aftercorr:65695587_*(unfulfilled)",
+        "Partition": "public",
+        "StartTime": "Unknown",
+        "ArrayTaskThrottle": "4"
+      },
+      "v2-pilot-summary": {
+        "requestedId": "65695589",
+        "JobId": "65695589",
+        "JobState": "PENDING",
+        "Reason": "Dependency",
+        "Dependency": "afterany:65695587_*(unfulfilled),afterany:65695588_*(unfulfilled)",
+        "Partition": "public",
+        "StartTime": "Unknown"
+      }
+    },
+    "maintenanceReservations": [
+      {
+        "ReservationName": "oct2026_maint",
+        "StartTime": "2026-10-12T10:00:00",
+        "EndTime": "2026-10-15T17:00:00",
+        "Flags": "MAINT,SPEC_NODES,ALL_NODES"
+      }
+    ],
+    "pendingJobModificationAttempt": "Rejected by Sol; jobs remain unchanged."
+  },
+  "localEvidenceDirectory": "guard/prototype/output/v2-improvement-pilot-2026-10-13",
+  "promotionAllowed": false,
+  "selectionRule": "Use family-separated development validation only. Never select a seed or setting using historical diagnostic results. Report all three seeds; extend the selected design to ten seeds later.",
+  "limits": [
+    "No fresh blind test exists yet; promotion is prohibited.",
+    "Worktree and patch contracts are not included in this pilot.",
+    "Coverage gaps and disputed families remain explicit follow-up work, not silently relabeled.",
+    "Training uses a custom Preference contract through the unchanged production request builder; the shipped default is unchanged.",
+    "The official trainer has no external validation-file option; a verified seed permutation places the registered family-separated validation cases into its internal split."
+  ],
+  "nextRequiredAction": "After maintenance, inspect actual job outcomes and compare every seed on fitting and validation before expanding the design."
+}

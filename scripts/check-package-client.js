@@ -15,7 +15,7 @@ if (!['npm', 'pnpm', 'yarn', 'bun'].includes(client)) {
   process.exit(2);
 }
 
-const workspace = fs.mkdtempSync(path.join(os.tmpdir(), 'bordercollie-client-'));
+const workspace = fs.mkdtempSync(path.join(os.tmpdir(), 'xor-client-'));
 const packDir = path.join(workspace, 'pack');
 const installDir = path.join(workspace, 'install');
 
@@ -51,9 +51,11 @@ try {
   if (client === 'bun') run('bun', ['add', tarball], installDir);
 
   const packageDir = path.join(installDir, 'node_modules', ...packageName.split('/'));
-  assert.ok(fs.existsSync(path.join(packageDir, 'scripts', 'bordercollie.js')));
-  assert.ok(fs.existsSync(path.join(packageDir, 'plugin', 'bordercollie.js')));
-  process.stdout.write(`ok - ${client} installs the packed bordercollie package\n`);
+  assert.ok(fs.existsSync(path.join(packageDir, 'scripts', 'xor.js')));
+  assert.ok(fs.existsSync(path.join(packageDir, 'plugin', 'xor.js')));
+  const installedManifest = JSON.parse(fs.readFileSync(path.join(packageDir, 'package.json'), 'utf8'));
+  assert.equal(installedManifest.bin.xor, 'scripts/xor.js');
+  process.stdout.write(`ok - ${client} installs the packed xor package\n`);
 } finally {
   fs.rmSync(workspace, { recursive: true, force: true });
 }

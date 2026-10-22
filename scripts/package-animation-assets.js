@@ -139,11 +139,20 @@ function renderQa(frames) {
   return { width, height, pixels }
 }
 
+function defaultSourcePath() {
+  const xorSource = path.join(ROOT, 'docs', 'assets', 'xor-source.png');
+  return fs.existsSync(xorSource) ? xorSource : path.join(ROOT, 'docs', 'assets', 'bordercollie-source.png');
+}
+
+function defaultQaPath() {
+  return path.join(ROOT, 'docs', 'assets', 'xor-animation-qa.png');
+}
+
 function packageAnimationAssets(options = {}) {
-  const sourcePath = path.resolve(options.sourcePath || path.join(ROOT, 'docs', 'assets', 'bordercollie-source.png'))
+  const sourcePath = path.resolve(options.sourcePath || defaultSourcePath())
   const outputDir = path.resolve(options.outputDir || path.join(ROOT, 'pet', 'assets', 'default-animations'))
   const manifestPath = path.resolve(options.manifestPath || path.join(outputDir, 'manifest.json'))
-  const qaPath = path.resolve(options.qaPath || path.join(ROOT, 'docs', 'assets', 'bordercollie-animation-qa.png'))
+  const qaPath = path.resolve(options.qaPath || defaultQaPath())
   const sourceFile = fs.readFileSync(sourcePath)
   const source = decodePng(sourceFile)
   const expected = {
@@ -157,11 +166,11 @@ function packageAnimationAssets(options = {}) {
   const frames = []
   for (let row = 0; row < ANIMATIONS.length; row += 1) {
     const animation = ANIMATIONS[row]
-    const directory = path.join(outputDir, `bordercollie-${animation}`)
+    const directory = path.join(outputDir, `xor-${animation}`)
     fs.mkdirSync(directory, { recursive: true })
     for (let column = 0; column < 5; column += 1) {
       const frame = extractFrame(source, row, column)
-      const filename = `bordercollie-${animation}-${column + 1}.png`
+      const filename = `xor-${animation}-${column + 1}.png`
       const filePath = path.join(directory, filename)
       fs.writeFileSync(filePath, encodePng(frame.image))
       frames.push({

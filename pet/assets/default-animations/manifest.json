@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "source": {
-    "file": "bordercollie-source.png",
+    "file": "xor-source.png",
     "sha256": "656deba7e0dfe60e516e9e5db6a3247b3fe031038cbf01fec33fd931e6b28cc3",
     "width": 960,
     "height": 1536,
@@ -35,7 +35,7 @@
     {
       "animation": "normal",
       "index": 1,
-      "file": "bordercollie-normal/bordercollie-normal-1.png",
+      "file": "xor-normal/xor-normal-1.png",
       "sourceCell": {
         "row": 1,
         "column": 1
@@ -56,7 +56,7 @@
     {
       "animation": "normal",
       "index": 2,
-      "file": "bordercollie-normal/bordercollie-normal-2.png",
+      "file": "xor-normal/xor-normal-2.png",
       "sourceCell": {
         "row": 1,
         "column": 2
@@ -77,7 +77,7 @@
     {
       "animation": "normal",
       "index": 3,
-      "file": "bordercollie-normal/bordercollie-normal-3.png",
+      "file": "xor-normal/xor-normal-3.png",
       "sourceCell": {
         "row": 1,
         "column": 3
@@ -98,7 +98,7 @@
     {
       "animation": "normal",
       "index": 4,
-      "file": "bordercollie-normal/bordercollie-normal-4.png",
+      "file": "xor-normal/xor-normal-4.png",
       "sourceCell": {
         "row": 1,
         "column": 4
@@ -119,7 +119,7 @@
     {
       "animation": "normal",
       "index": 5,
-      "file": "bordercollie-normal/bordercollie-normal-5.png",
+      "file": "xor-normal/xor-normal-5.png",
       "sourceCell": {
         "row": 1,
         "column": 5
@@ -140,7 +140,7 @@
     {
       "animation": "dragging",
       "index": 1,
-      "file": "bordercollie-dragging/bordercollie-dragging-1.png",
+      "file": "xor-dragging/xor-dragging-1.png",
       "sourceCell": {
         "row": 2,
         "column": 1
@@ -161,7 +161,7 @@
     {
       "animation": "dragging",
       "index": 2,
-      "file": "bordercollie-dragging/bordercollie-dragging-2.png",
+      "file": "xor-dragging/xor-dragging-2.png",
       "sourceCell": {
         "row": 2,
         "column": 2
@@ -182,7 +182,7 @@
     {
       "animation": "dragging",
       "index": 3,
-      "file": "bordercollie-dragging/bordercollie-dragging-3.png",
+      "file": "xor-dragging/xor-dragging-3.png",
       "sourceCell": {
         "row": 2,
         "column": 3
@@ -203,7 +203,7 @@
     {
       "animation": "dragging",
       "index": 4,
-      "file": "bordercollie-dragging/bordercollie-dragging-4.png",
+      "file": "xor-dragging/xor-dragging-4.png",
       "sourceCell": {
         "row": 2,
         "column": 4
@@ -224,7 +224,7 @@
     {
       "animation": "dragging",
       "index": 5,
-      "file": "bordercollie-dragging/bordercollie-dragging-5.png",
+      "file": "xor-dragging/xor-dragging-5.png",
       "sourceCell": {
         "row": 2,
         "column": 5
@@ -245,7 +245,7 @@
     {
       "animation": "hovering",
       "index": 1,
-      "file": "bordercollie-hovering/bordercollie-hovering-1.png",
+      "file": "xor-hovering/xor-hovering-1.png",
       "sourceCell": {
         "row": 3,
         "column": 1
@@ -266,7 +266,7 @@
     {
       "animation": "hovering",
       "index": 2,
-      "file": "bordercollie-hovering/bordercollie-hovering-2.png",
+      "file": "xor-hovering/xor-hovering-2.png",
       "sourceCell": {
         "row": 3,
         "column": 2
@@ -287,7 +287,7 @@
     {
       "animation": "hovering",
       "index": 3,
-      "file": "bordercollie-hovering/bordercollie-hovering-3.png",
+      "file": "xor-hovering/xor-hovering-3.png",
       "sourceCell": {
         "row": 3,
         "column": 3
@@ -308,7 +308,7 @@
     {
       "animation": "hovering",
       "index": 4,
-      "file": "bordercollie-hovering/bordercollie-hovering-4.png",
+      "file": "xor-hovering/xor-hovering-4.png",
       "sourceCell": {
         "row": 3,
         "column": 4
@@ -329,7 +329,7 @@
     {
       "animation": "hovering",
       "index": 5,
-      "file": "bordercollie-hovering/bordercollie-hovering-5.png",
+      "file": "xor-hovering/xor-hovering-5.png",
       "sourceCell": {
         "row": 3,
         "column": 5
@@ -350,7 +350,7 @@
     {
       "animation": "thinking",
       "index": 1,
-      "file": "bordercollie-thinking/bordercollie-thinking-1.png",
+      "file": "xor-thinking/xor-thinking-1.png",
       "sourceCell": {
         "row": 4,
         "column": 1
@@ -371,7 +371,7 @@
     {
       "animation": "thinking",
       "index": 2,
-      "file": "bordercollie-thinking/bordercollie-thinking-2.png",
+      "file": "xor-thinking/xor-thinking-2.png",
       "sourceCell": {
         "row": 4,
         "column": 2
@@ -392,7 +392,7 @@
     {
       "animation": "thinking",
       "index": 3,
-      "file": "bordercollie-thinking/bordercollie-thinking-3.png",
+      "file": "xor-thinking/xor-thinking-3.png",
       "sourceCell": {
         "row": 4,
         "column": 3
@@ -413,7 +413,7 @@
     {
       "animation": "thinking",
       "index": 4,
-      "file": "bordercollie-thinking/bordercollie-thinking-4.png",
+      "file": "xor-thinking/xor-thinking-4.png",
       "sourceCell": {
         "row": 4,
         "column": 4
@@ -434,7 +434,7 @@
     {
       "animation": "thinking",
       "index": 5,
-      "file": "bordercollie-thinking/bordercollie-thinking-5.png",
+      "file": "xor-thinking/xor-thinking-5.png",
       "sourceCell": {
         "row": 4,
         "column": 5
@@ -455,7 +455,7 @@
     {
       "animation": "suspicious",
       "index": 1,
-      "file": "bordercollie-suspicious/bordercollie-suspicious-1.png",
+      "file": "xor-suspicious/xor-suspicious-1.png",
       "sourceCell": {
         "row": 5,
         "column": 1
@@ -476,7 +476,7 @@
     {
       "animation": "suspicious",
       "index": 2,
-      "file": "bordercollie-suspicious/bordercollie-suspicious-2.png",
+      "file": "xor-suspicious/xor-suspicious-2.png",
       "sourceCell": {
         "row": 5,
         "column": 2
@@ -497,7 +497,7 @@
     {
       "animation": "suspicious",
       "index": 3,
-      "file": "bordercollie-suspicious/bordercollie-suspicious-3.png",
+      "file": "xor-suspicious/xor-suspicious-3.png",
       "sourceCell": {
         "row": 5,
         "column": 3
@@ -518,7 +518,7 @@
     {
       "animation": "suspicious",
       "index": 4,
-      "file": "bordercollie-suspicious/bordercollie-suspicious-4.png",
+      "file": "xor-suspicious/xor-suspicious-4.png",
       "sourceCell": {
         "row": 5,
         "column": 4
@@ -539,7 +539,7 @@
     {
       "animation": "suspicious",
       "index": 5,
-      "file": "bordercollie-suspicious/bordercollie-suspicious-5.png",
+      "file": "xor-suspicious/xor-suspicious-5.png",
       "sourceCell": {
         "row": 5,
         "column": 5
@@ -560,7 +560,7 @@
     {
       "animation": "refused",
       "index": 1,
-      "file": "bordercollie-refused/bordercollie-refused-1.png",
+      "file": "xor-refused/xor-refused-1.png",
       "sourceCell": {
         "row": 6,
         "column": 1
@@ -581,7 +581,7 @@
     {
       "animation": "refused",
       "index": 2,
-      "file": "bordercollie-refused/bordercollie-refused-2.png",
+      "file": "xor-refused/xor-refused-2.png",
       "sourceCell": {
         "row": 6,
         "column": 2
@@ -602,7 +602,7 @@
     {
       "animation": "refused",
       "index": 3,
-      "file": "bordercollie-refused/bordercollie-refused-3.png",
+      "file": "xor-refused/xor-refused-3.png",
       "sourceCell": {
         "row": 6,
         "column": 3
@@ -623,7 +623,7 @@
     {
       "animation": "refused",
       "index": 4,
-      "file": "bordercollie-refused/bordercollie-refused-4.png",
+      "file": "xor-refused/xor-refused-4.png",
       "sourceCell": {
         "row": 6,
         "column": 4
@@ -644,7 +644,7 @@
     {
       "animation": "refused",
       "index": 5,
-      "file": "bordercollie-refused/bordercollie-refused-5.png",
+      "file": "xor-refused/xor-refused-5.png",
       "sourceCell": {
         "row": 6,
         "column": 5
@@ -665,7 +665,7 @@
     {
       "animation": "denied",
       "index": 1,
-      "file": "bordercollie-denied/bordercollie-denied-1.png",
+      "file": "xor-denied/xor-denied-1.png",
       "sourceCell": {
         "row": 7,
         "column": 1
@@ -686,7 +686,7 @@
     {
       "animation": "denied",
       "index": 2,
-      "file": "bordercollie-denied/bordercollie-denied-2.png",
+      "file": "xor-denied/xor-denied-2.png",
       "sourceCell": {
         "row": 7,
         "column": 2
@@ -707,7 +707,7 @@
     {
       "animation": "denied",
       "index": 3,
-      "file": "bordercollie-denied/bordercollie-denied-3.png",
+      "file": "xor-denied/xor-denied-3.png",
       "sourceCell": {
         "row": 7,
         "column": 3
@@ -728,7 +728,7 @@
     {
       "animation": "denied",
       "index": 4,
-      "file": "bordercollie-denied/bordercollie-denied-4.png",
+      "file": "xor-denied/xor-denied-4.png",
       "sourceCell": {
         "row": 7,
         "column": 4
@@ -749,7 +749,7 @@
     {
       "animation": "denied",
       "index": 5,
-      "file": "bordercollie-denied/bordercollie-denied-5.png",
+      "file": "xor-denied/xor-denied-5.png",
       "sourceCell": {
         "row": 7,
         "column": 5
@@ -770,7 +770,7 @@
     {
       "animation": "celebrating",
       "index": 1,
-      "file": "bordercollie-celebrating/bordercollie-celebrating-1.png",
+      "file": "xor-celebrating/xor-celebrating-1.png",
       "sourceCell": {
         "row": 8,
         "column": 1
@@ -791,7 +791,7 @@
     {
       "animation": "celebrating",
       "index": 2,
-      "file": "bordercollie-celebrating/bordercollie-celebrating-2.png",
+      "file": "xor-celebrating/xor-celebrating-2.png",
       "sourceCell": {
         "row": 8,
         "column": 2
@@ -812,7 +812,7 @@
     {
       "animation": "celebrating",
       "index": 3,
-      "file": "bordercollie-celebrating/bordercollie-celebrating-3.png",
+      "file": "xor-celebrating/xor-celebrating-3.png",
       "sourceCell": {
         "row": 8,
         "column": 3
@@ -833,7 +833,7 @@
     {
       "animation": "celebrating",
       "index": 4,
-      "file": "bordercollie-celebrating/bordercollie-celebrating-4.png",
+      "file": "xor-celebrating/xor-celebrating-4.png",
       "sourceCell": {
         "row": 8,
         "column": 4
@@ -854,7 +854,7 @@
     {
       "animation": "celebrating",
       "index": 5,
-      "file": "bordercollie-celebrating/bordercollie-celebrating-5.png",
+      "file": "xor-celebrating/xor-celebrating-5.png",
       "sourceCell": {
         "row": 8,
         "column": 5

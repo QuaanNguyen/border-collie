@@ -3,79 +3,18 @@ const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
 const { spawnSync } = require('node:child_process');
+const { assertOpenCodeVersion } = require('../xor/lib/opencode-version');
 const { buildNativePet } = require('./build-native-pet');
-const { LEGACY_PLUGIN_DIRECTORY, LEGACY_PLUGIN_ENTRY } = require('../bordercollie/lib/legacy-paths');
-const { defaultConfigRoot, defaultConfig, writeConfig } = require('../bordercollie/lib/config');
+const { retrieveJudge } = require('../xor/lib/judge-artifacts');
+const {
+  LEGACY_PLUGIN_DIRECTORY,
+  LEGACY_PLUGIN_ENTRY,
+  OLDER_LEGACY_PLUGIN_DIRECTORY,
+  OLDER_LEGACY_PLUGIN_ENTRY,
+} = require('../xor/lib/legacy-paths');
 
 function defaultPluginsDir() {
   return path.join(os.homedir(), '.config', 'opencode', 'plugins');
-}
-
-function defaultOwnerConfigDir() {
-  return defaultConfigRoot();
-}
-
-function researchSafePolicy() {
-  return {
-    schema_version: 1,
-    setup_package: 'research-safe',
-    trusted_workspace_roots: [],
-  };
-}
-
-const CUSTOM_FIELDS = ['trusted_workspace_roots', 'read_paths', 'write_paths', 'command_allowlist', 'allow_ordinary_bash', 'allow_tools', 'egress', 'done_criteria', 'deny_commands', 'protected_paths', 'read_protected_paths'];
-
-function initialOwnerPolicy(opts) {
-  if (!opts.setupPackage || opts.setupPackage === 'research-safe') return researchSafePolicy();
-  if (opts.setupPackage !== 'custom') throw new Error('setup package must be Research-safe or Custom');
-  const policy = { schema_version: 1, setup_package: 'custom', trusted_workspace_roots: [] };
-  for (const field of CUSTOM_FIELDS) {
-    if (Object.hasOwn(opts.customPolicy || {}, field)) policy[field] = opts.customPolicy[field];
-  }
-  return policy;
-}
-
-function ensureOwnerPolicy(ownerConfigDir, opts = {}) {
-  const configFile = path.join(ownerConfigDir, 'config.json');
-  const legacyPolicyPath = path.join(ownerConfigDir, 'policy.json');
-  if (!fs.existsSync(configFile) && !fs.existsSync(legacyPolicyPath)) {
-    const config = defaultConfig();
-    if (opts.setupPackage === 'custom') {
-      const policy = initialOwnerPolicy(opts);
-      delete policy.schema_version;
-      delete policy.setup_package;
-      delete policy.trusted_workspace_roots;
-      config.profiles.custom = { extends: 'research', policy };
-      config.adapters.opencode.default_profile = 'custom';
-      config.adapters.opencode.allowed_project_profiles = ['custom', 'governed'];
-    }
-    writeConfig(config, ownerConfigDir);
-  }
-  return fs.existsSync(configFile) ? configFile : legacyPolicyPath;
-}
-
-function migrationPreview(policyPath) {
-  if (path.basename(policyPath) === 'config.json') return null;
-  const target = researchSafePolicy();
-  let current;
-  try {
-    current = JSON.parse(fs.readFileSync(policyPath, 'utf8'));
-  } catch (error) {
-    return {
-      policyPath,
-      problem: 'invalid-policy',
-      reason: error.message,
-    };
-  }
-  const missingFields = Object.keys(target).filter((field) => field !== 'schema_version' && !(field in current));
-  const currentSchemaVersion = Number.isInteger(current.schema_version) ? current.schema_version : 0;
-  if (currentSchemaVersion >= target.schema_version && !missingFields.length) return null;
-  return {
-    currentSchemaVersion,
-    targetSchemaVersion: target.schema_version,
-    missingFields,
-    recommendedPolicy: target,
-  };
 }
 
 function installEnv() {
@@ -208,7 +147,7 @@ function ensureElectron(petDir, donorPetDirs = []) {
 
   if (!electronReady(petDir)) {
     throw new Error(
-      'Electron binary did not install. From the bordercollie clone run: cd pet && npm install\n' +
+      'Electron binary did not install. From the xor clone run: cd pet && npm install\n' +
       'Then re-run scripts/install-plugin.',
     );
   }
@@ -216,14 +155,14 @@ function ensureElectron(petDir, donorPetDirs = []) {
 
 function verifyStagedPlugin(entry, cwd) {
   const href = require('node:url').pathToFileURL(entry).href;
-  const script = `const plugin = await import(${JSON.stringify(href)}); if (typeof plugin.Bordercollie !== 'function') process.exit(2); if (plugin.default != null && (plugin.default.id !== 'bordercollie' || typeof plugin.default.setup !== 'function')) process.exit(3)`;
+  const script = `const plugin = await import(${JSON.stringify(href)}); if (typeof plugin.xor !== 'function' && typeof plugin.bordercollie !== 'function') process.exit(2); if (plugin.default != null && (plugin.default.id !== 'xor' && plugin.default.id !== 'bordercollie' || typeof plugin.default.setup !== 'function')) process.exit(3)`;
   runCommand(process.execPath, ['--input-type=module', '-e', script], cwd, { capture: true });
 }
 
-function verifyOpenCode(cwd, ownerConfigDir, command = process.platform === 'win32' ? 'opencode.exe' : 'opencode') {
+function verifyOpenCode(cwd, command = process.platform === 'win32' ? 'opencode.exe' : 'opencode') {
   const env = installEnv();
+  env.XOR_NO_PET = '1';
   env.BORDERCOLLIE_NO_PET = '1';
-  env.BORDERCOLLIE_OWNER_CONFIG = ownerConfigDir;
   runCommand(command, ['debug', 'config'], cwd, {
     capture: true,
     env,
@@ -233,8 +172,8 @@ function verifyOpenCode(cwd, ownerConfigDir, command = process.platform === 'win
 
 function replaceInstallation({ stagePackage, stageEntry, packageDir, entry, pluginsDir, verify }) {
   const suffix = `${process.pid}-${Date.now()}`;
-  const packageBackup = path.join(pluginsDir, `.bordercollie-package-backup-${suffix}`);
-  const entryBackup = path.join(pluginsDir, `.bordercollie-entry-backup-${suffix}.js`);
+  const packageBackup = path.join(pluginsDir, `.xor-package-backup-${suffix}`);
+  const entryBackup = path.join(pluginsDir, `.xor-entry-backup-${suffix}.js`);
   const hadPackage = fs.existsSync(packageDir);
   const hadEntry = fs.existsSync(entry);
   let installedPackage = false;
@@ -242,10 +181,10 @@ function replaceInstallation({ stagePackage, stageEntry, packageDir, entry, plug
   const previousEntries = [];
 
   try {
-    for (const name of [LEGACY_PLUGIN_DIRECTORY, LEGACY_PLUGIN_ENTRY]) {
+    for (const name of [LEGACY_PLUGIN_DIRECTORY, LEGACY_PLUGIN_ENTRY, OLDER_LEGACY_PLUGIN_DIRECTORY, OLDER_LEGACY_PLUGIN_ENTRY]) {
       const original = path.join(pluginsDir, name);
       if (original === packageDir || original === entry || !fs.existsSync(original)) continue;
-      const backup = path.join(pluginsDir, `.bordercollie-previous-${previousEntries.length}-${suffix}`);
+      const backup = path.join(pluginsDir, `.xor-previous-${previousEntries.length}-${suffix}`);
       fs.renameSync(original, backup);
       previousEntries.push({ original, backup });
     }
@@ -276,22 +215,25 @@ function replaceInstallation({ stagePackage, stageEntry, packageDir, entry, plug
   }
 }
 
-function installPlugin(opts = {}) {
+async function installPlugin(opts = {}) {
   const repoRoot = path.resolve(opts.repoRoot || path.join(__dirname, '..'));
   const pluginsDir = opts.destDir || defaultPluginsDir();
-  const ownerConfigDir = opts.ownerConfigDir || defaultOwnerConfigDir();
-  const packageDir = path.join(pluginsDir, 'bordercollie');
-  const entry = path.join(pluginsDir, 'bordercollie.js');
+  const packageDir = path.join(pluginsDir, 'xor');
+  const entry = path.join(pluginsDir, 'xor.js');
   const skipRuntimeSetup = opts.skipRuntimeSetup === true || opts.skipNpm === true;
 
-  const srcPlugin = path.join(repoRoot, 'plugin', 'bordercollie.js');
-  const srcGuard = path.join(repoRoot, 'bordercollie');
+  const srcPlugin = fs.existsSync(path.join(repoRoot, 'plugin', 'xor.js'))
+    ? path.join(repoRoot, 'plugin', 'xor.js')
+    : path.join(repoRoot, 'plugin', 'bordercollie.js');
+  const srcXor = fs.existsSync(path.join(repoRoot, 'xor'))
+    ? path.join(repoRoot, 'xor')
+    : path.join(repoRoot, 'bordercollie');
   const srcEvents = path.join(repoRoot, 'events');
   const srcPet = path.join(repoRoot, 'pet');
 
   if (!fs.existsSync(srcPlugin)) throw new Error('missing ' + srcPlugin);
-  if (!fs.existsSync(path.join(srcGuard, 'lib', 'session.js'))) {
-    throw new Error('missing bordercollie/lib/session.js under ' + srcGuard);
+  if (!fs.existsSync(path.join(srcXor, 'lib', 'session.js'))) {
+    throw new Error('missing xor/lib/session.js under ' + srcXor);
   }
   if (!fs.existsSync(path.join(srcEvents, 'index.js'))) {
     throw new Error('missing events/index.js under ' + srcEvents);
@@ -300,23 +242,34 @@ function installPlugin(opts = {}) {
     throw new Error('missing pet/package.json under ' + srcPet);
   }
 
+  if (opts.verifyOpenCode === true) {
+    const version = runCommand(opts.openCodeCommand || (process.platform === 'win32' ? 'opencode.exe' : 'opencode'), ['--version'], repoRoot, { capture: true, timeout: 15000 });
+    assertOpenCodeVersion(version.stdout.toString());
+  }
+
+  console.log('Retrieving the Needle Judge…');
+  const judge = await retrieveJudge({ manifest: opts.judgeManifest, root: opts.judgeRoot });
+
   fs.mkdirSync(pluginsDir, { recursive: true });
-  const stageRoot = fs.mkdtempSync(path.join(pluginsDir, '.bordercollie-stage-'));
-  const stagePackage = path.join(stageRoot, 'bordercollie');
+  const stageRoot = fs.mkdtempSync(path.join(pluginsDir, '.xor-stage-'));
+  const stagePackage = path.join(stageRoot, 'xor');
   const stageIndex = path.join(stagePackage, 'index.mjs');
   const stagedPetDir = path.join(stagePackage, 'pet');
-  let ownerPolicyPath;
-  let ownerPolicyMigration;
   let petRuntimeReused = false;
 
   try {
     fs.mkdirSync(stagePackage, { recursive: true });
     fs.copyFileSync(srcPlugin, stageIndex);
     fs.writeFileSync(path.join(stagePackage, 'package.json'), JSON.stringify({
-      name: 'bordercollie',
+      name: 'xor',
       exports: { '.': './index.mjs' },
     }, null, 2) + '\n');
-    copyTree(srcGuard, path.join(stagePackage, 'bordercollie'));
+    copyTree(srcXor, path.join(stagePackage, 'xor'), {
+      skip: new Set(['prototype']),
+    });
+    copyTree(srcXor, path.join(stagePackage, 'bordercollie'), {
+      skip: new Set(['prototype']),
+    });
     copyTree(srcEvents, path.join(stagePackage, 'events'));
     copyTree(srcPet, stagedPetDir, {
       skip: new Set(['node_modules']),
@@ -355,8 +308,6 @@ function installPlugin(opts = {}) {
     }
 
     verifyStagedPlugin(stageIndex, stageRoot);
-    ownerPolicyPath = ensureOwnerPolicy(ownerConfigDir, opts);
-    ownerPolicyMigration = migrationPreview(ownerPolicyPath);
     replaceInstallation({
       stagePackage,
       packageDir,
@@ -364,7 +315,7 @@ function installPlugin(opts = {}) {
       pluginsDir,
       verify: opts.verifyOpenCode === true ? () => {
         console.log('Verifying OpenCode plugin readiness…');
-        verifyOpenCode(repoRoot, ownerConfigDir, opts.openCodeCommand);
+        verifyOpenCode(repoRoot, opts.openCodeCommand);
       } : null,
     });
   } finally {
@@ -380,8 +331,8 @@ function installPlugin(opts = {}) {
     dest: path.join(packageDir, 'index.mjs'),
     petDir,
     petRuntimeReused,
-    ownerPolicyPath,
-    migrationPreview: ownerPolicyMigration,
+    judgeDir: judge.dir,
+    judgeReused: judge.reused,
   };
 }
 
@@ -390,24 +341,10 @@ if (require.main === module) {
     console.error('Usage: node scripts/install-plugin.js');
     process.exit(2);
   }
-  console.log('Installing bordercollie into OpenCode global plugins…');
-  const { dest, packageDir, petDir, ownerPolicyPath, migrationPreview: preview } = installPlugin({ verifyOpenCode: true });
-  console.log('Plugin entry:  ' + dest);
-  console.log('Package:       ' + packageDir + '  (guard + pet)');
-  console.log('Pet runtime:   ' + (process.platform === 'darwin' ? petDir + '/native/pet-host' : petDir + '/node_modules'));
-  console.log('Owner policy:  ' + ownerPolicyPath);
-  if (preview) {
-    if (preview.problem) {
-      console.log('Owner policy needs attention: ' + preview.policyPath);
-      console.log('Its contents were preserved and the package was installed. Fix the JSON before updating policy.');
-    } else {
-      console.log('Policy migration preview: schema ' + preview.currentSchemaVersion + ' → ' + preview.targetSchemaVersion);
-      if (preview.missingFields.length) console.log('Suggested fields: ' + preview.missingFields.join(', '));
-      console.log('Recommended policy: ' + JSON.stringify(preview.recommendedPolicy));
-    }
-  }
-  console.log('OpenCode V2 loads the package directory ~/.config/opencode/plugins/bordercollie.');
-  console.log('Done. Open any project with: opencode <path>');
+  require('./xor').main(['install']).catch((error) => {
+    console.error(error.message);
+    process.exitCode = 2;
+  });
 }
 
-module.exports = { installPlugin, defaultPluginsDir, defaultOwnerConfigDir, electronReady, nativePetReady, replaceInstallation };
+module.exports = { installPlugin, defaultPluginsDir, electronReady, nativePetReady, replaceInstallation };

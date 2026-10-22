@@ -140,7 +140,7 @@ async function probeReceivedPointer(statusPath, previousCount, timeoutMs = 400) 
 async function findVisiblePetPoint(pointerHelper, statusPath, bounds, expected, diagnostic = () => '') {
   const point = await waitFor(
     () => {
-      const point = findControl(pointerHelper, bounds.pid, 'bordercollie sprite')
+      const point = findControl(pointerHelper, bounds.pid, 'xor sprite') || findControl(pointerHelper, bounds.pid, 'bordercollie sprite')
       if (!point || (expected && Math.hypot(point.x - expected.x, point.y - expected.y) > 2)) return null
       return point
     },

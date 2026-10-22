@@ -1,128 +1,134 @@
-# bordercollie
+# xor
 
-A desktop border collie that watches your AI coding agent and reacts when something needs attention.
+xor checks a coding agent's proposed actions before they run.
+It reads your request, your project rules, and the proposed action, then returns approve, deny, or ask.
+An optional desktop companion shows when the agent is working, blocked, or finished.
 
-![bordercollie watching agents](docs/bordercollie.gif)
+![xor companion](docs/xor.gif)
 
-## What It Does
+[Install](#installation) · [Set project rules](#project-rules) · [Commands](#commands) · [Current work](#current-work) · [Find your way around](#find-your-way-around)
 
-bordercollie is a small desktop companion for OpenCode.
-In plain terms, it sits beside your coding agent, watches what the agent tries to do, and reacts when the agent is working, blocked, refused, failed, or claiming it is done.
+## What it does
 
-The guard checks actions before they run, blocks work outside the task, and verifies important finish claims against the files in the project.
+The OpenCode plugin checks each tool call before OpenCode runs it.
+It blocks actions outside the project folder and protects the project rules from agent edits.
+It then asks a local Needle model whether the remaining action follows your rules.
+
+- Approve lets OpenCode continue its normal permission checks.
+- Deny blocks the action and tells the agent why.
+- Ask blocks the action and tells the agent to request your confirmation before trying again.
+
+When the agent makes a matching completion claim, xor checks the completion requirements you configured against the project files.
+The desktop companion displays these events without changing the decisions.
+
+OpenCode is the supported integration.
+The training tool inventory also covers Claude Code and Codex, but that inventory does not provide runtime integrations for those agents.
 
 ## Installation
 
-OpenCode is the currently supported Guard-enforcing integration.
-Codex CLI and Claude Code are not yet advertised as Guard-enforcing because their deny-before-run coverage has not been verified.
-
-For the public npm package, install the CLI globally and then install the plugin:
+Use Node.js 22.12 or newer and OpenCode 2.0.30 or newer.
+On macOS, install Xcode Command Line Tools before running the installer.
+Install the package and set up the plugin:
 
 ```sh
-npm install --global @quaannguyen/bordercollie
-bordercollie install
+npm install --global @quaannguyen/xor
+xor install
 ```
 
-The npm installation includes Guard and the desktop Pet.
+The installer checks your OpenCode version, installs the plugin, and downloads the pinned Needle runner and model.
+It verifies the downloaded files and builds the desktop companion on macOS or installs its Electron runtime on Windows and Linux.
+New model downloads use the xor cache folder.
+An existing verified cache from an older installation can be reused.
 
-To install from a source clone for development:
+To install from this repository:
 
 ```sh
-git clone https://github.com/QuaanNguyen/border-collie.git
-cd bordercollie
+git clone https://github.com/QuaanNguyen/border-collie.git xor
+cd xor
+npm install
 node scripts/install-plugin.js
 ```
 
-Or on macOS and Linux:
+The GitHub repository still uses the border-collie address.
+The package, command, plugin, and active implementation use xor.
 
-```sh
-bash scripts/install-plugin.sh
+## Project rules
+
+Write your project rules in `.xor/preference.json`:
+
+```json
+{
+  "text": "Work on this repository. Allow local edits and tests. Deny sending source code or secrets to outside services. Ask before deleting files."
+}
 ```
 
-The installation includes Guard and the desktop Pet.
-OpenCode v2 loads the package directory `~/.config/opencode/plugins/bordercollie`. A configured path must point at that directory; a bare `bordercollie.js` file is not a v2 plugin.
-On macOS, the installer builds a small native host that uses the system WebKit framework and does not download Electron.
-Windows and Linux use the locked Electron runtime.
+You can also add completion requirements, such as checking that a build output exists.
+See the [project rule and completion reference](docs/xor-and-judge.md#the-preference) for the file format.
+Missing rules use the shipped defaults.
+Invalid rules block execution until you correct them.
 
-On Windows, from Command Prompt:
+## Commands
 
-```bat
-scripts\win\install-plugin.bat
-```
+| Task | Command |
+| --- | --- |
+| Install the OpenCode plugin and model | `xor install` |
+| Move older project rules to xor | `xor migrate` |
+| Make the desktop companion smaller | `xor pet size 75` |
+| Make the desktop companion larger | `xor pet size 115` |
+| Reset the companion size | `xor pet size reset` |
+| Show command help | `xor help` |
 
-You need Node.js 22.12 or newer, Git, and OpenCode installed.
-The macOS installation also needs Xcode Command Line Tools.
-Windows and Linux installations need npm.
+Older bordercollie commands remain available for existing installations.
+Migration preserves your rules and stops if old and new instructions conflict.
 
-## Usage
+## Current work
 
-Open any project with OpenCode:
+The active research work generates varied examples, reviews their permission decisions, and tests a small checker model on the Mac.
+Generated commands are data and are never executed by the generation pipeline.
 
-```sh
-opencode <path>
-```
+No replacement model is qualified.
+Direct answers without model reasoning remain a qualification requirement, not a measured guarantee of the current release.
+The [training guide](docs/checker-training.md) records the pipeline and remaining requirements.
+The [checked tool inventory](docs/checker-tool-inventory.json) records supported input formats and known gaps.
 
-Inspect and select bordercollie profiles from the CLI:
+## Development and checks
 
-```sh
-bc profile list
-bc profile create lab-research --from research
-bc profile assign opencode lab-research
-```
-
-Set up the harness-neutral project Protocol without editing an OpenCode configuration path:
-
-```sh
-bc project setup --profile governed --write-path 'src/**'
-```
-
-Resize the Pet directly, without sending a UI preference through an agent conversation:
+Use Node.js 22.12 or newer, Python 3, Git, and Git LFS.
+Install development dependencies and retrieve the preserved research files:
 
 ```sh
-bc pet size 115
-bc pet size reset
-```
-
-Work on the desktop companion UI:
-
-```sh
-cd pet
-npm install
-npm run start:dev
-```
-
-The development window includes animation controls plus local Event stream scenarios for working, allowed and refused actions, completion verdicts, review requests, errors, and Pet size.
-It is a visual harness only: it does not start a network listener or alter the private Adapter-to-Pet event path used in production.
-Use it to inspect the Pet's focus, visibility, geometry, dragging, and reactions without starting OpenCode.
-
-Animation asset storage and replacement notes live in [docs/ANIMATION_ASSETS.md](docs/ANIMATION_ASSETS.md).
-The Pet validates its complete animation contract before activating it, uses elapsed-time frame scheduling, and shows a stable frame when the operating system requests reduced motion.
-
-Run the fast release-readiness checks:
-
-```sh
+npm ci
+git lfs install
+git lfs pull
+npm run check
 npm test
 npm run test:package
+node scripts/check-package-client.js npm
+python3 analysis/checker-v3-2026-10-19/manifest-data.py --check
 ```
 
-The current automated suite exercises unit behavior, non-UI integration behavior, the CLI, a no-download staged install, and the contents of the npm tarball.
-See [the release guide](docs/RELEASING.md) for the release plan, test layers, and the work GitHub Actions can automate.
-Pet UI, native window, renderer, and real OpenCode process coverage live in the e2e layer.
-
-Run the focused Guard and plugin behavior tests:
+Run the full desktop test suite on a host that can launch the companion:
 
 ```sh
-node --test test/bordercollie/*.test.js test/plugin/*.test.mjs
+node test/run-all-tests.js
 ```
 
-Guard events and active sessions exist only while OpenCode and the Pet are running.
-The plugin sends Guard events over the Pet process's private input pipe.
-Profiles and Pet size are persistent bordercollie owner preferences in the canonical bordercollie configuration.
+Keep ASU gateway credentials on your Mac.
+The [research file guide](docs/research-data.md) explains the preserved inputs and checksum checks.
 
-Existing installations can move their project and owner settings without changing their contents:
+## Find your way around
 
-```sh
-bordercollie migrate
-```
+| If you want to… | Start here |
+| --- | --- |
+| Understand the runtime and project terms | [Project context](CONTEXT.md) |
+| Understand action checks and project rules | [Verifier reference](docs/xor-and-judge.md) |
+| Follow model and data work | [Training guide](docs/checker-training.md) |
+| Inspect the checked agent tools | [Tool inventory](docs/checker-tool-inventory.json) |
+| Find preserved experiments and data | [Research file guide](docs/research-data.md) |
+| Work on the desktop companion | [Companion events](docs/EVENTS.md) |
+| Contribute or run platform checks | [Contributing guide](CONTRIBUTION.md) |
+| Prepare a release | [Release guide](docs/RELEASING.md) |
 
-Migration stops before changing files when both folder names already exist.
+The active verifier code is in [xor](xor/), the OpenCode integration is in [plugin](plugin/), and the desktop companion is in [pet](pet/).
+Command entry points and maintenance tools are in [scripts](scripts/), with tests in [test](test/).
+Frozen records retain older names where changing them would break their recorded checksums.

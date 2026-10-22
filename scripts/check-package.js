@@ -7,7 +7,7 @@ const path = require('node:path');
 const { spawnSync } = require('node:child_process');
 
 const root = path.resolve(__dirname, '..');
-const output = fs.mkdtempSync(path.join(os.tmpdir(), 'bordercollie-pack-'));
+const output = fs.mkdtempSync(path.join(os.tmpdir(), 'xor-pack-'));
 
 try {
   const packed = spawnSync('npm', ['pack', '--json', '--pack-destination', output], {
@@ -23,21 +23,28 @@ try {
   const files = new Set(report[0].files.map(({ path: file }) => file));
   for (const required of [
     'package.json',
+    'scripts/xor.js',
     'scripts/bordercollie.js',
     'scripts/check-package-client.js',
     'scripts/check-package.js',
     'scripts/check-syntax.js',
     'scripts/install-plugin.js',
+    'scripts/migrate.js',
     'scripts/run-e2e.js',
+    'plugin/xor.js',
     'plugin/bordercollie.js',
     'plugin/package.json',
-    'bordercollie/lib/session.js',
+    'xor/lib/session.js',
+    'xor/lib/judge.js',
+    'xor/lib/judge-artifacts.js',
+    'xor/lib/preference.js',
     'events/index.js',
     'pet/package.json',
   ]) {
     assert(files.has(required), `packed artifact is missing ${required}`);
   }
   assert(![...files].some((file) => file.includes('node_modules/')), 'packed artifact contains node_modules');
+  assert(![...files].some((file) => file.startsWith('xor/prototype/') || file.startsWith('bordercollie/prototype/')), 'packed artifact contains research files');
   console.log(`Verified ${report[0].filename} (${files.size} files, ${report[0].size} bytes)`);
 } finally {
   fs.rmSync(output, { recursive: true, force: true });

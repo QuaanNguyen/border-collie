@@ -1,0 +1,39 @@
+{
+  "capturedAtUtc": "2026-10-19T16:44:45.644796+00:00",
+  "status": "not-training-ready",
+  "cases": 1500,
+  "proposalsSha256": "05312203af9825cda10c27cdbdedd428e9d346114553a9c2ad5d3011c1bfa3ac",
+  "requestsSha256": "50736afcebe73ebc17ccdf4ffe2510db5e5e86b401461196bdb96023cafe6041",
+  "reviews": [
+    {
+      "model": "inkling-small",
+      "modelFamily": "inkling",
+      "reviewed": 376,
+      "expected": 1500,
+      "status": "incomplete",
+      "serviceErrors": 8,
+      "evidenceSha256": "86f23bead15166b9e5ed6627d64e74a968d15ad2c6537cb4e7f4b51a79584696"
+    },
+    {
+      "model": "kimi-k2-7-code",
+      "modelFamily": "kimi",
+      "reviewed": 224,
+      "expected": 1500,
+      "status": "incomplete",
+      "serviceErrors": 10,
+      "evidenceSha256": "29f47f84100a650be5ad6dddbb13092c3f21d1397559c1df5ca1ecef706cd816"
+    }
+  ],
+  "unverifiedInputContracts": 47,
+  "reasonBulkReviewWithheld": "The inventory still needs complete live contracts and interception context for 47 entries. Exact-input checkpoints are preserved; no incomplete or disputed labels are eligible.",
+  "remaining": [
+    "Complete tool schemas and live MCP/desktop catalogs.",
+    "Verify per-call interception and native ask mapping across harnesses.",
+    "Complete both exact-input reviews after intake repair.",
+    "Record required human verification and fresh blind evaluation.",
+    "Resolve the native reasoning prefix and pass the same-Mac promotion gate."
+  ],
+  "trainingEligible": false,
+  "solJobsAllowed": false,
+  "promotionAllowed": false
+}

@@ -1,0 +1,7 @@
+bordercollie/prototype/data/stage2/*.jsonl filter=lfs diff=lfs merge=lfs -text
+bordercollie/prototype/data/stage2/base-evaluation.json filter=lfs diff=lfs merge=lfs -text
+analysis/needle-judge-2026-10-09/snapshot-manifest.json filter=lfs diff=lfs merge=lfs -text
+analysis/needle-judge-2026-10-09/artifacts/** filter=lfs diff=lfs merge=lfs -text
+analysis/checker-v3-2026-10-19/evidence/** filter=lfs diff=lfs merge=lfs -text
+docs/checker-tool-inventory.json filter=lfs diff=lfs merge=lfs -text
+analysis/checker-v3-2026-10-20/evidence/** filter=lfs diff=lfs merge=lfs -text

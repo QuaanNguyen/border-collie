@@ -1,0 +1,41 @@
+{
+  "recordedAtUtc": "2026-10-20T18:46:06.885782+00:00",
+  "ownerRequest": "Stop the process and switch models to gemma4-31b-it and glm-5-3-flash, then continue",
+  "stoppedRun": {
+    "path": "bordercollie/prototype/output/authored-2026-10-20-full-v2",
+    "processPid": 17734,
+    "processTerminated": true,
+    "preservedCases": 76,
+    "calls": 25,
+    "interruptedUncertainCalls": 1,
+    "snapshot": "bordercollie/prototype/output/authored-2026-10-20-full-v2-stopped-review",
+    "oldModelReviewNotStarted": true
+  },
+  "newRun": {
+    "path": "bordercollie/prototype/output/authored-2026-10-20-gemma-glm",
+    "authorModel": "gemma4-31b-it",
+    "reviewers": [
+      {
+        "model": "gemma4-31b-it",
+        "family": "gemma"
+      },
+      {
+        "model": "glm-5-3-flash",
+        "family": "glm"
+      }
+    ],
+    "plannedCases": 1764,
+    "planSha256": "a832856ebc4a5952f20e1618da803d6e43e7a5c98f4f8492ec24702e026fc7e9",
+    "processPid": 25200,
+    "modelsVerifiedInGateway": true,
+    "firstVerifiedAuthorBatch": {
+      "acceptedCasesAtCheck": 28,
+      "calls": 8,
+      "errors": 0
+    },
+    "firstFrozenReviewCases": 16
+  },
+  "trainingEligible": false,
+  "newTrainingStarted": false,
+  "focusedTestsPassed": 25
+}

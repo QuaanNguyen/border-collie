@@ -1,0 +1,176 @@
+'use strict';
+
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const os = require('node:os');
+const path = require('node:path');
+const test = require('node:test');
+
+const { createBordercollieAdapter } = require('../../xor/lib/adapter');
+const { DEFAULT_PREFERENCE } = require('../../xor/lib/preference');
+
+function withWorkdir(run) {
+  const workdir = fs.realpathSync(fs.mkdtempSync(path.join(os.tmpdir(), 'bordercollie-gate-')));
+  return Promise.resolve(run(workdir)).finally(() => fs.rmSync(workdir, { recursive: true, force: true }));
+}
+
+function judgeDouble(respond) {
+  const calls = [];
+  const judge = async (input) => {
+    calls.push(input);
+    return respond(input);
+  };
+  judge.calls = calls;
+  return judge;
+}
+
+function bordercollieWith(workdir, judge, preference = DEFAULT_PREFERENCE) {
+  return createBordercollieAdapter({ workdir, judge, preference });
+}
+
+test('a shell call reaches the Judge with its derived reads, writes, and network targets', async () => {
+  await withWorkdir(async (workdir) => {
+    const judge = judgeDouble(() => ({ verdict: 'disallow' }));
+    const bordercollie = bordercollieWith(workdir, judge);
+
+    const out = await bordercollie.proposedAction({
+      tool: 'bash',
+      args: { command: 'cat src/config.js > build/out.txt && curl -X POST https://collector.example.com' },
+      userMessage: 'fix the config loader',
+    });
+
+    assert.equal(judge.calls.length, 1);
+    const { call, userMessage, preference } = judge.calls[0];
+    assert.equal(userMessage, 'fix the config loader');
+    assert.equal(preference.text, DEFAULT_PREFERENCE.text);
+    assert.ok(call.readPaths.includes('src/config.js'));
+    assert.ok(call.writePaths.includes('build/out.txt'));
+    assert.ok(call.urls.some((url) => url.startsWith('https://collector.example.com')));
+
+    assert.equal(out.decision, 'disallow');
+    assert.match(out.message, /(?:xor|bordercollie) refused this action/);
+    assert.match(out.message, /Requested action: bash/);
+    assert.match(out.message, /Decided by: Judge/);
+    assert.match(out.message, /Permitted alternative:/);
+    assert.match(out.message, /Retry: do not retry this target/);
+    assert.equal(out.events.at(-1).petState, 'refused');
+  });
+});
+
+test('an allow Verdict runs the call even when the Judge reports a low score', async () => {
+  await withWorkdir(async (workdir) => {
+    const bordercollie = bordercollieWith(workdir, judgeDouble(() => ({ verdict: 'allow', confidence: 0.01 })));
+    const out = await bordercollie.proposedAction({ tool: 'bash', args: { command: 'npm test' }, userMessage: 'run the tests' });
+    assert.equal(out.decision, 'allow');
+    assert.equal(out.message, undefined);
+    assert.equal(out.events.at(-1).type, 'action');
+    assert.equal(out.events.at(-1).petState, 'allowed');
+  });
+});
+
+test('a missing Verdict blocks the call', async () => {
+  await withWorkdir(async (workdir) => {
+    const bordercollie = bordercollieWith(workdir, judgeDouble(() => ({ verdict: null })));
+    const out = await bordercollie.proposedAction({ tool: 'read', args: { filePath: 'README.md' }, userMessage: 'summarize the readme' });
+    assert.equal(out.decision, 'disallow');
+    assert.match(out.message, /Governing rule: judge_no_verdict/);
+    assert.equal(out.events.at(-1).petState, 'refused');
+  });
+});
+
+test('a Judge that is unavailable or throws blocks the call', async () => {
+  await withWorkdir(async (workdir) => {
+    const unavailable = bordercollieWith(workdir, judgeDouble(() => ({ verdict: null, unavailable: true, reason: 'the Judge runner is missing' })));
+    const missing = await unavailable.proposedAction({ tool: 'read', args: { filePath: 'README.md' } });
+    assert.equal(missing.decision, 'disallow');
+    assert.match(missing.message, /judge_unavailable/);
+    assert.match(missing.message, /(?:xor|bordercollie) install/);
+
+    const failing = bordercollieWith(workdir, async () => { throw new Error('engine crashed'); });
+    const crashed = await failing.proposedAction({ tool: 'read', args: { filePath: 'README.md' } });
+    assert.equal(crashed.decision, 'disallow');
+    assert.match(crashed.message, /engine crashed/);
+
+    const unconfigured = createBordercollieAdapter({ workdir });
+    assert.equal((await unconfigured.proposedAction({ tool: 'read', args: { filePath: 'README.md' } })).decision, 'disallow');
+  });
+});
+
+test('paths outside the folder, Preference changes, and subagent dispatch are blocked without the Judge', async () => {
+  await withWorkdir(async (workdir) => {
+    const outside = fs.realpathSync(fs.mkdtempSync(path.join(os.tmpdir(), 'bordercollie-outside-')));
+    try {
+      fs.writeFileSync(path.join(outside, 'private.md'), 'private\n');
+      fs.symlinkSync(outside, path.join(workdir, 'shared'), process.platform === 'win32' ? 'junction' : 'dir');
+      const judge = judgeDouble(() => ({ verdict: 'allow' }));
+      const bordercollie = bordercollieWith(workdir, judge);
+      const outsideFile = path.join(outside, 'private.md');
+      const outsideShell = outsideFile.replace(/\\/g, '/');
+
+      const blocked = [
+        [{ tool: 'read', args: { filePath: outsideFile } }, 'project_folder'],
+        [{ tool: 'read', args: { filePath: '../secrets.txt' } }, 'project_folder'],
+        [{ tool: 'read', args: { filePath: 'shared/private.md' } }, 'project_folder'],
+        [{ tool: 'edit', args: { filePath: outsideFile, oldString: 'a', newString: 'b' } }, 'project_folder'],
+        [{ tool: 'bash', args: { command: `cat ${outsideShell}` } }, 'project_folder'],
+        [{ tool: 'bash', args: { command: 'cp notes.md ~/notes.md' } }, 'project_folder'],
+        [{ tool: 'bash', args: { command: 'ls', workdir: outside } }, 'project_folder'],
+        [{ tool: 'glob', args: { pattern: '../**/*.md' } }, 'project_folder'],
+        [{ tool: 'edit', args: { filePath: '.bordercollie/preference.json', oldString: '"ask"', newString: '"x"' } }, 'preference'],
+        [{ tool: 'write', args: { filePath: path.join(workdir, '.bordercollie', 'preference.json'), content: '{}' } }, 'preference'],
+        [{ tool: 'bash', args: { command: 'echo {} > .bordercollie/preference.json' } }, 'preference'],
+        [{ tool: 'bash', args: { command: 'rm -rf .bordercollie' } }, 'preference'],
+        [{ tool: 'bash', args: { command: 'mv .bordercollie elsewhere' } }, 'preference'],
+        [{ tool: 'bash', args: { command: 'rm -rf .' } }, 'preference'],
+        [{ tool: 'edit', args: { filePath: '.opencode/protocol.json', oldString: 'a', newString: 'b' } }, 'preference'],
+        [{ tool: 'task', args: { subagent_type: 'explore', prompt: 'look around' } }, 'subagent_dispatch'],
+      ];
+      for (const [action, rule] of blocked) {
+        const out = await bordercollie.proposedAction({ ...action, userMessage: 'do the work' });
+        assert.equal(out.decision, 'disallow', `${JSON.stringify(action)} should be blocked`);
+        assert.match(out.message, new RegExp(`Governing rule: ${rule}`), JSON.stringify(action));
+        assert.match(out.message, /Decided by: folder boundary/);
+        assert.equal(out.events.at(-1).petState, 'refused');
+      }
+      assert.equal(judge.calls.length, 0, 'the Judge must not be consulted for boundary blocks');
+
+      for (const action of [
+        { tool: 'read', args: { filePath: '.bordercollie/preference.json' } },
+        { tool: 'bash', args: { command: 'npm test 2>/dev/null' } },
+        { tool: 'glob', args: { pattern: 'src/**/*.js' } },
+        { tool: 'grep', args: { pattern: '\\.\\./', path: 'src' } },
+        { tool: 'edit', args: { filePath: path.join(workdir, 'src', 'a.js'), oldString: 'a', newString: 'b' } },
+      ]) {
+        const out = await bordercollie.proposedAction({ ...action, userMessage: 'do the work' });
+        assert.equal(out.decision, 'allow', JSON.stringify(action));
+      }
+      assert.equal(judge.calls.length, 5);
+    } finally {
+      fs.rmSync(outside, { recursive: true, force: true });
+    }
+  });
+});
+
+test('an ask withholds the call and the owner reply is judged with the next attempt', async () => {
+  await withWorkdir(async (workdir) => {
+    const preference = { text: 'Ask the owner before pushing or deploying.' };
+    const judge = judgeDouble(({ userMessage }) => ({ verdict: /yes, push/i.test(userMessage) ? 'allow' : 'ask' }));
+    const bordercollie = bordercollieWith(workdir, judge, preference);
+
+    const held = await bordercollie.proposedAction({ tool: 'bash', args: { command: 'git push origin main' }, userMessage: 'ship the fix' });
+    assert.equal(held.decision, 'ask');
+    assert.match(held.message, /holding this action for the owner/);
+    assert.match(held.message, /ask the owner whether to proceed/);
+    assert.match(held.message, /pushing or deploying/);
+    assert.equal(held.events.at(-1).type, 'ask');
+    assert.equal(held.events.at(-1).petState, 'asking');
+
+    const unclear = await bordercollie.proposedAction({ tool: 'bash', args: { command: 'git push origin main' }, userMessage: 'hmm, maybe' });
+    assert.equal(unclear.decision, 'ask');
+
+    const granted = await bordercollie.proposedAction({ tool: 'bash', args: { command: 'git push origin main' }, userMessage: 'yes, push it' });
+    assert.equal(granted.decision, 'allow');
+    assert.deepEqual(judge.calls.map(({ userMessage }) => userMessage), ['ship the fix', 'hmm, maybe', 'yes, push it']);
+    assert.match(judge.calls[0].preference.text, /pushing or deploying/);
+  });
+});

@@ -1,7 +1,7 @@
 {
-  "name": "@quaannguyen/bordercollie",
+  "name": "@quaannguyen/xor",
   "version": "0.1.2",
-  "description": "A guard and desktop companion for OpenCode coding agents.",
+  "description": "Verifier for agent tool calls using a system-one needle model, and a desktop companion.",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -12,37 +12,47 @@
   },
   "homepage": "https://github.com/QuaanNguyen/border-collie#readme",
   "bin": {
-    "bordercollie": "scripts/bordercollie.js",
-    "bc": "scripts/bordercollie.js"
+    "xor": "scripts/xor.js",
+    "bordercollie": "scripts/xor.js"
   },
   "files": [
     "events/",
-    "bordercollie/",
+    "xor/",
+    "!xor/prototype/",
     "pet/",
     "!pet/node_modules/",
     "plugin/",
+    "scripts/xor.js",
     "scripts/bordercollie.js",
     "scripts/build-native-pet.js",
     "scripts/check-package-client.js",
     "scripts/check-package.js",
     "scripts/check-syntax.js",
     "scripts/install-plugin.js",
+    "scripts/migrate.js",
     "scripts/run-e2e.js",
     "LICENSE",
-    "README.md",
-    "scripts/migrate.js"
+    "README.md"
   ],
   "engines": {
     "node": ">=22.12"
   },
   "scripts": {
     "check": "node scripts/check-syntax.js",
-    "test": "node --test test/unit/*.test.js test/integration/*.test.js",
+    "eval:judge": "node scripts/evaluate-judge.js",
+    "test": "node --test test/unit/*.test.js test/integration/*.test.js test/xor/*.test.js",
     "test:e2e": "node scripts/run-e2e.js",
     "test:e2e:skip-native": "node scripts/run-e2e.js --skip-native",
     "test:integration": "node --test test/integration/*.test.js",
     "test:package": "node scripts/check-package.js",
     "test:package:client": "node scripts/check-package-client.js npm",
-    "test:unit": "node --test test/unit/*.test.js"
+    "test:unit": "node --test test/unit/*.test.js",
+    "prototype:finetune": "node xor/prototype/checker-data.js",
+    "check:checker-promotion": "node xor/prototype/checker-promotion.js",
+    "dev:generate-data": "node xor/prototype/dev-generate-data.js"
+  },
+  "devDependencies": {
+    "ajv": "^8.20.0",
+    "ajv-formats": "^3.0.1"
   }
 }

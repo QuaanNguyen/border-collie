@@ -2,11 +2,11 @@ const fs = require('fs')
 const path = require('path')
 const { app, BrowserWindow, ipcMain } = require('electron')
 
-const root = process.env.BORDERCOLLIE_ROOT || process.argv.at(-3)
-const statusPath = process.env.BORDERCOLLIE_STATUS_PATH || process.argv.at(-2)
-const eventPath = process.env.BORDERCOLLIE_EVENT_PATH || process.argv.at(-1)
-const frame = process.env.BORDERCOLLIE_TEST_FRAME
-const devHarness = process.env.BORDERCOLLIE_DEV_HARNESS === '1'
+const root = process.env.XOR_ROOT || process.env.BORDERCOLLIE_ROOT || process.argv.at(-3)
+const statusPath = process.env.XOR_STATUS_PATH || process.env.BORDERCOLLIE_STATUS_PATH || process.argv.at(-2)
+const eventPath = process.env.XOR_EVENT_PATH || process.env.BORDERCOLLIE_EVENT_PATH || process.argv.at(-1)
+const frame = process.env.XOR_TEST_FRAME || process.env.BORDERCOLLIE_TEST_FRAME
+const devHarness = process.env.XOR_DEV_HARNESS === '1' || process.env.BORDERCOLLIE_DEV_HARNESS === '1'
 let watcher
 
 function watchEventFile(filePath, onEvent, interval = 25) {
@@ -49,21 +49,24 @@ async function rendererStatus(win) {
       const read = () => {
         const image = document.getElementById('animation')
         if (!image.hidden && image.complete && image.naturalWidth) {
-          const regions = window.BordercollieHitRegions.imageHitRegions(image)
+          const hitRegions = window.XorHitRegions || window.BordercollieHitRegions
+          const regions = hitRegions.imageHitRegions(image)
           const rect = image.getBoundingClientRect()
           const transform = getComputedStyle(image).transform
           const contains = (point) => regions.some((region) =>
             point.x >= region.x && point.x < region.x + region.width &&
             point.y >= region.y && point.y < region.y + region.height
           )
+          const renderedObj = window.__xor || window.__bordercollie
+          const petApi = window.xor || window.bordercollie
           resolve({
-            state: window.__bordercollie.rendered(),
+            state: renderedObj.rendered(),
             regionCount: regions.length,
             horizontalScale: transform === 'none' ? 1 : new DOMMatrix(transform).a,
             horizontalCenterOffset: rect.x + rect.width / 2 - window.innerWidth / 2,
             cornerReceivesInput: contains({ x: rect.x + 1, y: rect.y + 1 }),
             centerReceivesInput: contains({ x: rect.x + rect.width / 2, y: rect.y + rect.height / 2 }),
-            imageDraggable: typeof window.bordercollie.startDrag === 'function',
+            imageDraggable: typeof petApi.startDrag === 'function',
             hasPersistentChrome: Boolean(document.querySelector('.tray, .counts, .log')),
             bubbleVisible: !document.getElementById('bubble').hidden,
             bubbleColor: getComputedStyle(document.getElementById('bubble-text')).color,
@@ -78,7 +81,8 @@ async function rendererStatus(win) {
           return
         }
         if (Date.now() >= deadline) {
-          resolve({ state: window.__bordercollie.rendered(), regionCount: 0 })
+          const renderedObj = window.__xor || window.__bordercollie
+          resolve({ state: renderedObj.rendered(), regionCount: 0 })
           return
         }
         setTimeout(read, 25)
@@ -122,7 +126,7 @@ async function clickDevScenario(win, label) {
 process.on('SIGTERM', () => app.quit())
 
 app.whenReady().then(async () => {
-  ipcMain.handle('bordercollie:config', () => ({
+  const handleConfig = () => ({
     animations: {
       calm: {
         frames: [frame, frame, frame, frame, frame],
@@ -140,15 +144,22 @@ app.whenReady().then(async () => {
     dev: devHarness,
     live: !devHarness,
     eventsFile: eventPath,
-  }))
-  ipcMain.handle('bordercollie:dev-scenarios', () => devHarness ? [{ id: 'refused', label: 'Refused' }] : [])
-  ipcMain.handle('bordercollie:dev-event', (_event, id) => {
+  })
+  ipcMain.handle('xor:config', handleConfig)
+  ipcMain.handle('bordercollie:config', handleConfig)
+  const handleScenarios = () => devHarness ? [{ id: 'refused', label: 'Refused' }] : []
+  ipcMain.handle('xor:dev-scenarios', handleScenarios)
+  ipcMain.handle('bordercollie:dev-scenarios', handleScenarios)
+  const handleDevEv = (_event, id) => {
     if (!devHarness || id !== 'refused') return null
     const entry = { type: 'excursion', status: 'block', petState: 'denied', summary: 'Outside the task', reason: 'The path is not allowed' }
+    win.webContents.send('xor:event', entry)
     win.webContents.send('bordercollie:event', entry)
     return entry
-  })
-  for (const channel of ['bordercollie:hit-regions', 'bordercollie:scale-set']) {
+  }
+  ipcMain.handle('xor:dev-event', handleDevEv)
+  ipcMain.handle('bordercollie:dev-event', handleDevEv)
+  for (const channel of ['xor:hit-regions', 'bordercollie:hit-regions', 'xor:scale-set', 'bordercollie:scale-set']) {
     ipcMain.on(channel, () => {})
   }
 
@@ -171,18 +182,23 @@ app.whenReady().then(async () => {
       app.quit()
       return
     }
+    win.webContents.send('xor:dragging', { phase: 'start', deltaX: 0 })
     win.webContents.send('bordercollie:dragging', { phase: 'start', deltaX: 0 })
+    win.webContents.send('xor:dragging', { phase: 'move', deltaX: -24 })
     win.webContents.send('bordercollie:dragging', { phase: 'move', deltaX: -24 })
     const leftDrag = await waitForState(win, 'drag')
     await delay(600)
     const heldDrag = await rendererStatus(win)
+    win.webContents.send('xor:dragging', { phase: 'move', deltaX: 24 })
     win.webContents.send('bordercollie:dragging', { phase: 'move', deltaX: 24 })
     const rightDrag = await waitForState(win, 'drag')
+    win.webContents.send('xor:dragging', { phase: 'end', deltaX: 0 })
     win.webContents.send('bordercollie:dragging', { phase: 'end', deltaX: 0 })
     await delay(50)
     const endedDrag = await rendererStatus(win)
     watcher = watchEventFile(eventPath, async (event) => {
       try {
+        win.webContents.send('xor:event', event)
         win.webContents.send('bordercollie:event', event)
         const status = await waitForState(win, event.petState)
         writeStatus({

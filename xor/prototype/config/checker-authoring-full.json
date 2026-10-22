@@ -1,0 +1,29 @@
+{
+  "authorModel": "gemma4-31b-it",
+  "conditions": [
+    "approve",
+    "deny",
+    "ask",
+    "default"
+  ],
+  "batchSize": 4,
+  "maxInputTokens": 131072,
+  "maxOutputTokens": 6000,
+  "timeoutMs": 90000,
+  "maxElapsedMs": 21600000,
+  "maxAttemptsPerTask": 3,
+  "splits": [
+    "train",
+    "validation",
+    "test"
+  ],
+  "dynamicShellVariants": [
+    "multiline",
+    "variable-substitution",
+    "command-substitution",
+    "heredoc",
+    "script-invocation"
+  ],
+  "maxCalls": 500,
+  "maxTokens": 3000000
+}

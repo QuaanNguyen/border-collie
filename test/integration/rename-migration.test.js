@@ -6,47 +6,66 @@ const os = require('node:os');
 const path = require('node:path');
 const test = require('node:test');
 const { migrate } = require('../../scripts/migrate');
-const { readProjectProtocol } = require('../../bordercollie/lib/live-protocol');
+const { readPreference, LEGACY_PREFERENCE_RELATIVE_PATH } = require('../../xor/lib/preference');
+const { LEGACY_PLUGIN_DIRECTORY, LEGACY_PLUGIN_ENTRY } = require('../../xor/lib/legacy-paths');
 const { replaceInstallation } = require('../../scripts/install-plugin');
+const { boundaryDecision } = require('../../xor/lib/boundary');
+const { proposedCall } = require('../../xor/lib/toolcalls');
 
-test('rename preserves complete existing project and owner settings', (t) => {
+test('renaming preserves existing owner instructions and migrates them without defaults', (t) => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'bordercollie-rename-'));
   t.after(() => fs.rmSync(root, { recursive: true, force: true }));
-  const legacy = path.join(root, '.border-collie');
-  fs.mkdirSync(legacy);
-  const contents = '{"write_paths":["docs/**"],"done_criteria":[{"id":"review","text":"Owner review"}]}\n';
-  fs.writeFileSync(path.join(legacy, 'protocol.json'), contents);
-  assert.deepEqual(readProjectProtocol(root).protocol.write_paths, ['docs/**']);
-  const owner = path.join(root, '.config', 'border-collie');
-  fs.mkdirSync(owner, { recursive: true });
-  fs.writeFileSync(path.join(owner, 'config.json'), '{"pet":{"scale":1.35},"profiles":{"owner":"unchanged"}}');
-  assert.equal(migrate({ workdir: root, home: root }).moved.length, 2);
-  assert.equal(fs.readFileSync(path.join(root, '.bordercollie', 'protocol.json'), 'utf8'), contents);
-  assert.equal(JSON.parse(fs.readFileSync(path.join(root, '.config', 'bordercollie', 'config.json'))).pet.scale, 1.35);
-  assert.deepEqual(migrate({ workdir: root, home: root }).moved, []);
-  fs.mkdirSync(legacy);
-  fs.writeFileSync(path.join(legacy, 'preference.json'), '{"allow":"docs"}');
-  assert.throws(() => migrate({ workdir: root, home: root }), /Nothing was changed/);
-  assert.equal(fs.existsSync(path.join(legacy, 'preference.json')), true);
+  const legacy = path.join(root, LEGACY_PREFERENCE_RELATIVE_PATH);
+  fs.mkdirSync(path.dirname(legacy));
+  const instructions = { purpose: 'Documentation only.', disallow: 'Changing source code.' };
+  fs.writeFileSync(legacy, JSON.stringify(instructions));
+  assert.match(readPreference(root).preference.text, /Changing source code/);
+  assert.equal(boundaryDecision({ workdir: root, call: proposedCall('write', { path: LEGACY_PREFERENCE_RELATIVE_PATH, content: '{}' }) }).rule, 'preference');
+  const result = migrate({ workdir: root, configRoot: path.join(root, 'config'), ownerPolicyPath: path.join(root, 'unused-policy') });
+  assert.match(JSON.parse(fs.readFileSync(result.preferenceFile)).text, /Documentation only/);
+  assert.match(JSON.parse(fs.readFileSync(result.preferenceFile)).text, /Changing source code/);
+  assert.equal(fs.existsSync(legacy), false);
+  fs.writeFileSync(legacy, JSON.stringify({ purpose: 'Different instructions.' }));
+  assert.equal(readPreference(root).valid, false);
+  assert.throws(() => migrate({ workdir: root }), /different instructions/);
+  assert.equal(fs.existsSync(legacy), true);
 });
 
-test('renamed installation restores the previous plugin after verification failure', (t) => {
-  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'bordercollie-plugin-rename-'));
+test('renamed installation removes duplicate plugin entries and restores them after failure', (t) => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'bordercollie-install-rename-'));
   t.after(() => fs.rmSync(root, { recursive: true, force: true }));
-  const oldPackage = path.join(root, 'border-collie');
-  const oldEntry = path.join(root, 'border-collie.js');
+  const oldPackage = path.join(root, LEGACY_PLUGIN_DIRECTORY);
+  const oldEntry = path.join(root, LEGACY_PLUGIN_ENTRY);
   fs.mkdirSync(oldPackage);
   fs.writeFileSync(path.join(oldPackage, 'original'), 'original package');
   fs.writeFileSync(oldEntry, 'original entry');
+  const destination = path.join(root, 'xor');
   const stage = path.join(root, 'stage');
   fs.mkdirSync(stage);
-  const input = { stagePackage: stage, packageDir: path.join(root, 'bordercollie'), entry: path.join(root, 'bordercollie.js'), pluginsDir: root };
-  assert.throws(() => replaceInstallation({ ...input, verify: () => { throw new Error('readiness failed'); } }), /readiness failed/);
+  assert.throws(() => replaceInstallation({ stagePackage: stage, packageDir: destination, entry: path.join(root, 'xor.js'), pluginsDir: root, verify: () => { throw new Error('readiness failed'); } }), /readiness failed/);
   assert.equal(fs.readFileSync(oldEntry, 'utf8'), 'original entry');
   assert.equal(fs.readFileSync(path.join(oldPackage, 'original'), 'utf8'), 'original package');
   fs.mkdirSync(stage);
-  replaceInstallation(input);
+  replaceInstallation({ stagePackage: stage, packageDir: destination, entry: path.join(root, 'xor.js'), pluginsDir: root });
   assert.equal(fs.existsSync(oldEntry), false);
   assert.equal(fs.existsSync(oldPackage), false);
-  assert.equal(fs.existsSync(input.packageDir), true);
+  assert.equal(fs.existsSync(destination), true);
 });
+
+for (const canonical of [true, false]) {
+  test(`event output uses ${canonical ? 'xor before the legacy setting' : 'the legacy fallback'}`, (t) => {
+    const root = fs.mkdtempSync(path.join(os.tmpdir(), 'xor-event-rename-'));
+    t.after(() => fs.rmSync(root, { recursive: true, force: true }));
+    const legacy = path.join(root, 'legacy.jsonl');
+    const current = path.join(root, 'xor.jsonl');
+    const env = { ...process.env, BORDERCOLLIE_EVENTS: legacy };
+    delete env.XOR_EVENTS;
+    if (canonical) env.XOR_EVENTS = current;
+    const result = require('node:child_process').spawnSync(process.execPath, ['-e',
+      "new (require('./events').EventBus)().emit({ type: 'run', summary: 'rename check' })",
+    ], { cwd: path.resolve(__dirname, '../..'), env, encoding: 'utf8' });
+    assert.equal(result.status, 0, result.stderr);
+    assert.equal(JSON.parse(fs.readFileSync(canonical ? current : legacy, 'utf8')).summary, 'rename check');
+    assert.equal(fs.existsSync(canonical ? legacy : current), false);
+  });
+}

@@ -1,0 +1,138 @@
+{
+  "repairedAtUtc": "2026-10-20T21:01:51.897Z",
+  "parentStudy": "/Users/quan/Repos/border-collie/bordercollie/prototype/output/checker-authoring-before-script-fix-2026-10-20T21-01-51-766Z",
+  "parentPlanSha256": "a832856ebc4a5952f20e1618da803d6e43e7a5c98f4f8492ec24702e026fc7e9",
+  "parentFiles": {
+    "dev-generation.log": "a9077cce1f203ffd8f4091bd26a2916e5bb000f1605e7a2f12eea1f897267c00",
+    "dev-runner.json": "edf25518c4ac49fe7251d28be184e7069703d05dda653c2471ea28ade9971f13",
+    "inventory.json": "28c3153c0a29de71a449f171b5fd3d6ad4c156187be4ff24ed212d8a595148d7",
+    "plan.json": "eec2c5469697e272e619b22524f9fe27fb76bff30991e4d8bb02fa3132181ab0",
+    "state.json": "0ca8d003106f265b00907dee5a4cfb2239ed4ee8363e68b458d225ae96a14c5f"
+  },
+  "successorStudy": "/Users/quan/Repos/border-collie/bordercollie/prototype/output/checker-authoring",
+  "successorPlanSha256": "3a9d08a481f8f9dbb7f30f848579e563034579486f26f871c5ce2b6dbf671391",
+  "originalCases": 148,
+  "recoveredCases": 12,
+  "seededCases": 160,
+  "historicalCalls": 55,
+  "historicalErrors": 15,
+  "consumedBudgetsInherited": true,
+  "sourceInstructionsChanged": false,
+  "taskIdentitiesUnchanged": true,
+  "originalInputHashesUnchanged": true,
+  "recovered": [
+    {
+      "id": "case-7169255a8c3de0692421a9a9",
+      "sourceSequence": 44,
+      "inputHash": "badc0aa7be5c9def434f008d835304241abfe3ee60eabe8aeb49c6e41d4ef5a8"
+    },
+    {
+      "id": "case-a864bdfbe9153ac1cf6b2d04",
+      "sourceSequence": 42,
+      "inputHash": "0658916c657a72d4e5124de3c7436e36c167284950e625b14a819c0fc859dcc0"
+    },
+    {
+      "id": "case-2648d754ec06e833ad1b3613",
+      "sourceSequence": 42,
+      "inputHash": "fc757ba71409cf3529e363d25f92a96dc05379f2eabf6b2f21256622a0717474"
+    },
+    {
+      "id": "case-0bd059c047ac882f4205b873",
+      "sourceSequence": 42,
+      "inputHash": "2c576a3f2b56573b79096a9943cad046793abf0aee6bc5a03150451c537bff83"
+    },
+    {
+      "id": "case-3be398a6439e5b998a21b032",
+      "sourceSequence": 35,
+      "inputHash": "732dea1bee4c050963297ac46278cf3425d31c1aa33426989598cb3917dcfe5b"
+    },
+    {
+      "id": "case-5e504f7af5d304208bfee402",
+      "sourceSequence": 35,
+      "inputHash": "365994637721611c139cc23f53c23a849b1e860c54585a604544dc13c6e74f65"
+    },
+    {
+      "id": "case-3c90dab7e6fd8322ed9e168b",
+      "sourceSequence": 35,
+      "inputHash": "bff159212fb58b7ec2c8d526e7b19453896482c96bf4a9d18d0a0a40063e6e8e"
+    },
+    {
+      "id": "case-c546d9ff5bbcbd1a17357204",
+      "sourceSequence": 35,
+      "inputHash": "16d88e87ac0494ba02d9d955ab886d56d5ab405bacaec2bbeb6f7980ddec8dfd"
+    },
+    {
+      "id": "case-a84dff2c4cd7dc2bb39083b3",
+      "sourceSequence": 27,
+      "inputHash": "9e4d2597723ce9892a05154bce7a7e42074269aa96e4ce1c970882dbb5fb809d"
+    },
+    {
+      "id": "case-c984ecaec616e8b17211b265",
+      "sourceSequence": 27,
+      "inputHash": "9ec54fa6bea2e6b631e2486054c5deba7964d90fd064e9799a423d7f185474c8"
+    },
+    {
+      "id": "case-7d361b07f598313e94c0243f",
+      "sourceSequence": 27,
+      "inputHash": "6b3b517578736fc8bbe7de23c8703d24ebad08dc9a2145000e37b015e1ac3745"
+    },
+    {
+      "id": "case-ce28b7384d2f5519b792ea9b",
+      "sourceSequence": 27,
+      "inputHash": "76c35596577b6aa6144fee9e646067246f5bb7124916ed769a3a53be713e6dd1"
+    }
+  ],
+  "rejected": [
+    {
+      "id": "case-a864bdfbe9153ac1cf6b2d04",
+      "sourceSequence": 44,
+      "error": "Missing required shell construct: script-invocation"
+    },
+    {
+      "id": "case-2648d754ec06e833ad1b3613",
+      "sourceSequence": 44,
+      "error": "Missing required shell construct: script-invocation"
+    },
+    {
+      "id": "case-0bd059c047ac882f4205b873",
+      "sourceSequence": 44,
+      "error": "Missing required shell construct: script-invocation"
+    },
+    {
+      "id": "case-a864bdfbe9153ac1cf6b2d04",
+      "sourceSequence": 43,
+      "error": "Missing required shell construct: script-invocation"
+    },
+    {
+      "id": "case-2648d754ec06e833ad1b3613",
+      "sourceSequence": 43,
+      "error": "Missing required shell construct: script-invocation"
+    },
+    {
+      "id": "case-0bd059c047ac882f4205b873",
+      "sourceSequence": 43,
+      "error": "Missing required shell construct: script-invocation"
+    }
+  ],
+  "trainingEligible": false,
+  "humanVerified": false,
+  "fixCommit": "3dd4f99",
+  "testsPassed": 147,
+  "independentReview": "Passed, including quoted/comment/heredoc negatives and budget-preserving recovery",
+  "decisiveCliReplay": {
+    "before": {
+      "casesAcceptedPerCapture": 1,
+      "expected": 2
+    },
+    "after": {
+      "casesAcceptedPerCapture": 2,
+      "expected": 2,
+      "errors": []
+    },
+    "capturedSequences": [
+      42,
+      43,
+      44
+    ]
+  }
+}

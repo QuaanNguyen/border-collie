@@ -1,7 +1,7 @@
-# Event schema (v1) - the contract between Guard and Pet bordercollie
+# Event schema (v1) - the contract between Guard and Pet xor
 
 Guard decides.
-bordercollie expresses.
+Pet xor expresses.
 They communicate through the Pet process's private input pipe.
 
 ## Transport
@@ -9,7 +9,7 @@ They communicate through the Pet process's private input pipe.
 The OpenCode plugin sends each event directly to the running Pet process.
 The pipe belongs to the running plugin instance, so the Pet exits when that plugin disconnects.
 The Pet queues events only in memory while its renderer starts.
-Nothing is replayed after OpenCode exits, and the runtime does not create `~/.bordercollie`.
+Nothing is replayed after OpenCode exits, and the runtime does not create lingering state files.
 
 ## Event object
 
@@ -24,22 +24,22 @@ Nothing is replayed after OpenCode exits, and the runtime does not create `~/.bo
   "petState": "refused",
   "tool": "bash",
   "summary": "curl -X POST http://198.51.100.7",
-  "reason": "host not in protocol.egress",
-  "rule": "egress",
+  "reason": "matches user preference description for denial",
+  "rule": "preference",
   "detail": {}
 }
 ```
 
 `seq` is monotonic within a run.
 `summary` is short and human-readable.
-bordercollie shows it in a speech bubble, so keep it under ~60 chars.
+The Pet shows it in a speech bubble, so keep it under ~60 chars.
 
 ## `type` values
 
 | type        | When                                                    | Typical `status`      |
 |-------------|---------------------------------------------------------|-----------------------|
 | `run`       | Run started, completed normally, or ended                | `start` / `finish` / `end` |
-| `protocol`  | Protocol loaded - carries the envelope in `detail`      | `ok`                  |
+| `protocol`  | Preference loaded - carries details                     | `ok`                  |
 | `thinking`  | The agent started or stopped thinking                   | `ok` / `idle`         |
 | `action`    | A tool call was proposed and allowed                    | `allow`               |
 | `excursion` | A tool call was proposed and refused                    | `block`               |
@@ -47,39 +47,37 @@ bordercollie shows it in a speech bubble, so keep it under ~60 chars.
 | `toolerror` | A tool *result* came back broken                        | `error`               |
 | `claim`     | The agent asserted it finished something                | `open`                |
 | `verdict`   | Evidence for a claim was checked                        | `pass` / `fail`       |
-| `ask`       | Genuinely ambiguous - a human should decide             | `ask`                 |
+| `ask`       | Action requires owner confirmation                      | `ask`                 |
 
 ## `petState` values
 
 Guard sets `petState` on each event.
-
 The shared Pet animation contract in `events/pet-config.json` maps these states to named animation tracks.
 
 | petState | Animation folder |
 |----------|------------------|
-| `calm` | `bordercollie-normal` |
-| `allowed` | `bordercollie-normal` |
-| `asking` | `bordercollie-thinking` |
-| `celebrating` | `bordercollie-celebrating` |
-| `checking` | `bordercollie-thinking` |
-| `denied` | `bordercollie-denied` |
-| `drag` | `bordercollie-dragging` |
-| `error` | `bordercollie-thinking` |
-| `hover` | `bordercollie-hovering` |
-| `offline` | `bordercollie-normal` |
-| `proving` | `bordercollie-thinking` |
-| `refused` | `bordercollie-refused` |
-| `rejecting` | `bordercollie-refused` |
-| `sleeping` | `bordercollie-denied` |
-| `suspicious` | `bordercollie-suspicious` |
-| `thinking` | `bordercollie-thinking` |
-| `watching` | `bordercollie-normal` |
+| `calm` | `xor-normal` |
+| `allowed` | `xor-normal` |
+| `asking` | `xor-thinking` |
+| `celebrating` | `xor-celebrating` |
+| `checking` | `xor-thinking` |
+| `denied` | `xor-denied` |
+| `drag` | `xor-dragging` |
+| `error` | `xor-thinking` |
+| `hover` | `xor-hovering` |
+| `offline` | `xor-normal` |
+| `proving` | `xor-thinking` |
+| `refused` | `xor-refused` |
+| `rejecting` | `xor-refused` |
+| `sleeping` | `xor-denied` |
+| `suspicious` | `xor-suspicious` |
+| `thinking` | `xor-thinking` |
+| `watching` | `xor-normal` |
 
 ## Rules
 
 1. Guard never imports Pet code. The OpenCode adapter connects Guard output to the Pet process, and Pet never imports Guard code.
 2. Guard always sets `petState`, so the pet never has to infer it from `type`.
-3. bordercollie **never blocks anything**. It reports what already happened.
-4. Silence is the resting state.
-   No event means no reaction, and routine allowed actions tick a counter and say nothing apart from a quick nod.
+3. Pet xor **never blocks anything**. It reports what already happened.
+4. Silence is the resting state. Routine allowed actions nod quickly and say nothing.
 5. `detail` is free-form and may grow; consumers must ignore unknown keys.
