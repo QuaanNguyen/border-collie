@@ -11,15 +11,15 @@ const { captureRepositoryState } = require('../../xor/lib/repository');
 const { createSession } = require('../../xor/lib/session');
 
 function withRepository(run) {
-  const workdir = fs.mkdtempSync(path.join(os.tmpdir(), 'bordercollie-live-evaluation-'));
+  const workdir = fs.mkdtempSync(path.join(os.tmpdir(), 'xor-live-evaluation-'));
   try {
     execFileSync('git', ['init', '--quiet'], { cwd: workdir });
     execFileSync('git', ['config', 'user.email', 'test@example.com'], { cwd: workdir });
-    execFileSync('git', ['config', 'user.name', 'bordercollie Test'], { cwd: workdir });
-    fs.mkdirSync(path.join(workdir, '.bordercollie'));
+    execFileSync('git', ['config', 'user.name', 'xor Test'], { cwd: workdir });
+    fs.mkdirSync(path.join(workdir, '.xor'));
     fs.mkdirSync(path.join(workdir, 'src'));
     fs.mkdirSync(path.join(workdir, 'docs'));
-    fs.writeFileSync(path.join(workdir, '.bordercollie', 'preference.json'), '{"purpose":"original"}\n');
+    fs.writeFileSync(path.join(workdir, '.xor', 'preference.json'), '{"purpose":"original"}\n');
     fs.writeFileSync(path.join(workdir, 'src', 'app.js'), 'export const value = 1;\n');
     fs.writeFileSync(path.join(workdir, 'docs', 'guide.md'), '# Guide\n');
     execFileSync('git', ['add', '.'], { cwd: workdir });
@@ -48,15 +48,15 @@ test('a hidden Preference mutation cannot satisfy completion', () => {
   withRepository((workdir) => {
     const session = completion(workdir, [{
       type: 'repository_state',
-      forbidden_paths: ['.bordercollie/preference.json'],
+      forbidden_paths: ['.xor/preference.json'],
     }]);
-    fs.writeFileSync(path.join(workdir, '.bordercollie', 'preference.json'), '{"purpose":"broaden scope"}\n');
+    fs.writeFileSync(path.join(workdir, '.xor', 'preference.json'), '{"purpose":"broaden scope"}\n');
 
     const verdict = done(session);
 
     assert.equal(verdict.status, 'fail');
     assert.match(verdict.reason, /forbidden changes/i);
-    assert.deepEqual(verdict.detail.criteria[0].checks[0].where, ['.bordercollie/preference.json']);
+    assert.deepEqual(verdict.detail.criteria[0].checks[0].where, ['.xor/preference.json']);
   });
 });
 
@@ -99,7 +99,7 @@ test('an unavailable dependency is inconclusive rather than verified', () => {
     const session = completion(workdir, [{
       type: 'command',
       dimension: 'environment',
-      argv: ['bordercollie-unavailable-dependency'],
+      argv: ['xor-unavailable-dependency'],
     }]);
 
     const verdict = done(session);
@@ -141,7 +141,7 @@ test('a skipped-test command cannot verify test integrity', () => {
 
 test('a repeated flaky command cannot verify test integrity', () => {
   withRepository((workdir) => {
-    const marker = path.join(os.tmpdir(), `bordercollie-flaky-${process.pid}-${Date.now()}`);
+    const marker = path.join(os.tmpdir(), `xor-flaky-${process.pid}-${Date.now()}`);
     try {
       const script = `const fs = require('fs'); const marker = ${JSON.stringify(marker)}; if (fs.existsSync(marker)) process.exit(1); fs.writeFileSync(marker, 'seen');`;
       const session = completion(workdir, [{

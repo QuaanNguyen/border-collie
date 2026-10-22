@@ -165,7 +165,6 @@ const api = { createReactionScheduler, HIGH, MIN_DWELL, HOLD };
 
 if (typeof window !== 'undefined') {
   window.XorScheduler = api;
-  window.BordercollieScheduler = api;
 }
 if (typeof module !== 'undefined') module.exports = api;
 })();

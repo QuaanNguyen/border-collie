@@ -6,10 +6,10 @@ const animation = document.getElementById("animation");
 const bubble = document.getElementById("bubble");
 const bubbleText = document.getElementById("bubble-text");
 const bubbleSub = document.getElementById("bubble-sub");
-const petApi = window.xor || window.bordercollie;
-const animationApi = window.XorAnimation || window.BordercollieAnimation;
-const hitRegionsApi = window.XorHitRegions || window.BordercollieHitRegions;
-const schedulerApi = window.XorScheduler || window.BordercollieScheduler;
+const petApi = window.xor;
+const animationApi = window.XorAnimation;
+const hitRegionsApi = window.XorHitRegions;
+const schedulerApi = window.XorScheduler;
 const motionPreference = window.matchMedia?.("(prefers-reduced-motion: reduce)");
 const animationPlayer = animationApi.createAnimationPlayer({
   target: animation,
@@ -368,7 +368,6 @@ const exportedApi = {
   scheduler,
 };
 window.__xor = exportedApi;
-window.__bordercollie = exportedApi;
 
 setState("offline");
 

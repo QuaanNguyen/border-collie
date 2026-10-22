@@ -75,5 +75,4 @@ const hitRegions = { regionsFromAlpha, placeAlphaRegions, imageHitRegions };
 if (typeof module !== "undefined" && module.exports) module.exports = hitRegions;
 if (typeof window !== "undefined") {
   window.XorHitRegions = hitRegions;
-  window.BordercollieHitRegions = hitRegions;
 }

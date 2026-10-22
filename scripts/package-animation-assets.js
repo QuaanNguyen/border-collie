@@ -141,7 +141,7 @@ function renderQa(frames) {
 
 function defaultSourcePath() {
   const xorSource = path.join(ROOT, 'docs', 'assets', 'xor-source.png');
-  return fs.existsSync(xorSource) ? xorSource : path.join(ROOT, 'docs', 'assets', 'bordercollie-source.png');
+  return xorSource;
 }
 
 function defaultQaPath() {

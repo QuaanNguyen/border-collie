@@ -63,7 +63,7 @@ async function fixture(t, handle) {
 }
 function reviewResponse(body) {
   const inputs = JSON.parse(body.messages[1].content);
-  return { model: body.model, choices: [{ message: { content: JSON.stringify({ decisions: inputs.map(({ id, inputHash }) => ({ id, inputHash, verdict: 'deny' })) }) } }] };
+  return { model: body.model, choices: [{ finish_reason: 'stop', message: { content: JSON.stringify({ decisions: inputs.map(({ id, inputHash }) => ({ id, inputHash, verdict: 'deny' })) }) } }] };
 }
 async function waitFor(predicate) {
   for (let attempt = 0; attempt < 100; attempt += 1) {
@@ -142,7 +142,7 @@ test('review retries are bounded per invocation and later starts resume missing 
   let gemmaReviews = 0;
   const { directory, start, requests } = await fixture(t, (body) => {
     if (JSON.parse(body.messages[1].content).tasks) return response(body);
-    if (body.model === 'gemma4-31b-it' && ++gemmaReviews <= 2) return { model: body.model, choices: [{ message: { content: '{}' } }] };
+    if (body.model === 'gemma4-31b-it' && ++gemmaReviews <= 2) return { model: body.model, choices: [{ finish_reason: 'stop', message: { content: '{}' } }] };
     return reviewResponse(body);
   });
   const partial = await start(directory).done;

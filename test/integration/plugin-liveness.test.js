@@ -8,7 +8,7 @@ const ROOT = path.resolve(__dirname, '..', '..')
 
 async function main() {
   const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'xor-liveness-'))
-  const envKeys = ['XOR_NO_PET', 'XOR_EVENTS', 'BORDERCOLLIE_NO_PET', 'BORDERCOLLIE_EVENTS']
+  const envKeys = ['XOR_NO_PET', 'XOR_EVENTS']
   const previousEnv = new Map(envKeys.map((key) => [key, process.env[key]]))
   try {
     await runScenario(tempDir)
@@ -26,7 +26,6 @@ async function main() {
 async function runDefaultCompletionScenario(tempDir) {
   fs.mkdirSync(tempDir, { recursive: true })
   process.env.XOR_NO_PET = '1'
-  process.env.BORDERCOLLIE_NO_PET = '1'
 
   const client = {
     session: {
@@ -60,7 +59,6 @@ async function runScenario(tempDir) {
     }],
   }))
   process.env.XOR_NO_PET = '1'
-  process.env.BORDERCOLLIE_NO_PET = '1'
 
   let messageReads = 0
   let promptCalls = 0
@@ -154,7 +152,7 @@ async function runScenario(tempDir) {
       { tool: 'read', sessionID: 'transport-failure' },
       { args: { path: 'README.md' } },
     ),
-    /(?:xor|bordercollie) refused this action/,
+    /xor refused this action/,
   )
   process.stdout.write('ok - streaming responses are not interrupted by completion review\n')
   process.stdout.write('ok - Pet delivery failure does not disable xor enforcement\n')

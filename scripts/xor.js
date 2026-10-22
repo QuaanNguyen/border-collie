@@ -11,7 +11,7 @@ function usage() {
   return `Usage: xor <command>
 
 Commands:
-  install                    Bind the OpenCode plugin and retrieve the Needle Judge
+  install                    Bind the OpenCode plugin and retrieve the Needle Gate
   migrate                    Move this folder from the retired Protocol and profiles to a Preference
   pet size <percent|reset>   Persist and apply the Pet size
   help                       Show this help
@@ -50,7 +50,7 @@ async function handleInstall() {
       ? result.petDir + '/native/pet-host'
       : result.petDir + '/node_modules'
   ));
-  console.log('Judge:         ' + result.judgeDir + (result.judgeReused ? '  (already verified)' : ''));
+  console.log('Gate:             ' + (result.gateDir || result.verifierDir) + ((result.gateReused || result.verifierReused) ? '  (already verified)' : ''));
   console.log('Done. Open any project with: opencode <path>');
 }
 

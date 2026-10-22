@@ -92,12 +92,12 @@ No checker replacement is promoted.
 
 ## Historical work and Sol
 
-The original PR history is preserved by the remote tag `needle-judge-pr53-aaf39bd`.
+The original PR history is preserved by the remote tag `needle-verifier-pr53-aaf39bd`.
 It keeps commit `71bb67d` and the experiment receipts reachable.
 Fetch the preservation tag before replaying historical Git-backed artifacts:
 
 ```sh
-git fetch origin tag needle-judge-pr53-aaf39bd
+git fetch origin tag needle-verifier-pr53-aaf39bd
 ```
 
 Historical V2 request handling lives under `xor/prototype/historical-v2` so old records remain reproducible without being mislabeled as V3.

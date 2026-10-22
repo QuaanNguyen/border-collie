@@ -3,13 +3,13 @@
 const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
-const { PREFERENCE_RELATIVE_PATH, LEGACY_PREFERENCE_RELATIVE_PATH, RETIRED_PROTOCOL_RELATIVE_PATHS } = require('./preference');
+const { PREFERENCE_RELATIVE_PATH, RETIRED_PROTOCOL_RELATIVE_PATHS } = require('./preference');
 
 const SUBAGENT_TOOLS = new Set(['task', 'subagent']);
 const DIRECT_WRITE_TOOLS = new Set(['delete', 'remove', 'move', 'rename', 'chmod', 'chown']);
 const DIRECT_WRITE_KEYS = ['path', 'filePath', 'file_path', 'target', 'source', 'destination', 'from', 'to'];
 const WORKING_DIRECTORY_KEYS = ['workdir', 'cwd'];
-const PROTECTED_RELATIVE_PATHS = [path.posix.dirname(PREFERENCE_RELATIVE_PATH), path.posix.dirname(LEGACY_PREFERENCE_RELATIVE_PATH), ...RETIRED_PROTOCOL_RELATIVE_PATHS];
+const PROTECTED_RELATIVE_PATHS = [path.posix.dirname(PREFERENCE_RELATIVE_PATH), ...RETIRED_PROTOCOL_RELATIVE_PATHS];
 const CASE_INSENSITIVE = process.platform === 'darwin' || process.platform === 'win32';
 const STANDARD_STREAMS = new Set(['/dev/null', '/dev/stdin', '/dev/stdout', '/dev/stderr', 'nul']);
 

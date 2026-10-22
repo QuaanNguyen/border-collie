@@ -1,6 +1,6 @@
 "use strict";
 /**
- * bordercollie  -  the window.
+ * xor  -  the window.
  *
  * A frameless, transparent, always-on-top companion that floats over whatever
  * you are working in. It has no idea what Guard is beyond one URL: it reads the
@@ -100,7 +100,6 @@ function setScale(next) {
   applyLayout();
   if (win && !win.isDestroyed()) {
     win.webContents.send("xor:scaled", Math.round(s * 100));
-    win.webContents.send("bordercollie:scaled", Math.round(s * 100));
   }
 }
 
@@ -124,7 +123,6 @@ if (!gotLock) {
   if (!DEV) liveEventReader = readLiveEvents(process.stdin, (event) => {
     if (win && !win.isDestroyed()) {
       win.webContents.send("xor:event", event);
-      win.webContents.send("bordercollie:event", event);
     } else {
       pendingEvents.push(event);
       if (pendingEvents.length > 256) pendingEvents.shift();
@@ -190,7 +188,6 @@ if (!gotLock) {
       while (pendingEvents.length) {
         const ev = pendingEvents.shift();
         win.webContents.send("xor:event", ev);
-        win.webContents.send("bordercollie:event", ev);
       }
     });
 
@@ -294,26 +291,22 @@ if (!gotLock) {
     animations,
   });
   ipcMain.handle("xor:config", handleConfig);
-  ipcMain.handle("bordercollie:config", handleConfig);
 
   const handleDevScenarios = (event) => {
     if (!DEV || !devHarness || !win || win.isDestroyed() || event.sender !== win.webContents) return [];
     return devHarness.scenarios();
   };
   ipcMain.handle("xor:dev-scenarios", handleDevScenarios);
-  ipcMain.handle("bordercollie:dev-scenarios", handleDevScenarios);
 
   const handleDevEvent = (event, id) => {
     if (!DEV || !devHarness || !win || win.isDestroyed() || event.sender !== win.webContents) return null;
     const entry = devHarness.trigger(id);
     if (entry) {
       win.webContents.send("xor:event", entry);
-      win.webContents.send("bordercollie:event", entry);
     }
     return entry;
   };
   ipcMain.handle("xor:dev-event", handleDevEvent);
-  ipcMain.handle("bordercollie:dev-event", handleDevEvent);
 
   const handleHitRegions = (event, regions, nextDragRegions) => {
     if (!win || win.isDestroyed() || event.sender !== win.webContents) return;
@@ -321,7 +314,6 @@ if (!gotLock) {
     dragRegions = Array.isArray(nextDragRegions) ? nextDragRegions : [];
   };
   ipcMain.on("xor:hit-regions", handleHitRegions);
-  ipcMain.on("bordercollie:hit-regions", handleHitRegions);
 
   const handleDragStart = (event, x, y) => {
     if (!win || win.isDestroyed() || event.sender !== win.webContents) return;
@@ -334,10 +326,8 @@ if (!gotLock) {
     };
     if (windowInteraction) windowInteraction.setDragging(true);
     win.webContents.send("xor:dragging", { phase: "start", deltaX: 0 });
-    win.webContents.send("bordercollie:dragging", { phase: "start", deltaX: 0 });
   };
   ipcMain.on("xor:drag-start", handleDragStart);
-  ipcMain.on("bordercollie:drag-start", handleDragStart);
 
   const handleDragTo = (event, x, y) => {
     if (!win || win.isDestroyed() || event.sender !== win.webContents) return;
@@ -349,10 +339,8 @@ if (!gotLock) {
     win.setBounds({ ...bounds, ...origin });
     pointerDrag.lastX = x;
     win.webContents.send("xor:dragging", { phase: "move", deltaX });
-    win.webContents.send("bordercollie:dragging", { phase: "move", deltaX });
   };
   ipcMain.on("xor:drag-to", handleDragTo);
-  ipcMain.on("bordercollie:drag-to", handleDragTo);
 
   const handleDragEnd = (event) => {
     if (!win || win.isDestroyed() || event.sender !== win.webContents) return;
@@ -360,13 +348,10 @@ if (!gotLock) {
     pointerDrag = null;
     if (windowInteraction) windowInteraction.setDragging(false);
     win.webContents.send("xor:dragging", { phase: "end", deltaX: 0 });
-    win.webContents.send("bordercollie:dragging", { phase: "end", deltaX: 0 });
   };
   ipcMain.on("xor:drag-end", handleDragEnd);
-  ipcMain.on("bordercollie:drag-end", handleDragEnd);
 
   ipcMain.on("xor:scale-set", (_e, s) => setScale(s));
-  ipcMain.on("bordercollie:scale-set", (_e, s) => setScale(s));
 
   app.whenReady().then(() => {
     if (process.platform === "darwin" && !DEV) app.setActivationPolicy("accessory");

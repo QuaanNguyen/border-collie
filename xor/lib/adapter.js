@@ -16,6 +16,4 @@ function createXorAdapter(options = {}) {
   };
 }
 
-const createBordercollieAdapter = createXorAdapter;
-
-module.exports = { createXorAdapter, createBordercollieAdapter };
+module.exports = { createXorAdapter };

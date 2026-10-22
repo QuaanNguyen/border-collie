@@ -4,7 +4,7 @@ const os = require('os')
 const path = require('path')
 
 const { installPlugin, replaceInstallation } = require('../../scripts/install-plugin')
-const { fakeJudgeManifest } = require('../fixtures/fake-judge')
+const { fakeGateManifest } = require('../fixtures/fake-gate')
 
 const root = fs.mkdtempSync(path.join(os.tmpdir(), 'xor-atomic-install-'))
 const repoRoot = path.join(root, 'repo')
@@ -45,15 +45,15 @@ async function main() {
   await assert.rejects(installPlugin({
     repoRoot,
     destDir: pluginsDir,
-    judgeRoot: path.join(root, 'judge'),
-    judgeManifest: fakeJudgeManifest(path.join(root, 'judge-source')).manifest,
+    gateRoot: path.join(root, 'gate'),
+    gateManifest: fakeGateManifest(path.join(root, 'gate-source')).manifest,
   }))
   assert.strictEqual(fs.readFileSync(entryPath, 'utf8'), 'old entry\n')
   assert.strictEqual(fs.readFileSync(path.join(packageDir, 'old-marker'), 'utf8'), 'old package\n')
 
   const verificationRoot = path.join(root, 'verification')
-  const verificationPackage = path.join(verificationRoot, 'bordercollie')
-  const verificationEntry = path.join(verificationRoot, 'bordercollie.js')
+  const verificationPackage = path.join(verificationRoot, 'xor')
+  const verificationEntry = path.join(verificationRoot, 'xor.js')
   fs.mkdirSync(verificationPackage, { recursive: true })
   fs.writeFileSync(path.join(verificationPackage, 'new-marker'), 'new package\n')
   fs.writeFileSync(verificationEntry, 'new entry\n')

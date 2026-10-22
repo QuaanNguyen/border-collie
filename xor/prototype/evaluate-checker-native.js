@@ -5,7 +5,7 @@ const os = require('node:os');
 const path = require('node:path');
 const { spawnSync } = require('node:child_process');
 const { performance } = require('node:perf_hooks');
-const { verdictFrom, JUDGE_REQUEST_VERSION } = require('../lib/judge');
+const { verdictFrom, GATE_REQUEST_VERSION } = require('../lib/gate');
 const { digest } = require('./checker-data');
 
 function directVerdict(response) {
@@ -23,10 +23,10 @@ function evaluate({ requestsFile, runner, weights, output, expectedRunnerSha256,
   if (hashBytes(runnerBytes) !== expectedRunnerSha256 || hashBytes(weightBytes) !== expectedWeightsSha256) throw new Error('Runner or model digest differs from the registered artifact');
   const contents = fs.readFileSync(requestsFile, 'utf8');
   const requests = contents.trim().split('\n').map(JSON.parse);
-  if (!requests.length || requests.some((row) => row.version !== JUDGE_REQUEST_VERSION || row.inputHash !== digest({ version: row.version, query: row.query, tools: row.tools }))) throw new Error('Evaluation requests changed or use a retired format');
+  if (!requests.length || requests.some((row) => row.version !== GATE_REQUEST_VERSION || row.inputHash !== digest({ version: row.version, query: row.query, tools: row.tools }))) throw new Error('Evaluation requests changed or use a retired format');
   const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'checker-native-'));
   const settings = { threads, maxTokens: 128, timeoutMs: 15000, repetitions: 3, warmupPasses: 1 };
-  const evidence = { status: 'running', platform: 'darwin-arm64', machineId: digest({ hostname: os.hostname(), cpus: os.cpus().map((cpu) => cpu.model) }), requestFormatVersion: JUDGE_REQUEST_VERSION, evaluationSha256: hashBytes(Buffer.from(contents)), runnerSha256: expectedRunnerSha256, modelSha256: expectedWeightsSha256, scriptSha256: hashBytes(fs.readFileSync(__filename)), deploymentBytes: weightBytes.length + runnerBytes.length, settings, rows: [] };
+  const evidence = { status: 'running', platform: 'darwin-arm64', machineId: digest({ hostname: os.hostname(), cpus: os.cpus().map((cpu) => cpu.model) }), requestFormatVersion: GATE_REQUEST_VERSION, evaluationSha256: hashBytes(Buffer.from(contents)), runnerSha256: expectedRunnerSha256, modelSha256: expectedWeightsSha256, scriptSha256: hashBytes(fs.readFileSync(__filename)), deploymentBytes: weightBytes.length + runnerBytes.length, settings, rows: [] };
   const env = { PATH: process.env.PATH, NEEDLE_TELEMETRY: '0', DO_NOT_TRACK: '1', HF_HUB_OFFLINE: '1' };
   const save = () => fs.writeFileSync(output, JSON.stringify(evidence, null, 2) + '\n');
   fs.mkdirSync(path.dirname(output), { recursive: true });

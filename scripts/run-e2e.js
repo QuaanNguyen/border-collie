@@ -7,7 +7,6 @@ const env = { ...process.env };
 const skipNative = process.argv.includes('--skip-native');
 if (skipNative) {
   env.XOR_SKIP_NATIVE_TESTS = '1';
-  env.BORDERCOLLIE_SKIP_NATIVE_TESTS = '1';
 }
 
 const tests = [

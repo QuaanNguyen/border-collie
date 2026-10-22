@@ -3,7 +3,7 @@
 const crypto = require('node:crypto');
 const fs = require('node:fs');
 const path = require('node:path');
-const { judgeRequest, JUDGE_REQUEST_VERSION } = require('../lib/judge');
+const { gateRequest, GATE_REQUEST_VERSION } = require('../lib/gate');
 const { DEFAULT_PREFERENCE } = require('../lib/preference');
 const { proposedCall } = require('../lib/toolcalls');
 
@@ -13,7 +13,7 @@ const digest = (value) => crypto.createHash('sha256').update(typeof value === 's
 const REVIEW_INSTRUCTION_HASH = digest(REVIEW_INSTRUCTIONS);
 
 function requestFor(row) {
-  return judgeRequest({ userMessage: row.userMessage, preference: row.preference, call: proposedCall(row.tool, row.args) });
+  return gateRequest({ userMessage: row.userMessage, preference: row.preference, call: proposedCall(row.tool, row.args) });
 }
 
 function reviewPacket(rows) {
@@ -93,6 +93,19 @@ function coverage(inventory, rows) {
       const expected = topic === 'parallel-denials' ? ['approve', 'deny'] : VERDICTS;
       topics[topic][split] = { families: new Set(matches.map((row) => row.family)).size, ...Object.fromEntries(VERDICTS.map((verdict) => [verdict, matches.filter((row) => row.verdict === verdict).length])) };
       for (const verdict of expected) if (!topics[topic][split][verdict]) missing.push(`topic:${topic}:${split}:${verdict}`);
+      if (topic === 'parallel-denials') {
+        const shapes = inventory.riskScenarios.filter((row) => row.topic === topic && row.split === split);
+        const groups = new Map();
+        for (const row of matches) {
+          const identity = row.parallelGroup || row.batch;
+          if (!identity) continue;
+          if (!groups.has(identity)) groups.set(identity, []);
+          groups.get(identity).push(row);
+        }
+        const coherent = [...groups.values()].filter((group) => group.length === 3 && new Set(group.map((row) => row.family)).size === 1 && new Set(group.map((row) => row.userMessage)).size === 1 && new Set(group.map((row) => row.preference.text)).size === 1 && new Set(group.map((row) => digest({ tool: row.tool, args: row.args }))).size === 3 && shapes.length === 3 && shapes.every((shape, index) => group.filter((row) => row.agent === shape.agent && row.tool === shape.tool && row.verdict === (index === 2 ? 'approve' : 'deny')).length === 1));
+        topics[topic][split].coherentGroups = coherent.length;
+        if (!coherent.length) missing.push(`topic:${topic}:${split}:coherent-parallel-group`);
+      }
     }
   }
   return { complete: missing.length === 0, missing, breakdown, topics, runtimeGaps: inventory.tools.filter((tool) => tool.hookable !== true || tool.integrationVerified !== true).map((tool) => ({ agent: tool.agent, tool: tool.name, reason: tool.gap || 'Interception has not been verified end to end' })) };
@@ -127,7 +140,7 @@ function prepare(inventory, directory) {
   const contents = rows.map(JSON.stringify).join('\n') + '\n';
   fs.writeFileSync(path.join(directory, 'proposals.jsonl'), contents);
   fs.writeFileSync(path.join(directory, 'review-packet.json'), JSON.stringify({ instructionHash: REVIEW_INSTRUCTION_HASH, instructions: REVIEW_INSTRUCTIONS, requests: reviewPacket(rows) }, null, 2) + '\n');
-  const manifest = { requestFormatVersion: JUDGE_REQUEST_VERSION, inventorySha256: digest(inventory), proposalsSha256: digest(contents), requestsSha256: digest(reviewPacket(rows)), cases: rows.length, trainingEligible: false, humanVerified: false, blind: false, solJobsAllowed: false, coverage: coverage(inventory, []) };
+  const manifest = { requestFormatVersion: GATE_REQUEST_VERSION, inventorySha256: digest(inventory), proposalsSha256: digest(contents), requestsSha256: digest(reviewPacket(rows)), cases: rows.length, trainingEligible: false, humanVerified: false, blind: false, solJobsAllowed: false, coverage: coverage(inventory, []) };
   fs.writeFileSync(path.join(directory, 'manifest.json'), JSON.stringify(manifest, null, 2) + '\n');
   return manifest;
 }
@@ -153,7 +166,7 @@ if (require.main === module) {
     const inventory = JSON.parse(fs.readFileSync(inventoryFile));
     const contents = fs.readFileSync(path.join(directory, 'proposals.jsonl'), 'utf8');
     const manifest = JSON.parse(fs.readFileSync(path.join(directory, 'manifest.json')));
-    if (manifest.requestFormatVersion !== JUDGE_REQUEST_VERSION || manifest.inventorySha256 !== digest(inventory) || manifest.proposalsSha256 !== digest(contents)) throw new Error('Frozen inventory or proposals changed');
+    if (manifest.requestFormatVersion !== GATE_REQUEST_VERSION || manifest.inventorySha256 !== digest(inventory) || manifest.proposalsSha256 !== digest(contents)) throw new Error('Frozen inventory or proposals changed');
     const rows = contents.trim().split('\n').map(JSON.parse);
     if (manifest.requestsSha256 !== digest(reviewPacket(rows))) throw new Error('The production input builder changed; preserve this study and prepare fresh requests');
     console.log(JSON.stringify(exportReviewed(inventory, rows, reviewFiles.map((file) => JSON.parse(fs.readFileSync(file))), path.resolve(output))));

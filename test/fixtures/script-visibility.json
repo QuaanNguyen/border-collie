@@ -1,0 +1,613 @@
+[
+  {
+    "name": "that does this:",
+    "command": "bash /home/admin/catalog.sh",
+    "message": "I wrote catalog.sh that does this:\n\n#!/bin/bash\ncat catalog.txt\necho \"done\"",
+    "paths": [
+      "/home/admin/catalog.sh"
+    ],
+    "valid": true
+  },
+  {
+    "name": "which handles the handshake:",
+    "command": "bash /home/admin/catalog.sh",
+    "message": "I wrote catalog.sh which handles the handshake:\n\n#!/bin/bash\ncat catalog.txt\necho \"done\"",
+    "paths": [
+      "/home/admin/catalog.sh"
+    ],
+    "valid": true
+  },
+  {
+    "name": "to simulate some payloads:",
+    "command": "bash /home/admin/catalog.sh",
+    "message": "I wrote catalog.sh to simulate some payloads:\n\n#!/bin/bash\ncat catalog.txt\necho \"done\"",
+    "paths": [
+      "/home/admin/catalog.sh"
+    ],
+    "valid": true
+  },
+  {
+    "name": "with these contents:",
+    "command": "bash /home/admin/catalog.sh",
+    "message": "I wrote catalog.sh with these contents:\n\n#!/bin/bash\ncat catalog.txt\necho \"done\"",
+    "paths": [
+      "/home/admin/catalog.sh"
+    ],
+    "valid": true
+  },
+  {
+    "name": "literal escaped newlines",
+    "command": "bash catalog.sh",
+    "message": "Run catalog.sh that does this:\\n#!/bin/sh\\ncat catalog.txt",
+    "paths": [
+      "catalog.sh"
+    ],
+    "valid": true
+  },
+  {
+    "name": "./scripts/catalog.sh",
+    "command": "./scripts/catalog.sh",
+    "message": "```sh\n#!/bin/sh\ncat catalog.txt\n```",
+    "paths": [
+      "./scripts/catalog.sh"
+    ],
+    "valid": true
+  },
+  {
+    "name": "/opt/catalog.sh",
+    "command": "/opt/catalog.sh",
+    "message": "```sh\n#!/bin/sh\ncat catalog.txt\n```",
+    "paths": [
+      "/opt/catalog.sh"
+    ],
+    "valid": true
+  },
+  {
+    "name": "../scripts/catalog.sh",
+    "command": "../scripts/catalog.sh",
+    "message": "```sh\n#!/bin/sh\ncat catalog.txt\n```",
+    "paths": [
+      "../scripts/catalog.sh"
+    ],
+    "valid": true
+  },
+  {
+    "name": "\"./scripts/catalog check.sh\"",
+    "command": "\"./scripts/catalog check.sh\"",
+    "message": "```sh\n#!/bin/sh\ncat catalog.txt\n```",
+    "paths": [
+      "./scripts/catalog check.sh"
+    ],
+    "valid": true
+  },
+  {
+    "name": "'/opt/catalog check.sh'",
+    "command": "'/opt/catalog check.sh'",
+    "message": "```sh\n#!/bin/sh\ncat catalog.txt\n```",
+    "paths": [
+      "/opt/catalog check.sh"
+    ],
+    "valid": true
+  },
+  {
+    "name": "bash \"scripts/catalog check.sh\"",
+    "command": "bash \"scripts/catalog check.sh\"",
+    "message": "```sh\n#!/bin/sh\ncat catalog.txt\n```",
+    "paths": [
+      "scripts/catalog check.sh"
+    ],
+    "valid": true
+  },
+  {
+    "name": "cd scripts && ./catalog.sh",
+    "command": "cd scripts && ./catalog.sh",
+    "message": "```sh\n#!/bin/sh\ncat catalog.txt\n```",
+    "paths": [
+      "./catalog.sh"
+    ],
+    "valid": true
+  },
+  {
+    "name": "cd \"scripts; archive\" && ./catalog.sh",
+    "command": "cd \"scripts; archive\" && ./catalog.sh",
+    "message": "```sh\n#!/bin/sh\ncat catalog.txt\n```",
+    "paths": [
+      "./catalog.sh"
+    ],
+    "valid": true
+  },
+  {
+    "name": "/bin/bash catalog.sh",
+    "command": "/bin/bash catalog.sh",
+    "message": "```sh\n#!/bin/sh\ncat catalog.txt\n```",
+    "paths": [
+      "catalog.sh"
+    ],
+    "valid": true
+  },
+  {
+    "name": "LOCAL=1 bash catalog.sh",
+    "command": "LOCAL=1 bash catalog.sh",
+    "message": "```sh\n#!/bin/sh\ncat catalog.txt\n```",
+    "paths": [
+      "catalog.sh"
+    ],
+    "valid": true
+  },
+  {
+    "name": "echo first; bash catalog.sh",
+    "command": "echo first; bash catalog.sh",
+    "message": "```sh\n#!/bin/sh\ncat catalog.txt\n```",
+    "paths": [
+      "catalog.sh"
+    ],
+    "valid": true
+  },
+  {
+    "name": "echo ./scripts/catalog.sh",
+    "command": "echo ./scripts/catalog.sh",
+    "message": "```sh\n#!/bin/sh\ncat catalog.txt\n```",
+    "paths": [],
+    "valid": true
+  },
+  {
+    "name": "echo bash catalog.sh",
+    "command": "echo bash catalog.sh",
+    "message": "```sh\n#!/bin/sh\ncat catalog.txt\n```",
+    "paths": [],
+    "valid": true
+  },
+  {
+    "name": "cat ./scripts/catalog.sh",
+    "command": "cat ./scripts/catalog.sh",
+    "message": "```sh\n#!/bin/sh\ncat catalog.txt\n```",
+    "paths": [],
+    "valid": true
+  },
+  {
+    "name": "# ./catalog.sh",
+    "command": "# ./catalog.sh",
+    "message": "```sh\n#!/bin/sh\ncat catalog.txt\n```",
+    "paths": [],
+    "valid": true
+  },
+  {
+    "name": "# note; ./catalog.sh",
+    "command": "# note; ./catalog.sh",
+    "message": "```sh\n#!/bin/sh\ncat catalog.txt\n```",
+    "paths": [],
+    "valid": true
+  },
+  {
+    "name": "cat <<'EOF'\n./catalog.sh\nEOF",
+    "command": "cat <<'EOF'\n./catalog.sh\nEOF",
+    "message": "```sh\n#!/bin/sh\ncat catalog.txt\n```",
+    "paths": [],
+    "valid": true
+  },
+  {
+    "name": "echo \"hello; ./catalog.sh arg\"",
+    "command": "echo \"hello; ./catalog.sh arg\"",
+    "message": "```sh\n#!/bin/sh\ncat catalog.txt\n```",
+    "paths": [],
+    "valid": true
+  },
+  {
+    "name": "echo 'hello; ./catalog.sh arg'",
+    "command": "echo 'hello; ./catalog.sh arg'",
+    "message": "```sh\n#!/bin/sh\ncat catalog.txt\n```",
+    "paths": [],
+    "valid": true
+  },
+  {
+    "name": "echo \"hello; ./catalog.sh;\"",
+    "command": "echo \"hello; ./catalog.sh;\"",
+    "message": "```sh\n#!/bin/sh\ncat catalog.txt\n```",
+    "paths": [],
+    "valid": true
+  },
+  {
+    "name": "printf \"%s\" \"bash catalog.sh\"",
+    "command": "printf \"%s\" \"bash catalog.sh\"",
+    "message": "```sh\n#!/bin/sh\ncat catalog.txt\n```",
+    "paths": [],
+    "valid": true
+  },
+  {
+    "name": "./scripts/catalog.sh.backup",
+    "command": "./scripts/catalog.sh.backup",
+    "message": "```sh\n#!/bin/sh\ncat catalog.txt\n```",
+    "paths": [],
+    "valid": true
+  },
+  {
+    "name": "python3 -m http.server",
+    "command": "python3 -m http.server",
+    "message": "```sh\n#!/bin/sh\ncat catalog.txt\n```",
+    "paths": [],
+    "valid": true
+  },
+  {
+    "name": "heredoc followed by actual invocation",
+    "command": "cat <<'EOF'\nbash hidden.sh\nEOF\nbash catalog.sh",
+    "message": "```sh\n#!/bin/sh\ncat catalog.txt\n```",
+    "paths": [
+      "catalog.sh"
+    ],
+    "valid": true
+  },
+  {
+    "name": "missing",
+    "command": "bash catalog.sh",
+    "message": "Run catalog.sh",
+    "paths": [
+      "catalog.sh"
+    ],
+    "valid": false
+  },
+  {
+    "name": "wrong filename",
+    "command": "bash catalog.sh",
+    "message": "Use other.sh:\n```sh\n#!/bin/sh\ncat catalog.txt\n```",
+    "paths": [
+      "catalog.sh"
+    ],
+    "valid": false
+  },
+  {
+    "name": "same basename wrong directory",
+    "command": "bash catalog.sh",
+    "message": "Use /other/catalog.sh:\n```sh\n#!/bin/sh\ncat catalog.txt\n```",
+    "paths": [
+      "catalog.sh"
+    ],
+    "valid": false
+  },
+  {
+    "name": "empty",
+    "command": "bash catalog.sh",
+    "message": "catalog.sh\n```sh\n# description only\n```",
+    "paths": [
+      "catalog.sh"
+    ],
+    "valid": false
+  },
+  {
+    "name": "prose fence",
+    "command": "bash catalog.sh",
+    "message": "catalog.sh\n```text\nThis script does useful things.\n```",
+    "paths": [
+      "catalog.sh"
+    ],
+    "valid": false
+  },
+  {
+    "name": "omitted",
+    "command": "bash catalog.sh",
+    "message": "catalog.sh\n```sh\n#!/bin/sh\n# remaining implementation omitted\ncat catalog.txt\n```",
+    "paths": [
+      "catalog.sh"
+    ],
+    "valid": false
+  },
+  {
+    "name": "two unnamed scripts",
+    "command": "bash a.sh && bash b.sh",
+    "message": "```sh\n#!/bin/sh\ncat catalog.txt\n```",
+    "paths": [
+      "a.sh",
+      "b.sh"
+    ],
+    "valid": false
+  },
+  {
+    "name": "two named scripts",
+    "command": "bash a.sh && bash b.sh",
+    "message": "a.sh\n```sh\n#!/bin/sh\ncat catalog.txt\n```\nb.sh\n```sh\n#!/bin/sh\ncat catalog.txt\n```",
+    "paths": [
+      "a.sh",
+      "b.sh"
+    ],
+    "valid": true
+  },
+  {
+    "name": "incomplete quote",
+    "command": "bash catalog.sh \"unterminated",
+    "message": "```sh\n#!/bin/sh\ncat catalog.txt\n```",
+    "paths": [
+      "catalog.sh"
+    ],
+    "valid": false
+  },
+  {
+    "name": "duplicate basename requires full identities",
+    "command": "bash /a/catalog.sh && bash /b/catalog.sh",
+    "message": "catalog.sh\n```sh\n#!/bin/sh\ncat catalog.txt\n```",
+    "paths": [
+      "/a/catalog.sh",
+      "/b/catalog.sh"
+    ],
+    "valid": false
+  },
+  {
+    "name": "unsupported wrapper fails visibly",
+    "command": "env bash catalog.sh",
+    "message": "```sh\n#!/bin/sh\ncat catalog.txt\n```",
+    "paths": [],
+    "valid": false
+  },
+  {
+    "name": "unsupported timeout wrapper fails visibly",
+    "command": "timeout 5 bash catalog.sh",
+    "message": "```sh\n#!/bin/sh\ncat catalog.txt\n```",
+    "paths": [],
+    "valid": false
+  },
+  {
+    "name": "prose unlabeled fence fails",
+    "command": "bash catalog.sh",
+    "message": "catalog.sh\n```\nPlease do the catalog work now.\n```",
+    "paths": [
+      "catalog.sh"
+    ],
+    "valid": false
+  },
+  {
+    "name": "shell line continuation is not part of filename",
+    "command": "bash \\\ncatalog.sh",
+    "message": "```sh\n#!/bin/sh\ncat catalog.txt\n```",
+    "paths": [
+      "catalog.sh"
+    ],
+    "valid": true
+  },
+  {
+    "name": "unsupported interpreter option",
+    "command": "bash -c 'bash catalog.sh'",
+    "message": "```sh\n#!/bin/sh\ncat catalog.txt\n```",
+    "paths": [],
+    "valid": false
+  },
+  {
+    "name": "observed case-2e28792e4c8c49da9ffc4182 missing relative-path script body",
+    "command": "bin/check-route-status.sh\nls -lh logs/north-express.log",
+    "message": "Inspect our current project status and return the results.",
+    "paths": [
+      "bin/check-route-status.sh"
+    ],
+    "valid": false
+  },
+  {
+    "name": "visible body bin/check-route-status.sh\nls -lh logs/north-express.log",
+    "command": "bin/check-route-status.sh\nls -lh logs/north-express.log",
+    "message": "```sh\n#!/bin/sh\ncat catalog.txt\n```",
+    "paths": [
+      "bin/check-route-status.sh"
+    ],
+    "valid": true
+  },
+  {
+    "name": "missing body echo \"$(bash hidden.sh)\"",
+    "command": "echo \"$(bash hidden.sh)\"",
+    "message": "Inspect our current project status and return the results.",
+    "paths": [
+      "hidden.sh"
+    ],
+    "valid": false
+  },
+  {
+    "name": "visible body echo \"$(bash hidden.sh)\"",
+    "command": "echo \"$(bash hidden.sh)\"",
+    "message": "```sh\n#!/bin/sh\ncat catalog.txt\n```",
+    "paths": [
+      "hidden.sh"
+    ],
+    "valid": true
+  },
+  {
+    "name": "missing body (bash hidden.sh)",
+    "command": "(bash hidden.sh)",
+    "message": "Inspect our current project status and return the results.",
+    "paths": [
+      "hidden.sh"
+    ],
+    "valid": false
+  },
+  {
+    "name": "visible body (bash hidden.sh)",
+    "command": "(bash hidden.sh)",
+    "message": "```sh\n#!/bin/sh\ncat catalog.txt\n```",
+    "paths": [
+      "hidden.sh"
+    ],
+    "valid": true
+  },
+  {
+    "name": "missing body bash hidden.sh>out.txt",
+    "command": "bash hidden.sh>out.txt",
+    "message": "Inspect our current project status and return the results.",
+    "paths": [
+      "hidden.sh"
+    ],
+    "valid": false
+  },
+  {
+    "name": "visible body bash hidden.sh>out.txt",
+    "command": "bash hidden.sh>out.txt",
+    "message": "```sh\n#!/bin/sh\ncat catalog.txt\n```",
+    "paths": [
+      "hidden.sh"
+    ],
+    "valid": true
+  },
+  {
+    "name": "missing body bash < hidden.sh",
+    "command": "bash < hidden.sh",
+    "message": "Inspect our current project status and return the results.",
+    "paths": [
+      "hidden.sh"
+    ],
+    "valid": false
+  },
+  {
+    "name": "visible body bash < hidden.sh",
+    "command": "bash < hidden.sh",
+    "message": "```sh\n#!/bin/sh\ncat catalog.txt\n```",
+    "paths": [
+      "hidden.sh"
+    ],
+    "valid": true
+  },
+  {
+    "name": "missing body echo `bash hidden.sh`",
+    "command": "echo `bash hidden.sh`",
+    "message": "Inspect our current project status and return the results.",
+    "paths": [
+      "hidden.sh"
+    ],
+    "valid": false
+  },
+  {
+    "name": "visible body echo `bash hidden.sh`",
+    "command": "echo `bash hidden.sh`",
+    "message": "```sh\n#!/bin/sh\ncat catalog.txt\n```",
+    "paths": [
+      "hidden.sh"
+    ],
+    "valid": true
+  },
+  {
+    "name": "missing body echo \"$(echo $(bash hidden.sh))\"",
+    "command": "echo \"$(echo $(bash hidden.sh))\"",
+    "message": "Inspect our current project status and return the results.",
+    "paths": [
+      "hidden.sh"
+    ],
+    "valid": false
+  },
+  {
+    "name": "visible body echo \"$(echo $(bash hidden.sh))\"",
+    "command": "echo \"$(echo $(bash hidden.sh))\"",
+    "message": "```sh\n#!/bin/sh\ncat catalog.txt\n```",
+    "paths": [
+      "hidden.sh"
+    ],
+    "valid": true
+  },
+  {
+    "name": "missing body scripts/catalog.sh",
+    "command": "scripts/catalog.sh",
+    "message": "Inspect our current project status and return the results.",
+    "paths": [
+      "scripts/catalog.sh"
+    ],
+    "valid": false
+  },
+  {
+    "name": "visible body scripts/catalog.sh",
+    "command": "scripts/catalog.sh",
+    "message": "```sh\n#!/bin/sh\ncat catalog.txt\n```",
+    "paths": [
+      "scripts/catalog.sh"
+    ],
+    "valid": true
+  },
+  {
+    "name": "literal nested mention echo '$(bash hidden.sh)'",
+    "command": "echo '$(bash hidden.sh)'",
+    "message": "Inspect our project.",
+    "paths": [],
+    "valid": true
+  },
+  {
+    "name": "literal nested mention echo \"\\$(bash hidden.sh)\"",
+    "command": "echo \"\\$(bash hidden.sh)\"",
+    "message": "Inspect our project.",
+    "paths": [],
+    "valid": true
+  },
+  {
+    "name": "literal nested mention echo '`bash hidden.sh`'",
+    "command": "echo '`bash hidden.sh`'",
+    "message": "Inspect our project.",
+    "paths": [],
+    "valid": true
+  },
+  {
+    "name": "literal nested mention echo \"\\`bash hidden.sh\\`\"",
+    "command": "echo \"\\`bash hidden.sh\\`\"",
+    "message": "Inspect our project.",
+    "paths": [],
+    "valid": true
+  },
+  {
+    "name": "literal nested mention cat <<'END'\necho $(bash hidden.sh)\nEND",
+    "command": "cat <<'END'\necho $(bash hidden.sh)\nEND",
+    "message": "Inspect our project.",
+    "paths": [],
+    "valid": true
+  },
+  {
+    "name": "literal nested mention echo \"(bash hidden.sh)\"",
+    "command": "echo \"(bash hidden.sh)\"",
+    "message": "Inspect our project.",
+    "paths": [],
+    "valid": true
+  },
+  {
+    "name": "literal nested mention echo \"bash hidden.sh>out.txt\"",
+    "command": "echo \"bash hidden.sh>out.txt\"",
+    "message": "Inspect our project.",
+    "paths": [],
+    "valid": true
+  },
+  {
+    "name": "dynamic interpreter target fails explicitly",
+    "command": "bash \"$SCRIPT\"",
+    "message": "Inspect our project.",
+    "paths": [],
+    "valid": false
+  },
+  {
+    "name": "unsupported active form \"$SHELL\" hidden.sh",
+    "command": "\"$SHELL\" hidden.sh",
+    "message": "Inspect our project.",
+    "paths": [],
+    "valid": false
+  },
+  {
+    "name": "unsupported active form \"$(which bash)\" hidden.sh",
+    "command": "\"$(which bash)\" hidden.sh",
+    "message": "Inspect our project.",
+    "paths": [],
+    "valid": false
+  },
+  {
+    "name": "unsupported active form if true; then bash hidden.sh; fi",
+    "command": "if true; then bash hidden.sh; fi",
+    "message": "Inspect our project.",
+    "paths": [],
+    "valid": false
+  },
+  {
+    "name": "unsupported active form cat <<END\n$(bash hidden.sh)\nEND",
+    "command": "cat <<END\n$(bash hidden.sh)\nEND",
+    "message": "Inspect our project.",
+    "paths": [],
+    "valid": false
+  },
+  {
+    "name": "escaped heredoc substitution remains literal",
+    "command": "cat <<END\n\\$(bash hidden.sh)\nEND",
+    "message": "Inspect our project.",
+    "paths": [],
+    "valid": true
+  },
+  {
+    "name": "backslash quoted heredoc delimiter remains literal",
+    "command": "cat <<\\END\n$(bash hidden.sh)\nEND",
+    "message": "Inspect our project.",
+    "paths": [],
+    "valid": true
+  }
+]

@@ -24,7 +24,6 @@ try {
   for (const required of [
     'package.json',
     'scripts/xor.js',
-    'scripts/bordercollie.js',
     'scripts/check-package-client.js',
     'scripts/check-package.js',
     'scripts/check-syntax.js',
@@ -32,11 +31,10 @@ try {
     'scripts/migrate.js',
     'scripts/run-e2e.js',
     'plugin/xor.js',
-    'plugin/bordercollie.js',
     'plugin/package.json',
     'xor/lib/session.js',
-    'xor/lib/judge.js',
-    'xor/lib/judge-artifacts.js',
+    'xor/lib/gate.js',
+    'xor/lib/gate-artifacts.js',
     'xor/lib/preference.js',
     'events/index.js',
     'pet/package.json',
@@ -44,7 +42,7 @@ try {
     assert(files.has(required), `packed artifact is missing ${required}`);
   }
   assert(![...files].some((file) => file.includes('node_modules/')), 'packed artifact contains node_modules');
-  assert(![...files].some((file) => file.startsWith('xor/prototype/') || file.startsWith('bordercollie/prototype/')), 'packed artifact contains research files');
+  assert(![...files].some((file) => file.startsWith('xor/prototype/')), 'packed artifact contains research files');
   console.log(`Verified ${report[0].filename} (${files.size} files, ${report[0].size} bytes)`);
 } finally {
   fs.rmSync(output, { recursive: true, force: true });

@@ -47,7 +47,7 @@ These counts describe review progress, not accepted training examples.
 The continuation process resumes missing decisions after bounded service retries and runs the local coverage audit only after both reviews finish.
 It never submits Sol jobs or closes tickets.
 
-The replacement isolated evaluation has 64 unique Judge inputs and four separate boundary cases.
+The replacement isolated evaluation has 64 unique Gate inputs and four separate boundary cases.
 Its rules are fixed before generation, and exact duplicates or conflicting duplicate families are excluded with provenance.
 Two additional families were quarantined during input inspection before consulting model decisions or independent review labels.
 The [intake receipt](experiments/isolated-evaluation-intake-2026-10-16.json) explains the missing task-scope facts.

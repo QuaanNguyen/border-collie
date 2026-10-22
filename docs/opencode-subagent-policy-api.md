@@ -22,7 +22,7 @@ The current implementation carries the parent's deny rules and `external_directo
 
 Consequently, a plugin cannot safely implement issue #15 by attaching a per-child xor policy envelope through a documented dispatch API.
 
-A plugin can still enforce a policy independently by throwing from `tool.execute.before` for every relevant tool call, including calls from child sessions, but that is a plugin-owned xor verifier rather than inherited child-session authority.
+A plugin can still enforce a policy independently by throwing from `tool.execute.before` for every relevant tool call, including calls from child sessions, but that is a plugin-owned xor gate rather than inherited child-session authority.
 
 ## Official evidence
 
@@ -68,7 +68,7 @@ Its source explicitly states that parent-agent restrictions govern only that par
 
 Finally, the generic built-in and MCP tool wrappers trigger the same before hook with the executing session ID before invoking each tool.
 
-This is the supported interception point for a plugin-owned, fail-closed xor verifier that applies to both parent and child tool calls.
+This is the supported interception point for a plugin-owned, fail-closed xor gate that applies to both parent and child tool calls.
 
 [Built-in and MCP tool hook invocation](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/session/tools.ts#L1559-L1577)
 

@@ -3,20 +3,12 @@
 const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
-const { existingDirectory } = require('./legacy-paths');
 
 const CONFIG_SCHEMA_VERSION = 3;
 const PET_SCALES = Object.freeze([0.6, 0.75, 0.9, 1, 1.15, 1.35, 1.6, 2]);
 
 function defaultConfigRoot() {
-  return process.env.XOR_CONFIG_ROOT ||
-    process.env.BORDERCOLLIE_CONFIG_ROOT ||
-    process.env.BORDER_COLLIE_CONFIG_ROOT ||
-    existingDirectory(
-      path.join(os.homedir(), '.config', 'xor'),
-      path.join(os.homedir(), '.config', 'bordercollie'),
-      path.join(os.homedir(), '.config', 'border-collie')
-    );
+  return process.env.XOR_CONFIG_ROOT || path.join(os.homedir(), '.config', 'xor');
 }
 
 function configPath(root = defaultConfigRoot()) {

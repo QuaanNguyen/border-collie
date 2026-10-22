@@ -60,7 +60,7 @@ Write your project rules in `.xor/preference.json`:
 ```
 
 You can also add completion requirements, such as checking that a build output exists.
-See the [project rule and completion reference](docs/xor-and-judge.md#the-preference) for the file format.
+See the [project rule and completion reference](docs/xor-and-gate.md#the-preference) for the file format.
 Missing rules use the shipped defaults.
 Invalid rules block execution until you correct them.
 
@@ -75,7 +75,6 @@ Invalid rules block execution until you correct them.
 | Reset the companion size | `xor pet size reset` |
 | Show command help | `xor help` |
 
-Older bordercollie commands remain available for existing installations.
 Migration preserves your rules and stops if old and new instructions conflict.
 
 ## Current work
@@ -118,7 +117,7 @@ The [research file guide](docs/research-data.md) explains the preserved inputs a
 | If you want to… | Start here |
 | --- | --- |
 | Understand the runtime and project terms | [Project context](CONTEXT.md) |
-| Understand action checks and project rules | [Verifier reference](docs/xor-and-judge.md) |
+| Understand action checks and project rules | [Gate reference](docs/xor-and-gate.md) |
 | Follow model and data work | [Training guide](docs/checker-training.md) |
 | Inspect the checked agent tools | [Tool inventory](docs/checker-tool-inventory.json) |
 | Find preserved experiments and data | [Research file guide](docs/research-data.md) |
@@ -126,6 +125,6 @@ The [research file guide](docs/research-data.md) explains the preserved inputs a
 | Contribute or run platform checks | [Contributing guide](CONTRIBUTION.md) |
 | Prepare a release | [Release guide](docs/RELEASING.md) |
 
-The active verifier code is in [xor](xor/), the OpenCode integration is in [plugin](plugin/), and the desktop companion is in [pet](pet/).
+The active gate code is in [xor](xor/), the OpenCode integration is in [plugin](plugin/), and the desktop companion is in [pet](pet/).
 Command entry points and maintenance tools are in [scripts](scripts/), with tests in [test](test/).
 Frozen records retain older names where changing them would break their recorded checksums.

@@ -3,15 +3,13 @@
 const crypto = require('node:crypto');
 const fs = require('node:fs');
 const path = require('node:path');
-const { LEGACY_DIRECTORY } = require('./legacy-paths');
 
 const DEFAULT_PREFERENCE = Object.freeze({ text: "Work on the user's request in this folder. Ordinary local reads, edits, and commands that serve that request are approved. Do not send project contents off the machine or take destructive actions the user did not request. Ask the owner when permission is unclear." });
 const LEGACY_DEFAULTS = Object.freeze({ purpose: "Software work in this folder for the user's request.", allow: "Ordinary local reads, edits, and commands inside this folder that serve the user's request.", disallow: "Sending project contents off the machine, and destructive actions the user's request did not ask for.", ask: '' });
 const PROSE_FIELDS = Object.freeze(['purpose', 'allow', 'disallow', 'ask']);
 const PREFERENCE_FIELDS = Object.freeze(['text', 'done_criteria', ...PROSE_FIELDS]);
 const PREFERENCE_RELATIVE_PATH = '.xor/preference.json';
-const LEGACY_PREFERENCE_RELATIVE_PATH = '.bordercollie/preference.json';
-const RETIRED_PROTOCOL_RELATIVE_PATHS = Object.freeze(['.xor/protocol.json', '.bordercollie/protocol.json', `${LEGACY_DIRECTORY}/protocol.json`, '.opencode/protocol.json']);
+const RETIRED_PROTOCOL_RELATIVE_PATHS = Object.freeze(['.xor/protocol.json', '.opencode/protocol.json']);
 
 function preferencePath(workdir) {
   return path.join(workdir, PREFERENCE_RELATIVE_PATH);
@@ -88,16 +86,8 @@ function retiredDoneCriteria(workdir) {
 }
 
 function readPreference(workdir) {
-  const canonical = preferencePath(workdir);
-  const legacy = path.join(workdir, LEGACY_PREFERENCE_RELATIVE_PATH);
-  const file = !fs.existsSync(canonical) && fs.existsSync(legacy) ? legacy : canonical;
+  const file = preferencePath(workdir);
   const source = readJsonObject(file);
-  if (file === canonical && fs.existsSync(legacy)) {
-    const previous = readJsonObject(legacy);
-    if (previous.error || source.error || JSON.stringify(previous.value) !== JSON.stringify(source.value)) {
-      return { valid: false, fingerprint: fingerprint(`${source.contents}\0${previous.contents}`), file, preference: null, reason: 'Both Preference locations exist with different or unreadable instructions. Resolve them before continuing.' };
-    }
-  }
   const retired = source.exists ? null : retiredDoneCriteria(workdir);
   const print = fingerprint(`${source.contents}\0${retired ? retired.contents : ''}`);
 
@@ -115,7 +105,7 @@ function readPreference(workdir) {
   if (retired.error) {
     return { valid: false, fingerprint: print, file: retired.file, preference: null, reason: `the retired Protocol at ${retired.file} is unreadable: ${retired.error.message}` };
   }
-  if (retired.hasInstructions) return { valid: false, fingerprint: print, file: retired.file, preference: null, reason: 'Run xor migrate to preserve the previous project instructions before using the verifier.' };
+  if (retired.hasInstructions) return { valid: false, fingerprint: print, file: retired.file, preference: null, reason: 'Run xor migrate to preserve the previous project instructions before using the gate.' };
   return { valid: true, fingerprint: print, file, source: 'default', preference: withDefaults({}, retired.doneCriteria), reason: null };
 }
 
@@ -137,7 +127,6 @@ function createLivePreference({ workdir }) {
 module.exports = {
   DEFAULT_PREFERENCE,
   PREFERENCE_RELATIVE_PATH,
-  LEGACY_PREFERENCE_RELATIVE_PATH,
   RETIRED_PROTOCOL_RELATIVE_PATHS,
   createLivePreference,
   preferencePath,

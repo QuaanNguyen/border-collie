@@ -20,10 +20,10 @@ function run(command, args, cwd = ROOT) {
 }
 
 run(npm, ['test'])
-const xorTests = fs.existsSync(path.join(ROOT, 'test', 'xor')) ? 'test/xor/*.test.js' : 'test/bordercollie/*.test.js'
+const xorTests = fs.existsSync(path.join(ROOT, 'test', 'xor')) ? 'test/xor/*.test.js' : 'test/xor/*.test.js'
 run(process.execPath, ['--test', xorTests, 'test/plugin/*.test.mjs'])
 
-if (process.env.XOR_SKIP_NATIVE_TESTS !== '1' && process.env.BORDERCOLLIE_SKIP_NATIVE_TESTS !== '1') {
+if (process.env.XOR_SKIP_NATIVE_TESTS !== '1' && process.env.XOR_SKIP_NATIVE_TESTS !== '1') {
   if (!electronMatchesLock()) {
     run(npm, ['ci'], PET_DIR)
   }

@@ -6,7 +6,6 @@ const path = require('node:path');
 const { CONFIG_SCHEMA_VERSION, PET_SCALES, configPath, defaultConfigRoot, writeConfig } = require('../xor/lib/config');
 const {
   DEFAULT_PREFERENCE,
-  LEGACY_PREFERENCE_RELATIVE_PATH,
   preferencePath,
   readJsonObject,
   retiredProtocolPaths,
@@ -16,11 +15,8 @@ const {
 
 function retiredOwnerPolicyPath() {
   if (process.env.XOR_OWNER_CONFIG) return path.join(process.env.XOR_OWNER_CONFIG, 'policy.json');
-  if (process.env.BORDERCOLLIE_OWNER_CONFIG) return path.join(process.env.BORDERCOLLIE_OWNER_CONFIG, 'policy.json');
   const xorDir = path.join(os.homedir(), '.config', 'opencode', 'xor');
-  const legacyDir = path.join(os.homedir(), '.config', 'opencode', 'bordercollie');
-  const dir = !fs.existsSync(xorDir) && fs.existsSync(legacyDir) ? legacyDir : xorDir;
-  return path.join(dir, 'policy.json');
+  return path.join(xorDir, 'policy.json');
 }
 
 function readOrThrow(file, label) {
@@ -57,10 +53,7 @@ function migratePreference(opts = {}) {
 
   const preferenceFile = preferencePath(workdir);
   const preference = readOrThrow(preferenceFile, 'The Preference');
-  const legacyPreferenceFile = path.join(workdir, LEGACY_PREFERENCE_RELATIVE_PATH);
-  const legacyPreference = readOrThrow(legacyPreferenceFile, 'The previous Preference');
-  if (preference.exists && legacyPreference.exists && JSON.stringify(preference.value) !== JSON.stringify(legacyPreference.value)) throw new Error('Both Preference locations exist with different instructions. Resolve them before migration. Nothing was changed.');
-  const sourcePreference = preference.exists ? preference : legacyPreference;
+  const sourcePreference = preference;
   if (sourcePreference.exists) {
     try {
       validatePreference(sourcePreference.value);
@@ -87,10 +80,6 @@ function migratePreference(opts = {}) {
   if (!preference.exists || report.carriedDoneCriteria || JSON.stringify(preference.value) !== JSON.stringify(next)) {
     writeJson(preferenceFile, next);
     report.wrotePreference = true;
-  }
-  if (legacyPreference.exists) {
-    fs.rmSync(legacyPreferenceFile);
-    report.removed.push(legacyPreferenceFile);
   }
 
   for (const { file, source } of protocols) {

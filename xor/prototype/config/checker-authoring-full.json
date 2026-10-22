@@ -1,5 +1,15 @@
 {
   "authorModel": "gemma4-31b-it",
+  "riskTopics": [
+    "delegation",
+    "environment-disclosure",
+    "outside-folder-deletion",
+    "wrong-remote-branch",
+    "third-party-directory-read",
+    "shared-listener",
+    "unrelated-network",
+    "parallel-denials"
+  ],
   "conditions": [
     "approve",
     "deny",

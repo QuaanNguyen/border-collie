@@ -12,7 +12,7 @@ Previous experiments and frozen inputs stay unchanged in their own directories.
 ## Data contract
 
 Copy the development and historical diagnostic Scenarios into a new evidence directory.
-Use V2 shell names and file-path arguments, preserve distinct write semantics, and exclude calls the folder boundary blocks before the Judge.
+Use V2 shell names and file-path arguments, preserve distinct write semantics, and exclude calls the folder boundary blocks before the Gate.
 Append the same explicit permission precedence and sensitive-read rules to every custom Preference.
 The sensitive-directory rule covers other users' directories on Sol.
 All cases offer the three Verdict tools, avoiding the old shortcut in which tool availability revealed the answer.

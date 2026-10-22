@@ -83,7 +83,12 @@ async function main(args) {
     return;
   }
   if (args.filter((arg) => arg === '--status').length > 1 || args.some((arg) => arg.startsWith('-') && arg !== '--status') || args.filter((arg) => arg !== '--status').length > 1) throw new Error('Usage: npm run dev:generate-data -- [study-directory] [--status]');
-  const selected = path.resolve(args.find((arg) => arg !== '--status') || path.join(__dirname, 'output/checker-authoring'));
+  const explicit = args.find((arg) => arg !== '--status');
+  const activeFile = path.join(__dirname, 'output/checker-active-study.json');
+  const active = !explicit && fs.existsSync(activeFile) ? read(activeFile) : null;
+  if (active && (typeof active.directory !== 'string' || typeof active.planSha256 !== 'string')) throw new Error('Invalid active study receipt');
+  const selected = path.resolve(explicit || (active ? path.resolve(__dirname, '../..', active.directory) : path.join(__dirname, 'output/checker-authoring')));
+  if (active && digest(read(path.join(selected, 'plan.json'))) !== active.planSha256) throw new Error('Active study plan changed; inspect its repair receipt before resuming');
   if (args.includes('--status')) {
     console.log(`Study ${selected}`);
     console.log(display(progress(selected, 'Status')).join('\n'));

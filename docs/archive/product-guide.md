@@ -10,8 +10,8 @@ xor is a small desktop companion for OpenCode that pairs with a system-one verif
 In plain terms, it sits beside your coding agent, watches what the agent tries to do, and reacts when the agent is working, blocked, refused, failed, or claiming it is done.
 
 xor checks every tool call before it runs.
-A small on-device model, the Needle verifier, reads your latest message, the folder Preference, and the proposed call, and answers approve, deny, or ask.
-Paths outside the project folder and changes to the Preference are refused in code before the verifier runs.
+A small on-device model, the Needle gate, reads your latest message, the folder Preference, and the proposed call, and answers approve, deny, or ask.
+Paths outside the project folder and changes to the Preference are refused in code before the gate runs.
 xor also verifies important finish claims against the files in the project.
 
 The verifier uses the [Needle 3](https://github.com/cactus-compute/needle) model from Cactus Compute, run locally with telemetry off.
@@ -30,14 +30,14 @@ xor install
 ```
 
 The npm installation includes xor and the desktop Pet.
-`xor install` also downloads the Needle runner for your platform and the 35 MB `needle3.cact` weights from Hugging Face, checks both against pinned SHA-256 digests, and caches them under `~/.cache/xor/judge` (`%LOCALAPPDATA%\xor\judge` on Windows).
+`xor install` also downloads the Needle runner for your platform and the 35 MB `needle3.cact` weights from Hugging Face, checks both against pinned SHA-256 digests, and caches them under `~/.cache/xor/gate` (`%LOCALAPPDATA%\xor\verifier` on Windows).
 If that download or check fails, the previously installed plugin stays in place.
 The verifier has runners for macOS on Apple Silicon, Linux x64 and ARM64, and Windows x64 and ARM64.
 
 To install from a source clone for development:
 
 ```sh
-git clone https://github.com/QuaanNguyen/border-collie.git xor
+git clone https://github.com/QuaanNguyen/xor.git xor
 cd xor
 node scripts/install-plugin.js
 ```
@@ -84,7 +84,7 @@ The checker always offers approve, deny, and ask.
 An ask answer withholds the action until the owner provides applicable confirmation.
 An unreadable Preference blocks the session until you fix it, and the agent cannot edit the file.
 
-Projects set up with an earlier release may still have `.bordercollie/preference.json` or `.opencode/protocol.json`.
+Projects set up with an earlier release may still have `.opencode/protocol.json`.
 Their allowlists are ignored; only their `done_criteria` are read, and only while no Preference exists.
 Clean them up when you choose:
 
@@ -92,7 +92,7 @@ Clean them up when you choose:
 xor migrate
 ```
 
-`xor migrate` writes the Preference with those done criteria, deletes retired Protocol files, and migrates `.bordercollie` configurations to `.xor`.
+`xor migrate` writes the Preference with those done criteria, deletes retired Protocol files,.
 
 Resize the Pet directly, without sending a UI preference through an agent conversation:
 
@@ -133,10 +133,10 @@ Run the focused xor and plugin behavior tests:
 node --test test/xor/*.test.js test/plugin/*.test.mjs
 ```
 
-Measure the installed Judge against the fixed evaluation cases:
+Measure the installed Gate against the fixed evaluation cases:
 
 ```sh
-npm run eval:judge
+npm run eval:gate
 ```
 
 xor events and active sessions exist only while OpenCode and the Pet are running.

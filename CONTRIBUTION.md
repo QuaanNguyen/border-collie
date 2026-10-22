@@ -1,8 +1,8 @@
 # Contributing to xor
 
-xor is an OpenCode plugin, deterministic verifier and guard, transient event stream, and optional desktop Pet companion.
-The plugin in `plugin/` adapts OpenCode hooks (`tool.execute.before`) to verifier decisions and publishes events to the Pet over a private input pipe.
-The verifier owns policy enforcement and completion evidence, while the Pet expresses events and never changes verifier outcomes.
+xor is an OpenCode plugin, deterministic action gate and guard, transient event stream, and optional desktop Pet companion.
+The plugin in `plugin/` adapts OpenCode hooks (`tool.execute.before`) to gate decisions and publishes events to the Pet over a private input pipe.
+The gate owns policy enforcement and completion evidence, while the Pet expresses events and never changes gate outcomes.
 The production macOS Pet uses the native AppKit and WebKit host in `pet/native/`, while Windows, Linux, and development mode use the locked Electron runtime in `pet/`.
 The root package is configured for `@quaannguyen/xor`.
 
@@ -19,7 +19,7 @@ Read `README.md`, `CONTEXT.md`, `docs/RELEASING.md`, and the relevant domain doc
 Clone the repository and enter its root directory.
 
 ```sh
-git clone https://github.com/QuaanNguyen/border-collie.git xor
+git clone https://github.com/QuaanNguyen/xor.git
 cd xor
 ```
 
@@ -55,7 +55,7 @@ Run the unit and integration suite.
 npm test
 ```
 
-Run the focused verifier and plugin suites when changing those boundaries.
+Run the focused gate and plugin suites when changing those boundaries.
 
 ```sh
 node --test test/xor/*.test.js test/plugin/*.test.mjs
@@ -164,7 +164,7 @@ For OpenCode API or permission claims, record the version or date checked and li
 
 Start by reproducing a user-visible bug through the closest E2E path, especially for installation, OpenCode, process lifecycle, renderer, native host, and Windows issues.
 Reduce the reproduction to a deterministic unit or integration test after confirming the end-user failure.
-Keep the fix at the narrowest responsible boundary, such as verifier policy resolution, the OpenCode adapter, the event stream, the Pet host, or packaging.
+Keep the fix at the narrowest responsible boundary, such as gate policy resolution, the OpenCode adapter, the event stream, the Pet host, or packaging.
 Preserve fail-closed behavior for ambiguous preferences, malformed project files, protected paths, and unsupported subagent policy inheritance.
 Do not describe OpenCode permissions as an operating-system sandbox or as a complete shell filesystem boundary.
 Run the relevant focused tests, the fast checks, and the closest E2E coverage before submitting the change.
@@ -175,7 +175,7 @@ Keep each pull request focused on one coherent change and explain the user-visib
 State the problem, the approach, affected platforms, and any compatibility or security implications.
 List the exact validation commands that passed and identify checks that could not run.
 Include screenshots or short recordings for visible Pet or renderer changes when they make the result easier to review.
-Call out changes to verifier semantics, package contents, installer behavior, OpenCode hooks, or release metadata explicitly.
+Call out changes to gate semantics, package contents, installer behavior, OpenCode hooks, or release metadata explicitly.
 Do not publish packages, alter protected release configuration, or make unrelated cleanup changes as part of a normal contribution.
 Keep source comments out of new code and express intent through names, types, and structure.
 Request review only after the worktree contains the intended changes and no unrelated files are modified.

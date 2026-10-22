@@ -6,6 +6,184 @@ from pathlib import Path
 import re
 
 
+def substitution_end(command, start, backticks):
+    quote, depth, index = None, 1, start
+    while index < len(command):
+        character = command[index]
+        if character == '\\' and quote != "'":
+            index += 1
+        elif quote:
+            if character == quote:
+                quote = None
+        elif character in "'\"":
+            quote = character
+        elif backticks and character == '`':
+            return index
+        elif not backticks and character == '(':
+            depth += 1
+        elif not backticks and character == ')':
+            depth -= 1
+            if depth == 0:
+                return index
+        index += 1
+    return -1
+
+
+def shell_commands(command):
+    commands, words, pending, issues = [], [], [], []
+    word, started, quote, delimiter = '', False, None, None
+    quoted_word = False
+    index = 0
+    while index < len(command):
+        character = command[index]
+        if character == '\\' and quote != "'":
+            if index + 1 < len(command):
+                index += 1
+                quoted_word = True
+                if command[index] != '\n':
+                    word += command[index]
+                    started = True
+        elif quote != "'" and ((character == '$' and command[index + 1:index + 2] == '(') or character == '`'):
+            start = index + (1 if character == '`' else 2)
+            end = substitution_end(command, start, character == '`')
+            if end < 0:
+                return commands, False, issues + ['Unclosed active command substitution']
+            nested_commands, nested_complete, nested_issues = shell_commands(command[start:end])
+            commands.extend(nested_commands)
+            issues.extend(nested_issues)
+            if not nested_complete:
+                issues.append('Unsupported active command substitution')
+            word += '$DYNAMIC'
+            started = True
+            index = end
+        elif quote:
+            if character == quote:
+                quote = None
+            else:
+                word += character
+        elif character in "'\"":
+            quote, started, quoted_word = character, True, True
+        elif character == '#' and not started:
+            newline = command.find('\n', index)
+            index = len(command) if newline < 0 else newline - 1
+        elif character == '<' and command[index:index + 2] == '<<':
+            if started:
+                words.append(word)
+                word, started, quoted_word = '', False, False
+            index += 1
+            delimiter = command[index + 1:index + 2] == '-'
+            if delimiter:
+                index += 1
+        elif character in '<>':
+            if started:
+                words.append(word)
+                word, started, quoted_word = '', False, False
+            words.append(character)
+        elif character in ';|&()\n' or character.isspace():
+            if started:
+                if delimiter is not None:
+                    pending.append((word, delimiter, quoted_word))
+                    delimiter = None
+                else:
+                    words.append(word)
+                word, started, quoted_word = '', False, False
+            if character in ';|&()\n':
+                if words:
+                    commands.append(words)
+                words = []
+                if character == '\n' and pending:
+                    for marker, strip_tabs, quoted in pending:
+                        matched = False
+                        while index < len(command):
+                            end = command.find('\n', index + 1)
+                            line = command[index + 1:len(command) if end < 0 else end]
+                            index = len(command) if end < 0 else end
+                            if not quoted:
+                                cursor = 0
+                                while cursor < len(line):
+                                    if line[cursor] == '\\':
+                                        cursor += 1
+                                    elif line[cursor] == '`' or line[cursor:cursor + 2] == '$(':
+                                        issues.append('Active substitution in an unquoted heredoc requires independent visibility review')
+                                    cursor += 1
+                            if (line.lstrip('\t') if strip_tabs else line) == marker:
+                                matched = True
+                                break
+                        if not matched:
+                            return commands, False, issues
+                    pending = []
+        else:
+            word += character
+            started = True
+        index += 1
+    if started:
+        if delimiter is not None:
+            pending.append((word, delimiter, quoted_word))
+            delimiter = None
+        else:
+            words.append(word)
+    if words:
+        commands.append(words)
+    return commands, quote is None and delimiter is None and not pending, issues
+
+
+def script_visibility(command, message):
+    if not isinstance(command, str) or not isinstance(message, str):
+        return {'paths': [], 'issues': []}
+    commands, complete, issues = shell_commands(command)
+    paths = []
+    for words in commands:
+        index = 0
+        while index < len(words) and re.match(r'^[A-Za-z_][A-Za-z0-9_]*=', words[index]):
+            index += 1
+        executable = words[index] if index < len(words) else ''
+        if re.search(r'[$`]', executable):
+            issues.append('Dynamic executable requires independent visibility review')
+        if re.fullmatch(r'(?:if|then|elif|while|until|do|for|case|!)', executable) and any(re.search(r'\.(?:sh|py|js)$', word) for word in words[index + 1:]):
+            issues.append('Unsupported script invocation inside shell control flow')
+        if re.fullmatch(r'(?:env|sudo|timeout|nice|command|exec|nohup)', executable.rsplit('/', 1)[-1]) and any(re.search(r'\.(?:sh|py|js)$', word) for word in words[index + 1:]):
+            issues.append(f'Unsupported script execution wrapper {executable}')
+        interpreter = bool(re.fullmatch(r'(?:bash|sh|python3?|node)', executable.rsplit('/', 1)[-1]))
+        if interpreter and index + 1 < len(words) and words[index + 1].startswith('-') and any(re.search(r'\.(?:sh|py|js)(?:\s|$)', word) for word in words[index + 2:]):
+            issues.append(f'Unsupported script interpreter options {executable}')
+        first = words[index + 1] if index + 1 < len(words) else ''
+        candidate = (words[index + 2] if index + 2 < len(words) else '') if interpreter and first == '<' else first if interpreter else executable
+        if interpreter and re.search(r'[$`]', candidate):
+            issues.append(f'Dynamic script path requires independent visibility review {executable}')
+        if not re.search(r'\.(?:sh|py|js)$', candidate) or re.search(r'[$`<>\n]', candidate):
+            continue
+        if (interpreter or '/' in candidate) and candidate not in paths:
+            paths.append(candidate)
+    text = message.replace('\\n', '\n')
+    bodies = []
+    end = 0
+    for match in re.finditer(r'(^|\n)[ \t]*```([^\n]*)\n([\s\S]*?)\n[ \t]*```', text):
+        bodies.append((text[end:match.start()], match[3], match[2].strip()))
+        end = match.end()
+    if not bodies:
+        match = re.search(r'(^|\n)[ \t]*(#![^\n]+\n[\s\S]*)', text)
+        if match:
+            bodies.append((text[:match.start()], match[2], 'shebang'))
+    if paths and not complete:
+        issues.append('Unsupported or incomplete shell structure around a script invocation')
+    for script in paths:
+        matching = []
+        for prefix, contents, language in bodies:
+            names = [next(value for value in match.groups() if value is not None) for match in re.finditer(r'''`([^`\n]+\.(?:sh|py|js))`|"([^"\n]+\.(?:sh|py|js))"|'([^'\n]+\.(?:sh|py|js))'|([^\s`"'<>():,]+\.(?:sh|py|js))\b''', prefix)]
+            name = names[-1] if names else None
+            attributed = name == script or ('/' not in name and name == script.rsplit('/', 1)[-1] and sum(item.rsplit('/', 1)[-1] == name for item in paths) == 1) if name else len(paths) == 1 and len(bodies) == 1
+            if attributed:
+                matching.append((contents, language))
+        if len(matching) != 1:
+            issues.append(f'Missing or ambiguous visible contents for invoked script {script}')
+            continue
+        contents, language = matching[0]
+        executable = [line for line in contents.split('\n') if line.strip() and not re.match(r'^\s*(?:#|//)', line)]
+        if not executable or (not language and not re.match(r'^\s*#!', contents)) or not re.fullmatch(r'(?:shebang|sh|bash|shell|zsh|python|python3|py|javascript|js|node)?', language) or re.search(r'(?:^\s*(?:\.{3}|…)\s*$|\b(?:omitted|truncated|redacted|placeholder)\b)', contents, re.I | re.M):
+            issues.append(f'Missing executable or complete visible contents for invoked script {script}')
+    return {'paths': paths, 'issues': issues}
+
+
 def digest(value):
     if not isinstance(value, str):
         value = json.dumps(value, ensure_ascii=False, separators=(',', ':'))
@@ -67,7 +245,10 @@ def audit(directory):
             features['variables'] += bool(re.search(r'\$[A-Za-z_{]', command))
             features['commandSubstitution'] += '$(' in command or '`' in command
             features['heredocs'] += '<<' in command
-            features['scriptInvocation'] += bool(re.search(r'\b(?:bash|sh|python3?|node)\b', command))
+            scripts = script_visibility(command, row['userMessage'])
+            if scripts['issues']:
+                raise ValueError(row['id'] + ': ' + '; '.join(scripts['issues']))
+            features['scriptInvocation'] += bool(scripts['paths'])
     return {
         'status': 'complete-integrity-check',
         'cases': len(rows),

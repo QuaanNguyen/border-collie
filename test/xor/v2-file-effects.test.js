@@ -9,14 +9,14 @@ const { createSession } = require('../../xor/lib/session');
 const { proposedCall } = require('../../xor/lib/toolcalls');
 
 test('V2 patches check every added, updated, moved and deleted path before execution', async (t) => {
-  const workdir = fs.mkdtempSync(path.join(os.tmpdir(), 'bordercollie-v2-patch-'));
+  const workdir = fs.mkdtempSync(path.join(os.tmpdir(), 'xor-v2-patch-'));
   t.after(() => fs.rmSync(workdir, { recursive: true, force: true }));
-  for (const operation of ['*** Delete File: .bordercollie/preference.json', '*** Update File: src/main.js\n*** Move to: ../outside.js', '*** Add File: ../outside.js', '*** Update File: .bordercollie/preference.json']) {
-    let judged = false;
-    const session = createSession({ workdir, judge: async () => { judged = true; return { verdict: 'allow' }; } });
+  for (const operation of ['*** Delete File: .xor/preference.json', '*** Update File: src/main.js\n*** Move to: ../outside.js', '*** Add File: ../outside.js', '*** Update File: .xor/preference.json']) {
+    let verified = false;
+    const session = createSession({ workdir, gate: async () => { verified = true; return { verdict: 'allow' }; } });
     const patchText = `*** Begin Patch\n*** Add File: docs/notes.md\n+Notes\n${operation}\n*** End Patch`;
     assert.equal((await session.propose({ tool: 'patch', args: { patchText }, userMessage: 'Update the notes.' })).decision, 'disallow');
-    assert.equal(judged, false);
+    assert.equal(verified, false);
   }
   const call = proposedCall('patch', { patchText: '*** Begin Patch\n*** Update File: src/old.js\n*** Move to: src/new.js\n@@\n-old\n+new\n*** End Patch' });
   assert.deepEqual(call.readPaths, ['src/old.js']);
@@ -24,9 +24,9 @@ test('V2 patches check every added, updated, moved and deleted path before execu
 });
 
 test('V2 worktree targets preserve the project boundary and inspect force removal', async (t) => {
-  const workdir = fs.mkdtempSync(path.join(os.tmpdir(), 'bordercollie-v2-worktree-'));
+  const workdir = fs.mkdtempSync(path.join(os.tmpdir(), 'xor-v2-worktree-'));
   t.after(() => fs.rmSync(workdir, { recursive: true, force: true }));
-  const session = createSession({ workdir, judge: async ({ call }) => ({ verdict: call.args.force ? 'disallow' : 'allow' }) });
+  const session = createSession({ workdir, gate: async ({ call }) => ({ verdict: call.args.force ? 'disallow' : 'allow' }) });
   for (const [tool, args, expected] of [
     ['worktree_list', {}, 'allow'],
     ['worktree_create', { name: 'repair' }, 'disallow'],

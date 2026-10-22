@@ -191,7 +191,7 @@ t('reports the offending line, not the whole blob', () => {
 
 console.log('\nevidence');
 
-const TMP = fs.mkdtempSync(path.join(require('node:os').tmpdir(), 'bordercollie-test-'));
+const TMP = fs.mkdtempSync(path.join(require('node:os').tmpdir(), 'xor-test-'));
 fs.mkdirSync(path.join(TMP, 'src'), { recursive: true });
 fs.writeFileSync(path.join(TMP, 'src/config.py'), 'API_KEY = "sk-demo-ABCDEFGHIJ"\n');
 fs.writeFileSync(path.join(TMP, '.env.example'), 'API_KEY=sk-demo-ABCDEFGHIJ\n');

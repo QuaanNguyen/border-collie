@@ -8,16 +8,14 @@ const { spawnSync } = require('node:child_process');
 const root = path.resolve(__dirname, '..');
 const files = [
   ['scripts/xor.js', []],
-  ['scripts/bordercollie.js', []],
   ['scripts/check-package-client.js', []],
   ['scripts/check-package.js', []],
   ['scripts/check-syntax.js', []],
-  ['scripts/evaluate-judge.js', []],
+  ['scripts/evaluate-gate.js', []],
   ['scripts/install-plugin.js', []],
   ['scripts/migrate.js', []],
   ['scripts/run-e2e.js', []],
   ['plugin/xor.js', ['--input-type=module']],
-  ['plugin/bordercollie.js', ['--input-type=module']],
 ];
 
 for (const [file, args] of files) {

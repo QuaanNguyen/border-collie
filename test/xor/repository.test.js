@@ -11,11 +11,11 @@ const { captureRepositoryState, evaluateRepositoryState } = require('../../xor/l
 const { createSession } = require('../../xor/lib/session');
 
 function withRepository(run) {
-  const workdir = fs.mkdtempSync(path.join(os.tmpdir(), 'bordercollie-repository-'));
+  const workdir = fs.mkdtempSync(path.join(os.tmpdir(), 'xor-repository-'));
   try {
     execFileSync('git', ['init', '--quiet'], { cwd: workdir });
     execFileSync('git', ['config', 'user.email', 'test@example.com'], { cwd: workdir });
-    execFileSync('git', ['config', 'user.name', 'bordercollie Test'], { cwd: workdir });
+    execFileSync('git', ['config', 'user.name', 'xor Test'], { cwd: workdir });
     fs.mkdirSync(path.join(workdir, 'src'));
     fs.writeFileSync(path.join(workdir, 'src', 'app.js'), 'export const value = 1;\n');
     fs.writeFileSync(path.join(workdir, '.gitignore'), 'generated/\n');

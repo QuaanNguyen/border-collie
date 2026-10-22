@@ -10,7 +10,7 @@ The desktop companion is retained for runtime compatibility and documented in [t
 **xor**:
 The single product and command name for the system that applies permission decisions and checks completion evidence.
 
-**Needle Verifier (Judge)**:
+**Needle Gate (Verifier)**:
 The model that reads the user message, the Preference, and one proposed action and returns a Verdict.
 
 **Verdict**:

@@ -20,16 +20,16 @@ assert.strictEqual(rootPackage.version, '0.1.2')
 assert.strictEqual(rootPackage.private, undefined)
 assert.deepStrictEqual(rootPackage.repository, {
   type: 'git',
-  url: 'https://github.com/QuaanNguyen/border-collie.git',
+  url: 'https://github.com/QuaanNguyen/xor.git',
 })
 assert.deepStrictEqual(rootPackage.bugs, {
-  url: 'https://github.com/QuaanNguyen/border-collie/issues',
+  url: 'https://github.com/QuaanNguyen/xor/issues',
 })
-assert.strictEqual(rootPackage.homepage, 'https://github.com/QuaanNguyen/border-collie#readme')
+assert.strictEqual(rootPackage.homepage, 'https://github.com/QuaanNguyen/xor#readme')
 assert.match(installationGuide, /npm install --global \./)
-assert.match(installationGuide, /(?:xor|bordercollie) install/)
+assert.match(installationGuide, /xor install/)
 assert.doesNotMatch(readme, /\b(?:bdc|bcollie|bc) (?:install|profile|project|pet)\b/)
-assert.deepStrictEqual(rootPackage.bin, { xor: 'scripts/xor.js', bordercollie: 'scripts/xor.js' })
+assert.deepStrictEqual(rootPackage.bin, { xor: 'scripts/xor.js' })
 assert.doesNotMatch(readme, /start:demo/)
 assert.doesNotMatch(main, /--demo/)
 assert.doesNotMatch(renderer, /DEMO_SCRIPT/)

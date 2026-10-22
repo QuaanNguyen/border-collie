@@ -25,9 +25,7 @@ test('OpenCode forwards structured completion claims to xor', async () => {
       done_criteria: [{ id: 'answer', structured_claims: { minimum_observations: 1 }, checks: [{ type: 'file_exists', path: 'answer.js' }] }],
     }));
     process.env.XOR_NO_PET = '1';
-    process.env.BORDERCOLLIE_NO_PET = '1';
     process.env.XOR_EVENTS = path.join(workdir, 'events.jsonl');
-    process.env.BORDERCOLLIE_EVENTS = path.join(workdir, 'events.jsonl');
     const { xor } = await import(pathToFileURL(path.join(ROOT, 'plugin', 'xor.js')).href);
     const hooks = await xor({
       directory: workdir,
@@ -38,13 +36,11 @@ test('OpenCode forwards structured completion claims to xor', async () => {
       }] } },
     });
     await hooks.event({ event: { type: 'session.idle', properties: { sessionID: 'one' } } });
-    const events = fs.readFileSync(process.env.BORDERCOLLIE_EVENTS, 'utf8').trim().split('\n').map(JSON.parse);
+    const events = fs.readFileSync(process.env.XOR_EVENTS, 'utf8').trim().split('\n').map(JSON.parse);
     assert.equal(events.at(-1).status, 'pass');
   } finally {
     delete process.env.XOR_NO_PET;
-    delete process.env.BORDERCOLLIE_NO_PET;
     delete process.env.XOR_EVENTS;
-    delete process.env.BORDERCOLLIE_EVENTS;
     fs.rmSync(workdir, { recursive: true, force: true });
   }
 });
@@ -65,9 +61,7 @@ test('OpenCode preserves xor terminal structured verdicts and remediation', asyn
       done_criteria: [{ id: 'answer', claim_mentions: ['answer'], structured_claims: { minimum_observations: 1 }, checks: [{ type: 'file_exists', path: 'answer.js' }] }],
     }));
     process.env.XOR_NO_PET = '1';
-    process.env.BORDERCOLLIE_NO_PET = '1';
     process.env.XOR_EVENTS = path.join(workdir, 'events.jsonl');
-    process.env.BORDERCOLLIE_EVENTS = path.join(workdir, 'events.jsonl');
     let attempt = 0;
     const { xor } = await import(pathToFileURL(path.join(ROOT, 'plugin', 'xor.js')).href);
     const hooks = await xor({
@@ -88,7 +82,7 @@ test('OpenCode preserves xor terminal structured verdicts and remediation', asyn
       await hooks.event({ event: { type: 'session.status', properties: { sessionID: 'one', status: 'busy' } } });
       await hooks.event({ event: { type: 'session.idle', properties: { sessionID: 'one' } } });
     }
-    const events = fs.readFileSync(process.env.BORDERCOLLIE_EVENTS, 'utf8').trim().split('\n').map(JSON.parse);
+    const events = fs.readFileSync(process.env.XOR_EVENTS, 'utf8').trim().split('\n').map(JSON.parse);
     const verdict = events.filter((event) => event.type === 'verdict').at(-1);
     assert.equal(verdict.status, 'fail');
     assert.equal(verdict.detail.terminal, true);
@@ -99,8 +93,8 @@ test('OpenCode preserves xor terminal structured verdicts and remediation', asyn
     assert.match(prompts.at(-1).body.parts[0].text, /Evaluation stopped\. Tell the user:/);
     assert.match(prompts.at(-1).body.parts[0].text, /structured claim symbol is unknown at answer\.js:1/);
   } finally {
-    delete process.env.BORDERCOLLIE_NO_PET;
-    delete process.env.BORDERCOLLIE_EVENTS;
+    delete process.env.XOR_NO_PET;
+    delete process.env.XOR_EVENTS;
     fs.rmSync(workdir, { recursive: true, force: true });
   }
 });

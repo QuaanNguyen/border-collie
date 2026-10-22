@@ -3,7 +3,7 @@ const assert = require('node:assert');
 const { createSession } = require('../../xor/lib/session');
 
 async function main() {
-  const session = createSession({ workdir: '/work/project', judge: async () => ({ verdict: 'allow' }) });
+  const session = createSession({ workdir: '/work/project', gate: async () => ({ verdict: 'allow' }) });
 
   for (const [source, destination] of [
     ['safe.md', '../other/out.md'],

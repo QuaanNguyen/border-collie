@@ -27,12 +27,12 @@ for (const scenario of scenarios) {
 assert.deepStrictEqual(harness.trigger('size-115').detail, { action: 'size', scale: 1.15, percent: 115 });
 assert.strictEqual(harness.trigger('missing'), null);
 
-const eventPath = path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'bordercollie-dev-harness-')), 'events.jsonl');
-const previousEvents = process.env.BORDERCOLLIE_EVENTS;
-process.env.BORDERCOLLIE_EVENTS = eventPath;
+const eventPath = path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'xor-dev-harness-')), 'events.jsonl');
+const previousEvents = process.env.XOR_EVENTS;
+process.env.XOR_EVENTS = eventPath;
 createDevHarness().trigger('refused');
 assert.strictEqual(fs.existsSync(eventPath), false);
-if (previousEvents === undefined) delete process.env.BORDERCOLLIE_EVENTS;
-else process.env.BORDERCOLLIE_EVENTS = previousEvents;
+if (previousEvents === undefined) delete process.env.XOR_EVENTS;
+else process.env.XOR_EVENTS = previousEvents;
 
 process.stdout.write('ok - Pet development scenarios use production Event stream entries\n');

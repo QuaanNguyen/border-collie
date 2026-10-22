@@ -38,3 +38,7 @@ class DirectTargetTest(unittest.TestCase):
             source.write_text('unexpected source')
             with self.assertRaisesRegex(ValueError, 'Unrecognized trainer'):
                 module.prepare(source, Path(directory) / 'new.py')
+
+
+if __name__ == '__main__':
+    unittest.main()

@@ -34,27 +34,24 @@ async function waitFor(read, timeoutMs = 10000) {
 }
 
 async function main() {
-  const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'bordercollie-renderer-'))
+  const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'xor-renderer-'))
   const statusPath = path.join(tempDir, 'status.json')
   const eventPath = path.join(tempDir, 'events.jsonl')
   const env = { ...process.env }
   delete env.ELECTRON_RUN_AS_NODE
-  env.BORDERCOLLIE_ROOT = ROOT
   env.XOR_ROOT = ROOT
-  env.BORDERCOLLIE_STATUS_PATH = statusPath
   env.XOR_STATUS_PATH = statusPath
-  env.BORDERCOLLIE_EVENT_PATH = eventPath
   env.XOR_EVENT_PATH = eventPath
-  const animFolder = fs.existsSync(path.join(PET_DIR, 'assets', 'default-animations', 'xor-normal')) ? 'xor-normal' : 'bordercollie-normal'
-  const animFile = fs.existsSync(path.join(PET_DIR, 'assets', 'default-animations', animFolder, `${animFolder}-1.png`)) ? `${animFolder}-1.png` : 'bordercollie-normal-1.png'
-  env.BORDERCOLLIE_TEST_FRAME = pathToFileURL(path.join(
+  const animFolder = 'xor-normal';
+  const animFile = 'xor-normal-1.png';
+  env.XOR_TEST_FRAME = pathToFileURL(path.join(
     PET_DIR,
     'assets',
     'default-animations',
     animFolder,
     animFile,
   )).href
-  env.XOR_TEST_FRAME = env.BORDERCOLLIE_TEST_FRAME
+
 
   let diagnostic = ''
   let childState = 'running'

@@ -21,7 +21,7 @@ async function run(name, test) {
 }
 
 async function main() {
-  const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'bordercollie-session-'));
+  const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'xor-session-'));
   try {
     await run('a new Pet cannot receive events from an ended plugin session', async () => {
       const previousPipe = new PassThrough();

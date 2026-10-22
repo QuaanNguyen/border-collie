@@ -23,14 +23,13 @@ lerna-debug.log*
 .temp
 .tmp
 
-# bordercollie
+# xor
 /pet/node_modules
 
 # opencode
 .opencode/
 .DS_Store
 opencode.json
-/bordercollie/prototype/output/
 /xor/prototype/output/
 /.worktrees/
 *.bin
@@ -49,3 +48,4 @@ __pycache__/
 /analysis/*/artifacts/
 
 /.audit/
+/.scratch/

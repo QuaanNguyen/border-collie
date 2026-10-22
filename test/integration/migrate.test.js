@@ -45,15 +45,15 @@ function migrate(layout) {
       ...process.env,
       XOR_CONFIG_ROOT: layout.configRoot,
       XOR_OWNER_CONFIG: layout.ownerDir,
-      BORDERCOLLIE_CONFIG_ROOT: layout.configRoot,
-      BORDERCOLLIE_OWNER_CONFIG: layout.ownerDir,
+      XOR_CONFIG_ROOT: layout.configRoot,
+      XOR_OWNER_CONFIG: layout.ownerDir,
     },
   });
 }
 
 test('migrate carries done criteria into a new Preference and removes the retired files', () => {
   withLayout((layout) => {
-    const canonical = path.join(layout.project, '.bordercollie', 'protocol.json');
+    const canonical = path.join(layout.project, '.xor', 'protocol.json');
     const legacy = path.join(layout.project, '.opencode', 'protocol.json');
     write(canonical, { task: 'fix the parser', write_paths: ['src/**'], done_criteria: [CRITERION] });
     write(legacy, { read_paths: ['**'] });
@@ -90,17 +90,17 @@ test('migrate keeps an existing Preference and fills done criteria only when it 
     assert.deepEqual(read(preferenceFile), withDefaults({ purpose: 'Docs only.', done_criteria: [CRITERION] }));
 
     write(preferenceFile, { purpose: 'Docs only.', done_criteria: [{ id: 'owner-written', checks: [] }] });
-    write(path.join(layout.project, '.bordercollie', 'protocol.json'), { done_criteria: [CRITERION] });
+    write(path.join(layout.project, '.xor', 'protocol.json'), { done_criteria: [CRITERION] });
     assert.equal(migrate(layout).status, 0);
     assert.deepEqual(read(preferenceFile).done_criteria, [{ id: 'owner-written', checks: [] }]);
-    assert.equal(fs.existsSync(path.join(layout.project, '.bordercollie', 'protocol.json')), false);
+    assert.equal(fs.existsSync(path.join(layout.project, '.xor', 'protocol.json')), false);
   });
 });
 
 test('migrate changes nothing when a file it reads is unreadable', () => {
   withLayout((layout) => {
     const preferenceFile = path.join(layout.project, '.xor', 'preference.json');
-    const protocol = path.join(layout.project, '.bordercollie', 'protocol.json');
+    const protocol = path.join(layout.project, '.xor', 'protocol.json');
     write(preferenceFile, '{ not json');
     write(protocol, { done_criteria: [CRITERION] });
 

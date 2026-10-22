@@ -1,19 +1,18 @@
 {
   "name": "@quaannguyen/xor",
   "version": "0.1.2",
-  "description": "Verifier for agent tool calls using a system-one needle model, and a desktop companion.",
+  "description": "Action gate for agent tool calls using a system-one needle model, and a desktop companion.",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/QuaanNguyen/border-collie.git"
+    "url": "https://github.com/QuaanNguyen/xor.git"
   },
   "bugs": {
-    "url": "https://github.com/QuaanNguyen/border-collie/issues"
+    "url": "https://github.com/QuaanNguyen/xor/issues"
   },
-  "homepage": "https://github.com/QuaanNguyen/border-collie#readme",
+  "homepage": "https://github.com/QuaanNguyen/xor#readme",
   "bin": {
-    "xor": "scripts/xor.js",
-    "bordercollie": "scripts/xor.js"
+    "xor": "scripts/xor.js"
   },
   "files": [
     "events/",
@@ -23,7 +22,6 @@
     "!pet/node_modules/",
     "plugin/",
     "scripts/xor.js",
-    "scripts/bordercollie.js",
     "scripts/build-native-pet.js",
     "scripts/check-package-client.js",
     "scripts/check-package.js",
@@ -39,7 +37,8 @@
   },
   "scripts": {
     "check": "node scripts/check-syntax.js",
-    "eval:judge": "node scripts/evaluate-judge.js",
+    "eval:gate": "node scripts/evaluate-gate.js",
+    "eval:verifier": "node scripts/evaluate-gate.js",
     "test": "node --test test/unit/*.test.js test/integration/*.test.js test/xor/*.test.js",
     "test:e2e": "node scripts/run-e2e.js",
     "test:e2e:skip-native": "node scripts/run-e2e.js --skip-native",

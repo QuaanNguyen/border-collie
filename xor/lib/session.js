@@ -45,29 +45,29 @@ function askMessage(call, preference) {
     'xor is holding this action for the owner.',
     'Requested action: ' + call.tool,
     'Target: ' + targetOf(call),
-    'Reason: the verifier needs owner confirmation under this Preference: ' + preference.text,
+    'Reason: the gate needs owner confirmation under this Preference: ' + preference.text,
     "Next step: ask the owner whether to proceed, then wait for the owner's reply.",
-    "Retry: only after the owner answers; the owner's reply is judged with the next attempt.",
+    "Retry: only after the owner answers; the owner's reply is checked with the next attempt.",
   ].join('\n');
 }
 
-function judgeRefusal(judgment) {
+function gateRefusal(judgment) {
   if (judgment.unavailable) {
-    return { rule: 'judge_unavailable', reason: judgment.reason || 'the Judge is not installed', alternative: 'Ask the owner to run xor install.' };
+    return { rule: 'gate_unavailable', reason: judgment.reason || 'the Gate is not installed', alternative: 'Ask the owner to run xor install.' };
   }
   if (judgment.verdict === null) {
-    return { rule: 'judge_no_verdict', reason: judgment.reason || 'the Judge returned no Verdict', alternative: "Choose a different action that serves the user's request." };
+    return { rule: 'gate_no_verdict', reason: judgment.reason || 'the Gate returned no Verdict', alternative: "Choose a different action that serves the user's request." };
   }
   return {
-    rule: 'judge',
-    reason: 'the Judge found this action outside the folder Preference',
+    rule: 'gate',
+    reason: 'the Gate found this action outside the folder Preference',
     alternative: "Choose a different action that serves the user's request within the folder Preference.",
   };
 }
 
 function createSession(opts = {}) {
   const workdir = opts.workdir || process.cwd();
-  const judge = typeof opts.judge === 'function' ? opts.judge : null;
+  const gate = typeof opts.gate === 'function' ? opts.gate : (typeof opts.verifier === 'function' ? opts.verifier : null);
   let preference = withDefaults(opts.preference || {});
   const settled = new Set();
   const repository = captureRepositoryState(workdir, { ignoredPatterns: repositoryPatterns(preference.done_criteria) });
@@ -154,13 +154,13 @@ function createSession(opts = {}) {
     if (boundary) return refuse(call, actionId, events, { ...boundary, decidedBy: 'folder boundary' });
 
     let judgment;
-    if (!judge) {
-      judgment = { verdict: null, unavailable: true, reason: 'no Judge is configured for this session' };
+    if (!gate) {
+      judgment = { verdict: null, unavailable: true, reason: 'no Gate is configured for this session' };
     } else {
       try {
-        judgment = await judge({ userMessage: event.userMessage || '', preference, call });
+        judgment = await gate({ userMessage: event.userMessage || '', preference, call });
       } catch (error) {
-        judgment = { verdict: null, reason: `the Judge failed: ${error.message}` };
+        judgment = { verdict: null, reason: `the Gate failed: ${error.message}` };
       }
     }
     const verdict = judgment?.verdict ?? null;
@@ -178,12 +178,12 @@ function createSession(opts = {}) {
         type: 'ask', status: 'ask', petState: 'asking',
         tool: call.tool, summary: truncate(`${call.summary} needs the owner`, 60),
         reason: 'The checker requires owner confirmation under the folder Preference',
-        rule: 'judge',
+        rule: 'gate',
         detail: { actionId },
       });
       return { decision: 'ask', message: askMessage(call, preference), events };
     }
-    return refuse(call, actionId, events, { ...judgeRefusal(judgment || {}), decidedBy: 'Judge' });
+    return refuse(call, actionId, events, { ...gateRefusal(judgment || {}), decidedBy: 'Gate' });
   }
 
   function toolAfter(event) {

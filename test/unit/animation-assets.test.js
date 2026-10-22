@@ -133,7 +133,7 @@ function packageInto(root) {
   return { output, manifest, qa }
 }
 
-const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'bordercollie-animation-assets-'))
+const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'xor-animation-assets-'))
 try {
   const guide = fs.readFileSync(GUIDE, 'utf8')
   assert.match(guide, /node scripts\/package-animation-assets\.js/)

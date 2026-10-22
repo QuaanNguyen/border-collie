@@ -1,0 +1,44 @@
+'use strict';
+
+const assert = require('node:assert/strict');
+const crypto = require('node:crypto');
+const fs = require('node:fs');
+const os = require('node:os');
+const path = require('node:path');
+const test = require('node:test');
+const childProcess = require('node:child_process');
+const { platformKey } = require('../../xor/lib/gate-artifacts');
+const { DEFAULT_PREFERENCE } = require('../../xor/lib/preference');
+const { proposedCall } = require('../../xor/lib/toolcalls');
+
+test('native evaluation can pin workers without changing default runtime arguments or verdict parsing', async (t) => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'gate-workers-'));
+  t.after(() => fs.rmSync(root, { recursive: true, force: true }));
+  const directory = path.join(root, 'test-workers');
+  fs.mkdirSync(directory);
+  const recorded = path.join(root, 'arguments.json');
+  const runner = path.join(directory, 'needle');
+  const weights = path.join(directory, 'needle3.cact');
+  fs.writeFileSync(runner, `require('node:fs').writeFileSync(${JSON.stringify(recorded)}, JSON.stringify(process.argv.slice(2))); process.stdout.write(JSON.stringify({ success: true, function_calls: [{ name: 'approve', arguments: {} }] }));\n`);
+  const spawn = childProcess.spawn;
+  t.mock.method(childProcess, 'spawn', (executable, args, options) => {
+    assert.equal(executable, runner);
+    return spawn(process.execPath, [executable, ...args], options);
+  });
+  const { createNeedleGate } = require('../../xor/lib/gate');
+  fs.writeFileSync(weights, 'test weights');
+  const artifact = (file) => ({ path: path.basename(file), size: fs.statSync(file).size, sha256: crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex') });
+  const manifest = { revision: 'test-workers', weights: artifact(weights), runners: { [platformKey()]: artifact(runner) } };
+  const input = { userMessage: 'Read a.txt', preference: DEFAULT_PREFERENCE, call: proposedCall('read', { path: 'a.txt' }) };
+  const defaults = createNeedleGate({ manifest, root });
+  const configured = createNeedleGate({ manifest, root, threads: 4 });
+  const invalid = createNeedleGate({ manifest, root, threads: 0 });
+  t.after(() => { defaults.dispose(); configured.dispose(); invalid.dispose(); });
+  assert.equal((await defaults(input)).verdict, 'allow');
+  const defaultArguments = JSON.parse(fs.readFileSync(recorded, 'utf8'));
+  assert.equal(defaultArguments.includes('--threads'), false);
+  assert.equal((await configured(input)).verdict, 'allow');
+  const configuredArguments = JSON.parse(fs.readFileSync(recorded, 'utf8'));
+  assert.deepEqual(configuredArguments.filter((_, index) => index !== 3), [...defaultArguments.filter((_, index) => index !== 3), '--threads', '4']);
+  await assert.rejects(invalid(input), /positive integer/);
+});

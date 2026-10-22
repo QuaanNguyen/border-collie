@@ -4,6 +4,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { connection, request, safeError } = require('../../analysis/needle-judge-2026-10-09/scripts/gateway');
 const { REVIEW_INSTRUCTIONS, REVIEW_INSTRUCTION_HASH, digest, reviewPacket } = require('./checker-data');
+const { seedReview } = require('./seed-checker-reviews');
 
 async function review(directory, model, modelFamily, concurrency = 3) {
   const conn = connection();
@@ -15,6 +16,7 @@ async function review(directory, model, modelFamily, concurrency = 3) {
   const inputHash = digest(packets);
   if (manifest.requestsSha256 !== inputHash) throw new Error('The production input builder changed; prepare a new exact-input packet');
   const file = path.join(directory, `review-${model.replace(/[^a-zA-Z0-9_-]/g, '_')}.json`);
+  seedReview(directory, model, modelFamily);
   const saved = fs.existsSync(file) ? JSON.parse(fs.readFileSync(file)) : { model, modelFamily, instructionHash: REVIEW_INSTRUCTION_HASH, inputHash, decisions: [], responses: [], errors: [] };
   if (saved.model !== model || saved.modelFamily !== modelFamily || saved.instructionHash !== REVIEW_INSTRUCTION_HASH || saved.inputHash !== inputHash) throw new Error('Preserve old reviews; inputs or reviewer identity changed');
   const decisions = new Map(saved.decisions.map((row) => [row.id, row]));
@@ -41,8 +43,9 @@ async function review(directory, model, modelFamily, concurrency = 3) {
       const batch = batches[cursor++];
       if (!batch) return;
       try {
-        const response = await request(conn, '/chat/completions', { model, messages: [{ role: 'system', content: REVIEW_INSTRUCTIONS + ' Return {"decisions":[{"id":"...","inputHash":"...","verdict":"approve|deny|ask|abstain"}]} with exactly one row per input.' }, { role: 'user', content: JSON.stringify(batch) }] }, 120000);
+        const response = await request(conn, '/chat/completions', { model, max_tokens: 8192, response_format: { type: 'json_object' }, messages: [{ role: 'system', content: REVIEW_INSTRUCTIONS + ' Return {"decisions":[{"id":"...","inputHash":"...","verdict":"approve|deny|ask|abstain"}]} with exactly one row per input.' }, { role: 'user', content: JSON.stringify(batch) }] }, 300000);
         if (typeof response.model !== 'string' || response.model !== model && !response.model.startsWith(model + '-')) throw new Error('Gateway reported an unexpected reviewer model');
+        if (response.choices?.[0]?.finish_reason !== 'stop') throw new Error('Reviewer response was truncated or did not finish normally');
         const raw = response?.choices?.[0]?.message?.content;
         if (typeof raw !== 'string') throw new Error('Reviewer returned no text');
         const decoded = JSON.parse(raw.trim().replace(/^```(?:json)?\s*|\s*```$/g, ''));
@@ -52,7 +55,7 @@ async function review(directory, model, modelFamily, concurrency = 3) {
         }
         for (const row of decoded.decisions) decisions.set(row.id, { id: row.id, inputHash: row.inputHash, verdict: row.verdict });
         consecutiveErrors = 0;
-        saved.responses.push({ id: response.id || null, requestedModel: model, reportedModel: response.model || null, inputIds: batch.map((row) => row.id), usage: response.usage || null });
+        saved.responses.push({ id: response.id || null, requestedModel: model, reportedModel: response.model || null, finishReason: response.choices[0].finish_reason, maxOutputTokens: 8192, inputIds: batch.map((row) => row.id), usage: response.usage || null });
       } catch (error) {
         saved.errors.push({ inputIds: batch.map((row) => row.id), error: safeError(error, conn) });
         consecutiveErrors += 1;

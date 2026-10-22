@@ -9,7 +9,7 @@ const test = require('node:test');
 const { createSession } = require('../../xor/lib/session');
 
 async function withWorkdir(run) {
-  const workdir = fs.mkdtempSync(path.join(os.tmpdir(), 'bordercollie-session-'));
+  const workdir = fs.mkdtempSync(path.join(os.tmpdir(), 'xor-session-'));
   try {
     return await run(workdir);
   } finally {

@@ -4,7 +4,7 @@ const os = require('os')
 const path = require('path')
 
 const { installPlugin } = require('../../scripts/install-plugin')
-const { fakeJudgeManifest } = require('../fixtures/fake-judge')
+const { fakeGateManifest } = require('../fixtures/fake-gate')
 
 const root = fs.mkdtempSync(path.join(os.tmpdir(), 'xor-install-diagnostics-'))
 const repoRoot = path.join(root, 'repo')
@@ -39,8 +39,8 @@ async function main() {
   await assert.rejects(installPlugin({
     repoRoot,
     destDir: pluginsDir,
-    judgeRoot: path.join(root, 'judge'),
-    judgeManifest: fakeJudgeManifest(path.join(root, 'judge-source')).manifest,
+    gateRoot: path.join(root, 'gate'),
+    gateManifest: fakeGateManifest(path.join(root, 'gate-source')).manifest,
     skipRuntimeSetup: true,
     verifyOpenCode: true,
     openCodeCommand: executable,

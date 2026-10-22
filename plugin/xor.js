@@ -10,7 +10,7 @@ const here = path.dirname(fileURLToPath(import.meta.url));
 function findRepo(start) {
   let dir = start;
   for (let i = 0; i < 12; i++) {
-    if (fs.existsSync(path.join(dir, "xor/lib/session.js")) || fs.existsSync(path.join(dir, "bordercollie/lib/session.js"))) return dir;
+    if (fs.existsSync(path.join(dir, "xor/lib/session.js"))) return dir;
     const parent = path.dirname(dir);
     if (parent === dir) break;
     dir = parent;
@@ -20,11 +20,8 @@ function findRepo(start) {
 
 function resolveRoot(start) {
   if (process.env.XOR_ROOT) return process.env.XOR_ROOT;
-  if (process.env.BORDERCOLLIE_ROOT) return process.env.BORDERCOLLIE_ROOT;
   const bundledXor = path.join(start, "xor");
   if (fs.existsSync(path.join(bundledXor, "xor/lib/session.js"))) return bundledXor;
-  const bundled = path.join(start, "bordercollie");
-  if (fs.existsSync(path.join(bundled, "bordercollie/lib/session.js"))) return bundled;
   return findRepo(start);
 }
 
@@ -35,18 +32,14 @@ if (!repoRoot) {
   );
 }
 
-const xorLibDir = fs.existsSync(path.join(repoRoot, "xor/lib"))
-  ? path.join(repoRoot, "xor/lib")
-  : fs.existsSync(path.join(repoRoot, "lib"))
-    ? path.join(repoRoot, "lib")
-    : path.join(repoRoot, "bordercollie/lib");
+const xorLibDir = path.join(repoRoot, "xor/lib");
 
-const { createXorAdapter, createBordercollieAdapter } = require(path.join(xorLibDir, "adapter.js"));
+const { createXorAdapter } = require(path.join(xorLibDir, "adapter.js"));
 const { EventBus } = require(path.join(repoRoot, "events/index.js"));
 const { startControlServer } = require(path.join(repoRoot, "pet/control.js"));
 const { PET_SCALES, readConfig } = require(path.join(xorLibDir, "config.js"));
 const { createLivePreference } = require(path.join(xorLibDir, "preference.js"));
-const { createNeedleJudge } = require(path.join(xorLibDir, "judge.js"));
+const { createNeedleGate } = require(path.join(xorLibDir, "gate.js"));
 
 const { assertOpenCodeVersion } = require(path.join(xorLibDir, "opencode-version.js"));
 
@@ -151,7 +144,7 @@ function electronBinary(petDir) {
 }
 
 function launchPet() {
-  if (process.env.XOR_NO_PET === "1" || process.env.BORDERCOLLIE_NO_PET === "1") return;
+  if (process.env.XOR_NO_PET === "1") return;
   const petDir = path.join(repoRoot, "pet");
   const native = path.join(petDir, "native", "pet-host");
   const bin = process.platform === "darwin" ? native : electronBinary(petDir);
@@ -193,7 +186,7 @@ function launchPet() {
 export const xor = async ({ client, directory }, options = {}) => {
   const workdir = directory || process.cwd();
   const livePreference = createLivePreference({ workdir });
-  const judge = typeof options?.judge === "function" ? options.judge : createNeedleJudge();
+  const gate = typeof options?.gate === "function" ? options.gate : (typeof options?.verifier === "function" ? options.verifier : createNeedleGate());
   let preferenceState = livePreference.refresh();
   const petProcess = launchPet();
   const bus = new EventBus({
@@ -214,7 +207,6 @@ export const xor = async ({ client, directory }, options = {}) => {
   const sessions = new Map();
   const userMessages = new Map();
   const xorFeedback = new Set();
-  const bordercollieFeedback = xorFeedback;
   let ended = false;
   let lastActiveSessionID = null;
   let quarantinedPreferenceFingerprint = null;
@@ -252,7 +244,7 @@ export const xor = async ({ client, directory }, options = {}) => {
 
   function syncPreference(state, next) {
     if (!next.valid || state.preferenceRevision === next.revision) return;
-    state.bordercollie.replacePreference(next.preference);
+    state.xor.replacePreference(next.preference);
     state.preferenceRevision = next.revision;
     state.preferenceFingerprint = next.fingerprint;
     publish({
@@ -273,10 +265,9 @@ export const xor = async ({ client, directory }, options = {}) => {
       syncPreference(state, next);
       return state;
     }
-    const adapter = createXorAdapter({ preference: next.valid ? next.preference : null, workdir, judge });
+    const adapter = createXorAdapter({ preference: next.valid ? next.preference : null, workdir, gate });
     state = {
       xor: adapter,
-      bordercollie: adapter,
       reviewed: new Set(),
       completionPending: true,
       review: null,
@@ -284,7 +275,7 @@ export const xor = async ({ client, directory }, options = {}) => {
       preferenceFingerprint: next.valid ? next.fingerprint : null,
     };
     sessions.set(key, state);
-    publish(state.bordercollie.start());
+    publish(state.xor.start());
     return state;
   }
 
@@ -294,7 +285,7 @@ export const xor = async ({ client, directory }, options = {}) => {
     const state = sessions.get(sessionID);
     if (!state) return;
     try {
-      publish(state.bordercollie.end());
+      publish(state.xor.end());
     } catch {
     }
     sessions.delete(sessionID);
@@ -308,14 +299,14 @@ export const xor = async ({ client, directory }, options = {}) => {
     process.removeListener("exit", endSession);
     for (const state of sessions.values()) {
       try {
-        publish(state.bordercollie.end());
+        publish(state.xor.end());
       } catch {
       }
     }
     bus.close();
     petControl?.close();
     petProcess?.stdin?.end();
-    judge.dispose?.();
+    gate.dispose?.();
   }
 
   process.on("beforeExit", endSession);
@@ -337,7 +328,7 @@ export const xor = async ({ client, directory }, options = {}) => {
   }
 
   function rememberUserMessage(sessionID, text) {
-    if (!sessionID || !text || bordercollieFeedback.has(text)) return;
+    if (!sessionID || !text || xorFeedback.has(text)) return;
     userMessages.set(sessionID, text);
   }
 
@@ -356,7 +347,7 @@ export const xor = async ({ client, directory }, options = {}) => {
       const info = list[i].info || list[i];
       if (info.role !== "user") continue;
       const text = userText(list[i].parts || info.parts);
-      if (text && !bordercollieFeedback.has(text)) return text;
+      if (text && !xorFeedback.has(text)) return text;
     }
     return '';
   }
@@ -375,7 +366,7 @@ export const xor = async ({ client, directory }, options = {}) => {
       });
       return;
     }
-    const doneCriteria = state.bordercollie.preference.done_criteria;
+    const doneCriteria = state.xor.preference.done_criteria;
     if (!client?.session?.messages) {
       if (doneCriteria.length) {
         bus.emit({
@@ -416,11 +407,11 @@ export const xor = async ({ client, directory }, options = {}) => {
     const reviewKey = completion.id || `${completion.finish || ""}:${completion.text}`;
     if (state.reviewed.has(reviewKey)) return;
     state.reviewed.add(reviewKey);
-    const out = state.bordercollie.assistantCompletion(completion);
+    const out = state.xor.assistantCompletion(completion);
     publish(out);
     const sendFeedback = client?.session?.promptAsync || client?.session?.prompt;
     if (out.inject && sendFeedback) {
-      bordercollieFeedback.add(out.inject.trim());
+      xorFeedback.add(out.inject.trim());
       Promise.resolve().then(() => sendFeedback.call(client.session, {
         path: { id: sessionID },
         body: { noReply: true, parts: [{ type: "text", text: out.inject }] },
@@ -464,7 +455,7 @@ export const xor = async ({ client, directory }, options = {}) => {
       const next = refreshPreference();
       if (!next.valid) throw new Error(sessionBlockedMessage(tool, args, blockedReason(next)));
       const state = stateFor(input.sessionID, next);
-      const out = await state.bordercollie.proposedAction({
+      const out = await state.xor.proposedAction({
         tool,
         args,
         userMessage: await latestUserMessage(input.sessionID),
@@ -491,7 +482,7 @@ export const xor = async ({ client, directory }, options = {}) => {
       const next = refreshPreference();
       if (!next.valid) return;
       const state = stateFor(input.sessionID, next);
-      publish(state.bordercollie.toolResult({
+      publish(state.xor.toolResult({
         tool: input.tool,
         status: output?.error ? "error" : "completed",
         result: resultText(output),
@@ -513,18 +504,16 @@ export const xor = async ({ client, directory }, options = {}) => {
       const state = stateFor(sessionID, next);
       if (event.type === "session.status" && isBusy(event)) {
         state.completionPending = true;
-        publish(state.bordercollie.lifecycle("busy"));
+        publish(state.xor.lifecycle("busy"));
       }
       if (event.type === "session.idle" || isIdle(event)) {
-        publish(state.bordercollie.lifecycle("idle"));
+        publish(state.xor.lifecycle("idle"));
         await scheduleCompletionReview(sessionID);
         return;
       }
     },
   };
 };
-
-export const bordercollie = xor;
 
 function messageText(parts) {
   return (parts || []).map((part) => part?.text || part?.content || "").join("");

@@ -9,11 +9,11 @@ const test = require('node:test');
 const { createSession } = require('../../xor/lib/session');
 
 function withRepository(run) {
-  const workdir = fs.mkdtempSync(path.join(os.tmpdir(), 'bordercollie-structured-claim-'));
+  const workdir = fs.mkdtempSync(path.join(os.tmpdir(), 'xor-structured-claim-'));
   try {
     execFileSync('git', ['init', '--quiet'], { cwd: workdir });
     execFileSync('git', ['config', 'user.email', 'test@example.com'], { cwd: workdir });
-    execFileSync('git', ['config', 'user.name', 'bordercollie Test'], { cwd: workdir });
+    execFileSync('git', ['config', 'user.name', 'xor Test'], { cwd: workdir });
     fs.mkdirSync(path.join(workdir, 'src'));
     fs.writeFileSync(path.join(workdir, 'src', 'answer.js'), 'export const answer = 42;\n');
     execFileSync('git', ['add', '.'], { cwd: workdir });

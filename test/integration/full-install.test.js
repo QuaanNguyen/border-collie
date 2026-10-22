@@ -5,12 +5,12 @@ const path = require('path')
 
 const ROOT = path.resolve(__dirname, '..', '..')
 const { electronReady, installPlugin, nativePetReady } = require('../../scripts/install-plugin')
-const { fakeJudgeManifest } = require('../fixtures/fake-judge')
+const { fakeGateManifest } = require('../fixtures/fake-gate')
 
 const root = fs.mkdtempSync(path.join(os.tmpdir(), 'xor-full-install-'))
-const judge = {
-  judgeRoot: path.join(root, 'judge'),
-  judgeManifest: fakeJudgeManifest(path.join(root, 'judge-source')).manifest,
+const gate = {
+  gateRoot: path.join(root, 'gate'),
+  gateManifest: fakeGateManifest(path.join(root, 'gate-source')).manifest,
 }
 
 async function main() {
@@ -21,7 +21,7 @@ async function main() {
     result = await installPlugin({
       repoRoot: ROOT,
       destDir: path.join(root, 'plugins'),
-      ...judge,
+      ...gate,
     })
   } finally {
     if (originalNodeEnv === undefined) delete process.env.NODE_ENV
@@ -43,7 +43,7 @@ async function main() {
     repeated = await installPlugin({
       repoRoot: ROOT,
       destDir: path.join(root, 'plugins'),
-      ...judge,
+      ...gate,
     })
   } finally {
     process.env.PATH = originalPath
