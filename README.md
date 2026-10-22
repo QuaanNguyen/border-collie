@@ -43,14 +43,11 @@ An existing verified cache from an older installation can be reused.
 To install from this repository:
 
 ```sh
-git clone https://github.com/QuaanNguyen/border-collie.git xor
+git clone https://github.com/QuaanNguyen/xor.git
 cd xor
 npm install
 node scripts/install-plugin.js
 ```
-
-The GitHub repository still uses the border-collie address.
-The package, command, plugin, and active implementation use xor.
 
 ## Project rules
 
