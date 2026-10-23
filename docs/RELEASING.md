@@ -4,7 +4,7 @@ xor's first supported public distribution is one npm package and one matching Gi
 The npm registry also serves npm, pnpm, Yarn, and Bun, so those clients do not need separate packages.
 OpenCode is the primary supported adapter for the initial release; other agent and editor integrations should be designed and tested as adapters before they are advertised as supported.
 
-The root package is configured for the public scoped `@quaannguyen/xor@0.1.2` package.
+The root package is configured for the public scoped `@quaannguyen/xor@0.1.3` package.
 The npm package name and repository metadata are recorded in `package.json`.
 The remaining public-release gates are npm ownership and trusted-publisher configuration, protected-branch controls, release-candidate validation, and clean installation checks.
 
@@ -66,7 +66,7 @@ Package/plugin code is tested the same way as other code: keep most logic in ord
 8. Inspect the tarball with `npm pack --dry-run`; never publish from an uncommitted working tree.
 9. Configure npm trusted publishing for the release workflow and require a GitHub environment approval for the first few releases.
 10. Publish a release candidate with the `next` dist tag, install it on all three operating systems, and test it with OpenCode.
-11. Tag the exact release commit as `v0.1.2` and let the tag-driven `Release` workflow verify and publish it.
+11. Tag the exact release commit as `v0.1.3` and let the tag-driven `Release` workflow verify and publish it.
 12. Create matching GitHub release notes with supported platforms, Node/OpenCode prerequisites, known limitations, and upgrade instructions.
 13. Test the public command (`xor install`) from a clean directory.
 14. If it is broken, deprecate the npm version; do not reuse or move an existing version tag.

@@ -1,6 +1,6 @@
 {
   "name": "@quaannguyen/xor",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Action gate for agent tool calls using a system-one needle model, and a desktop companion.",
   "license": "MIT",
   "repository": {

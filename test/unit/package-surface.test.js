@@ -16,7 +16,7 @@ const animationPlayer = fs.readFileSync(path.join(ROOT, 'pet', 'src', 'animation
 
 assert.strictEqual(petPackage.scripts['start:demo'], undefined)
 assert.strictEqual(rootPackage.name, '@quaannguyen/xor')
-assert.strictEqual(rootPackage.version, '0.1.2')
+assert.strictEqual(rootPackage.version, '0.1.3')
 assert.strictEqual(rootPackage.private, undefined)
 assert.deepStrictEqual(rootPackage.repository, {
   type: 'git',
