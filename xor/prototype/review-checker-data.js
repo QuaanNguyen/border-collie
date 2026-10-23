@@ -43,17 +43,18 @@ async function review(directory, model, modelFamily, concurrency = 3) {
       const batch = batches[cursor++];
       if (!batch) return;
       try {
-        const response = await request(conn, '/chat/completions', { model, max_tokens: 8192, response_format: { type: 'json_object' }, messages: [{ role: 'system', content: REVIEW_INSTRUCTIONS + ' Return {"decisions":[{"id":"...","inputHash":"...","verdict":"approve|deny|ask|abstain"}]} with exactly one row per input.' }, { role: 'user', content: JSON.stringify(batch) }] }, 300000);
+        const response = await request(conn, '/chat/completions', { model, max_tokens: 8192, response_format: { type: 'json_object' }, messages: [{ role: 'system', content: REVIEW_INSTRUCTIONS + ' Return {"decisions":[{"id":"...","inputHash":"...","verdict":"approve|deny|ask|abstain"}]} with exactly one row per input and verbatim exact id and inputHash.' }, { role: 'user', content: JSON.stringify(batch) }] }, 300000);
         if (typeof response.model !== 'string' || response.model !== model && !response.model.startsWith(model + '-')) throw new Error('Gateway reported an unexpected reviewer model');
         if (response.choices?.[0]?.finish_reason !== 'stop') throw new Error('Reviewer response was truncated or did not finish normally');
         const raw = response?.choices?.[0]?.message?.content;
         if (typeof raw !== 'string') throw new Error('Reviewer returned no text');
         const decoded = JSON.parse(raw.trim().replace(/^```(?:json)?\s*|\s*```$/g, ''));
-        if (!Array.isArray(decoded.decisions) || decoded.decisions.length !== batch.length || new Set(decoded.decisions.map((row) => row.id)).size !== batch.length) throw new Error('Reviewer did not return the exact batch');
-        for (const row of decoded.decisions) {
+        const list = Array.isArray(decoded) ? decoded : decoded.decisions;
+        if (!Array.isArray(list) || list.length !== batch.length || new Set(list.map((row) => row.id)).size !== batch.length) throw new Error('Reviewer did not return the exact batch');
+        for (const row of list) {
           if (!batch.some((packet) => packet.id === row.id && packet.inputHash === row.inputHash) || !['approve', 'deny', 'ask', 'abstain'].includes(row.verdict)) throw new Error('Reviewer changed an identity or returned an invalid verdict');
         }
-        for (const row of decoded.decisions) decisions.set(row.id, { id: row.id, inputHash: row.inputHash, verdict: row.verdict });
+        for (const row of list) decisions.set(row.id, { id: row.id, inputHash: row.inputHash, verdict: row.verdict });
         consecutiveErrors = 0;
         saved.responses.push({ id: response.id || null, requestedModel: model, reportedModel: response.model || null, finishReason: response.choices[0].finish_reason, maxOutputTokens: 8192, inputIds: batch.map((row) => row.id), usage: response.usage || null });
       } catch (error) {
