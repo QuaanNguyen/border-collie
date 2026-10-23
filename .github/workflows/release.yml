@@ -16,6 +16,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - run: git lfs install --local
+      - run: git lfs pull --include="docs/checker-tool-inventory.json"
       - uses: actions/setup-node@v4
         with:
           node-version: 24
@@ -36,6 +38,8 @@ jobs:
     environment: npm
     steps:
       - uses: actions/checkout@v4
+      - run: git lfs install --local
+      - run: git lfs pull --include="docs/checker-tool-inventory.json"
       - uses: actions/setup-node@v4
         with:
           node-version: 24
