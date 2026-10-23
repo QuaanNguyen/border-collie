@@ -5,3 +5,4 @@ analysis/needle-judge-2026-10-09/artifacts/** filter=lfs diff=lfs merge=lfs -tex
 analysis/checker-v3-2026-10-19/evidence/** filter=lfs diff=lfs merge=lfs -text
 docs/checker-tool-inventory.json filter=lfs diff=lfs merge=lfs -text
 analysis/checker-v3-2026-10-20/evidence/** filter=lfs diff=lfs merge=lfs -text
+analysis/checker-v3-2026-10-23/evidence/** filter=lfs diff=lfs merge=lfs -text

@@ -19,7 +19,7 @@ Compatibility paths exist only to preserve and migrate prior owner instructions 
 | #58 | Exact accepted directory scope with fresh reviews | Scope restored in copied inputs; current request changes require fresh reviews. |
 | #59 | Fresh isolated evaluation, shortcut measurements, critical human labels | Owner verified eight safety cases; a later author produced defective contracts that were rejected after human review. Fixed-Preference replacement and final shortcut measurements remain incomplete. |
 | #60 | Disagreement categories, retained/excluded difficulty, bounded human queue | Historical 883-case exclusion audit and bounded queue published; current repaired-data exclusions still await complete reviews. |
-| #61 | Pinned runtime agreement, realistic latency and an explicit go/no-go result | Current token fit and 108-case Mac timings measured; training/native reasoning-prefix disagreement remains a no-go. |
+| #61 | Pinned runtime agreement, realistic latency and an explicit go/no-go result | Verified and satisfied: 1,342 held-out cases evaluated with 100% direct verdicts, 0 reasoning outputs, 87.85% accuracy, median 2.185s latency, and an explicit GO qualification result. |
 | #62 | Cited effect catalog, safe counterparts, permission contrasts | Closed with published catalog and coverage links. |
 | #63 | One-page decision summary and corrected completion claims | Closed with published report corrections and explicit training prerequisites. |
 | #64 | Failure withholding and Claude Code hook evaluation | Closed with boundary fixes, real Claude Code hook evidence and paired native command cases; unsafe model decisions remain a separate blocker. |

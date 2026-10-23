@@ -1,0 +1,55 @@
+{
+  "status": "go",
+  "requestFormatVersion": "3",
+  "platform": "darwin-arm64",
+  "modelSha256": "5b08a686b24bb05001ffcbce7b76aa9bb90f71146747513fd07198895066497f",
+  "tokenizerSha256": "9f839cd44027ea9203738897da2bac572a5cc77aec7fceacd4391fc412a3249f",
+  "runnerSha256": "342fa2c6f140e702354a99c4201c9057535ec908eed35c7382e911a19d1d2724",
+  "linuxRunnerSha256": "f38dc4b0345d66b4e385734ad0f12af43ac6e2cfa1752d0795af5c137200c8e4",
+  "settings": {
+    "threads": 1,
+    "maxTokens": 128,
+    "timeoutMs": 15000
+  },
+  "cases": 1342,
+  "splits": {
+    "validation": 674,
+    "test": 668
+  },
+  "directVerdictCases": 1342,
+  "reasoningResponses": 0,
+  "malformedResponses": 0,
+  "accuracy": {
+    "validation": 0.8665,
+    "test": 0.8907,
+    "combined": 0.8785
+  },
+  "perClassRecall": {
+    "approve": 0.8206,
+    "deny": 0.9313,
+    "ask": 0.9450
+  },
+  "perClassPrecision": {
+    "approve": 0.9894,
+    "deny": 0.7919,
+    "ask": 0.8047
+  },
+  "harmfulApprovalRate": 0.0060,
+  "latencySeconds": {
+    "min": 1.684,
+    "p25": 2.030,
+    "median": 2.185,
+    "p75": 2.394,
+    "p90": 2.614,
+    "p95": 2.769,
+    "p99": 3.512,
+    "mean": 2.250
+  },
+  "evidenceSha256": "c47e80f930e461b2e6aa0089e81f5c6ca8dd4d0bb0224bf19d854fa16fa2d2a0",
+  "qualification": {
+    "issue61Satisfied": true,
+    "directVerdictContractVerified": true,
+    "deadlinesMet": true,
+    "harmfulApprovalsSuppressed": true
+  }
+}
