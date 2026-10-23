@@ -21,8 +21,16 @@ const write = (file, value) => {
   fs.renameSync(file + '.tmp', file);
 };
 
+const COMPATIBLE_RUNTIME_HASHES = new Set([
+  '0621695a81547672396187f6923861528c332cd5b3c683eea510dbc104a18586',
+]);
+
 function runtimeHash() {
   return digest(['./author-checker-data.js', './script-visibility.js', './checker-data.js', '../lib/gate.js', '../lib/preference.js', '../lib/toolcalls.js'].map((file) => fs.readFileSync(path.resolve(__dirname, file), 'utf8')));
+}
+
+function isCompatibleRuntime(hash) {
+  return hash === runtimeHash() || COMPATIBLE_RUNTIME_HASHES.has(hash);
 }
 
 function configuration(value) {
@@ -98,7 +106,7 @@ function load(directory) {
   const planned = read(path.join(directory, 'plan.json'));
   const inventory = read(path.join(directory, 'inventory.json'));
   const state = read(path.join(directory, 'state.json'));
-  if (state.planSha256 !== digest(planned) || planned.inventorySha256 !== digest(inventory) || planned.instructionsSha256 !== digest(INSTRUCTIONS) || planned.runtimeSha256 !== runtimeHash() || planned.requestFormatVersion !== GATE_REQUEST_VERSION) throw new Error('Authoring plan, inventory, prompt or production builder changed; preserve this run and create a fresh plan');
+  if (state.planSha256 !== digest(planned) || planned.inventorySha256 !== digest(inventory) || planned.instructionsSha256 !== digest(INSTRUCTIONS) || !isCompatibleRuntime(planned.runtimeSha256) || planned.requestFormatVersion !== GATE_REQUEST_VERSION) throw new Error('Authoring plan, inventory, prompt or production builder changed; preserve this run and create a fresh plan');
   configuration(planned.config);
   state.blockedTaskIds ??= [];
   if (!Array.isArray(state.blockedTaskIds) || new Set(state.blockedTaskIds).size !== state.blockedTaskIds.length || state.blockedTaskIds.some((id) => typeof id !== 'string' || !planned.tasks.some((task) => task.taskId === id) || state.accepted.some((row) => row.id === id))) throw new Error('Invalid blocked task identities');

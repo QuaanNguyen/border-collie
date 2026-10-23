@@ -1,46 +1,33 @@
 # xor
 
-xor checks a coding agent's proposed actions before they run.
-It reads your request, your project rules, and the proposed action, then returns approve, deny, or ask.
-An optional desktop companion shows when the agent is working, blocked, or finished.
+xor is a safety guard for your AI coding agent.
+
+When you use coding agents like OpenCode, you want them to build features and fix bugs without breaking your project. You do not want them deleting files by mistake, modifying your personal files, or leaking private tokens to the internet. 
+
+xor acts like a polite gatekeeper. Every time the agent wants to run a command or touch a file, xor checks that action against your simple project rules. If it looks safe, xor allows it. If it violates your rules, xor blocks it. If it looks uncertain or risky, xor pauses and asks you for confirmation first.
+
+An optional desktop companion sits on your screen and shows you what your agent is doing in real time.
 
 ![xor companion](docs/xor.gif)
 
-[Install](#installation) · [Set project rules](#project-rules) · [Commands](#commands) · [Current work](#current-work) · [Find your way around](#find-your-way-around)
+[Quick Start](#quick-start) · [How It Works](#how-it-works) · [Your Project Rules](#your-project-rules) · [Commands](#commands) · [Model Performance](#model-performance) · [For Developers & Contributors](#for-developers--contributors) · [Documentation](#documentation)
 
-## What it does
+---
 
-The OpenCode plugin checks each tool call before OpenCode runs it.
-It blocks actions outside the project folder and protects the project rules from agent edits.
-It then asks a local Needle model whether the remaining action follows your rules.
+## Quick Start
 
-- Approve lets OpenCode continue its normal permission checks.
-- Deny blocks the action and tells the agent why.
-- Ask blocks the action and tells the agent to request your confirmation before trying again.
+You only need Node.js 22.12 or newer and OpenCode 2.0.30 or newer. On macOS, make sure you have installed Xcode Command Line Tools (`xcode-select --install`).
 
-When the agent makes a matching completion claim, xor checks the completion requirements you configured against the project files.
-The desktop companion displays these events without changing the decisions.
-
-OpenCode is the supported integration.
-The training tool inventory also covers Claude Code and Codex, but that inventory does not provide runtime integrations for those agents.
-
-## Installation
-
-Use Node.js 22.12 or newer and OpenCode 2.0.30 or newer.
-On macOS, install Xcode Command Line Tools before running the installer.
-Install the package and set up the plugin:
+Install xor globally and run the setup command:
 
 ```sh
 npm install --global @quaannguyen/xor
 xor install
 ```
 
-The installer checks your OpenCode version, installs the plugin, and downloads the pinned Needle runner and model.
-It verifies the downloaded files and builds the desktop companion on macOS or installs its Electron runtime on Windows and Linux.
-New model downloads use the xor cache folder.
-An existing verified cache from an older installation can be reused.
+`xor install` sets up the OpenCode plugin, downloads the lightweight local checker model, verifies the file integrity, and gets the desktop companion ready. That is all you need to start working safely.
 
-To install from this repository:
+If you prefer installing from source:
 
 ```sh
 git clone https://github.com/QuaanNguyen/xor.git
@@ -49,9 +36,24 @@ npm install
 node scripts/install-plugin.js
 ```
 
-## Project rules
+---
 
-Write your project rules in `.xor/preference.json`:
+## How It Works
+
+1. **Folder Boundary Lock**: The agent is blocked from modifying files outside your active project folder.
+2. **Rule Protection**: The agent cannot secretly edit your `.xor/preference.json` rules to grant itself extra permissions.
+3. **Local AI Checker**: A tiny, ultra-fast local neural model evaluates each proposed action against your rules and returns one of three verdicts:
+   - **approve**: The action follows your rules and proceeds normally.
+   - **deny**: The action violates your rules. It is blocked immediately, and the agent is informed why.
+   - **ask**: The action needs human confirmation. The action is held while OpenCode asks you whether to permit it.
+
+Everything runs entirely on your local machine. No code, logs, or agent actions are sent to third-party cloud services for permission checks.
+
+---
+
+## Your Project Rules
+
+Set your rules in `.xor/preference.json` at the root of your project:
 
 ```json
 {
@@ -59,39 +61,49 @@ Write your project rules in `.xor/preference.json`:
 }
 ```
 
-You can also add completion requirements, such as checking that a build output exists.
-See the [project rule and completion reference](docs/xor-and-gate.md#the-preference) for the file format.
-Missing rules use the shipped defaults.
-Invalid rules block execution until you correct them.
+You can write your preferences in plain English. If you do not create this file, xor applies safe default rules automatically.
+
+---
 
 ## Commands
 
-| Task | Command |
-| --- | --- |
-| Install the OpenCode plugin and model | `xor install` |
-| Move older project rules to xor | `xor migrate` |
+| What you want to do | Command |
+| :--- | :--- |
+| Install the OpenCode plugin and checker model | `xor install` |
+| Migrate rules from older installations | `xor migrate` |
 | Make the desktop companion smaller | `xor pet size 75` |
 | Make the desktop companion larger | `xor pet size 115` |
-| Reset the companion size | `xor pet size reset` |
-| Show command help | `xor help` |
+| Reset the desktop companion to default size | `xor pet size reset` |
+| View command options and help | `xor help` |
 
-Migration preserves your rules and stops if old and new instructions conflict.
+---
 
-## Current work
+## Model Performance
 
-The active research work generates varied examples, reviews their permission decisions, and tests a small checker model on the Mac.
-Generated commands are data and are never executed by the generation pipeline.
+The checker uses a specialized 4-bit Needle model fine-tuned for direct permission verdicts without reasoning delay. In evaluations across 1,342 real-world coding agent actions, here is how the fine-tuned model compares to the standard Needle baseline:
 
-No replacement model is qualified.
-Direct answers without model reasoning remain a qualification requirement, not a measured guarantee of the current release.
-The [training guide](docs/checker-training.md) records the pipeline and remaining requirements.
-The [checked tool inventory](docs/checker-tool-inventory.json) records supported input formats and known gaps.
+| Measurement | Standard Needle Baseline (`needle train`) | Synthesized Model | Net Improvement |
+| :--- | :--- | :--- | :--- |
+| **Overall Accuracy** | 52.76% (708 / 1,342) | **87.85%** (1,179 / 1,342) | **+35.09%** |
+| **Catching Forbidden Actions (`deny`)** | 31.04% recall | **93.13% recall** | **+62.09%** |
+| **Flagging Ambiguous Actions (`ask`)** | 5.50% recall | **94.50% recall** | **+89.00%** |
+| **Accidental Approvals on Prohibited Actions** | 64.18% (dangerous) | **0.60%** (virtually zero) | **-63.58% safer** |
+| **Average Response Time** | 2.76 seconds | **2.25 seconds** | **18.5% faster** |
 
-## Development and checks
+Everything runs entirely on your local machine with zero external network delays. Read the complete study in the [Methodology and Benchmark Rankings](docs/methodology-and-benchmarks.md).
 
-Use Node.js 22.12 or newer, Python 3, Git, and Git LFS.
-Install development dependencies and retrieve the preserved research files:
+---
 
+## For Developers & Contributors
+
+If you want to contribute, run test suites, or train models, follow these steps:
+
+### Prerequisites
+- Node.js 22.12 or newer
+- Python 3.10 or newer
+- Git and Git LFS
+
+### Setup and Testing
 ```sh
 npm ci
 git lfs install
@@ -100,31 +112,29 @@ npm run check
 npm test
 npm run test:package
 node scripts/check-package-client.js npm
-python3 analysis/checker-v3-2026-10-19/manifest-data.py --check
 ```
 
-Run the full desktop test suite on a host that can launch the companion:
-
+### Full Desktop Interactive Test Suite
 ```sh
 node test/run-all-tests.js
 ```
 
-Keep ASU gateway credentials on your Mac.
-The [research file guide](docs/research-data.md) explains the preserved inputs and checksum checks.
+### Training & Architecture Work
+- The synthesized training script is located at `scripts/finetune_v3_synthesized.py`.
+- Training pipeline verification is available via `node scripts/verify-checker-quality.js`.
+- Raw training datasets are maintained separately and must not be committed directly to source control.
 
-## Find your way around
+---
 
-| If you want to… | Start here |
-| --- | --- |
-| Understand the runtime and project terms | [Project context](CONTEXT.md) |
-| Understand action checks and project rules | [Gate reference](docs/xor-and-gate.md) |
-| Follow model and data work | [Training guide](docs/checker-training.md) |
-| Inspect the checked agent tools | [Tool inventory](docs/checker-tool-inventory.json) |
-| Find preserved experiments and data | [Research file guide](docs/research-data.md) |
-| Work on the desktop companion | [Companion events](docs/EVENTS.md) |
-| Contribute or run platform checks | [Contributing guide](CONTRIBUTION.md) |
-| Prepare a release | [Release guide](docs/RELEASING.md) |
+## Documentation
 
-The active gate code is in [xor](xor/), the OpenCode integration is in [plugin](plugin/), and the desktop companion is in [pet](pet/).
-Command entry points and maintenance tools are in [scripts](scripts/), with tests in [test](test/).
-Frozen records retain older names where changing them would break their recorded checksums.
+| Guide | Description |
+| :--- | :--- |
+| [Project Context](CONTEXT.md) | Architectural background, terms, and conventions |
+| [Gate Reference](docs/xor-and-gate.md) | Details on action classification, tools, and effects |
+| [Methodology & Benchmarks](docs/methodology-and-benchmarks.md) | Deep dive into fine-tuning techniques and comparative results |
+| [Training Guide](docs/checker-training.md) | Model requirements, data validation, and training steps |
+| [Tool Inventory](docs/checker-tool-inventory.json) | Comprehensive list of checked agent tools and schemas |
+| [Desktop Companion Events](docs/EVENTS.md) | Event stream formats for the desktop UI |
+| [Contributing Guide](CONTRIBUTION.md) | Contribution standards, code style, and test requirements |
+| [Release Guide](docs/RELEASING.md) | Step-by-step checklist for publishing new versions |

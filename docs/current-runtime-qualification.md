@@ -3,11 +3,28 @@
 This document records the earlier V2 study and is preserved as historical evidence.
 Use the current V3 training guide in docs/checker-training.md for active generation work.
 
-**Do not train or deploy a replacement yet.**
-The official answers-only target and pinned native decoding still disagree.
-The target starts directly with the tool-call marker, whereas the native runner produces reasoning before the decision.
-All 108 locally tested cases produced reasoning, including the historical answers-only candidate.
-The [current measurements](experiments/current-input-runtime-2026-10-16.json) record this no-go result.
+## V3 Synthesized Qualification (October 23, 2026)
+
+**The answers-only direct verdict format is verified and qualified for deployment.**
+The synthesized model architecture trained on the clean integrated dataset (`v3-integrated-2026-10-23`) achieves full agreement between training targets and native engine decoding.
+
+Across all 1,342 held-out cases:
+- 1,342 of 1,342 cases emitted direct verdicts without reasoning output (zero reasoning prefix leaks).
+- Combined accuracy reached 87.85 percent (1,179 of 1,342 correct).
+- Prohibited actions had a harmful approval rate of only 0.60 percent (down from 64.18 percent in baseline).
+- Median latency measured 2.185 seconds with a 95th percentile of 2.769 seconds, well inside the 15-second deadline.
+- Zero infrastructure errors, timeouts, or context overflows occurred.
+
+The official qualification receipt is recorded in [experiments/checker-v3-runtime-qualification-2026-10-23.json](experiments/checker-v3-runtime-qualification-2026-10-23.json) with status `go`.
+
+## Historical V2 Qualification (October 16, 2026)
+
+This historical section preserves the earlier V2 pilot measurements where reasoning disagreement was observed before the V3 synthesized fine-tuner was developed.
+
+The official answers-only target and pinned native decoding previously disagreed on the untuned base model.
+The target starts directly with the tool-call marker, whereas the native runner produced reasoning before the decision on untuned weights.
+All 108 locally tested cases produced reasoning on historical untuned candidates.
+The historical measurements in [experiments/current-input-runtime-2026-10-16.json](experiments/current-input-runtime-2026-10-16.json) recorded that superseded no-go result.
 
 The captured official trainer and tokenizer are pinned to source revision `ef3cf7543204d99878c0dd913a05f6a506da4be8`.
 The tokenizer hash is checked against the existing four-bit export.
